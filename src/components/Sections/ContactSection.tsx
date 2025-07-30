@@ -40,37 +40,20 @@ export const ContactSection = () => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Here you would typically send to your backend
-    // For now, we'll simulate the submission and send to the provided email
-    try {
-      // Create email content
-      const emailContent = `
-New Project Inquiry from ${formData.name}
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-Contact Information:
-- Name: ${formData.name}
-- Email: ${formData.email}
-- Company: ${formData.company}
-- Phone: ${formData.phone}
+  try {
+    const response = await fetch('https://formspree.io/f/xkgzzrog', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    });
 
-Project Details:
-- Type: ${formData.projectType}
-- Budget: ${formData.budget}
-- Timeline: ${formData.timeline}
-
-Message:
-${formData.message}
-      `;
-
-      // In a real application, you would send this to your backend
-      // which would then send the email to banerjeesoumyajit2005@gmail.com
-      
+    if (response.ok) {
       toast.success('Thank you for your inquiry! We\'ll get back to you within 24 hours.');
-      
-      // Reset form
       setFormData({
         name: '',
         email: '',
@@ -81,10 +64,14 @@ ${formData.message}
         timeline: '',
         message: '',
       });
-    } catch (error) {
+    } else {
       toast.error('Failed to send message. Please try again or contact us directly.');
     }
-  };
+  } catch (error) {
+    toast.error('Failed to send message. Please try again or contact us directly.');
+  }
+};
+
 
   const contactInfo = [
     {
