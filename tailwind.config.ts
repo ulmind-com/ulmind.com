@@ -88,6 +88,14 @@ export default {
 					from: { height: 'var(--radix-accordion-content-height)' },
 					to: { height: '0' }
 				},
+				marquee: {
+					from: { transform: "translateX(0%)" },
+					to: { transform: "translateX(-100%)" },
+				},
+				"marquee-vertical": {
+					from: { transform: "translateY(0%)" },
+					to: { transform: "translateY(-100%)" },
+				},
 				'floating': {
 					'0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
 					'25%': { transform: 'translateY(-20px) rotate(1deg)' },
@@ -114,6 +122,8 @@ export default {
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
+				marquee: "marquee var(--duration) linear infinite",
+				"marquee-vertical": "marquee-vertical var(--duration) linear infinite",
 				'floating': 'floating 6s ease-in-out infinite',
 				'spin-slow': 'spin-slow 8s linear infinite',
 				'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
