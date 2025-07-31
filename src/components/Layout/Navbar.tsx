@@ -51,15 +51,20 @@ export const Navbar = () => {
         <div className="max-w-7xl mx-auto px-6 sm:px-8">
           <div className="flex justify-between items-center py-4">
             {/* Logo */}
-            <motion.div
+          
+           <motion.div
               whileHover={{ scale: 1.05 }}
               className="flex items-center"
             >
-              <div className="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">S</span>
+              <div className="h-12 w-auto max-w-[260px]">
+                <img
+                  src="/MerakiLogo.png"
+                  alt="Meraki Logo"
+                  className="h-full object-contain"
+                />
               </div>
-              <span className="ml-3 text-xl font-bold gradient-text">StartupCorp</span>
             </motion.div>
+
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8">

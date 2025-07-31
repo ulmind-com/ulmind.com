@@ -37,10 +37,13 @@ export const Footer = () => {
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center">
-              <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold">S</span>
+              <div className="w-auto h-12 rounded-lg overflow-hidden flex items-center justify-center">
+                <img
+                  src="/MerakiLogo.png"
+                  alt="Meraki Logo"
+                  className="w-full h-full object-contain"
+                />
               </div>
-              <span className="ml-2 text-lg font-bold gradient-text">StartupCorp</span>
             </div>
             <p className="text-muted-foreground text-sm">
               Transforming ideas into powerful digital solutions using cutting-edge technology and innovative design.
@@ -117,7 +120,7 @@ export const Footer = () => {
         <div className="py-6 border-t border-border">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-muted-foreground">
-              © {currentYear} StartupCorp. All rights reserved.
+              © {currentYear} Meraki. All rights reserved.
             </p>
             <div className="flex gap-6 text-sm text-muted-foreground">
               <button className="hover:text-primary smooth-transition">Privacy Policy</button>
