@@ -11,46 +11,22 @@ export default function Team() {
 
   const team = [
     {
-      name: "Soumyajit Banerjee",
+      name: "Md Tausif",
       role: "Founder & CEO",
-      image: "/placeholder.svg",
-      bio: "Visionary leader with 8+ years of experience in software development and business strategy.",
+      image: "/TousifBhaiya1.jpg",
+      bio: "Visionary leader with 3+ years of experience in software development and business strategy.",
       skills: ["Leadership", "Strategy", "Full-Stack Development"],
       social: {
-        linkedin: "#",
-        github: "#",
+        linkedin: "https://www.linkedin.com/in/md-tausif-b38a98229/",
+        github: "https://github.com/mdtausif12",
         twitter: "#"
       }
     },
     {
-      name: "Priya Sharma",
-      role: "CTO & Lead Architect",
-      image: "/placeholder.svg",
-      bio: "Technology enthusiast specializing in scalable architecture and cloud-native solutions.",
-      skills: ["System Architecture", "Cloud Computing", "DevOps"],
-      social: {
-        linkedin: "#",
-        github: "#",
-        twitter: "#"
-      }
-    },
-    {
-      name: "Rahul Kumar",
-      role: "Senior Full-Stack Developer",
-      image: "/placeholder.svg",
-      bio: "Passionate developer with expertise in modern web technologies and mobile applications.",
-      skills: ["React", "Node.js", "React Native"],
-      social: {
-        linkedin: "#",
-        github: "#",
-        twitter: "#"
-      }
-    },
-    {
-      name: "Anita Patel",
-      role: "UI/UX Design Lead",
-      image: "/placeholder.svg",
-      bio: "Creative designer focused on creating intuitive and beautiful user experiences.",
+      name: "Md Touseef Akhtar",
+      role: "Co-founder",
+      image: "/TouseefBhaiya2.jpg",
+      bio: "Technology enthusiast and Creative designer focused on creating intuitive and beautiful user experiences.",
       skills: ["UI/UX Design", "Prototyping", "User Research"],
       social: {
         linkedin: "#",
@@ -59,11 +35,23 @@ export default function Team() {
       }
     },
     {
-      name: "Vikram Singh",
-      role: "DevOps Engineer",
-      image: "/placeholder.svg",
-      bio: "Infrastructure expert ensuring reliable, scalable, and secure deployment solutions.",
-      skills: ["AWS", "Docker", "Kubernetes"],
+      name: "Soumyajit Banerjee",
+      role: "Co-founder & Technical Lead",
+      image: "/Soumyajit.jpg",
+      bio: "Passionate developer with expertise in full stack web technologies and reliable, scalable, and secure deployment.",
+      skills: ["SpringBoot", "React", "DevOps", "Microservices", "Cloud Computing"],
+      social: {
+        linkedin: "https://www.linkedin.com/in/soumyajit-banerjee-274b1229a/",
+        github: "https://github.com/leo-soumyajit",
+        twitter: "https://soumyajit-s-portfolio.vercel.app/"
+      }
+    },
+    {
+      name: "Nasir Shadan",
+      role: "Co-founder",
+      image: "/nasirSadanBhaiya.jpg",
+      bio: "Skilled Supply Chain Analyst with expertise in forecasting demand, and improving operational efficiency through data-driven insights.",
+      skills: ["Supply Chain Analyst","Data Analyst", "Public Relations"],
       social: {
         linkedin: "#",
         github: "#",
@@ -71,11 +59,23 @@ export default function Team() {
       }
     },
     {
-      name: "Neha Gupta",
-      role: "QA Lead",
-      image: "/placeholder.svg",
-      bio: "Quality assurance specialist ensuring bug-free and performant applications.",
-      skills: ["Test Automation", "Performance Testing", "Quality Assurance"],
+      name: "Tirtha Ghosh",
+      role: "Co-founder & Technical Lead",
+      image: "/TirthaGhosh.jpg",
+      bio: "Full Stack Developer skilled in building end-to-end web applications using modern frontend and backend.",
+      skills: ["MERN Stack", "NodeJS", "Express JS", "React"],
+      social: {
+        linkedin: "https://www.linkedin.com/in/tirtha-ghosh-098a072ba/",
+        github: "https://github.com/tirthaGhosh91213",
+        twitter: "https://tirtha-portfolio-pink.vercel.app/"
+      }
+    },
+    {
+      name: "Sourav Kumar Bera",
+      role: "Full Stack Developer",
+      image: "/SouravKumar.jpg",
+      bio: "Full Stack Developer specializing in the MERN stack, crafting responsive and scalable web applications.",
+      skills: ["React", "NodeJS", "ExpressJS", "Figma"],
       social: {
         linkedin: "#",
         github: "#",
