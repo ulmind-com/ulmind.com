@@ -77,19 +77,19 @@ const handleSubmit = async (e: React.FormEvent) => {
     {
       icon: Mail,
       title: 'Email Us',
-      value: 'banerjeesoumyajit2005@gmail.com',
+      value: 'merakisolutions001@gmail.com',
       description: 'Send us an email anytime',
     },
     {
       icon: Phone,
       title: 'Call Us',
-      value: '+91 98765 43210',
+      value: '+91 82109 97171',
       description: 'Mon-Fri from 9am to 6pm',
     },
     {
       icon: MapPin,
       title: 'Visit Us',
-      value: 'Kolkata, West Bengal, India',
+      value: 'Haldia, West Bengal, India',
       description: 'Come say hello at our office',
     },
   ];
@@ -287,7 +287,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               transition={{ delay: 1, duration: 0.6 }}
               className="bg-gradient-primary rounded-2xl p-6 text-white"
             >
-              <h4 className="font-bold text-lg mb-4">Why Choose StartupCorp?</h4>
+              <h4 className="font-bold text-lg mb-4">Why Choose Meraki?</h4>
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center">
                   <div className="text-2xl font-bold mb-1">24h</div>

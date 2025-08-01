@@ -73,9 +73,9 @@ export default function Team() {
     {
       name: "Sourav Kumar Bera",
       role: "Full Stack Developer",
-      image: "/SouravKumar.jpg",
+      image: "/SouravPic.jpg",
       bio: "Full Stack Developer specializing in the MERN stack, crafting responsive and scalable web applications.",
-      skills: ["React", "NodeJS", "ExpressJS", "Figma"],
+      skills: ["React", "NodeJS", "ExpressJS", "Figma", "NextJS"],
       social: {
         linkedin: "#",
         github: "#",
