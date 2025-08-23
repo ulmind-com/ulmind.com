@@ -71,6 +71,18 @@ export default function Team() {
       }
     },
     {
+      name: "Sneh Raj",
+      role: "Co-Founder and Media Head",
+      image: "snehrajbhaiya.jpg",
+      bio: "<>",
+      skills: ["React", "NodeJS", "ExpressJS", "Figma", "NextJS"],
+      social: {
+        linkedin: "#",
+        github: "#",
+        twitter: "#"
+      }
+    },
+    {
       name: "Sourav Kumar Bera",
       role: "Full Stack Developer",
       image: "/SouravPic.jpg",
@@ -83,7 +95,19 @@ export default function Team() {
       }
     },
     {
-      name: "Arjun Mehta",
+      "name": "Sagnik Mondal",
+      "role": "MERN Stack Developer",
+      "image": "sagnik.jpg",
+      "bio": "MERN Stack Developer passionate about building responsive, scalable, and user-friendly web applications. Experienced in developing full-stack solutions that balance clean design with strong backend architecture.",
+      "skills": ["MongoDB", "ExpressJS", "React", "NodeJS", "NextJS", "Tailwind CSS"],
+      "social": {
+        "linkedin": "https://www.linkedin.com/in/sagnik-mondal-118b08311?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+        "github": "https://github.com/SAgNik-MonDA",
+        "twitter": "#"
+      }
+    },
+    {
+      name: "Hariom Tiwari",
       role: "Mobile App Developer",
       image: "/placeholder.svg",
       bio: "Mobile development expert creating cross-platform applications with native performance.",
@@ -94,18 +118,8 @@ export default function Team() {
         twitter: "#"
       }
     },
-    {
-      name: "Kavya Reddy",
-      role: "Product Manager",
-      image: "/placeholder.svg",
-      bio: "Product strategist ensuring our solutions align with market needs and user expectations.",
-      skills: ["Product Strategy", "Market Research", "Agile Management"],
-      social: {
-        linkedin: "#",
-        github: "#",
-        twitter: "#"
-      }
-    }
+    
+
   ];
 
   return (
