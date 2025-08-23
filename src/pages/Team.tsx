@@ -107,17 +107,17 @@ export default function Team() {
       }
     },
     {
-      name: "Hariom Tiwari",
-      role: "Mobile App Developer",
-      image: "/placeholder.svg",
-      bio: "Mobile development expert creating cross-platform applications with native performance.",
-      skills: ["Flutter", "React Native", "iOS/Android"],
-      social: {
-        linkedin: "#",
-        github: "#",
-        twitter: "#"
-      }
-    },
+    "name": "Hariom Tiwari",
+    "role": "Mobile App Developer",
+    "image": "hariom.jpg",
+    "bio": "Passionate mobile app developer with expertise in building cross-platform and native applications. Skilled in crafting scalable, high-performance solutions using modern frameworks and languages.",
+    "skills": ["Flutter", "Kotlin", "Swift", "Java", "Python", "React", "Next.js"],
+    "social": {
+      "linkedin": "https://www.linkedin.com/in/hariomtiwari404/",
+      "github": "https://github.com/HariomTiwari404",
+      "twitter": "https://x.com/HariomTiwari404"
+    }
+  },
     
 
   ];
