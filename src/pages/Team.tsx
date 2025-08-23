@@ -97,7 +97,7 @@ export default function Team() {
     {
       "name": "Sagnik Mondal",
       "role": "MERN Stack Developer",
-      "image": "sagnik.jpg",
+      "image": "sagnik2.jpg",
       "bio": "MERN Stack Developer passionate about building responsive, scalable, and user-friendly web applications. Experienced in developing full-stack solutions that balance clean design with strong backend architecture.",
       "skills": ["MongoDB", "ExpressJS", "React", "NodeJS", "NextJS", "Tailwind CSS"],
       "social": {
