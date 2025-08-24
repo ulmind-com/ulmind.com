@@ -73,13 +73,11 @@ export default function Team() {
     {
       name: "Sneh Raj",
       role: "Co-Founder and Media Head",
-      image: "snehrajbhaiya.jpg",
-      bio: "<>",
-      skills: ["React", "NodeJS", "ExpressJS", "Figma", "NextJS"],
+      image: "snehraj1.png",
+      bio:  "Creative leader and strategist with expertise in team management, event coordination, public speaking, web development, and AI/ML. Skilled at leading initiatives, driving collaboration, and integrating technology with innovation to deliver impactful projects.",
+      skills: ["C/C++", "Arduino",  "HTML", "AI & ML", "IOT",  "sensors"],
       social: {
-        linkedin: "#",
-        github: "#",
-        twitter: "#"
+        linkedin: "https://www.linkedin.com/in/sneh-raj-471941280"
       }
     },
     {
@@ -118,6 +116,17 @@ export default function Team() {
       "twitter": "https://x.com/HariomTiwari404"
     }
   },
+  {
+      "name": "Aryan Raj",
+      "role": "Frontend Developer",
+      "image": "aryanraj.jpg",
+      "bio": "Creative frontend developer with a strong foundation in crafting responsive and user-friendly web applications. Skilled in building modern, interactive UIs using HTML, CSS, JavaScript, and React, with a keen eye for design and performance optimization.",
+      "skills": ["JavaScript", "CSS", "HTML", "React"],
+      "social": {
+        "linkedin": "https://www.linkedin.com/in/aryan-raj-5586a731a?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
+      }
+  }
+
     
 
   ];
