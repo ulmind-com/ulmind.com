@@ -8,7 +8,8 @@ import {
   ShoppingCart, 
   Palette,
   ArrowRight,
-  CheckCircle
+  CheckCircle,
+  Cpu
 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -49,7 +50,20 @@ const services = [
     title: "UI/UX Design",
     description: "User-centered design solutions that create engaging and intuitive digital experiences",
     features: ["User Research", "Wireframing", "Prototyping", "Design Systems"]
-  }
+  },
+  {
+    icon: <Cpu className="w-8 h-8" />,
+    title: "Artificial Intelligence & Machine Learning",
+    description: "Automate workflows and gain intelligent insights with integrated AI agents and machine learning.",
+    features: [
+        "Conversational AI",
+        "Process Automation",
+        "Predictive Analytics",
+        "Real-Time Decision Making"
+    ]
+},
+
+  
 ];
 
 export const ServicesSection = () => {

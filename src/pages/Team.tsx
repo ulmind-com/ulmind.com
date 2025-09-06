@@ -125,7 +125,34 @@ export default function Team() {
       "social": {
         "linkedin": "https://www.linkedin.com/in/aryan-raj-5586a731a?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
       }
+  },
+  {
+  "name": "Arup Samanta",
+  "role": "AI Agent Developer & Social Media Handler",
+  "image": "arup.png",
+  "bio": "AI Agent Developer, Social Media Handler, and SEO Expert with expertise in automation, conversational AI, and scalable digital solutions. Skilled at blending technology with creativity to enhance brand presence, engagement, and digital growth.",
+  "skills": [
+    "Python",
+    "n8n",
+    "JavaScript",
+    "Automation Tools",
+    "Social Media Management",
+    
+  ],
+  "social": {
+    "linkedin": "https://www.linkedin.com/in/arup-samanta-3291aa375?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
   }
+},
+{
+  'name': "Sumant Kumar",
+  "role": "AI Agent Developer & SEO Expert",
+  "image": "sumant.png",
+  "bio": "AI Agent Developer and SEO Expert with expertise in building intelligent automation, conversational AI, and data-driven SEO strategies. Skilled at integrating technology with innovation to deliver scalable solutions and boost digital growth.",
+  "skills": ["Python", "AI/ML", "n8n", "JavaScript", "Node.js", "API Integration", "SEO", "Automation Tools", "Web Development"],
+  "social": {
+    "linkedin": "https://www.linkedin.com/in/sumant-kumar-29a812339?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
+  }
+}
 
     
 
