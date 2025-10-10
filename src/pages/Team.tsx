@@ -80,6 +80,7 @@ export default function Team() {
         linkedin: "https://www.linkedin.com/in/sneh-raj-471941280"
       }
     },
+
     {
       name: "Sourav Kumar Bera",
       role: "Full Stack Developer",
@@ -104,6 +105,24 @@ export default function Team() {
         "twitter": "#"
       }
     },
+        {
+  name: "Bijay Sharma",
+  role: "SMO & Social Media Handler",
+  image: "BijoyBhaiya.jpg",
+  bio: "Social Media Handler, SMO Expert and scalable digital solutions. Skilled in integrating technology with creativity to enhance brand presence, drive engagement, and boost digital growth through innovative strategies and automation.",
+  skills: [
+    "C",
+    "Python",
+    "Promt Engineering",
+    "Video Editing",
+    "Canva",
+    "Social Media Management",
+    
+  ],
+  social: {
+    "linkedin": "https://www.linkedin.com/in/bijay-sharma-773b311a5?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
+  }
+},
     {
     "name": "Hariom Tiwari",
     "role": "Mobile App Developer",
