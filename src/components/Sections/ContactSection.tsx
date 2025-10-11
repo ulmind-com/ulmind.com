@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
-import { Mail, Phone, MapPin, Send, Clock, Users } from 'lucide-react';
+import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface ContactFormData {
@@ -37,41 +37,45 @@ export const ContactSection = () => {
   });
 
   const handleInputChange = (field: keyof ContactFormData, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  try {
-    const response = await fetch('https://formspree.io/f/xkgzzrog', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
-    });
+    const formElement = e.currentTarget;
+    const formDataToSend = new FormData(formElement);
 
-    if (response.ok) {
-      toast.success('Thank you for your inquiry! We\'ll get back to you within 24 hours.');
-      setFormData({
-        name: '',
-        email: '',
-        company: '',
-        phone: '',
-        projectType: '',
-        budget: '',
-        timeline: '',
-        message: '',
+    formDataToSend.append('access_key', 'ec7a5d8c-cb46-4946-a64d-5ef257209ab8');
+
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formDataToSend,
       });
-    } else {
+
+      if (response.ok) {
+        toast.success("Thank you for your inquiry! We'll get back to you within 24 hours.");
+
+        formElement.reset();
+
+        setFormData({
+          name: '',
+          email: '',
+          company: '',
+          phone: '',
+          projectType: '',
+          budget: '',
+          timeline: '',
+          message: '',
+        });
+      } else {
+        toast.error('Failed to send message. Please try again or contact us directly.');
+      }
+    } catch (error) {
       toast.error('Failed to send message. Please try again or contact us directly.');
     }
-  } catch (error) {
-    toast.error('Failed to send message. Please try again or contact us directly.');
-  }
-};
-
+  };
 
   const contactInfo = [
     {
@@ -125,12 +129,13 @@ const handleSubmit = async (e: React.FormEvent) => {
             <Card className="shadow-card">
               <CardContent className="p-8">
                 <h3 className="text-2xl font-bold mb-6">Tell Us About Your Project</h3>
-                
+
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium mb-2">Name *</label>
                       <Input
+                        name="name"
                         required
                         value={formData.name}
                         onChange={(e) => handleInputChange('name', e.target.value)}
@@ -140,6 +145,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                     <div>
                       <label className="block text-sm font-medium mb-2">Email *</label>
                       <Input
+                        name="email"
                         type="email"
                         required
                         value={formData.email}
@@ -153,6 +159,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                     <div>
                       <label className="block text-sm font-medium mb-2">Company</label>
                       <Input
+                        name="company"
                         value={formData.company}
                         onChange={(e) => handleInputChange('company', e.target.value)}
                         placeholder="Your company name"
@@ -161,6 +168,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                     <div>
                       <label className="block text-sm font-medium mb-2">Phone</label>
                       <Input
+                        name="phone"
                         value={formData.phone}
                         onChange={(e) => handleInputChange('phone', e.target.value)}
                         placeholder="+1 (555) 123-4567"
@@ -171,6 +179,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                   <div>
                     <label className="block text-sm font-medium mb-2">Project Type *</label>
                     <select
+                      name="projectType"
                       required
                       value={formData.projectType}
                       onChange={(e) => handleInputChange('projectType', e.target.value)}
@@ -191,6 +200,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                     <div>
                       <label className="block text-sm font-medium mb-2">Budget Range</label>
                       <select
+                        name="budget"
                         value={formData.budget}
                         onChange={(e) => handleInputChange('budget', e.target.value)}
                         className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
@@ -206,6 +216,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                     <div>
                       <label className="block text-sm font-medium mb-2">Timeline</label>
                       <select
+                        name="timeline"
                         value={formData.timeline}
                         onChange={(e) => handleInputChange('timeline', e.target.value)}
                         className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
@@ -223,6 +234,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                   <div>
                     <label className="block text-sm font-medium mb-2">Project Description *</label>
                     <Textarea
+                      name="message"
                       required
                       rows={6}
                       value={formData.message}
@@ -254,8 +266,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             <div>
               <h3 className="text-2xl font-bold mb-6">Get in Touch</h3>
               <p className="text-muted-foreground mb-8">
-                Ready to transform your ideas into reality? We're here to help you every step of the way. 
-                Reach out to us and let's start building something amazing together.
+                Ready to transform your ideas into reality? We're here to help you every step of the way. Reach out to us and let's start building something amazing together.
               </p>
             </div>
 

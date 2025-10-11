@@ -14,12 +14,11 @@ import { Footer } from '@/components/Layout/Footer';
 const jobOpenings = [
   {
     id: 1,
-    title: "Senior Java Developer",
+    title: "Java Developer",
     department: "Backend Development",
     location: "Remote",
     type: "Full-time",
-    experience: "5+ years",
-    salary: "$80,000 - $120,000",
+    experience: "1+ years",
     skills: ["Java", "Spring Boot", "Microservices", "SQL", "RESTful API", "AWS/Azure"],
     description: "We're looking for an experienced Java developer to join our backend team and work on scalable microservices architecture.",
     requirements: [
@@ -45,7 +44,6 @@ const jobOpenings = [
     location: "Remote",
     type: "Full-time",
     experience: "3+ years",
-    salary: "$60,000 - $90,000",
     skills: ["React", "TypeScript", "Next.js", "Tailwind CSS", "GraphQL", "Testing"],
     description: "Join our frontend team to build beautiful, responsive user interfaces using React and modern web technologies.",
     requirements: [
@@ -71,7 +69,6 @@ const jobOpenings = [
     location: "Remote",
     type: "Full-time",
     experience: "4+ years",
-    salary: "$65,000 - $95,000",
     skills: ["Figma", "Adobe Creative Suite", "Prototyping", "User Research", "Wireframing"],
     description: "Create exceptional user experiences and intuitive interfaces for web and mobile applications.",
     requirements: [
@@ -134,11 +131,10 @@ export default function Career() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!selectedJob) return;
 
-    // Create FormData for file upload
     const submitData = new FormData();
+    submitData.append('access_key', 'ec7a5d8c-cb46-4946-a64d-5ef257209ab8');
     submitData.append('jobTitle', selectedJob.title);
     submitData.append('name', formData.name);
     submitData.append('email', formData.email);
@@ -152,30 +148,36 @@ export default function Career() {
     }
 
     try {
-      // Simulate form submission
-      console.log('Form submitted:', {
-        job: selectedJob.title,
-        applicant: formData.name,
-        email: 'banerjeesoumyajit2005@gmail.com'
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: submitData,
       });
 
-      toast({
-        title: "Application Submitted!",
-        description: `Your application for ${selectedJob.title} has been submitted successfully. We'll get back to you soon.`,
-      });
+      if (response.ok) {
+        toast({
+          title: "Application Submitted!",
+          description: `Your application for ${selectedJob.title} has been submitted successfully. We'll get back to you soon.`,
+        });
 
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        experience: '',
-        coverLetter: '',
-        portfolioUrl: '',
-        linkedinUrl: '',
-        resume: null,
-      });
-      setSelectedJob(null);
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          experience: '',
+          coverLetter: '',
+          portfolioUrl: '',
+          linkedinUrl: '',
+          resume: null,
+        });
+        setSelectedJob(null);
+      } else {
+        toast({
+          title: "Error",
+          description: "There was an error submitting your application. Please try again.",
+          variant: "destructive",
+        });
+      }
     } catch (error) {
       toast({
         title: "Error",
@@ -246,10 +248,6 @@ export default function Career() {
                     <span>{selectedJob.type}</span>
                   </div>
                   <div className="flex items-center gap-2 text-muted-foreground">
-                    <DollarSign className="w-4 h-4" />
-                    <span>{selectedJob.salary}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-muted-foreground">
                     <Briefcase className="w-4 h-4" />
                     <span>{selectedJob.experience}</span>
                   </div>
@@ -283,8 +281,8 @@ export default function Career() {
               {/* Application Form */}
               <div className="lg:w-3/5 p-6">
                 <h3 className="text-xl font-semibold text-foreground mb-6">Apply for this position</h3>
-                
-                <form onSubmit={handleSubmit} className="space-y-4">
+
+                <form onSubmit={handleSubmit} className="space-y-4" encType="multipart/form-data">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="text-sm font-medium text-foreground mb-2 block">
@@ -446,7 +444,7 @@ export default function Career() {
                             {job.department}
                           </Badge>
                           <p className="text-muted-foreground mb-4">{job.description}</p>
-                          
+
                           <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mb-4">
                             <div className="flex items-center gap-1">
                               <MapPin className="w-4 h-4" />
@@ -455,10 +453,6 @@ export default function Career() {
                             <div className="flex items-center gap-1">
                               <Clock className="w-4 h-4" />
                               <span>{job.type}</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <DollarSign className="w-4 h-4" />
-                              <span>{job.salary}</span>
                             </div>
                             <div className="flex items-center gap-1">
                               <Briefcase className="w-4 h-4" />
@@ -560,7 +554,7 @@ export default function Career() {
           </div>
         </div>
       </section>
-      
+
       <Footer />
     </div>
   );

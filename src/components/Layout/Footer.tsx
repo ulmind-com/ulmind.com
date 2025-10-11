@@ -120,7 +120,7 @@ export const Footer = () => {
         <div className="py-6 border-t border-border">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-muted-foreground">
-              © {currentYear} Meraki. All rights reserved.
+              © {currentYear} Meraki Universe. All rights reserved.
             </p>
             <div className="flex gap-6 text-sm text-muted-foreground">
               <button className="hover:text-primary smooth-transition">Privacy Policy</button>
