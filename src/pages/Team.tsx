@@ -68,18 +68,6 @@ export default function Team() {
       },
     },
     {
-      name: "Sneh Raj",
-      role: "Co-founder and Media Head",
-      image: "/snehraj1.png",
-      bio: "Creative leader and strategist with expertise in team management, event coordination, public speaking, web development, and AI/ML.",
-      skills: ["C/C++", "Arduino", "HTML", "AI & ML", "IOT", "Sensors"],
-      social: {
-        linkedin: "https://www.linkedin.com/in/sneh-raj-471941280",
-      },
-    },
-    
-
-    {
       name: "Sourav Kumar Bera",
       role: "Full Stack Developer",
       image: "/SouravPic.jpg",
@@ -130,25 +118,6 @@ export default function Team() {
     "twitter": "#"
   }
 },
-
-    {
-      name: "Bijay Sharma",
-      role: "SMO & Social Media Handler",
-      image: "/BijoyBhaiya.jpg",
-      bio: "Social Media Handler, SMO Expert skilled in integrating technology with creativity to enhance brand presence.",
-      skills: [
-        "C",
-        "Python",
-        "Prompt Engineering",
-        "Video Editing",
-        "Canva",
-        "Social Media Management",
-      ],
-      social: {
-        linkedin:
-          "https://www.linkedin.com/in/bijay-sharma-773b311a5",
-      },
-    },
         {
   name: "Bijay Sharma",
   role: "SMO & Social Media Handler",
@@ -248,7 +217,7 @@ export default function Team() {
     },
     {
       name: "Samprita Pal",
-      role: "Marketing Head and Anchor",
+      role: "Marketing Lead and Anchor",
       image: "/samprita.jpg",
       bio: "A passionate communicator with a creative vision for branding and public engagement through innovative ideas.",
       skills: [
@@ -262,9 +231,9 @@ export default function Team() {
     },
     {
       name: "Ariba Afroz",
-      role: "HR Head and project planning",
+      role: "HR and project planning",
       image: "/abira.jpg",
-      bio: "Working as the HR Head, Team Leader, and Project Planner, responsible for overall project coordination, team management, client handling, and deal finalization. I oversee recruitment, assign tasks, ensure smooth project execution, and maintain strong client relationships to achieve company goals efficiently.",
+      bio: "Working as the HR, Team Leader, and Project Planner, responsible for overall project coordination, team management, client handling, and deal finalization. I oversee recruitment, assign tasks, ensure smooth project execution, and maintain strong client relationships to achieve company goals efficiently.",
       skills: [
         "Hiring department ",
         "Project planning and execution ",
