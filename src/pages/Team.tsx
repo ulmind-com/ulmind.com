@@ -48,7 +48,7 @@ export default function Team() {
     },
     {
       name: "Nasir Shadan",
-      role: "Co-founder",
+      role: "Co-founder & Business Development Manager (BDM)",
       image: "/nasirSadanBhaiya.jpg",
       bio: "Skilled Supply Chain Analyst with expertise in forecasting demand, and improving operational efficiency through data-driven insights.",
       skills: ["Supply Chain Analyst","Data Analyst", "Public Relations"],
@@ -72,7 +72,7 @@ export default function Team() {
     },
     {
       name: "Sneh Raj",
-      role: "Co-Founder and Media Head",
+      role: "Media Lead",
       image: "snehraj1.png",
       bio:  "Creative leader and strategist with expertise in team management, event coordination, public speaking, web development, and AI/ML. Skilled at leading initiatives, driving collaboration, and integrating technology with innovation to deliver impactful projects.",
       skills: ["C/C++", "Arduino",  "HTML", "AI & ML", "IOT",  "sensors"],
@@ -93,6 +93,20 @@ export default function Team() {
         twitter: "#"
       }
     },
+
+    {
+  "name": "Swastika Roy",
+  "role": "Senior Backend Developer & HR",
+  "image": "/swastika.jpg",
+  "bio": "Spring Boot–focused Full Stack Developer specializing in building reliable microservices and high-performance REST APIs with Java and MySQL. I architect clean, maintainable backends, optimize database performance, and automate workflows with Python. I care deeply about code quality, security, and delivering scalable features that serve real users.",
+  "skills": ["MySQL", "Java", "Spring Boot", "Microservices", "Python"],
+  "social": {
+    "linkedin": "https://www.linkedin.com/in/swastika-roy-692aa72b4/",
+    "github": "https://github.com/Swastika-Roy",
+    "twitter": "#"
+  }
+},
+
     {
       "name": "Sagnik Mondal",
       "role": "MERN Stack Developer",
