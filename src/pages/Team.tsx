@@ -49,7 +49,7 @@ export default function Team() {
     },
     {
       name: "Nasir Shadan",
-      role: "Co-founder",
+      role: "Co-founder & Business Development Manager (BDM)",
       image: "/nasirSadanBhaiya.jpg",
       bio: "Skilled Supply Chain Analyst with expertise in forecasting demand and improving operational efficiency through data-driven insights.",
       skills: ["Supply Chain Analyst", "Data Analyst", "Public Relations"],
@@ -77,6 +77,8 @@ export default function Team() {
         linkedin: "https://www.linkedin.com/in/sneh-raj-471941280",
       },
     },
+    
+
     {
       name: "Sourav Kumar Bera",
       role: "Full Stack Developer",
@@ -115,6 +117,20 @@ export default function Team() {
           "https://www.linkedin.com/in/md-afzaal-ahmed-16b986318",
       },
     },
+
+    {
+  "name": "Swastika Roy",
+  "role": "Senior Backend Developer & HR",
+  "image": "/swastika.jpg",
+  "bio": "Spring Boot–focused Full Stack Developer specializing in building reliable microservices and high-performance REST APIs with Java and MySQL. I architect clean, maintainable backends, optimize database performance, and automate workflows with Python. I care deeply about code quality, security, and delivering scalable features that serve real users.",
+  "skills": ["MySQL", "Java", "Spring Boot", "Microservices", "Python"],
+  "social": {
+    "linkedin": "https://www.linkedin.com/in/swastika-roy-692aa72b4/",
+    "github": "https://github.com/Swastika-Roy",
+    "twitter": "#"
+  }
+},
+
     {
       name: "Bijay Sharma",
       role: "SMO & Social Media Handler",
@@ -132,6 +148,35 @@ export default function Team() {
         linkedin:
           "https://www.linkedin.com/in/bijay-sharma-773b311a5",
       },
+    },
+        {
+  name: "Bijay Sharma",
+  role: "SMO & Social Media Handler",
+  image: "BijoyBhaiya.jpg",
+  bio: "Social Media Handler, SMO Expert and scalable digital solutions. Skilled in integrating technology with creativity to enhance brand presence, drive engagement, and boost digital growth through innovative strategies and automation.",
+  skills: [
+    "C",
+    "Python",
+    "Promt Engineering",
+    "Video Editing",
+    "Canva",
+    "Social Media Management",
+    
+  ],
+  social: {
+    "linkedin": "https://www.linkedin.com/in/bijay-sharma-773b311a5?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
+  }
+  
+},
+{
+      name: "Sneh Raj",
+      role: "Media Team",
+      image: "snehraj1.png",
+      bio:  "Creative leader and strategist with expertise in team management, event coordination, public speaking, web development, and AI/ML. Skilled at leading initiatives, driving collaboration, and integrating technology with innovation to deliver impactful projects.",
+      skills: ["C/C++", "Arduino",  "HTML", "AI & ML", "IOT",  "sensors"],
+      social: {
+        linkedin: "https://www.linkedin.com/in/sneh-raj-471941280"
+      }
     },
     {
       name: "Hariom Tiwari",
