@@ -70,16 +70,7 @@ export default function Team() {
         twitter: "https://tirtha-portfolio-pink.vercel.app/"
       }
     },
-    {
-      name: "Sneh Raj",
-      role: "Media Lead",
-      image: "snehraj1.png",
-      bio:  "Creative leader and strategist with expertise in team management, event coordination, public speaking, web development, and AI/ML. Skilled at leading initiatives, driving collaboration, and integrating technology with innovation to deliver impactful projects.",
-      skills: ["C/C++", "Arduino",  "HTML", "AI & ML", "IOT",  "sensors"],
-      social: {
-        linkedin: "https://www.linkedin.com/in/sneh-raj-471941280"
-      }
-    },
+    
 
     {
       name: "Sourav Kumar Bera",
@@ -136,7 +127,18 @@ export default function Team() {
   social: {
     "linkedin": "https://www.linkedin.com/in/bijay-sharma-773b311a5?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
   }
+  
 },
+{
+      name: "Sneh Raj",
+      role: "Media Team",
+      image: "snehraj1.png",
+      bio:  "Creative leader and strategist with expertise in team management, event coordination, public speaking, web development, and AI/ML. Skilled at leading initiatives, driving collaboration, and integrating technology with innovation to deliver impactful projects.",
+      skills: ["C/C++", "Arduino",  "HTML", "AI & ML", "IOT",  "sensors"],
+      social: {
+        linkedin: "https://www.linkedin.com/in/sneh-raj-471941280"
+      }
+    },
     {
     "name": "Hariom Tiwari",
     "role": "Mobile App Developer",
