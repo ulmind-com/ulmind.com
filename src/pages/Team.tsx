@@ -151,16 +151,16 @@ export default function Team() {
         twitter: "https://x.com/HariomTiwari404",
       },
     },
-// {
-//       name: "Sneh Raj",
-//       role: "Media Team",
-//       image: "snehraj1.png",
-//       bio:  "Creative leader and strategist with expertise in team management, event coordination, public speaking, web development, and AI/ML. Skilled at leading initiatives, driving collaboration, and integrating technology with innovation to deliver impactful projects.",
-//       skills: ["C/C++", "Arduino",  "HTML", "AI & ML", "IOT",  "sensors"],
-//       social: {
-//         linkedin: "https://www.linkedin.com/in/sneh-raj-471941280"
-//       }
-//     },
+{
+      name: "Sneh Raj",
+      role: "Media Head",
+      image: "snehraj1.png",
+      bio:  "Creative leader and strategist with expertise in team management, event coordination, public speaking, web development, and AI/ML. Skilled at leading initiatives, driving collaboration, and integrating technology with innovation to deliver impactful projects.",
+      skills: ["C/C++", "Arduino",  "HTML", "AI & ML", "IOT",  "sensors"],
+      social: {
+        linkedin: "https://www.linkedin.com/in/sneh-raj-471941280"
+      }
+    },
 
             {
   name: "Bijay Sharma",
