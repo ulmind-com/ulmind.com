@@ -118,7 +118,51 @@ export default function Team() {
     "twitter": "#"
   }
 },
+
         {
+  name: "Roni Routh",
+  role: "Python Developer & ML Engineer",
+  image: "ronirouth.jpg",
+  bio: "Passionate Python Developer specializing in Machine Learning and Data Analysis. Skilled in C++, Python, and key ML libraries like NumPy, Pandas, Scikit-learn, and FastAPI, focusing on building intelligent, data-driven applications with clean, efficient code.",
+  skills: [
+     "C++ ",
+    "Python",
+    "NumPy",
+    "Pandas",
+    "Matplotlib & Seaborn",
+    "Scikit-learn",
+   "FastApi",
+   "SQL"
+  ],
+  social: {
+    "linkedin": "https://www.linkedin.com/in/roni-routh-a15227302/"
+  }
+  
+},
+   {
+      name: "Hariom Tiwari",
+      role: "Mobile App Developer",
+      image: "/hariom.jpg",
+      bio: "Passionate mobile app developer skilled in building cross-platform and native applications using modern frameworks.",
+      skills: ["Flutter", "Kotlin", "Swift", "Java", "Python", "React", "Next.js"],
+      social: {
+        linkedin: "https://www.linkedin.com/in/hariomtiwari404/",
+        github: "https://github.com/HariomTiwari404",
+        twitter: "https://x.com/HariomTiwari404",
+      },
+    },
+{
+      name: "Sneh Raj",
+      role: "Media Team",
+      image: "snehraj1.png",
+      bio:  "Creative leader and strategist with expertise in team management, event coordination, public speaking, web development, and AI/ML. Skilled at leading initiatives, driving collaboration, and integrating technology with innovation to deliver impactful projects.",
+      skills: ["C/C++", "Arduino",  "HTML", "AI & ML", "IOT",  "sensors"],
+      social: {
+        linkedin: "https://www.linkedin.com/in/sneh-raj-471941280"
+      }
+    },
+
+            {
   name: "Bijay Sharma",
   role: "SMO & Social Media Handler",
   image: "BijoyBhaiya.jpg",
@@ -137,28 +181,22 @@ export default function Team() {
   }
   
 },
-{
-      name: "Sneh Raj",
-      role: "Media Team",
-      image: "snehraj1.png",
-      bio:  "Creative leader and strategist with expertise in team management, event coordination, public speaking, web development, and AI/ML. Skilled at leading initiatives, driving collaboration, and integrating technology with innovation to deliver impactful projects.",
-      skills: ["C/C++", "Arduino",  "HTML", "AI & ML", "IOT",  "sensors"],
-      social: {
-        linkedin: "https://www.linkedin.com/in/sneh-raj-471941280"
-      }
-    },
+
     {
-      name: "Hariom Tiwari",
-      role: "Mobile App Developer",
-      image: "/hariom.jpg",
-      bio: "Passionate mobile app developer skilled in building cross-platform and native applications using modern frameworks.",
-      skills: ["Flutter", "Kotlin", "Swift", "Java", "Python", "React", "Next.js"],
-      social: {
-        linkedin: "https://www.linkedin.com/in/hariomtiwari404/",
-        github: "https://github.com/HariomTiwari404",
-        twitter: "https://x.com/HariomTiwari404",
-      },
-    },
+  "name": "Haris Jamil",
+  "role": "Designer",
+  "image": "harris.png",
+  "bio": "As a Designer at Meraki Education, I focus on creating meaningful and engaging visual experiences that reflect our mission to empower learners. Through thoughtful design, I aim to make education more accessible, inspiring, and impactful for every student.",
+  "skills": [
+    "Ui/Ux Design ",
+    "Frontend development ",
+    "Team work ",
+  ],
+  "social": {
+    "linkedin": "https://www.linkedin.com/in/haris-jamil-24451831b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
+  }
+},
+ 
     {
       name: "Aryan Raj",
       role: "Frontend Developer",
