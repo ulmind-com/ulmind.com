@@ -67,6 +67,61 @@ export default function Team() {
         twitter: "https://tirtha-portfolio-pink.vercel.app/",
       },
     },
+
+     {
+      name: "Md Afzaal Ahmed",
+      role: "Education Head",
+      image: "/Afzaal.jpg",
+      bio: "As the Founder and Education Head of Meraki Education, I strive to create a space where every learner grows with confidence.",
+      skills: [
+        "Business Management",
+        "Strategy and Planning",
+        "Project Management",
+        "Team Management",
+        "Client Dealings",
+      ],
+      social: {
+        linkedin:
+          "https://www.linkedin.com/in/md-afzaal-ahmed-16b986318",
+      },
+    },
+
+    {
+  "name": "Samiran Samanta",
+  "role": "Full Stack Developer & DevOps Engineer and Tech Lead",
+  "image": "/samiransamanta.jpg",
+  "bio": "As a Senior Full Stack Developer and DevOps Engineer at Meraki, I build robust technology solutions and streamline development processes to deliver impactful products that empower users.",
+  "skills": [
+    "Backend Development",
+    "APIs Designing",
+    "Database Designing",
+    "API Performance Tuning",
+    "Native App Development",
+  ],
+  "social": {
+    "linkedin": "https://www.linkedin.com/in/samiransamanta/",
+    "github": "https://github.com/Samiran2004",
+    "twitter": "https://x.com/SmrSmt147270"
+  }
+},
+
+{
+  "name": "Nakshatra Sarkar",
+  "role": "Senior Data Science and Machine Learning Engineer",
+  "image": "/nakshatrusarkar.jpg",
+  "bio": "As a Senior Data Science and Machine Learning Engineer at Meraki, I build robust technology solutions and streamline development processes to deliver impactful products that empower users.",
+  "skills": [
+    "Python",
+    "Power BI",
+    "Data Analysis",
+    "Machine Learning",
+  ],
+  "social": {
+    "linkedin": "https://www.linkedin.com/in/nakshatra-sarkar-389418264/",
+  }
+},
+
+
     {
       name: "Sourav Kumar Bera",
       role: "Full Stack Developer",
@@ -88,23 +143,8 @@ export default function Team() {
         twitter: "#",
       },
     },
-    {
-      name: "Md Afzaal Ahmed",
-      role: "Education Head",
-      image: "/Afzaal.jpg",
-      bio: "As the Founder and Education Head of Meraki Education, I strive to create a space where every learner grows with confidence.",
-      skills: [
-        "Business Management",
-        "Strategy and Planning",
-        "Project Management",
-        "Team Management",
-        "Client Dealings",
-      ],
-      social: {
-        linkedin:
-          "https://www.linkedin.com/in/md-afzaal-ahmed-16b986318",
-      },
-    },
+
+   
 
     {
   "name": "Swastika Roy",
