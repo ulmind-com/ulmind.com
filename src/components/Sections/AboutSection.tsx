@@ -38,7 +38,7 @@ export const AboutSection = () => {
             transition={{ duration: 0.8 }}
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full mb-6">
-              <span className="text-sm font-medium text-primary">About Meraki</span>
+              <span className="text-sm font-medium text-primary">About Mehraki</span>
             </div>
 
             <h2 className="text-3xl sm:text-4xl font-bold mb-6">

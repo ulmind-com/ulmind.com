@@ -39,8 +39,8 @@ export const Footer = () => {
             <div className="flex items-center">
               <div className="w-auto h-12 rounded-lg overflow-hidden flex items-center justify-center">
                 <img
-                  src="/MerakiLogo.png"
-                  alt="Meraki Logo"
+                  src="/MehrakiLogo.png"
+                  alt="Mehraki Logo"
                   className="w-full h-full object-contain"
                 />
               </div>
@@ -59,7 +59,7 @@ export const Footer = () => {
               </div>
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Mail className="w-4 h-4" />
-                <span>merakisolutions001@gmail.com</span>
+                <span>Mehrakisolutions001@gmail.com</span>
               </div>
             </div>
           </div>
@@ -120,7 +120,7 @@ export const Footer = () => {
         <div className="py-6 border-t border-border">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-muted-foreground">
-              © {currentYear} Meraki Universe. All rights reserved.
+              © {currentYear} Mehraki Universe. All rights reserved.
             </p>
             <div className="flex gap-6 text-sm text-muted-foreground">
               <button className="hover:text-primary smooth-transition">Privacy Policy</button>

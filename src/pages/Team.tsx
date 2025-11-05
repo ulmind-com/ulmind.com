@@ -68,29 +68,50 @@ export default function Team() {
       },
     },
 
-     {
-      name: "Md Afzaal Ahmed",
-      role: "Education Head",
-      image: "/Afzaal.jpg",
-      bio: "As the Founder and Education Head of Meraki Education, I strive to create a space where every learner grows with confidence.",
+    //  {
+    //   name: "Md Afzaal Ahmed",
+    //   role: "Education Head",
+    //   image: "/Afzaal.jpg",
+    //   bio: "As the Founder and Education Head of Mehraki Education, I strive to create a space where every learner grows with confidence.",
+    //   skills: [
+    //     "Business Management",
+    //     "Strategy and Planning",
+    //     "Project Management",
+    //     "Team Management",
+    //     "Client Dealings",
+    //   ],
+    //   social: {
+    //     linkedin:
+    //       "https://www.linkedin.com/in/md-afzaal-ahmed-16b986318",
+    //   },
+    // },
+
+
+    {
+      name: "Arnab Senapati",
+      role: "Co-Founder , MD & COO",
+      image: "/ArnabSenapati.jpg",
+      bio: " I’m focused on building a company that helps businesses grow through creativity, technology, and strategy.",
       skills: [
-        "Business Management",
-        "Strategy and Planning",
+        "Business Development",
         "Project Management",
-        "Team Management",
-        "Client Dealings",
+        "Digital Marketing",
+        "Team Leadership",
+        "Client Relationship Management",
+        "Brand Strategy",
       ],
       social: {
         linkedin:
-          "https://www.linkedin.com/in/md-afzaal-ahmed-16b986318",
+          "https://www.linkedin.com/in/arnab-senapati",
       },
     },
+
 
     {
   "name": "Samiran Samanta",
   "role": "Full Stack Developer & DevOps Engineer and Tech Lead",
   "image": "/samiransamanta.jpg",
-  "bio": "As a Senior Full Stack Developer and DevOps Engineer at Meraki, I build robust technology solutions and streamline development processes to deliver impactful products that empower users.",
+  "bio": "As a Senior Full Stack Developer and DevOps Engineer at Mehraki, I build robust technology solutions and streamline development processes to deliver impactful products that empower users.",
   "skills": [
     "Backend Development",
     "APIs Designing",
@@ -109,7 +130,7 @@ export default function Team() {
   "name": "Nakshatra Sarkar",
   "role": "Senior Data Science and Machine Learning Engineer",
   "image": "/nakshatrusarkar.jpg",
-  "bio": "As a Senior Data Science and Machine Learning Engineer at Meraki, I build robust technology solutions and streamline development processes to deliver impactful products that empower users.",
+  "bio": "As a Senior Data Science and Machine Learning Engineer at Mehraki, I build robust technology solutions and streamline development processes to deliver impactful products that empower users.",
   "skills": [
     "Python",
     "Power BI",
@@ -179,28 +200,28 @@ export default function Team() {
   }
   
 },
-   {
-      name: "Hariom Tiwari",
-      role: "Mobile App Developer",
-      image: "/hariom.jpg",
-      bio: "Passionate mobile app developer skilled in building cross-platform and native applications using modern frameworks.",
-      skills: ["Flutter", "Kotlin", "Swift", "Java", "Python", "React", "Next.js"],
-      social: {
-        linkedin: "https://www.linkedin.com/in/hariomtiwari404/",
-        github: "https://github.com/HariomTiwari404",
-        twitter: "https://x.com/HariomTiwari404",
-      },
-    },
-{
-      name: "Sneh Raj",
-      role: "Media Head",
-      image: "snehraj1.png",
-      bio:  "Creative leader and strategist with expertise in team management, event coordination, public speaking, web development, and AI/ML. Skilled at leading initiatives, driving collaboration, and integrating technology with innovation to deliver impactful projects.",
-      skills: ["C/C++", "Arduino",  "HTML", "AI & ML", "IOT",  "sensors"],
-      social: {
-        linkedin: "https://www.linkedin.com/in/sneh-raj-471941280"
-      }
-    },
+  //  {
+  //     name: "Hariom Tiwari",
+  //     role: "Mobile App Developer",
+  //     image: "/hariom.jpg",
+  //     bio: "Passionate mobile app developer skilled in building cross-platform and native applications using modern frameworks.",
+  //     skills: ["Flutter", "Kotlin", "Swift", "Java", "Python", "React", "Next.js"],
+  //     social: {
+  //       linkedin: "https://www.linkedin.com/in/hariomtiwari404/",
+  //       github: "https://github.com/HariomTiwari404",
+  //       twitter: "https://x.com/HariomTiwari404",
+  //     },
+  //   },
+// {
+//       name: "Sneh Raj",
+//       role: "Media Head",
+//       image: "snehraj1.png",
+//       bio:  "Creative leader and strategist with expertise in team management, event coordination, public speaking, web development, and AI/ML. Skilled at leading initiatives, driving collaboration, and integrating technology with innovation to deliver impactful projects.",
+//       skills: ["C/C++", "Arduino",  "HTML", "AI & ML", "IOT",  "sensors"],
+//       social: {
+//         linkedin: "https://www.linkedin.com/in/sneh-raj-471941280"
+//       }
+//     },
 
             {
   name: "Bijay Sharma",
@@ -226,7 +247,7 @@ export default function Team() {
   "name": "Haris Jamil",
   "role": "Designer",
   "image": "harris.png",
-  "bio": "As a Designer at Meraki Education, I focus on creating meaningful and engaging visual experiences that reflect our mission to empower learners. Through thoughtful design, I aim to make education more accessible, inspiring, and impactful for every student.",
+  "bio": "As a Designer at Mehraki Education, I focus on creating meaningful and engaging visual experiences that reflect our mission to empower learners. Through thoughtful design, I aim to make education more accessible, inspiring, and impactful for every student.",
   "skills": [
     "Ui/Ux Design ",
     "Frontend development ",

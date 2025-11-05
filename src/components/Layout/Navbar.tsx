@@ -58,8 +58,8 @@ export const Navbar = () => {
             >
               <div className="h-12 w-auto max-w-[260px]">
                 <img
-                  src="/MerakiLogo.png"
-                  alt="Meraki Logo"
+                  src="/MehrakiLogo.png"
+                  alt="Mehraki Logo"
                   className="h-full object-contain"
                 />
               </div>

@@ -81,7 +81,7 @@ export const ContactSection = () => {
     {
       icon: Mail,
       title: 'Email Us',
-      value: 'merakisolutions001@gmail.com',
+      value: 'Mehrakisolutions001@gmail.com',
       description: 'Send us an email anytime',
     },
     {
@@ -298,7 +298,7 @@ export const ContactSection = () => {
               transition={{ delay: 1, duration: 0.6 }}
               className="bg-gradient-primary rounded-2xl p-6 text-white"
             >
-              <h4 className="font-bold text-lg mb-4">Why Choose Meraki?</h4>
+              <h4 className="font-bold text-lg mb-4">Why Choose Mehraki?</h4>
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center">
                   <div className="text-2xl font-bold mb-1">24h</div>
