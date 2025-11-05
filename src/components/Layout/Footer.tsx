@@ -8,7 +8,7 @@ export const Footer = () => {
     { icon: Github, href: '#', label: 'GitHub' },
     { icon: Linkedin, href: '#', label: 'LinkedIn' },
     { icon: Twitter, href: '#', label: 'Twitter' },
-    { icon: Mail, href: 'mailto:banerjeesoumyajit2005@gmail.com', label: 'Email' },
+    { icon: Mail, href: 'mailto:mehrakipvtltd@gmail.com', label: 'Email' },
   ];
 
   const quickLinks = [
@@ -55,11 +55,11 @@ export const Footer = () => {
               </div>
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Phone className="w-4 h-4" />
-                <span>+91 82109 97171</span>
+                <span>+91 85378 61040</span>
               </div>
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Mail className="w-4 h-4" />
-                <span>Mehrakisolutions001@gmail.com</span>
+                <span>mehrakipvtltd@gmail.com</span>
               </div>
             </div>
           </div>
@@ -120,7 +120,7 @@ export const Footer = () => {
         <div className="py-6 border-t border-border">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-muted-foreground">
-              © {currentYear} Mehraki Universe. All rights reserved.
+              © {currentYear} Mehraki. All rights reserved.
             </p>
             <div className="flex gap-6 text-sm text-muted-foreground">
               <button className="hover:text-primary smooth-transition">Privacy Policy</button>
