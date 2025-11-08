@@ -1,14 +1,15 @@
 import { motion } from 'framer-motion';
-import { Github, Linkedin, Twitter, Mail, Phone, MapPin } from 'lucide-react';
+import { Github, Linkedin, Twitter, Mail, Phone, MapPin, Instagram, Facebook } from 'lucide-react';
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const socialLinks = [
-    { icon: Github, href: '#', label: 'GitHub' },
-    { icon: Linkedin, href: '#', label: 'LinkedIn' },
+    { icon: Instagram, href: '#', label: 'Instagram' },
+    { icon: Linkedin, href: 'https://www.linkedin.com/company/mehraki/', label: 'LinkedIn' },
     { icon: Twitter, href: '#', label: 'Twitter' },
-    { icon: Mail, href: 'mailto:mehrakipvtltd@gmail.com', label: 'Email' },
+    { icon: Facebook, href: '#', label: 'Facebook' },
+    { icon: Mail, href: 'mailto:ulmindpvtltd@gmail.com', label: 'Email' },
   ];
 
   const quickLinks = [
@@ -39,8 +40,8 @@ export const Footer = () => {
             <div className="flex items-center">
               <div className="w-auto h-12 rounded-lg overflow-hidden flex items-center justify-center">
                 <img
-                  src="/MehrakiLogo.png"
-                  alt="Mehraki Logo"
+                  src="/ULmindLogo.png"
+                  alt="ULmind Logo"
                   className="w-full h-full object-contain"
                 />
               </div>
@@ -59,7 +60,7 @@ export const Footer = () => {
               </div>
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Mail className="w-4 h-4" />
-                <span>mehrakipvtltd@gmail.com</span>
+                <span>ulmindpvtltd@gmail.com</span>
               </div>
             </div>
           </div>
@@ -120,7 +121,7 @@ export const Footer = () => {
         <div className="py-6 border-t border-border">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-muted-foreground">
-              © {currentYear} Mehraki. All rights reserved.
+              © {currentYear} ULmind. All rights reserved.
             </p>
             <div className="flex gap-6 text-sm text-muted-foreground">
               <button className="hover:text-primary smooth-transition">Privacy Policy</button>

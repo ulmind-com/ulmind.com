@@ -45,7 +45,7 @@ const WhatsAppFloat: React.FC = () => {
           boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
         }}
         onClick={() => setShowPopup(true)}
-        title="Chat with Mehraki on WhatsApp"
+        title="Chat with ULmind on WhatsApp"
       >
         <svg
           viewBox="0 0 32 32"
@@ -102,8 +102,8 @@ const WhatsAppFloat: React.FC = () => {
               {/* Profile Image with Online Indicator */}
               <div style={{ position: "relative" }}>
                 <img
-                  src="/mehrakilogo1.png"
-                  alt="Mehraki"
+                  src="/ULmindlogo1.png"
+                  alt="ULmind"
                   style={{
                     width: "48px",
                     height: "48px",
@@ -130,7 +130,7 @@ const WhatsAppFloat: React.FC = () => {
               {/* Name and Number */}
               <div style={{ flex: 1 }}>
                 <div style={{ fontWeight: "600", fontSize: "16px", marginBottom: "2px" }}>
-                  Mehraki
+                  ULmind
                 </div>
                 <div style={{ fontSize: "13px", opacity: 0.9 }}>
                   +91 85378 61040

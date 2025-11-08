@@ -16,28 +16,8 @@ export default function Team() {
 
   const team = [
     {
-      name: "Md Tausif",
-      role: "Founder & CEO",
-      image: "/TousifBhaiya1.jpg",
-      bio: "Visionary leader with 3+ years of experience in software development and business strategy.",
-      skills: ["Leadership", "Strategy", "Full-Stack Development"],
-      social: {
-        linkedin: "https://www.linkedin.com/in/md-tausif-b38a98229/",
-        github: "https://github.com/mdtausif12",
-        twitter: "#",
-      },
-    },
-    {
-      name: "Md Touseef Akhtar",
-      role: "Co-founder",
-      image: "/TouseefBhaiya2.jpg",
-      bio: "Technology enthusiast and creative designer focused on creating intuitive and beautiful user experiences.",
-      skills: ["UI/UX Design", "Prototyping", "User Research"],
-      social: { linkedin: "#", github: "#", twitter: "#" },
-    },
-    {
       name: "Soumyajit Banerjee",
-      role: "Co-founder & Technical Lead",
+      role: "Founder & CTO",
       image: "/Soumyajit.jpg",
       bio: "Passionate developer with expertise in full stack web technologies and reliable, scalable, and secure deployment.",
       skills: ["SpringBoot", "React", "DevOps", "Microservices", "Cloud Computing"],
@@ -47,49 +27,10 @@ export default function Team() {
         twitter: "https://soumyajit-s-portfolio.vercel.app/",
       },
     },
-    {
-      name: "Nasir Shadan",
-      role: "Co-founder & Business Development Manager (BDM)",
-      image: "/nasirSadanBhaiya.jpg",
-      bio: "Skilled Supply Chain Analyst with expertise in forecasting demand and improving operational efficiency through data-driven insights.",
-      skills: ["Supply Chain Analyst", "Data Analyst", "Public Relations"],
-      social: { linkedin: "#", github: "#", twitter: "#" },
-    },
-    {
-      name: "Tirtha Ghosh",
-      role: "Co-founder & Technical Lead",
-      image: "/TirthaGhosh.jpg",
-      bio: "Full Stack Developer skilled in building end-to-end web applications using modern frontend and backend technologies.",
-      skills: ["MERN Stack", "NodeJS", "Express JS", "React"],
-      social: {
-        linkedin: "https://www.linkedin.com/in/tirtha-ghosh-098a072ba/",
-        github: "https://github.com/tirthaGhosh91213",
-        twitter: "https://tirtha-portfolio-pink.vercel.app/",
-      },
-    },
 
-    //  {
-    //   name: "Md Afzaal Ahmed",
-    //   role: "Education Head",
-    //   image: "/Afzaal.jpg",
-    //   bio: "As the Founder and Education Head of Mehraki Education, I strive to create a space where every learner grows with confidence.",
-    //   skills: [
-    //     "Business Management",
-    //     "Strategy and Planning",
-    //     "Project Management",
-    //     "Team Management",
-    //     "Client Dealings",
-    //   ],
-    //   social: {
-    //     linkedin:
-    //       "https://www.linkedin.com/in/md-afzaal-ahmed-16b986318",
-    //   },
-    // },
-
-
-    {
+        {
       name: "Arnab Senapati",
-      role: "Co-Founder , MD & COO",
+      role: "Co-Founder , MD & CEO",
       image: "/ArnabSenapati.jpg",
       bio: " I’m focused on building a company that helps businesses grow through creativity, technology, and strategy.",
       skills: [
@@ -107,11 +48,11 @@ export default function Team() {
     },
 
 
-    {
+        {
   "name": "Samiran Samanta",
-  "role": "Full Stack Developer & DevOps Engineer and Tech Lead",
+  "role": "Co-founder & CTO",
   "image": "/samiransamanta.jpg",
-  "bio": "As a Senior Full Stack Developer and DevOps Engineer at Mehraki, I build robust technology solutions and streamline development processes to deliver impactful products that empower users.",
+  "bio": "As a Senior Full Stack Developer and DevOps Engineer at ULmind, I build robust technology solutions and streamline development processes to deliver impactful products that empower users.",
   "skills": [
     "Backend Development",
     "APIs Designing",
@@ -126,34 +67,22 @@ export default function Team() {
   }
 },
 
-{
-  "name": "Nakshatra Sarkar",
-  "role": "Senior Data Science and Machine Learning Engineer",
-  "image": "/nakshatrusarkar.jpg",
-  "bio": "As a Senior Data Science and Machine Learning Engineer at Mehraki, I build robust technology solutions and streamline development processes to deliver impactful products that empower users.",
-  "skills": [
-    "Python",
-    "Power BI",
-    "Data Analysis",
-    "Machine Learning",
-  ],
-  "social": {
-    "linkedin": "https://www.linkedin.com/in/nakshatra-sarkar-389418264/",
-  }
-},
-
-
     {
-      name: "Sourav Kumar Bera",
-      role: "Full Stack Developer",
-      image: "/SouravPic.jpg",
-      bio: "Full Stack Developer specializing in the MERN stack, crafting responsive and scalable web applications.",
-      skills: ["React", "NodeJS", "ExpressJS", "Figma", "NextJS"],
-      social: { linkedin: "#", github: "#", twitter: "#" },
+      name: "Tirtha Ghosh",
+      role: "Co-founder & CTO",
+      image: "/TirthaGhosh.jpg",
+      bio: "Full Stack Developer skilled in building end-to-end web applications using modern frontend and backend technologies.",
+      skills: ["MERN Stack", "NodeJS", "Express JS", "React"],
+      social: {
+        linkedin: "https://www.linkedin.com/in/tirtha-ghosh-098a072ba/",
+        github: "https://github.com/tirthaGhosh91213",
+        twitter: "https://tirtha-portfolio-pink.vercel.app/",
+      },
     },
+
     {
       name: "Sagnik Mondal",
-      role: "MERN Stack Developer",
+      role: "Co-founder & Developer",
       image: "/sagnik2.jpg",
       bio: "MERN Stack Developer passionate about building responsive, scalable, and user-friendly web applications.",
       skills: ["MongoDB", "ExpressJS", "React", "NodeJS", "NextJS", "Tailwind CSS"],
@@ -169,7 +98,7 @@ export default function Team() {
 
     {
   "name": "Swastika Roy",
-  "role": "Senior Backend Developer & HR",
+  "role": "Co-founder & CHRO",
   "image": "/swastika.jpg",
   "bio": "Spring Boot–focused Full Stack Developer specializing in building reliable microservices and high-performance REST APIs with Java and MySQL. I architect clean, maintainable backends, optimize database performance, and automate workflows with Python. I care deeply about code quality, security, and delivering scalable features that serve real users.",
   "skills": ["MySQL", "Java", "Spring Boot", "Microservices", "Python"],
@@ -180,7 +109,7 @@ export default function Team() {
   }
 },
 
-        {
+{
   name: "Roni Routh",
   role: "Python Developer & ML Engineer",
   image: "ronirouth.jpg",
@@ -198,150 +127,25 @@ export default function Team() {
   social: {
     "linkedin": "https://www.linkedin.com/in/roni-routh-a15227302/"
   }
-  
 },
-  //  {
-  //     name: "Hariom Tiwari",
-  //     role: "Mobile App Developer",
-  //     image: "/hariom.jpg",
-  //     bio: "Passionate mobile app developer skilled in building cross-platform and native applications using modern frameworks.",
-  //     skills: ["Flutter", "Kotlin", "Swift", "Java", "Python", "React", "Next.js"],
-  //     social: {
-  //       linkedin: "https://www.linkedin.com/in/hariomtiwari404/",
-  //       github: "https://github.com/HariomTiwari404",
-  //       twitter: "https://x.com/HariomTiwari404",
-  //     },
-  //   },
-// {
-//       name: "Sneh Raj",
-//       role: "Media Head",
-//       image: "snehraj1.png",
-//       bio:  "Creative leader and strategist with expertise in team management, event coordination, public speaking, web development, and AI/ML. Skilled at leading initiatives, driving collaboration, and integrating technology with innovation to deliver impactful projects.",
-//       skills: ["C/C++", "Arduino",  "HTML", "AI & ML", "IOT",  "sensors"],
-//       social: {
-//         linkedin: "https://www.linkedin.com/in/sneh-raj-471941280"
-//       }
-//     },
-
-            {
-  name: "Bijay Sharma",
-  role: "SMO & Social Media Handler",
-  image: "BijoyBhaiya.jpg",
-  bio: "Social Media Handler, SMO Expert and scalable digital solutions. Skilled in integrating technology with creativity to enhance brand presence, drive engagement, and boost digital growth through innovative strategies and automation.",
+{
+  name: "Sayan Samanta",
+  role: "Media Head & Developer",
+  image: "sayansamanta.heic",
+  bio: "I’m Sayan Samanta, an IT undergrad driven by a passion for Full Stack Development and UI/UX design. I’m currently honing my skills in modern web technologies while learning how to merge design and functionality into seamless digital experiences.",
   skills: [
-    "C",
+     "C",
     "Python",
-    "Promt Engineering",
-    "Video Editing",
-    "Canva",
-    "Social Media Management",
-    
+    "Java",
+    "UI/UX",
   ],
   social: {
-    "linkedin": "https://www.linkedin.com/in/bijay-sharma-773b311a5?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
+    "linkedin": "www.linkedin.com/in/sayan-samanta-40604827b"
   }
-  
 },
 
-    {
-  "name": "Haris Jamil",
-  "role": "Designer",
-  "image": "harris.png",
-  "bio": "As a Designer at Mehraki Education, I focus on creating meaningful and engaging visual experiences that reflect our mission to empower learners. Through thoughtful design, I aim to make education more accessible, inspiring, and impactful for every student.",
-  "skills": [
-    "Ui/Ux Design ",
-    "Frontend development ",
-    "Team work ",
-  ],
-  "social": {
-    "linkedin": "https://www.linkedin.com/in/haris-jamil-24451831b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
-  }
-},
- 
-    {
-      name: "Aryan Raj",
-      role: "Frontend Developer",
-      image: "/aryanraj.jpg",
-      bio: "Creative frontend developer skilled in building modern, interactive UIs using React and JavaScript.",
-      skills: ["JavaScript", "CSS", "HTML", "React"],
-      social: {
-        linkedin: "https://www.linkedin.com/in/aryan-raj-5586a731a",
-      },
-    },
-    {
-      name: "Arup Samanta",
-      role: "AI Agent Developer & Social Media Handler",
-      image: "/arup.png",
-      bio: "AI Agent Developer and SEO Expert skilled in automation, conversational AI, and social media management.",
-      skills: ["Python", "n8n", "JavaScript", "Automation Tools", "Social Media Management"],
-      social: {
-        linkedin: "https://www.linkedin.com/in/arup-samanta-3291aa375",
-      },
-    },
-    {
-      name: "Sumant Kumar",
-      role: "AI Agent Developer & SEO Expert",
-      image: "/sumant.png",
-      bio: "AI Agent Developer and SEO Expert integrating technology with innovation to deliver scalable automation and SEO solutions.",
-      skills: [
-        "Python",
-        "AI/ML",
-        "n8n",
-        "JavaScript",
-        "Node.js",
-        "API Integration",
-        "SEO",
-        "Automation Tools",
-        "Web Development",
-      ],
-      social: {
-        linkedin: "https://www.linkedin.com/in/sumant-kumar-29a812339",
-      },
-    },
-    {
-      name: "Soham Khanra",
-      role: "Video Editor",
-      image: "/sohamVideo.jpg",
-      bio: "Experienced video editor specializing in cinematic storytelling, visual effects, and seamless transitions.",
-      skills: [
-        "Adobe After Effects",
-        "Adobe Premiere Pro",
-        "DaVinci Resolve",
-        "Capcut",
-        "Python",
-      ],
-      social: {
-        linkedin: "https://www.linkedin.com/in/soham-khanra-172b1a312",
-      },
-    },
-    {
-      name: "Samprita Pal",
-      role: "Marketing Lead and Anchor",
-      image: "/samprita.jpg",
-      bio: "A passionate communicator with a creative vision for branding and public engagement through innovative ideas.",
-      skills: [
-        "Social Media Management",
-        "Voiceovers",
-        "Hosting",
-        "Advertisement",
-        "C Programming",
-      ],
-      social: {},
-    },
-    {
-      name: "Ariba Afroz",
-      role: "HR and project planning",
-      image: "/abira.jpg",
-      bio: "Working as the HR, Team Leader, and Project Planner, responsible for overall project coordination, team management, client handling, and deal finalization. I oversee recruitment, assign tasks, ensure smooth project execution, and maintain strong client relationships to achieve company goals efficiently.",
-      skills: [
-        "Hiring department ",
-        "Project planning and execution ",
-        "Client discussion and deal handling ",
-        "Marketing management",
-        "Team leader",
-      ],
-      social: {},
-    },
+
+
   ];
 
   return (

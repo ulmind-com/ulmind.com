@@ -81,13 +81,13 @@ export const ContactSection = () => {
     {
       icon: Mail,
       title: 'Email Us',
-      value: 'Mehrakisolutions001@gmail.com',
+      value: 'ulmindpvtltd@gmail.com',
       description: 'Send us an email anytime',
     },
     {
       icon: Phone,
       title: 'Call Us',
-      value: '+91 82109 97171',
+      value: '+91 85378 61040',
       description: 'Mon-Fri from 9am to 6pm',
     },
     {
@@ -298,7 +298,7 @@ export const ContactSection = () => {
               transition={{ delay: 1, duration: 0.6 }}
               className="bg-gradient-primary rounded-2xl p-6 text-white"
             >
-              <h4 className="font-bold text-lg mb-4">Why Choose Mehraki?</h4>
+              <h4 className="font-bold text-lg mb-4">Why Choose ULmind?</h4>
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center">
                   <div className="text-2xl font-bold mb-1">24h</div>

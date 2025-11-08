@@ -58,8 +58,8 @@ export const Navbar = () => {
             >
               <div className="h-12 w-auto max-w-[260px]">
                 <img
-                  src="/MehrakiLogo.png"
-                  alt="Mehraki Logo"
+                  src="/ULmindLogo.png"
+                  alt="ULmind Logo"
                   className="h-full object-contain"
                 />
               </div>
