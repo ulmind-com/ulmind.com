@@ -140,7 +140,7 @@ export default function Team() {
     "UI/UX",
   ],
   social: {
-    "linkedin": "www.linkedin.com/in/sayan-samanta-40604827b"
+    "linkedin": "https://www.linkedin.com/in/sayan-samanta-40604827b?utm_source=share&utm_campaign=share_via&utm_content=profile"
   }
 },
 
