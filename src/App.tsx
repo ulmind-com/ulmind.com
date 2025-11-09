@@ -1,4 +1,4 @@
-import React, { useState,useEffect} from "react";
+import React, { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -12,7 +12,6 @@ import Team from "./pages/Team";
 import Methodology from "./pages/Methodology";
 import Career from "./pages/Career";
 import NotFound from "./pages/NotFound";
-import Preloader from "./components/Preloader/Preloader";
 
 // WhatsApp Floating Widget
 const WhatsAppFloat: React.FC = () => {
@@ -20,9 +19,9 @@ const WhatsAppFloat: React.FC = () => {
   const [message, setMessage] = useState("");
 
   const openWhatsApp = () => {
-    const messageWithLink = message 
-      ? `${message}\n\nhttps://www.ulmind.com`
-      : "Hi there 👋\nHow can I help you?\n\nwww.ulmind.com";
+    const messageWithLink = message
+      ? `${message}\n\n 'https://www.ulmind.com'`
+      : "Hi there 👋\nHow can I help you?\n\n 'https://www.ulmind.com'";
     const encodedMessage = encodeURIComponent(messageWithLink || "Hi there 👋\nHow can I help you?");
     window.open(`https://wa.me/918537861040?text=${encodedMessage}`, "_blank");
     setShowPopup(false);
@@ -165,7 +164,7 @@ const WhatsAppFloat: React.FC = () => {
               style={{
                 padding: "20px",
                 background: "#E5DDD5",
-                backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d9d9d9' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+                backgroundImage: "url('data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d9d9d9' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')",
                 minHeight: "200px",
               }}
             >
@@ -281,50 +280,32 @@ const WhatsAppFloat: React.FC = () => {
 // Main App
 const queryClient = new QueryClient();
 
-const App = () => {
-  const [loading, setLoading] = useState(true);
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="light"
+      enableSystem
+      disableTransitionOnChange
+    >
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/team" element={<Team />} />
+            <Route path="/methodology" element={<Methodology />} />
+            <Route path="/career" element={<Career />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+        <WhatsAppFloat />
+      </TooltipProvider>
+    </ThemeProvider>
+  </QueryClientProvider>
+);
 
-  useEffect(() => {
-    const t = setTimeout(() => setLoading(false), 1500);
-    return () => clearTimeout(t);
-  }, []);
-
-  return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="light"
-        enableSystem
-        disableTransitionOnChange
-      >
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-
-          {loading ? (
-            <Preloader />
-          ) : (
-            <>
-              <BrowserRouter>
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/projects" element={<Projects />} />
-                  <Route path="/team" element={<Team />} />
-                  <Route path="/methodology" element={<Methodology />} />
-                  <Route path="/career" element={<Career />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </BrowserRouter>
-
-              <WhatsAppFloat />
-            </>
-          )}
-        </TooltipProvider>
-      </ThemeProvider>
-    </QueryClientProvider>
-  );
-}
-
-
-export default App; 
+export default App;
