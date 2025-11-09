@@ -19,7 +19,10 @@ const WhatsAppFloat: React.FC = () => {
   const [message, setMessage] = useState("");
 
   const openWhatsApp = () => {
-    const encodedMessage = encodeURIComponent(message || "Hi there 👋\nHow can I help you?");
+    const messageWithLink = message 
+      ? `${message}\n\nhttps://www.ulmind.com`
+      : "Hi there 👋\nHow can I help you?\n\nwww.ulmind.com";
+    const encodedMessage = encodeURIComponent(messageWithLink || "Hi there 👋\nHow can I help you?");
     window.open(`https://wa.me/918537861040?text=${encodedMessage}`, "_blank");
     setShowPopup(false);
     setMessage("");
