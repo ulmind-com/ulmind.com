@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect} from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -12,6 +12,7 @@ import Team from "./pages/Team";
 import Methodology from "./pages/Methodology";
 import Career from "./pages/Career";
 import NotFound from "./pages/NotFound";
+import Preloader from "./components/Preloader/Preloader";
 
 // WhatsApp Floating Widget
 const WhatsAppFloat: React.FC = () => {
@@ -280,32 +281,50 @@ const WhatsAppFloat: React.FC = () => {
 // Main App
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="light"
-      enableSystem
-      disableTransitionOnChange
-    >
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/team" element={<Team />} />
-            <Route path="/methodology" element={<Methodology />} />
-            <Route path="/career" element={<Career />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-        <WhatsAppFloat />
-      </TooltipProvider>
-    </ThemeProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  const [loading, setLoading] = useState(true);
 
-export default App;
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1500);
+    return () => clearTimeout(t);
+  }, []);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="light"
+        enableSystem
+        disableTransitionOnChange
+      >
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+
+          {loading ? (
+            <Preloader />
+          ) : (
+            <>
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/projects" element={<Projects />} />
+                  <Route path="/team" element={<Team />} />
+                  <Route path="/methodology" element={<Methodology />} />
+                  <Route path="/career" element={<Career />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </BrowserRouter>
+
+              <WhatsAppFloat />
+            </>
+          )}
+        </TooltipProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
+  );
+}
+
+
+export default App; 
