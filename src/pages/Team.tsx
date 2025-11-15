@@ -24,7 +24,7 @@ export default function Team() {
       social: {
         linkedin: "https://www.linkedin.com/in/soumyajit-banerjee-274b1229a/",
         github: "https://github.com/leo-soumyajit",
-        twitter: "https://soumyajit-s-portfolio.vercel.app/",
+        twitter: "https://soumyajitbanerjeeportfolio.vercel.app/",
       },
     },
 
