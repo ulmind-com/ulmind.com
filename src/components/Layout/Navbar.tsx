@@ -58,7 +58,7 @@ export const Navbar = () => {
             >
               <div className="h-12 w-auto max-w-[260px]">
                 <img
-                  src="/ULMiNDLogo.png"
+                  src="/ULmindLogo.png"
                   alt="ULMiND Logo"
                   className="h-full object-contain"
                 />

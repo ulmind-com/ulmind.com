@@ -40,7 +40,7 @@ export const Footer = () => {
             <div className="flex items-center">
               <div className="w-auto h-12 rounded-lg overflow-hidden flex items-center justify-center">
                 <img
-                  src="/ULMiNDLogo.png"
+                  src="/ULmindLogo.png"
                   alt="ULMiND Logo"
                   className="w-full h-full object-contain"
                 />
