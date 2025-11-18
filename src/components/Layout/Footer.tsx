@@ -5,11 +5,11 @@ export const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const socialLinks = [
-    { icon: Instagram, href: 'https://www.instagram.com/ulmind__official', label: 'Instagram' },
+    { icon: Instagram, href: 'https://www.instagram.com/ULMiND__official', label: 'Instagram' },
     { icon: Linkedin, href: 'https://www.linkedin.com/company/mehraki/', label: 'LinkedIn' },
     { icon: Twitter, href: '#', label: 'Twitter' },
     { icon: Facebook, href: '#', label: 'Facebook' },
-    { icon: Mail, href: 'mailto:ulmindpvtltd@gmail.com', label: 'Email' },
+    { icon: Mail, href: 'mailto:ULMiNDpvtltd@gmail.com', label: 'Email' },
   ];
 
   const quickLinks = [
@@ -40,8 +40,8 @@ export const Footer = () => {
             <div className="flex items-center">
               <div className="w-auto h-12 rounded-lg overflow-hidden flex items-center justify-center">
                 <img
-                  src="/ULmindLogo.png"
-                  alt="ULmind Logo"
+                  src="/ULMiNDLogo.png"
+                  alt="ULMiND Logo"
                   className="w-full h-full object-contain"
                 />
               </div>
@@ -60,7 +60,7 @@ export const Footer = () => {
               </div>
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Mail className="w-4 h-4" />
-                <span>ulmindpvtltd@gmail.com</span>
+                <span>ULMiNDpvtltd@gmail.com</span>
               </div>
             </div>
           </div>
@@ -121,7 +121,7 @@ export const Footer = () => {
         <div className="py-6 border-t border-border">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-muted-foreground">
-              © {currentYear} ULmind. All rights reserved.
+              © {currentYear} ULMiND. All rights reserved.
             </p>
             <div className="flex gap-6 text-sm text-muted-foreground">
               <button className="hover:text-primary smooth-transition">Privacy Policy</button>

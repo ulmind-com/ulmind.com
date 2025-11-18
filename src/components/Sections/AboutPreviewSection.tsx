@@ -48,7 +48,7 @@ export const AboutPreviewSection = () => {
             transition={{ duration: 0.8 }}
           >
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
-              About ULmind
+              About ULMiND
             </h2>
             <p className="text-muted-foreground text-lg mb-6 leading-relaxed">
               We are a passionate team of developers, designers, and innovators dedicated to 

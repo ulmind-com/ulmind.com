@@ -31,7 +31,7 @@ export default function Team() {
         {
       name: "Arnab Senapati",
       role: "Co-Founder , MD & CEO",
-      image: "/ArnabSenapati.jpg",
+      image: "/ArnabSenapati[1].jpg",
       bio: " I’m focused on building a company that helps businesses grow through creativity, technology, and strategy.",
       skills: [
         "Business Development",
@@ -44,6 +44,8 @@ export default function Team() {
       social: {
         linkedin:
           "https://www.linkedin.com/in/arnab-senapati",
+        github: "https://github.com/arnab-senapati",
+        twitter: "https://x.com/arnabsenapti",
       },
     },
 
@@ -52,7 +54,7 @@ export default function Team() {
   "name": "Samiran Samanta",
   "role": "Co-founder & CTO",
   "image": "/samiransamanta.jpg",
-  "bio": "As a Senior Full Stack Developer and DevOps Engineer at ULmind, I build robust technology solutions and streamline development processes to deliver impactful products that empower users.",
+  "bio": "As a Senior Full Stack Developer and DevOps Engineer at ULMiND, I build robust technology solutions and streamline development processes to deliver impactful products that empower users.",
   "skills": [
     "Backend Development",
     "APIs Designing",

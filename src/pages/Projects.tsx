@@ -10,82 +10,82 @@ export default function Projects() {
   const projects = [
     {
       id: 1,
-      title: "E-Commerce Platform",
-      description: "A comprehensive e-commerce solution with advanced analytics, inventory management, and multi-vendor support.",
-      image: "/placeholder.svg",
-      technologies: ["React", "Node.js", "MongoDB", "Stripe"],
+      title: "Restaurant Food Delivery Platform Serverless",
+      description: "A comprehensive  is a serverless, progressive web app (PWA) for ordering food from ma lakshmirani restaurant. It features a responsive, modern interface with dynamic menu sections, a seamless cart experience directly connect with restaurant's owner whatsapp.",
+      image: "/foodorder1.png",
+      technologies: ["React", "TypeScript", "Vercel"],
       category: "Web Development",
-      timeline: "6 months",
-      teamSize: "5 developers",
-      features: ["Multi-vendor marketplace", "Real-time analytics", "Payment gateway integration", "Mobile responsive"],
-      demoUrl: "#",
+      timeline: "3 days",
+      teamSize: "3 developers",
+      // features: ["", "Real-time analytics", "Payment gateway integration", "Mobile responsive"],
+      demoUrl: "https://www.malakshmiranirestaurant.online",
       githubUrl: "#"
     },
-    {
-      id: 2,
-      title: "Healthcare Management System",
-      description: "Complete hospital management system with patient records, appointment scheduling, and billing integration.",
-      image: "/placeholder.svg",
-      technologies: ["React Native", "Spring Boot", "PostgreSQL", "AWS"],
-      category: "Mobile & Web",
-      timeline: "8 months",
-      teamSize: "7 developers",
-      features: ["Patient management", "Appointment system", "Medical records", "Billing integration"],
-      demoUrl: "#",
-      githubUrl: "#"
-    },
-    {
-      id: 3,
-      title: "AI-Powered Analytics Dashboard",
-      description: "Advanced analytics platform with machine learning insights and predictive modeling for business intelligence.",
-      image: "/placeholder.svg",
-      technologies: ["Python", "React", "TensorFlow", "Docker"],
-      category: "AI & Analytics",
-      timeline: "10 months",
-      teamSize: "6 developers",
-      features: ["Machine learning models", "Predictive analytics", "Real-time dashboards", "Custom reports"],
-      demoUrl: "#",
-      githubUrl: "#"
-    },
-    {
-      id: 4,
-      title: "Financial Trading Platform",
-      description: "Real-time trading platform with advanced charting, portfolio management, and risk assessment tools.",
-      image: "/placeholder.svg",
-      technologies: ["Angular", "Java", "Kafka", "Redis"],
-      category: "FinTech",
-      timeline: "12 months",
-      teamSize: "8 developers",
-      features: ["Real-time trading", "Portfolio tracking", "Risk management", "Advanced charts"],
-      demoUrl: "#",
-      githubUrl: "#"
-    },
-    {
-      id: 5,
-      title: "Social Media Analytics Tool",
-      description: "Comprehensive social media monitoring and analytics platform for brands and marketing agencies.",
-      image: "/placeholder.svg",
-      technologies: ["Vue.js", "Python", "Elasticsearch", "Kubernetes"],
-      category: "Marketing Tech",
-      timeline: "7 months",
-      teamSize: "4 developers",
-      features: ["Social monitoring", "Sentiment analysis", "Competitor tracking", "Custom reporting"],
-      demoUrl: "#",
-      githubUrl: "#"
-    },
-    {
-      id: 6,
-      title: "IoT Smart Home System",
-      description: "Complete IoT ecosystem for smart home automation with mobile app and voice control integration.",
-      image: "/placeholder.svg",
-      technologies: ["Flutter", "Node.js", "MQTT", "Firebase"],
-      category: "IoT",
-      timeline: "9 months",
-      teamSize: "6 developers",
-      features: ["Device automation", "Voice control", "Energy monitoring", "Security system"],
-      demoUrl: "#",
-      githubUrl: "#"
-    }
+    // {
+    //   id: 2,
+    //   title: "Healthcare Management System",
+    //   description: "Complete hospital management system with patient records, appointment scheduling, and billing integration.",
+    //   image: "/placeholder.svg",
+    //   technologies: ["React Native", "Spring Boot", "PostgreSQL", "AWS"],
+    //   category: "Mobile & Web",
+    //   timeline: "8 months",
+    //   teamSize: "7 developers",
+    //   // features: ["Patient management", "Appointment system", "Medical records", "Billing integration"],
+    //   demoUrl: "#",
+    //   githubUrl: "#"
+    // },
+    // {
+    //   id: 3,
+    //   title: "AI-Powered Analytics Dashboard",
+    //   description: "Advanced analytics platform with machine learning insights and predictive modeling for business intelligence.",
+    //   image: "/placeholder.svg",
+    //   technologies: ["Python", "React", "TensorFlow", "Docker"],
+    //   category: "AI & Analytics",
+    //   timeline: "10 months",
+    //   teamSize: "6 developers",
+    //   // features: ["Machine learning models", "Predictive analytics", "Real-time dashboards", "Custom reports"],
+    //   demoUrl: "#",
+    //   githubUrl: "#"
+    // },
+    // {
+    //   id: 4,
+    //   title: "Financial Trading Platform",
+    //   description: "Real-time trading platform with advanced charting, portfolio management, and risk assessment tools.",
+    //   image: "/placeholder.svg",
+    //   technologies: ["Angular", "Java", "Kafka", "Redis"],
+    //   category: "FinTech",
+    //   timeline: "12 months",
+    //   teamSize: "8 developers",
+    //   // features: ["Real-time trading", "Portfolio tracking", "Risk management", "Advanced charts"],
+    //   demoUrl: "#",
+    //   githubUrl: "#"
+    // },
+    // {
+    //   id: 5,
+    //   title: "Social Media Analytics Tool",
+    //   description: "Comprehensive social media monitoring and analytics platform for brands and marketing agencies.",
+    //   image: "/placeholder.svg",
+    //   technologies: ["Vue.js", "Python", "Elasticsearch", "Kubernetes"],
+    //   category: "Marketing Tech",
+    //   timeline: "7 months",
+    //   teamSize: "4 developers",
+    //   // features: ["Social monitoring", "Sentiment analysis", "Competitor tracking", "Custom reporting"],
+    //   demoUrl: "#",
+    //   githubUrl: "#"
+    // },
+    // {
+    //   id: 6,
+    //   title: "IoT Smart Home System",
+    //   description: "Complete IoT ecosystem for smart home automation with mobile app and voice control integration.",
+    //   image: "/placeholder.svg",
+    //   technologies: ["Flutter", "Node.js", "MQTT", "Firebase"],
+    //   category: "IoT",
+    //   timeline: "9 months",
+    //   teamSize: "6 developers",
+    //   // features: ["Device automation", "Voice control", "Energy monitoring", "Security system"],
+    //   demoUrl: "#",
+    //   githubUrl: "#"
+    // }
   ];
 
   const categories = ["All", "Web Development", "Mobile & Web", "AI & Analytics", "FinTech", "Marketing Tech", "IoT"];
@@ -152,7 +152,7 @@ export default function Projects() {
                     <img 
                       src={project.image} 
                       alt={project.title}
-                      className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                     <div className="absolute top-4 left-4">
                       <Badge variant="secondary" className="bg-primary/20 text-primary border-primary/30">
@@ -193,7 +193,7 @@ export default function Projects() {
                       <Button size="sm" className="flex-1" asChild>
                         <a href={project.demoUrl} target="_blank" rel="noopener noreferrer">
                           <ExternalLink className="w-4 h-4 mr-2" />
-                          Demo
+                          Live
                         </a>
                       </Button>
                       <Button size="sm" variant="outline" asChild>
@@ -226,9 +226,9 @@ export default function Projects() {
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {[
-                { number: "50+", label: "Projects Delivered" },
-                { number: "98%", label: "Client Satisfaction" },
-                { number: "15+", label: "Industries Served" },
+                { number: "5+", label: "Projects Delivered" },
+                { number: "99%", label: "Client Satisfaction" },
+                { number: "5+", label: "Industries Served" },
                 { number: "24/7", label: "Support Available" }
               ].map((stat, index) => (
                 <div key={index} className="text-center">

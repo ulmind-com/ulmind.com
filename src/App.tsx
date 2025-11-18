@@ -20,8 +20,8 @@ const WhatsAppFloat: React.FC = () => {
 
   const openWhatsApp = () => {
     const messageWithLink = message 
-      ? `${message}\n\nhttps://www.ulmind.com`
-      : "Hi there 👋\nHow can I help you?\n\nwww.ulmind.com";
+      ? `${message}\n\nhttps://www.ULMiND.com`
+      : "Hi there 👋\nHow can I help you?\n\nwww.ULMiND.com";
     const encodedMessage = encodeURIComponent(messageWithLink || "Hi there 👋\nHow can I help you?");
     window.open(`https://wa.me/918537861040?text=${encodedMessage}`, "_blank");
     setShowPopup(false);
@@ -48,7 +48,7 @@ const WhatsAppFloat: React.FC = () => {
           boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
         }}
         onClick={() => setShowPopup(true)}
-        title="Chat with ULmind on WhatsApp"
+        title="Chat with ULMiND on WhatsApp"
       >
         <svg
           viewBox="0 0 32 32"
@@ -105,8 +105,8 @@ const WhatsAppFloat: React.FC = () => {
               {/* Profile Image with Online Indicator */}
               <div style={{ position: "relative" }}>
                 <img
-                  src="/ULmindlogo1.png"
-                  alt="ULmind"
+                  src="/ULMiNDlogo1.png"
+                  alt="ULMiND"
                   style={{
                     width: "48px",
                     height: "48px",
@@ -133,7 +133,7 @@ const WhatsAppFloat: React.FC = () => {
               {/* Name and Number */}
               <div style={{ flex: 1 }}>
                 <div style={{ fontWeight: "600", fontSize: "16px", marginBottom: "2px" }}>
-                  ULmind
+                  ULMiND
                 </div>
                 <div style={{ fontSize: "13px", opacity: 0.9 }}>
                   +91 85378 61040
