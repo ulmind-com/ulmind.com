@@ -105,7 +105,7 @@ const WhatsAppFloat: React.FC = () => {
               {/* Profile Image with Online Indicator */}
               <div style={{ position: "relative" }}>
                 <img
-                  src="/ULMiNDlogo1.png"
+                  src="/ULmindlogo1.png"
                   alt="ULMiND"
                   style={{
                     width: "48px",
