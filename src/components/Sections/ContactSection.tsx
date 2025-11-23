@@ -81,7 +81,7 @@ export const ContactSection = () => {
     {
       icon: Mail,
       title: 'Email Us',
-      value: 'ULMiNDpvtltd@gmail.com',
+      value: 'ulmindpvtltd@gmail.com',
       description: 'Send us an email anytime',
     },
     {

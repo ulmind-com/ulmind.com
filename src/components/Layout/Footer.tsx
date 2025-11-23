@@ -9,7 +9,7 @@ export const Footer = () => {
     { icon: Linkedin, href: 'https://www.linkedin.com/company/mehraki/', label: 'LinkedIn' },
     { icon: Twitter, href: '#', label: 'Twitter' },
     { icon: Facebook, href: '#', label: 'Facebook' },
-    { icon: Mail, href: 'mailto:ULMiNDpvtltd@gmail.com', label: 'Email' },
+    { icon: Mail, href: 'mailto:ulmindpvtltd@gmail.com', label: 'Email' },
   ];
 
   const quickLinks = [
@@ -60,7 +60,7 @@ export const Footer = () => {
               </div>
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Mail className="w-4 h-4" />
-                <span>ULMiNDpvtltd@gmail.com</span>
+                <span>ulmindpvtltd@gmail.com</span>
               </div>
             </div>
           </div>

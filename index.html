@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ULMiND</title>
     <!-- ✅ Favicon -->
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
     <!-- <meta property="og:image" content="https://ULMiND.com/ULMiNDcard.png" /> -->
     <meta property="og:url" content="https://ulmind.com" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="description" content="ULMiND is a forward-thinking IT company specializing in web development, mobile applications, cloud solutions, and AI-driven innovations. We help businesses scale with cutting-edge digital solutions." />
     <meta name="author" content="ULMiND" />
     <meta property="og:title" content="ULMiND" />
@@ -15,12 +17,33 @@
     <meta property="og:type" content="website" />
     <!-- <meta property="og:image" content="https://ULMiND.com/ULMiNDcard.png" />
     <meta property="og:url" content="https://ULMiND.com" /> -->
-</head>
 
+    <!-- Organization Logo Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "url": "https://ulmind.com",
+      "logo": "https://ulmind.com/ULMiNDcard.png"
+    }
+    </script>
 
+    <!-- Sitelinks Search Box Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "url": "https://ulmind.com/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://ulmind.com/search/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+  </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-
   </body>
 </html>
