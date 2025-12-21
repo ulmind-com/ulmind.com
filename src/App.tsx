@@ -13,17 +13,25 @@ import Methodology from "./pages/Methodology";
 import Career from "./pages/Career";
 import NotFound from "./pages/NotFound";
 
+// ✅ Snowfall import
+import Snowfall from "react-snowfall";
+
 // WhatsApp Floating Widget
 const WhatsAppFloat: React.FC = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [message, setMessage] = useState("");
 
   const openWhatsApp = () => {
-    const messageWithLink = message 
+    const messageWithLink = message
       ? `${message}\n\nhttps://www.ULMiND.com`
       : "Hi there 👋\nHow can I help you?\n\nwww.ULMiND.com";
-    const encodedMessage = encodeURIComponent(messageWithLink || "Hi there 👋\nHow can I help you?");
-    window.open(`https://wa.me/918537861040?text=${encodedMessage}`, "_blank");
+    const encodedMessage = encodeURIComponent(
+      messageWithLink || "Hi there 👋\nHow can I help you?"
+    );
+    window.open(
+      `https://wa.me/918537861040?text=${encodedMessage}`,
+      "_blank"
+    );
     setShowPopup(false);
     setMessage("");
   };
@@ -50,13 +58,8 @@ const WhatsAppFloat: React.FC = () => {
         onClick={() => setShowPopup(true)}
         title="Chat with ULMiND on WhatsApp"
       >
-        <svg
-          viewBox="0 0 32 32"
-          width="36"
-          height="36"
-          fill="white"
-        >
-          <path d="M16 0C7.164 0 0 7.164 0 16c0 2.828.736 5.484 2.024 7.792L0 32l8.416-2.208A15.928 15.928 0 0016 32c8.836 0 16-7.164 16-16S24.836 0 16 0zm0 29.6a13.6 13.6 0 01-6.944-1.904l-.496-.296-5.152 1.352 1.376-5.024-.324-.516A13.544 13.544 0 012.4 16c0-7.512 6.088-13.6 13.6-13.6S29.6 8.488 29.6 16 23.512 29.6 16 29.6zm7.456-10.176c-.408-.204-2.416-1.192-2.792-1.328-.376-.136-.648-.204-.92.204-.272.408-1.056 1.328-1.296 1.6-.24.272-.48.308-.888.104-.408-.204-1.72-.632-3.276-2.02-1.212-1.08-2.032-2.416-2.272-2.824-.24-.408-.024-.628.18-.832.184-.184.408-.48.612-.72.204-.24.272-.408.408-.68.136-.272.068-.508-.032-.712-.104-.204-.92-2.216-1.26-3.036-.332-.8-.668-.692-.92-.704-.236-.012-.508-.016-.78-.016-.272 0-.716.104-1.092.508-.376.408-1.44 1.408-1.44 3.432 0 2.024 1.476 3.98 1.68 4.252.204.272 2.888 4.408 6.996 6.184.976.424 1.74.676 2.336.864.98.312 1.872.268 2.576.164.788-.116 2.416-.988 2.756-1.94.34-.952.34-1.768.24-1.94-.104-.172-.376-.272-.784-.476z"/>
+        <svg viewBox="0 0 32 32" width="36" height="36" fill="white">
+          <path d="M16 0C7.164 0 0 7.164 0 16c0 2.828.736 5.484 2.024 7.792L0 32l8.416-2.208A15.928 15.928 0 0016 32c8.836 0 16-7.164 16-16S24.836 0 16 0zm0 29.6a13.6 13.6 0 01-6.944-1.904l-.496-.296-5.152 1.352 1.376-5.024-.324-.516A13.544 13.544 0 012.4 16c0-7.512 6.088-13.6 13.6-13.6S29.6 8.488 29.6 16 23.512 29.6 16 29.6zm7.456-10.176c-.408-.204-2.416-1.192-2.792-1.328-.376-.136-.648-.204-.92.204-.272.408-1.056 1.328-1.296 1.6-.24.272-.48.308-.888.104-.408-.204-1.72-.632-3.276-2.02-1.212-1.08-2.032-2.416-2.272-2.824-.24-.408-.024-.628.18-.832.184-.184.408-.48.612-.72.204-.24.272-.408.408-.68.136-.272.068-.508-.032-.712-.104-.204-.92-2.216-1.26-3.036-.332-.8-.668-.692-.92-.704-.236-.012-.508-.016-.78-.016-.272 0-.716.104-1.092.508-.376.408-1.44 1.408-1.44 3.432 0 2.024 1.476 3.98 1.68 4.252.204.272 2.888 4.408 6.996 6.184.976.424 1.74.676 2.336.864.98.312 1.872.268 2.576.164.788-.116 2.416-.988 2.756-1.94.34-.952.34-1.768.24-1.94-.104-.172-.376-.272-.784-.476z" />
         </svg>
       </div>
 
@@ -86,11 +89,12 @@ const WhatsAppFloat: React.FC = () => {
               zIndex: 999999,
               width: "360px",
               overflow: "hidden",
-              fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif",
+              fontFamily:
+                "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif",
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Header - Teal Green */}
+            {/* Header */}
             <div
               style={{
                 background: "#00897B",
@@ -102,7 +106,6 @@ const WhatsAppFloat: React.FC = () => {
                 position: "relative",
               }}
             >
-              {/* Profile Image with Online Indicator */}
               <div style={{ position: "relative" }}>
                 <img
                   src="/ULmindlogo1.png"
@@ -115,7 +118,6 @@ const WhatsAppFloat: React.FC = () => {
                     backgroundColor: "#fff",
                   }}
                 />
-                {/* Green online dot */}
                 <div
                   style={{
                     position: "absolute",
@@ -129,37 +131,52 @@ const WhatsAppFloat: React.FC = () => {
                   }}
                 />
               </div>
-              
-              {/* Name and Number */}
+
               <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: "600", fontSize: "16px", marginBottom: "2px" }}>
+                <div
+                  style={{
+                    fontWeight: "600",
+                    fontSize: "16px",
+                    marginBottom: "2px",
+                  }}
+                >
                   ULMiND
                 </div>
                 <div style={{ fontSize: "13px", opacity: 0.9 }}>
                   +91 85378 61040
                 </div>
               </div>
-              
-              {/* QR Code Icon */}
+
               <div style={{ marginRight: "8px" }}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="white"
+                  strokeWidth="2"
+                >
                   <rect x="3" y="3" width="7" height="7" />
                   <rect x="14" y="3" width="7" height="7" />
                   <rect x="3" y="14" width="7" height="7" />
                   <rect x="14" y="14" width="7" height="7" />
                 </svg>
               </div>
-              
-              {/* Close Button */}
+
               <div
-                style={{ cursor: "pointer", fontSize: "28px", lineHeight: "20px", fontWeight: "300" }}
+                style={{
+                  cursor: "pointer",
+                  fontSize: "28px",
+                  lineHeight: "20px",
+                  fontWeight: "300",
+                }}
                 onClick={() => setShowPopup(false)}
               >
                 ×
               </div>
             </div>
 
-            {/* Chat Body - WhatsApp Pattern Background */}
+            {/* Chat Body */}
             <div
               style={{
                 padding: "20px",
@@ -168,7 +185,6 @@ const WhatsAppFloat: React.FC = () => {
                 minHeight: "200px",
               }}
             >
-              {/* Time stamp */}
               <div style={{ textAlign: "center", marginBottom: "16px" }}>
                 <span
                   style={{
@@ -183,7 +199,6 @@ const WhatsAppFloat: React.FC = () => {
                 </span>
               </div>
 
-              {/* Chat Bubbles */}
               <div style={{ marginBottom: "20px" }}>
                 <div
                   style={{
@@ -220,7 +235,7 @@ const WhatsAppFloat: React.FC = () => {
               </div>
             </div>
 
-            {/* Input Area - White */}
+            {/* Input Area */}
             <div
               style={{
                 background: "#F0F2F5",
@@ -248,9 +263,15 @@ const WhatsAppFloat: React.FC = () => {
                 }}
                 autoFocus
               />
-              {/* Three dots menu */}
-              <div style={{ color: "#54656F", cursor: "pointer", fontSize: "20px" }}>⋮</div>
-              {/* Send Button */}
+              <div
+                style={{
+                  color: "#54656F",
+                  cursor: "pointer",
+                  fontSize: "20px",
+                }}
+              >
+                ⋮
+              </div>
               <div
                 onClick={openWhatsApp}
                 style={{
@@ -291,6 +312,26 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
+
+        {/* 🎄 GfG-like Snowfall */}
+        <Snowfall
+          style={{
+            position: "fixed",
+            width: "100vw",
+            height: "100vh",
+            top: 0,
+            left: 0,
+            pointerEvents: "none",
+            zIndex: 500, // below WhatsApp zIndex 999999
+          }}
+          color="#ffffff"
+          snowflakeCount={80}        // sparse like banner
+          radius={[1.2, 3.2]}        // small round dots
+          speed={[0.5, 1.5]}         // gentle fall
+          wind={[-0.3, 0.6]}         // slight horizontal drift
+          opacity={[0.6, 1]}
+        />
+
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
