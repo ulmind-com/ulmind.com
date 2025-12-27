@@ -130,21 +130,6 @@ export default function Team() {
     "linkedin": "https://www.linkedin.com/in/roni-routh-a15227302/"
   }
 },
-{
-  name: "Sayan Samanta",
-  role: "Media Head & Developer",
-  image: "sayansamanta.heic",
-  bio: "I’m Sayan Samanta, an IT undergrad driven by a passion for Full Stack Development and UI/UX design. I’m currently honing my skills in modern web technologies while learning how to merge design and functionality into seamless digital experiences.",
-  skills: [
-     "C",
-    "Python",
-    "Java",
-    "UI/UX",
-  ],
-  social: {
-    "linkedin": "https://www.linkedin.com/in/sayan-samanta-40604827b?utm_source=share&utm_campaign=share_via&utm_content=profile"
-  }
-},
 
 
 
