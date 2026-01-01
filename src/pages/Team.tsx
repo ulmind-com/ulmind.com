@@ -89,6 +89,40 @@ export default function Team() {
         github: "https://github.com/Swastika-Roy",
       },
     },
+  "name": "Swastika Roy",
+  "role": "Co-founder & CHRO",
+  "image": "/swastika.jpg",
+  "bio": "Spring Boot–focused Full Stack Developer specializing in building reliable microservices and high-performance REST APIs with Java and MySQL. I architect clean, maintainable backends, optimize database performance, and automate workflows with Python. I care deeply about code quality, security, and delivering scalable features that serve real users.",
+  "skills": ["MySQL", "Java", "Spring Boot", "Microservices", "Python"],
+  "social": {
+    "linkedin": "https://www.linkedin.com/in/swastika-roy-692aa72b4/",
+    "github": "https://github.com/Swastika-Roy",
+    "twitter": "#"
+  }
+},
+
+{
+  name: "Roni Routh",
+  role: "Python Developer & ML Engineer",
+  image: "ronirouth.jpg",
+  bio: "Passionate Python Developer specializing in Machine Learning and Data Analysis. Skilled in C++, Python, and key ML libraries like NumPy, Pandas, Scikit-learn, and FastAPI, focusing on building intelligent, data-driven applications with clean, efficient code.",
+  skills: [
+     "C++ ",
+    "Python",
+    "NumPy",
+    "Pandas",
+    "Matplotlib & Seaborn",
+    "Scikit-learn",
+   "FastApi",
+   "SQL"
+  ],
+  social: {
+    "linkedin": "https://www.linkedin.com/in/roni-routh-a15227302/"
+  }
+},
+
+
+
   ];
 
   return (
