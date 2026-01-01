@@ -82,47 +82,33 @@ export default function Team() {
       name: "Swastika Roy",
       role: "Co-Founder & CHRO",
       image: "/swastika.jpg",
-      bio: "Spring Boot–focused backend engineer building reliable microservices.",
-      skills: ["Java", "Spring Boot", "MySQL", "Microservices"],
+      bio: "Spring Boot–focused Full Stack Developer specializing in building reliable microservices and high-performance REST APIs with Java and MySQL. I architect clean, maintainable backends, optimize database performance, and automate workflows with Python. I care deeply about code quality, security, and delivering scalable features that serve real users.",
+      skills: ["MySQL", "Java", "Spring Boot", "Microservices", "Python"],
       social: {
         linkedin: "https://www.linkedin.com/in/swastika-roy-692aa72b4/",
         github: "https://github.com/Swastika-Roy",
-      },
+        twitter: "#"
+      }
     },
-  "name": "Swastika Roy",
-  "role": "Co-founder & CHRO",
-  "image": "/swastika.jpg",
-  "bio": "Spring Boot–focused Full Stack Developer specializing in building reliable microservices and high-performance REST APIs with Java and MySQL. I architect clean, maintainable backends, optimize database performance, and automate workflows with Python. I care deeply about code quality, security, and delivering scalable features that serve real users.",
-  "skills": ["MySQL", "Java", "Spring Boot", "Microservices", "Python"],
-  "social": {
-    "linkedin": "https://www.linkedin.com/in/swastika-roy-692aa72b4/",
-    "github": "https://github.com/Swastika-Roy",
-    "twitter": "#"
-  }
-},
-
-{
-  name: "Roni Routh",
-  role: "Python Developer & ML Engineer",
-  image: "ronirouth.jpg",
-  bio: "Passionate Python Developer specializing in Machine Learning and Data Analysis. Skilled in C++, Python, and key ML libraries like NumPy, Pandas, Scikit-learn, and FastAPI, focusing on building intelligent, data-driven applications with clean, efficient code.",
-  skills: [
-     "C++ ",
-    "Python",
-    "NumPy",
-    "Pandas",
-    "Matplotlib & Seaborn",
-    "Scikit-learn",
-   "FastApi",
-   "SQL"
-  ],
-  social: {
-    "linkedin": "https://www.linkedin.com/in/roni-routh-a15227302/"
-  }
-},
-
-
-
+    {
+      name: "Roni Routh",
+      role: "Python Developer & ML Engineer",
+      image: "ronirouth.jpg",
+      bio: "Passionate Python Developer specializing in Machine Learning and Data Analysis. Skilled in C++, Python, and key ML libraries like NumPy, Pandas, Scikit-learn, and FastAPI, focusing on building intelligent, data-driven applications with clean, efficient code.",
+      skills: [
+        "C++",
+        "Python",
+        "NumPy",
+        "Pandas",
+        "Matplotlib & Seaborn",
+        "Scikit-learn",
+        "FastApi",
+        "SQL"
+      ],
+      social: {
+        linkedin: "https://www.linkedin.com/in/roni-routh-a15227302/"
+      }
+    }
   ];
 
   return (
@@ -159,17 +145,17 @@ export default function Team() {
                   />
                   <div className="absolute inset-0 bg-black/60 opacity-0 hover:opacity-100 transition flex items-end justify-center pb-4 gap-2">
                     {member.social.linkedin && (
-                      <a href={member.social.linkedin} target="_blank">
+                      <a href={member.social.linkedin} target="_blank" rel="noopener noreferrer">
                         <Linkedin className="w-5 h-5 text-white" />
                       </a>
                     )}
                     {member.social.github && (
-                      <a href={member.social.github} target="_blank">
+                      <a href={member.social.github} target="_blank" rel="noopener noreferrer">
                         <Github className="w-5 h-5 text-white" />
                       </a>
                     )}
                     {member.social.twitter && (
-                      <a href={member.social.twitter} target="_blank">
+                      <a href={member.social.twitter} target="_blank" rel="noopener noreferrer">
                         <Twitter className="w-5 h-5 text-white" />
                       </a>
                     )}
@@ -207,7 +193,7 @@ export default function Team() {
             Join Our Growing Team
           </h2>
           <p className="text-xl text-muted-foreground mb-8">
-            We’re always looking for passionate people to grow with us.
+            We're always looking for passionate people to grow with us.
           </p>
           <Button size="lg" onClick={() => navigate("/career")}>
             View Open Positions
