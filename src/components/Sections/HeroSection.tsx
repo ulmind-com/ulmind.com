@@ -2,22 +2,21 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { FloatingObjects } from '@/components/3D/FloatingObjects';
+import { useNavigate } from 'react-router-dom';
 
 export const HeroSection = () => {
-  const scrollToContact = () => {
-    const element = document.querySelector('#contact');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+  const navigate = useNavigate();
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-secondary/20 to-background">
+    <section
+      id="home"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-secondary/20 to-background"
+    >
       {/* 3D Background */}
       <div className="absolute inset-0 opacity-30">
         <FloatingObjects />
       </div>
-      
+
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.div
@@ -28,11 +27,13 @@ export const HeroSection = () => {
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+            transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
             className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full mb-8"
           >
             <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium text-primary">Welcome to the Future of Development</span>
+            <span className="text-sm font-medium text-primary">
+              Welcome to the Future of Development
+            </span>
           </motion.div>
 
           <motion.h1
@@ -41,7 +42,7 @@ export const HeroSection = () => {
             transition={{ delay: 0.4, duration: 0.8 }}
             className="text-4xl sm:text-6xl lg:text-7xl font-bold mb-6"
           >
-            Building Tomorrow's
+            Building Tomorrow&apos;s
             <br />
             <span className="gradient-text">Digital Solutions</span>
           </motion.h1>
@@ -52,7 +53,8 @@ export const HeroSection = () => {
             transition={{ delay: 0.6, duration: 0.8 }}
             className="text-xl sm:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto"
           >
-            We transform ideas into powerful digital experiences using cutting-edge technology and innovative design principles.
+            We transform ideas into powerful digital experiences using cutting-edge
+            technology and innovative design principles.
           </motion.p>
 
           <motion.div
@@ -61,27 +63,29 @@ export const HeroSection = () => {
             transition={{ delay: 0.8, duration: 0.8 }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
+            {/* ✅ FIXED BUTTON */}
             <Button
               size="lg"
-              onClick={scrollToContact}
+              onClick={() => navigate('/contact')}
               className="bg-gradient-primary hover:opacity-90 smooth-transition group"
             >
               Start Your Project
               <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 smooth-transition" />
             </Button>
-            
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={() => document.querySelector('#about')?.scrollIntoView({ behavior: 'smooth' })}
-              className="border-primary text-primary hover:bg-primary hover:text-primary-foreground smooth-transition"
-            >
-              Learn More
-            </Button>
+
+<Button
+  variant="outline"
+  size="lg"
+  onClick={() => navigate('/about')}
+  className="border-primary text-primary hover:bg-primary hover:text-primary-foreground smooth-transition"
+>
+  Learn More
+</Button>
+
           </motion.div>
         </motion.div>
 
-        {/* Floating stats */}
+        {/* Stats */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -99,14 +103,18 @@ export const HeroSection = () => {
               whileHover={{ scale: 1.05 }}
               className="text-center"
             >
-              <div className="text-2xl font-bold gradient-text">{stat.number}</div>
-              <div className="text-sm text-muted-foreground">{stat.label}</div>
+              <div className="text-2xl font-bold gradient-text">
+                {stat.number}
+              </div>
+              <div className="text-sm text-muted-foreground">
+                {stat.label}
+              </div>
             </motion.div>
           ))}
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll Indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
