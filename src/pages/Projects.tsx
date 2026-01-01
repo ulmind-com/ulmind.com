@@ -1,247 +1,172 @@
-import { motion } from 'framer-motion';
-import { ExternalLink, Github, Calendar, Users, Rocket, Star, TrendingUp } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Navbar } from '@/components/Layout/Navbar';
-import { Footer } from '@/components/Layout/Footer';
+import { motion } from "framer-motion";
+import Tilt from "react-parallax-tilt";
+import { ExternalLink, Github, Calendar, Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import BlurBlob from "@/components/BlurBlob";
 
 export default function Projects() {
   const projects = [
     {
       id: 1,
-      title: "Restaurant Food Delivery Platform Serverless",
-      description: "A comprehensive  is a serverless, progressive web app (PWA) for ordering food from ma lakshmirani restaurant. It features a responsive, modern interface with dynamic menu sections, a seamless cart experience directly connect with restaurant's owner whatsapp.",
-      image: "/foodorder1.png",
+      title: "Restaurant Food Delivery Platform (Serverless)",
+      description:
+        "A serverless progressive web app for food ordering with a modern UI, cart system, and direct WhatsApp integration.",
+      image: "/maa_laxmi.png",
       technologies: ["React", "TypeScript", "Vercel"],
       category: "Web Development",
       timeline: "3 days",
       teamSize: "3 developers",
-      // features: ["", "Real-time analytics", "Payment gateway integration", "Mobile responsive"],
       demoUrl: "https://www.malakshmiranirestaurant.online",
-      githubUrl: "#"
+      githubUrl: "#",
     },
-    // {
-    //   id: 2,
-    //   title: "Healthcare Management System",
-    //   description: "Complete hospital management system with patient records, appointment scheduling, and billing integration.",
-    //   image: "/placeholder.svg",
-    //   technologies: ["React Native", "Spring Boot", "PostgreSQL", "AWS"],
-    //   category: "Mobile & Web",
-    //   timeline: "8 months",
-    //   teamSize: "7 developers",
-    //   // features: ["Patient management", "Appointment system", "Medical records", "Billing integration"],
-    //   demoUrl: "#",
-    //   githubUrl: "#"
-    // },
-    // {
-    //   id: 3,
-    //   title: "AI-Powered Analytics Dashboard",
-    //   description: "Advanced analytics platform with machine learning insights and predictive modeling for business intelligence.",
-    //   image: "/placeholder.svg",
-    //   technologies: ["Python", "React", "TensorFlow", "Docker"],
-    //   category: "AI & Analytics",
-    //   timeline: "10 months",
-    //   teamSize: "6 developers",
-    //   // features: ["Machine learning models", "Predictive analytics", "Real-time dashboards", "Custom reports"],
-    //   demoUrl: "#",
-    //   githubUrl: "#"
-    // },
-    // {
-    //   id: 4,
-    //   title: "Financial Trading Platform",
-    //   description: "Real-time trading platform with advanced charting, portfolio management, and risk assessment tools.",
-    //   image: "/placeholder.svg",
-    //   technologies: ["Angular", "Java", "Kafka", "Redis"],
-    //   category: "FinTech",
-    //   timeline: "12 months",
-    //   teamSize: "8 developers",
-    //   // features: ["Real-time trading", "Portfolio tracking", "Risk management", "Advanced charts"],
-    //   demoUrl: "#",
-    //   githubUrl: "#"
-    // },
-    // {
-    //   id: 5,
-    //   title: "Social Media Analytics Tool",
-    //   description: "Comprehensive social media monitoring and analytics platform for brands and marketing agencies.",
-    //   image: "/placeholder.svg",
-    //   technologies: ["Vue.js", "Python", "Elasticsearch", "Kubernetes"],
-    //   category: "Marketing Tech",
-    //   timeline: "7 months",
-    //   teamSize: "4 developers",
-    //   // features: ["Social monitoring", "Sentiment analysis", "Competitor tracking", "Custom reporting"],
-    //   demoUrl: "#",
-    //   githubUrl: "#"
-    // },
-    // {
-    //   id: 6,
-    //   title: "IoT Smart Home System",
-    //   description: "Complete IoT ecosystem for smart home automation with mobile app and voice control integration.",
-    //   image: "/placeholder.svg",
-    //   technologies: ["Flutter", "Node.js", "MQTT", "Firebase"],
-    //   category: "IoT",
-    //   timeline: "9 months",
-    //   teamSize: "6 developers",
-    //   // features: ["Device automation", "Voice control", "Energy monitoring", "Security system"],
-    //   demoUrl: "#",
-    //   githubUrl: "#"
-    // }
+    {
+      id: 2,
+      title: "Hotel & Restaurant Business Website",
+      description:
+        "A fast, mobile-first business website designed to improve online visibility and local engagement.",
+      image: "/Jamai_da_project.png",
+      technologies: ["React", "TypeScript", "Vercel"],
+      category: "Web Development",
+      timeline: "2 days",
+      teamSize: "2 developers",
+      demoUrl: "https://jamaidahotel.online",
+      githubUrl: "#",
+    },
+    {
+      id: 3,
+      title: "Regional Digital News Platform",
+      description:
+        "A scalable digital news portal delivering real-time regional updates with SEO-friendly architecture.",
+      image: "/jhbihar.png",
+      technologies: ["React", "SEO", "Vercel"],
+      category: "Media & Web",
+      timeline: "4 days",
+      teamSize: "3 developers",
+      demoUrl: "https://www.jharkhandbiharupdates.com",
+      githubUrl: "#",
+    },
+    {
+      id: 4,
+      title: "Investment & Financial Consulting Website",
+      description:
+        "A professional consulting website built to establish trust and convert visitors into leads.",
+      image: "/Smart_invest.png",
+      technologies: ["React", "Tailwind CSS", "Form Integration"],
+      category: "FinTech",
+      timeline: "3 days",
+      teamSize: "2 developers",
+      demoUrl: "https://www.smartinvestsolutions.in",
+      githubUrl: "#",
+    },
   ];
 
-  const categories = ["All", "Web Development", "Mobile & Web", "AI & Analytics", "FinTech", "Marketing Tech", "IoT"];
-
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        <div className="max-w-7xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h1 className="text-4xl md:text-6xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-6">
-              Our Projects
-            </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Explore our portfolio of successful projects that showcase our expertise in delivering 
-              innovative solutions across various industries and technologies.
-            </p>
-          </motion.div>
-        </div>
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      {/* Background blobs */}
+      <BlurBlob
+        position={{ top: "20%", left: "15%" }}
+        size={{ width: "400px", height: "400px" }}
+      />
+      <BlurBlob
+        position={{ top: "70%", left: "85%" }}
+        size={{ width: "450px", height: "450px" }}
+      />
+
+      {/* HERO */}
+      <section className="pt-32 pb-20 px-4 text-center">
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-4xl md:text-6xl font-bold gradient-text mb-6"
+        >
+          Our Projects
+        </motion.h1>
+        <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          Scalable, modern, and business-focused digital solutions.
+        </p>
       </section>
 
-      {/* Filter Section */}
-      <section className="py-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-wrap justify-center gap-4 mb-12">
-            {categories.map((category, index) => (
-              <motion.div
-                key={category}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+      {/* PROJECT GRID */}
+      <section className="py-12 px-4">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+          {projects.map((project, index) => (
+            <motion.div
+              key={project.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.08 }}
+            >
+              <Tilt
+                tiltMaxAngleX={15}
+                tiltMaxAngleY={15}
+                perspective={1000}
+                scale={1.04}
+                transitionSpeed={800}
+                gyroscope
               >
-                <Button 
-                  variant={index === 0 ? "default" : "outline"}
-                  className="hover:bg-primary hover:text-primary-foreground transition-all duration-300"
-                >
-                  {category}
-                </Button>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Projects Grid */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects.map((project, index) => (
-              <motion.div
-                key={project.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <Card className="overflow-hidden glass-card border-border/50 hover:shadow-glow hover:border-primary/20 transition-all duration-500 group hover-scale">
-                  <div className="relative overflow-hidden">
-                    <img 
-                      src={project.image} 
+                <Card className="overflow-hidden bg-background border hover:shadow-[0_30px_70px_-20px_rgba(0,0,0,0.4)] transition-all">
+                  <div className="relative">
+                    <img
+                      src={project.image}
                       alt={project.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="w-full h-56 object-cover"
                     />
-                    <div className="absolute top-4 left-4">
-                      <Badge variant="secondary" className="bg-primary/20 text-primary border-primary/30">
-                        {project.category}
-                      </Badge>
-                    </div>
+                    <Badge className="absolute top-4 left-4 bg-primary/20 text-primary">
+                      {project.category}
+                    </Badge>
                   </div>
-                  
+
                   <div className="p-6">
-                    <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
+                    <h3 className="text-xl font-bold mb-3">
                       {project.title}
                     </h3>
-                    
+
                     <p className="text-muted-foreground mb-4 line-clamp-3">
                       {project.description}
                     </p>
 
-                    <div className="flex items-center gap-4 mb-4 text-sm text-muted-foreground">
+                    <div className="flex gap-4 text-sm text-muted-foreground mb-4">
                       <div className="flex items-center gap-1">
                         <Calendar className="w-4 h-4" />
-                        <span>{project.timeline}</span>
+                        {project.timeline}
                       </div>
                       <div className="flex items-center gap-1">
                         <Users className="w-4 h-4" />
-                        <span>{project.teamSize}</span>
+                        {project.teamSize}
                       </div>
                     </div>
 
                     <div className="flex flex-wrap gap-2 mb-6">
-                      {project.technologies.map((tech, techIndex) => (
-                        <Badge key={techIndex} variant="outline" className="text-xs">
+                      {project.technologies.map((tech) => (
+                        <Badge key={tech} variant="outline">
                           {tech}
                         </Badge>
                       ))}
                     </div>
 
                     <div className="flex gap-3">
-                      <Button size="sm" className="flex-1" asChild>
-                        <a href={project.demoUrl} target="_blank" rel="noopener noreferrer">
+                      <Button asChild className="flex-1">
+                        <a href={project.demoUrl} target="_blank" rel="noreferrer">
                           <ExternalLink className="w-4 h-4 mr-2" />
                           Live
                         </a>
                       </Button>
-                      <Button size="sm" variant="outline" asChild>
-                        <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                      <Button variant="outline" asChild>
+                        <a href={project.githubUrl} target="_blank" rel="noreferrer">
                           <Github className="w-4 h-4" />
                         </a>
                       </Button>
                     </div>
                   </div>
                 </Card>
-              </motion.div>
-            ))}
-          </div>
+              </Tilt>
+            </motion.div>
+          ))}
         </div>
       </section>
-
-      {/* Stats Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-muted/30">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center"
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12">
-              Project Success Metrics
-            </h2>
-            
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {[
-                { number: "5+", label: "Projects Delivered" },
-                { number: "99%", label: "Client Satisfaction" },
-                { number: "5+", label: "Industries Served" },
-                { number: "24/7", label: "Support Available" }
-              ].map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="text-4xl font-bold text-primary mb-2">{stat.number}</div>
-                  <div className="text-muted-foreground">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </section>
-      
-      <Footer />
     </div>
   );
 }
