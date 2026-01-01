@@ -68,6 +68,8 @@ All colors MUST be HSL.
     --sidebar-border: 220 13% 91%;
 
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    --elegant-font: 'Great Vibes';
   }
 
   .dark {
@@ -202,4 +204,16 @@ All colors MUST be HSL.
 
 .animate-blob {
   animation: blob 8s infinite ease-in-out;
+}
+
+/* ---break---
+*/
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
