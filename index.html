@@ -4,22 +4,29 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+
     <!-- ✅ SEO Title -->
     <title>ULMiND | Digital Solutions & IT Services Company</title>
 
+
     <!-- ✅ Canonical -->
     <link rel="canonical" href="https://www.ulmind.com/" />
+
 
     <!-- ✅ Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
+
     <!-- ✅ Meta -->
     <meta
       name="description"
-      content="ULMiND is a forward-thinking IT company specializing in web development, mobile apps, cloud solutions, and AI-driven innovations. Based in Haldia, West Bengal."
+      content="ULMiND - Leading IT company in Haldia specializing in website development, mobile app development, ecommerce solutions, cloud services, and digital transformation. Custom software & AI-driven innovations."
     />
+    <meta name="keywords" content="website development, mobile app development, ecommerce website, IT services, cloud solutions, digital solutions, software company Haldia, web development West Bengal, custom software development, AI solutions, digital marketing" />
     <meta name="author" content="ULMiND" />
+    <meta name="robots" content="index, follow" />
+
 
     <!-- ✅ Open Graph -->
     <meta property="og:title" content="ULMiND | Digital Solutions & IT Services" />
@@ -31,11 +38,13 @@
     <meta property="og:url" content="https://www.ulmind.com/" />
     <meta property="og:image" content="https://www.ulmind.com/ULMiNDcard.png" />
 
+
     <!-- ✅ Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="ULMiND" />
     <meta name="twitter:description" content="Digital Solutions & IT Services Company" />
     <meta name="twitter:image" content="https://www.ulmind.com/ULMiNDcard.png" />
+
 
     <!-- ✅ Organization Schema (MOST IMPORTANT FOR LOGO) -->
     <script type="application/ld+json">
@@ -45,6 +54,13 @@
       "name": "ULMiND",
       "url": "https://www.ulmind.com",
       "logo": "https://www.ulmind.com/logo.png",
+      "description": "Leading IT company specializing in website development, mobile apps, ecommerce solutions, and cloud services",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Haldia",
+        "addressRegion": "West Bengal",
+        "addressCountry": "IN"
+      },
       "sameAs": [
         "https://www.facebook.com/ULmind.in",
         "https://www.instagram.com/ulmind__official",
@@ -54,16 +70,43 @@
     }
     </script>
 
+
     <!-- ✅ Website Schema -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
       "name": "ULMiND",
-      "url": "https://www.ulmind.com/"
+      "url": "https://www.ulmind.com/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://www.ulmind.com/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
+
+    <!-- ✅ LocalBusiness Schema (for local SEO) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "ULMiND",
+      "image": "https://www.ulmind.com/logo.png",
+      "url": "https://www.ulmind.com",
+      "description": "Website development, mobile app development, ecommerce solutions, and IT services in Haldia",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Haldia",
+        "addressRegion": "West Bengal",
+        "addressCountry": "IN"
+      },
+      "priceRange": "$$"
     }
     </script>
   </head>
+
 
   <body>
     <div id="root"></div>
