@@ -46,29 +46,36 @@
     <meta name="twitter:image" content="https://www.ulmind.com/ULMiNDcard.png" />
 
 
-    <!-- ✅ Organization Schema (MOST IMPORTANT FOR LOGO) -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "ULMiND",
-      "url": "https://www.ulmind.com",
-      "logo": "https://www.ulmind.com/logo.png",
-      "description": "Leading IT company specializing in website development, mobile apps, ecommerce solutions, and cloud services",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Haldia",
-        "addressRegion": "West Bengal",
-        "addressCountry": "IN"
-      },
-      "sameAs": [
-        "https://www.facebook.com/ULmind.in",
-        "https://www.instagram.com/ulmind__official",
-        "https://www.linkedin.com/company/ulmind",
-        "https://x.com/ULMINDOfficial"
-      ]
-    }
-    </script>
+   <!-- ✅ Organization Schema (FOR LOGO IN SEARCH) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "ULMiND",
+  "url": "https://www.ulmind.com",
+  "logo": {
+    "@type": "ImageObject",
+    "url": "https://www.ulmind.com/logo.png",
+    "width": 512,
+    "height": 512
+  },
+  "image": "https://www.ulmind.com/logo.png",
+  "description": "Leading IT company specializing in website development, mobile apps, ecommerce solutions, and cloud services",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Haldia",
+    "addressRegion": "West Bengal",
+    "addressCountry": "IN"
+  },
+  "sameAs": [
+    "https://www.facebook.com/ULmind.in",
+    "https://www.instagram.com/ulmind__official",
+    "https://www.linkedin.com/company/ulmind",
+    "https://x.com/ULMINDOfficial"
+  ]
+}
+</script>
+
 
 
     <!-- ✅ Website Schema -->
