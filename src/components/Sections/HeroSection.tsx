@@ -4,8 +4,10 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 import { FloatingObjects } from '@/components/3D/FloatingObjects';
 import { useNavigate } from 'react-router-dom';
 
+
 export const HeroSection = () => {
   const navigate = useNavigate();
+
 
   return (
     <section
@@ -16,6 +18,7 @@ export const HeroSection = () => {
       <div className="absolute inset-0 opacity-30">
         <FloatingObjects />
       </div>
+
 
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -36,6 +39,7 @@ export const HeroSection = () => {
             </span>
           </motion.div>
 
+
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -47,6 +51,7 @@ export const HeroSection = () => {
             <span className="gradient-text">Digital Solutions</span>
           </motion.h1>
 
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -57,13 +62,13 @@ export const HeroSection = () => {
             technology and innovative design principles.
           </motion.p>
 
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8, duration: 0.8 }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
-            {/* ✅ FIXED BUTTON */}
             <Button
               size="lg"
               onClick={() => navigate('/contact')}
@@ -73,17 +78,18 @@ export const HeroSection = () => {
               <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 smooth-transition" />
             </Button>
 
-<Button
-  variant="outline"
-  size="lg"
-  onClick={() => navigate('/about')}
-  className="border-primary text-primary hover:bg-primary hover:text-primary-foreground smooth-transition"
->
-  Learn More
-</Button>
 
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={() => navigate('/about')}
+              className="border-primary text-primary hover:bg-primary hover:text-primary-foreground smooth-transition"
+            >
+              Learn More
+            </Button>
           </motion.div>
         </motion.div>
+
 
         {/* Stats */}
         <motion.div
@@ -112,7 +118,49 @@ export const HeroSection = () => {
             </motion.div>
           ))}
         </motion.div>
+
+
+        {/* ✅ NEW: Internal Links Section for SEO */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.4, duration: 0.8 }}
+          className="mt-12 max-w-4xl mx-auto"
+        >
+          <p className="text-lg text-muted-foreground leading-relaxed">
+            ULMiND delivers cutting-edge digital solutions through our proven{' '}
+            <button
+              onClick={() => navigate('/methodology')}
+              className="text-primary hover:underline font-semibold cursor-pointer bg-transparent border-none p-0"
+            >
+              development methodology
+            </button>
+            . Explore our{' '}
+            <button
+              onClick={() => navigate('/projects')}
+              className="text-primary hover:underline font-semibold cursor-pointer bg-transparent border-none p-0"
+            >
+              successful projects
+            </button>
+            , meet our talented{' '}
+            <button
+              onClick={() => navigate('/team')}
+              className="text-primary hover:underline font-semibold cursor-pointer bg-transparent border-none p-0"
+            >
+              team of experts
+            </button>
+            , or{' '}
+            <button
+              onClick={() => navigate('/career')}
+              className="text-primary hover:underline font-semibold cursor-pointer bg-transparent border-none p-0"
+            >
+              join us
+            </button>
+            {' '}in shaping the future of technology.
+          </p>
+        </motion.div>
       </div>
+
 
       {/* Scroll Indicator */}
       <motion.div
