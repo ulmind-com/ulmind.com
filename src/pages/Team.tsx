@@ -23,7 +23,7 @@ export default function Team() {
     {
       name: "Arnab Senapati",
       role: "Co-Founder, MD & CEO",
-      image: "/arnabsenapati2.jpg",
+      image: "/arnabsenapati.png",
       bio: "Focused on building a company that helps businesses grow through technology and strategy.",
       skills: [
         "Business Development",

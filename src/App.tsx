@@ -18,11 +18,8 @@ import Career from "./pages/Career";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
-// Effects
-import Snowfall from "react-snowfall";
-
 // Icons
-import { Phone, Video, MoreVertical } from "lucide-react";
+import { Phone, Video, MoreVertical, Send } from "lucide-react";
 
 /* ===========================
    WhatsApp Floating Widget
@@ -31,8 +28,12 @@ const WhatsAppFloat: React.FC = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [message, setMessage] = useState("");
 
+  const isDark =
+    typeof document !== "undefined" &&
+    document.documentElement.classList.contains("dark");
+
   const openWhatsApp = () => {
-    const text = message || "Hi there 👋 How can I help you?";
+    const text = message || "Hi 👋 I want to know more.";
     window.open(
       `https://wa.me/918537861040?text=${encodeURIComponent(text)}`,
       "_blank"
@@ -43,16 +44,15 @@ const WhatsAppFloat: React.FC = () => {
 
   return (
     <>
-      {/* CALL BUTTON (same size as WhatsApp) */}
+      {/* CALL BUTTON (RESTORED) */}
       <a
         href="tel:8537861040"
-        title="Call Now"
         style={{
           position: "fixed",
           bottom: 100,
-          right: 24,
-          width: 60,
-          height: 60,
+          right: 22,
+          width: 56,
+          height: 56,
           borderRadius: "50%",
           backgroundColor: "#3B82F6",
           display: "flex",
@@ -62,19 +62,18 @@ const WhatsAppFloat: React.FC = () => {
           zIndex: 9999,
         }}
       >
-        <Phone size={28} color="white" />
+        <Phone size={26} color="#fff" />
       </a>
 
-      {/* WHATSAPP FLOATING BUTTON */}
+      {/* WHATSAPP BUTTON */}
       <div
         onClick={() => setShowPopup(true)}
-        title="Chat on WhatsApp"
         style={{
           position: "fixed",
           bottom: 24,
-          right: 24,
-          width: 60,
-          height: 60,
+          right: 22,
+          width: 56,
+          height: 56,
           borderRadius: "50%",
           backgroundColor: "#25D366",
           display: "flex",
@@ -85,19 +84,12 @@ const WhatsAppFloat: React.FC = () => {
           zIndex: 9999,
         }}
       >
-        {/* Official WhatsApp SVG */}
-       <svg
-  width="34"
-  height="34"
-  viewBox="0 0 24 24"
-  fill="white"
-  xmlns="http://www.w3.org/2000/svg"
->
-  <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.93.5 3.82 1.45 5.49L2 22l4.77-1.25a9.9 9.9 0 0 0 5.27 1.5h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm0 18.05h-.01a8.17 8.17 0 0 1-4.16-1.15l-.3-.18-2.83.74.76-2.76-.2-.29a8.13 8.13 0 1 1 6.74 3.64zm4.49-6.1c-.25-.12-1.47-.72-1.7-.8-.23-.08-.4-.12-.57.12-.17.25-.66.8-.8.97-.15.17-.29.18-.54.06-.25-.12-1.06-.39-2.01-1.25-.74-.66-1.24-1.47-1.39-1.72-.15-.25-.02-.38.11-.5.11-.11.25-.29.38-.44.12-.15.17-.25.25-.42.08-.17.04-.32-.02-.44-.06-.12-.57-1.37-.78-1.88-.2-.48-.41-.42-.57-.43h-.48c-.17 0-.44.06-.67.32-.23.25-.88.86-.88 2.1 0 1.23.9 2.42 1.02 2.59.12.17 1.77 2.7 4.29 3.78.6.26 1.07.42 1.44.54.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.23-.17-.48-.29z"/>
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" viewBox="0 0 48 48" id="whatsapp">
+  <rect width="48" height="48" fill="#0DC143" rx="24"></rect>
+  <path fill="#fff" d="M34.7507 13.2115C32.1777 10.5628 28.621 9.125 24.9885 9.125C17.2696 9.125 11.0642 15.4061 11.1399 23.0493C11.1399 25.4709 11.821 27.8169 12.9561 29.9358L10.9885 37.125L18.3291 35.2331C20.3723 36.3682 22.6426 36.898 24.9128 36.898C32.5561 36.898 38.7615 30.6169 38.7615 22.9736C38.7615 19.2655 37.3237 15.7845 34.7507 13.2115ZM24.9885 34.552C22.9453 34.552 20.902 34.0223 19.1615 32.9628L18.7074 32.7358L14.3183 33.8709L15.4534 29.5574L15.1507 29.1034C11.821 23.7304 13.4101 16.6169 18.8588 13.2872C24.3074 9.95743 31.3453 11.5466 34.675 16.9953C38.0047 22.4439 36.4156 29.4818 30.9669 32.8115C29.2264 33.9466 27.1074 34.552 24.9885 34.552ZM31.648 26.152L30.8156 25.7736C30.8156 25.7736 29.6047 25.2439 28.848 24.8655C28.7723 24.8655 28.6966 24.7899 28.621 24.7899C28.3939 24.7899 28.2426 24.8655 28.0912 24.9412C28.0912 24.9412 28.0156 25.0169 26.9561 26.2277C26.8804 26.3791 26.7291 26.4547 26.5777 26.4547H26.502C26.4264 26.4547 26.275 26.3791 26.1993 26.3034L25.821 26.152C24.9885 25.7736 24.2318 25.3196 23.6264 24.7142C23.475 24.5628 23.248 24.4115 23.0966 24.2601C22.5669 23.7304 22.0372 23.125 21.6588 22.4439L21.5831 22.2926C21.5074 22.2169 21.5074 22.1412 21.4318 21.9899C21.4318 21.8385 21.4318 21.6872 21.5074 21.6115C21.5074 21.6115 21.8101 21.2331 22.0372 21.0061C22.1885 20.8547 22.2642 20.6277 22.4156 20.4764C22.5669 20.2493 22.6426 19.9466 22.5669 19.7196C22.4912 19.3412 21.5831 17.298 21.3561 16.8439C21.2047 16.6169 21.0534 16.5412 20.8264 16.4655H20.5993C20.448 16.4655 20.221 16.4655 19.9939 16.4655C19.8426 16.4655 19.6912 16.5412 19.5399 16.5412L19.4642 16.6169C19.3128 16.6926 19.1615 16.8439 19.0101 16.9196C18.8588 17.0709 18.7831 17.2223 18.6318 17.3736C18.102 18.0547 17.7993 18.8872 17.7993 19.7196C17.7993 20.325 17.9507 20.9304 18.1777 21.4601L18.2534 21.6872C18.9345 23.125 19.8426 24.4115 21.0534 25.5466L21.3561 25.8493C21.5831 26.0764 21.8101 26.2277 21.9615 26.4547C23.5507 27.8169 25.3669 28.8007 27.4101 29.3304C27.6372 29.4061 27.9399 29.4061 28.1669 29.4818C28.3939 29.4818 28.6966 29.4818 28.9237 29.4818C29.302 29.4818 29.7561 29.3304 30.0588 29.1791C30.2858 29.0277 30.4372 29.0277 30.5885 28.8764L30.7399 28.725C30.8912 28.5736 31.0426 28.498 31.1939 28.3466C31.3453 28.1953 31.4966 28.0439 31.5723 27.8926C31.7237 27.5899 31.7993 27.2115 31.875 26.8331C31.875 26.6818 31.875 26.4547 31.875 26.3034C31.875 26.3034 31.7993 26.2277 31.648 26.152Z"></path>
 </svg>
       </div>
 
-      {/* CHAT POPUP */}
       {showPopup && (
         <>
           {/* Overlay */}
@@ -106,7 +98,7 @@ const WhatsAppFloat: React.FC = () => {
             style={{
               position: "fixed",
               inset: 0,
-              background: "rgba(0,0,0,0.4)",
+              background: "rgba(0,0,0,0.45)",
               zIndex: 9998,
             }}
           />
@@ -115,136 +107,108 @@ const WhatsAppFloat: React.FC = () => {
           <div
             style={{
               position: "fixed",
-              bottom: 100,
-              right: 24,
+              bottom: 96,
+              right: 22,
               width: 360,
-              borderRadius: 18,
+              borderRadius: 16,
               overflow: "hidden",
-              background: "#fff",
+              background: isDark ? "#0B141A" : "#ECE5DD",
+              boxShadow: "0 12px 32px rgba(0,0,0,0.45)",
               zIndex: 9999,
-              boxShadow: "0 10px 32px rgba(0,0,0,0.35)",
             }}
           >
             {/* HEADER */}
             <div
               style={{
-                background: "#00897B",
+                background: "#075E54",
                 color: "#fff",
-                padding: "12px 14px",
+                padding: 12,
                 display: "flex",
                 alignItems: "center",
-                gap: 12,
+                gap: 10,
               }}
             >
-              {/* Logo + online dot */}
-              <div style={{ position: "relative" }}>
-                <img
-                  src="/ULmindlogo1.png"
-                  alt="ULMiND"
-                  style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: "50%",
-                    objectFit: "cover",
-                  }}
-                />
-                <span
-                  style={{
-                    position: "absolute",
-                    bottom: 2,
-                    right: 2,
-                    width: 10,
-                    height: 10,
-                    background: "#25D366",
-                    borderRadius: "50%",
-                    border: "2px solid #00897B",
-                  }}
-                />
-              </div>
+              <img
+                src="/logo.png"
+                alt="ULMiND"
+                style={{
+                  width: 36,
+                  height: 36,
+                  borderRadius: "50%",
+                }}
+              />
 
-              {/* Name + status */}
               <div style={{ flex: 1 }}>
                 <div style={{ fontWeight: 600 }}>ULMiND</div>
-                <div style={{ fontSize: 12, opacity: 0.9 }}>online</div>
+                <div style={{ fontSize: 12, opacity: 0.85 }}>online</div>
               </div>
 
-              <Video size={20} />
-              <Phone size={20} />
-              <MoreVertical size={20} />
+              <Video size={18} />
+              <Phone size={18} />
+              <MoreVertical size={18} />
               <span
+                style={{ cursor: "pointer", fontSize: 22 }}
                 onClick={() => setShowPopup(false)}
-                style={{ fontSize: 22, cursor: "pointer" }}
               >
                 ×
               </span>
             </div>
 
             {/* BODY */}
-            <div
-              style={{
-                padding: "20px 16px",
-                background: "#ECE5DD",
-                minHeight: 220,
-              }}
-            >
+            <div style={{ padding: 16, minHeight: 180 }}>
               <div
                 style={{
-                  background: "#fff",
-                  padding: "10px 14px",
-                  borderRadius: "12px 12px 12px 4px",
-                  marginBottom: 8,
-                  display: "inline-block",
+                  background: isDark ? "#1E40AF" : "#FFFFFF",
+                  color: isDark ? "#FFFFFF" : "#111827",
+                  padding: 14,
+                  borderRadius: 12,
+                  maxWidth: "85%",
                 }}
               >
-                Hi there 👋
-              </div>
-              <br />
-              <div
-                style={{
-                  background: "#fff",
-                  padding: "10px 14px",
-                  borderRadius: "12px 12px 12px 4px",
-                  display: "inline-block",
-                }}
-              >
-                How can I help you?
+                Hi 👋
+                <br />
+                How can we help you?
               </div>
             </div>
 
             {/* INPUT */}
             <div
               style={{
-                padding: 10,
+                background: isDark ? "#202C33" : "#F0F2F5",
+                padding: 8,
                 display: "flex",
                 gap: 8,
-                background: "#F0F2F5",
               }}
             >
               <input
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                placeholder="Enter your message..."
+                placeholder="Type a message"
                 style={{
                   flex: 1,
                   borderRadius: 20,
                   padding: "10px 14px",
                   border: "none",
                   outline: "none",
+                  background: isDark ? "#2A3942" : "#FFFFFF",
+                  color: isDark ? "#FFFFFF" : "#000",
                 }}
               />
               <button
                 onClick={openWhatsApp}
                 style={{
-                  width: 44,
-                  height: 44,
+                  width: 40,
+                  height: 40,
                   borderRadius: "50%",
                   background: "#25D366",
                   border: "none",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                   cursor: "pointer",
-                  color: "#fff",
                 }}
               >
-                ➤
+                <Send size={18} color="#fff" />
               </button>
             </div>
           </div>
@@ -266,13 +230,8 @@ const App = () => (
         <Toaster />
         <Sonner />
 
-        <Snowfall
-          style={{ position: "fixed", inset: 0, pointerEvents: "none" }}
-          snowflakeCount={80}
-        />
-
         <BrowserRouter>
-        <ScrollToTop /> 
+          <ScrollToTop />
           <Routes>
             <Route element={<Layout />}>
               <Route path="/" element={<Index />} />
