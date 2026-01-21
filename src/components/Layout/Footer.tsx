@@ -18,10 +18,10 @@ export const Footer = () => {
   const isActive = (href: string) => location.pathname === href;
 
   const socialLinks = [
-    { icon: Instagram, href: "https://www.instagram.com/ULMiND__official" },
-    { icon: Linkedin, href: "https://www.linkedin.com/company/mehraki/" },
+    { icon: Instagram, href: "https://www.instagram.com/ulmind_official" },
+    { icon: Linkedin, href: "https://www.linkedin.com/company/ulmind" },
     { icon: Twitter, href: "https://x.com/ULMINDOfficial" },
-    { icon: Facebook, href: "https://www.facebook.com/ULmind.in" },
+    { icon: Facebook, href: "https://www.facebook.com/ulmind.official" },
     { icon: Mail, href: "mailto:contact@ulmind.com" },
   ];
 
