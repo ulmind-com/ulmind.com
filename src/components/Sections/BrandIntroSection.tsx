@@ -20,7 +20,7 @@ const BrandIntroSection = () => {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.7 }}
             >
-              <img src="/public/JBU.png" className="w-28 md:w-36 mb-4" />
+              <img src="/JBU.png" className="w-28 md:w-36 mb-4" />
               <h2 className="text-4xl md:text-6xl font-black text-white">
                 JharkhandBihar <span className="block text-white/70">Update</span>
               </h2>
