@@ -1,13 +1,74 @@
-import { motion } from 'framer-motion';
+import { motion, useInView, useMotionValue, useSpring } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { FloatingObjects } from '@/components/3D/FloatingObjects';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+
+// Counter component for the animated numbers
+const Counter = ({ value, label }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: false, amount: 0.5 });
+  
+  // Logical fix: Separate the first numeric part for animation
+  // Example: "24/7" -> animate "24", keep "/7" static
+  // Example: "50+" -> animate "50", keep "+" static
+  const match = value.match(/(\d+)(.*)/);
+  const numericValue = match ? parseInt(match[1]) : 0;
+  const suffix = match ? match[2] : '';
+
+  const count = useMotionValue(0);
+  const springValue = useSpring(count, {
+    stiffness: 60,
+    damping: 20,
+  });
+
+  const [display, setDisplay] = useState(0);
+
+  useEffect(() => {
+    if (isInView) {
+      count.set(numericValue);
+    } else {
+      count.set(0);
+    }
+  }, [isInView, numericValue, count]);
+
+  useEffect(() => {
+    return springValue.on("change", (latest) => {
+      setDisplay(Math.round(latest));
+    });
+  }, [springValue]);
+
+  return (
+    <motion.div
+      ref={ref}
+      whileHover={{ scale: 1.05 }}
+      className="text-center"
+    >
+      <div className="text-2xl font-bold gradient-text">
+        {display}{suffix}
+      </div>
+      <div className="text-sm text-muted-foreground">
+        {label}
+      </div>
+    </motion.div>
+  );
+};
 
 
 export const HeroSection = () => {
   const navigate = useNavigate();
 
+<<<<<<< HEAD
+=======
+  // Updated stats to match your video/requirements
+  const stats = [
+    { number: '3', label: 'Years Experience' },
+    { number: '5', label: 'Completed Projects' },
+    { number: '10+', label: 'Clients Worldwide' },
+    { number: '24/7', label: 'Support' },
+  ];
+>>>>>>> arnab-senapati-arnab-senapati-changes
 
   return (
     <section
@@ -78,7 +139,10 @@ export const HeroSection = () => {
               <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 smooth-transition" />
             </Button>
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> arnab-senapati-arnab-senapati-changes
             <Button
               variant="outline"
               size="lg"
@@ -90,32 +154,20 @@ export const HeroSection = () => {
           </motion.div>
         </motion.div>
 
+<<<<<<< HEAD
 
         {/* Stats */}
+=======
+        {/* Stats Section */}
+>>>>>>> arnab-senapati-arnab-senapati-changes
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.2, duration: 0.8 }}
-          className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-2xl mx-auto"
+          className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto"
         >
-          {[
-            { number: '5+', label: 'Projects Delivered' },
-            { number: '5+', label: 'Happy Clients' },
-            { number: '24/7', label: 'Support' },
-            { number: '3+', label: 'Years Experience' },
-          ].map((stat, index) => (
-            <motion.div
-              key={index}
-              whileHover={{ scale: 1.05 }}
-              className="text-center"
-            >
-              <div className="text-2xl font-bold gradient-text">
-                {stat.number}
-              </div>
-              <div className="text-sm text-muted-foreground">
-                {stat.label}
-              </div>
-            </motion.div>
+          {stats.map((stat, index) => (
+            <Counter key={index} value={stat.number} label={stat.label} />
           ))}
         </motion.div>
 
