@@ -7,7 +7,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/providers/theme-provider";
 import Layout from "@/components/Layout/Layout";
 import ScrollToTop from "@/components/ScrollToTop";
-import { NotFound } from "./components/ui/ghost-404-page-1"
 
 // Pages
 import Index from "./pages/Index";
@@ -17,7 +16,7 @@ import Team from "./pages/Team";
 import Methodology from "./pages/Methodology";
 import Career from "./pages/Career";
 import Contact from "./pages/Contact";
-// import NotFound from "./pages/NotFound";
+import NotFound from "./pages/NotFound";
 
 // Icons
 import { Phone, Video, MoreVertical, Send } from "lucide-react";
@@ -129,33 +128,6 @@ const WhatsAppFloat: React.FC = () => {
                 gap: 10,
               }}
             >
-<<<<<<< HEAD
-              {/* Logo + online dot */}
-              <div style={{ position: "relative" }}>
-                <img
-                  src="/logo.png"
-                  alt="ULMiND"
-                  style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: "50%",
-                    objectFit: "cover",
-                  }}
-                />
-                <span
-                  style={{
-                    position: "absolute",
-                    bottom: 2,
-                    right: 2,
-                    width: 10,
-                    height: 10,
-                    background: "#25D366",
-                    borderRadius: "50%",
-                    border: "2px solid #00897B",
-                  }}
-                />
-              </div>
-=======
               <img
                 src="/logo.png"
                 alt="ULMiND"
@@ -165,7 +137,6 @@ const WhatsAppFloat: React.FC = () => {
                   borderRadius: "50%",
                 }}
               />
->>>>>>> arnab-senapati-arnab-senapati-changes
 
               <div style={{ flex: 1 }}>
                 <div style={{ fontWeight: 600 }}>ULMiND</div>

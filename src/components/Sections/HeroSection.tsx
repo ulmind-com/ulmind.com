@@ -55,12 +55,9 @@ const Counter = ({ value, label }) => {
   );
 };
 
-
 export const HeroSection = () => {
   const navigate = useNavigate();
 
-<<<<<<< HEAD
-=======
   // Updated stats to match your video/requirements
   const stats = [
     { number: '3', label: 'Years Experience' },
@@ -68,7 +65,6 @@ export const HeroSection = () => {
     { number: '10+', label: 'Clients Worldwide' },
     { number: '24/7', label: 'Support' },
   ];
->>>>>>> arnab-senapati-arnab-senapati-changes
 
   return (
     <section
@@ -79,7 +75,6 @@ export const HeroSection = () => {
       <div className="absolute inset-0 opacity-30">
         <FloatingObjects />
       </div>
-
 
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -100,7 +95,6 @@ export const HeroSection = () => {
             </span>
           </motion.div>
 
-
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -112,7 +106,6 @@ export const HeroSection = () => {
             <span className="gradient-text">Digital Solutions</span>
           </motion.h1>
 
-
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -122,7 +115,6 @@ export const HeroSection = () => {
             We transform ideas into powerful digital experiences using cutting-edge
             technology and innovative design principles.
           </motion.p>
-
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -139,10 +131,6 @@ export const HeroSection = () => {
               <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 smooth-transition" />
             </Button>
 
-<<<<<<< HEAD
-
-=======
->>>>>>> arnab-senapati-arnab-senapati-changes
             <Button
               variant="outline"
               size="lg"
@@ -154,12 +142,7 @@ export const HeroSection = () => {
           </motion.div>
         </motion.div>
 
-<<<<<<< HEAD
-
-        {/* Stats */}
-=======
         {/* Stats Section */}
->>>>>>> arnab-senapati-arnab-senapati-changes
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -170,49 +153,7 @@ export const HeroSection = () => {
             <Counter key={index} value={stat.number} label={stat.label} />
           ))}
         </motion.div>
-
-
-        {/* ✅ NEW: Internal Links Section for SEO */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.4, duration: 0.8 }}
-          className="mt-12 max-w-4xl mx-auto"
-        >
-          <p className="text-lg text-muted-foreground leading-relaxed">
-            ULMiND delivers cutting-edge digital solutions through our proven{' '}
-            <button
-              onClick={() => navigate('/methodology')}
-              className="text-primary hover:underline font-semibold cursor-pointer bg-transparent border-none p-0"
-            >
-              development methodology
-            </button>
-            . Explore our{' '}
-            <button
-              onClick={() => navigate('/projects')}
-              className="text-primary hover:underline font-semibold cursor-pointer bg-transparent border-none p-0"
-            >
-              successful projects
-            </button>
-            , meet our talented{' '}
-            <button
-              onClick={() => navigate('/team')}
-              className="text-primary hover:underline font-semibold cursor-pointer bg-transparent border-none p-0"
-            >
-              team of experts
-            </button>
-            , or{' '}
-            <button
-              onClick={() => navigate('/career')}
-              className="text-primary hover:underline font-semibold cursor-pointer bg-transparent border-none p-0"
-            >
-              join us
-            </button>
-            {' '}in shaping the future of technology.
-          </p>
-        </motion.div>
       </div>
-
 
       {/* Scroll Indicator */}
       <motion.div
