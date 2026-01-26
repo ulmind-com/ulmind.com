@@ -40,7 +40,7 @@ export default function Team() {
     {
       name: "Samiran Samanta",
       role: "Co-Founder & CTO",
-      image: "/samiransamanta.jpg",
+      image: "/samiransamanta.png",
       bio: "Senior Full Stack Developer & DevOps Engineer building robust, scalable solutions.",
       skills: [
         "Backend",
