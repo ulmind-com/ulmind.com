@@ -1,16 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset
-      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
-
-
-<url>
-  <loc>https://www.ulmind.com/</loc>
-  <lastmod>2026-01-04T17:43:05+00:00</lastmod>
-</url>
-
-
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://www.ulmind.com/</loc>
+    <lastmod>2026-02-01</lastmod>
+    <priority>1.00</priority>
+  </url>
+  <url>
+    <loc>https://www.ulmind.com/about</loc>
+    <lastmod>2026-02-01</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.ulmind.com/team</loc>
+    <lastmod>2026-02-01</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.ulmind.com/methodology</loc>
+    <lastmod>2026-02-01</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.ulmind.com/projects</loc>
+    <lastmod>2026-02-01</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.ulmind.com/career</loc>
+    <lastmod>2026-02-01</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.ulmind.com/contact</loc>
+    <lastmod>2026-02-01</lastmod>
+    <priority>0.80</priority>
+  </url>
 </urlset>
