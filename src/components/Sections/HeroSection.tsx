@@ -1,81 +1,23 @@
-import { motion, useInView, useMotionValue, useSpring } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { FloatingObjects } from '@/components/3D/FloatingObjects';
-import { useNavigate } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
-
-// Counter component for the animated numbers
-const Counter = ({ value, label }) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: false, amount: 0.5 });
-  
-  // Logical fix: Separate the first numeric part for animation
-  // Example: "24/7" -> animate "24", keep "/7" static
-  // Example: "50+" -> animate "50", keep "+" static
-  const match = value.match(/(\d+)(.*)/);
-  const numericValue = match ? parseInt(match[1]) : 0;
-  const suffix = match ? match[2] : '';
-
-  const count = useMotionValue(0);
-  const springValue = useSpring(count, {
-    stiffness: 60,
-    damping: 20,
-  });
-
-  const [display, setDisplay] = useState(0);
-
-  useEffect(() => {
-    if (isInView) {
-      count.set(numericValue);
-    } else {
-      count.set(0);
-    }
-  }, [isInView, numericValue, count]);
-
-  useEffect(() => {
-    return springValue.on("change", (latest) => {
-      setDisplay(Math.round(latest));
-    });
-  }, [springValue]);
-
-  return (
-    <motion.div
-      ref={ref}
-      whileHover={{ scale: 1.05 }}
-      className="text-center"
-    >
-      <div className="text-2xl font-bold gradient-text">
-        {display}{suffix}
-      </div>
-      <div className="text-sm text-muted-foreground">
-        {label}
-      </div>
-    </motion.div>
-  );
-};
 
 export const HeroSection = () => {
-  const navigate = useNavigate();
-
-  // Updated stats to match your video/requirements
-  const stats = [
-    { number: '3', label: 'Years Experience' },
-    { number: '5', label: 'Completed Projects' },
-    { number: '10+', label: 'Clients Worldwide' },
-    { number: '24/7', label: 'Support' },
-  ];
+  const scrollToContact = () => {
+    const element = document.querySelector('#contact');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
-    <section
-      id="home"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-secondary/20 to-background"
-    >
+    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-secondary/20 to-background">
       {/* 3D Background */}
       <div className="absolute inset-0 opacity-30">
         <FloatingObjects />
       </div>
-
+      
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.div
@@ -86,13 +28,11 @@ export const HeroSection = () => {
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
+            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
             className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full mb-8"
           >
             <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium text-primary">
-              Welcome to the Future of Development
-            </span>
+            <span className="text-sm font-medium text-primary">Welcome to the Future of Development</span>
           </motion.div>
 
           <motion.h1
@@ -101,7 +41,7 @@ export const HeroSection = () => {
             transition={{ delay: 0.4, duration: 0.8 }}
             className="text-4xl sm:text-6xl lg:text-7xl font-bold mb-6"
           >
-            Building Tomorrow&apos;s
+            Building Tomorrow's
             <br />
             <span className="gradient-text">Digital Solutions</span>
           </motion.h1>
@@ -112,8 +52,7 @@ export const HeroSection = () => {
             transition={{ delay: 0.6, duration: 0.8 }}
             className="text-xl sm:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto"
           >
-            We transform ideas into powerful digital experiences using cutting-edge
-            technology and innovative design principles.
+            We transform ideas into powerful digital experiences using cutting-edge technology and innovative design principles.
           </motion.p>
 
           <motion.div
@@ -124,17 +63,17 @@ export const HeroSection = () => {
           >
             <Button
               size="lg"
-              onClick={() => navigate('/contact')}
+              onClick={scrollToContact}
               className="bg-gradient-primary hover:opacity-90 smooth-transition group"
             >
               Start Your Project
               <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 smooth-transition" />
             </Button>
-
+            
             <Button
               variant="outline"
               size="lg"
-              onClick={() => navigate('/about')}
+              onClick={() => document.querySelector('#about')?.scrollIntoView({ behavior: 'smooth' })}
               className="border-primary text-primary hover:bg-primary hover:text-primary-foreground smooth-transition"
             >
               Learn More
@@ -142,20 +81,32 @@ export const HeroSection = () => {
           </motion.div>
         </motion.div>
 
-        {/* Stats Section */}
+        {/* Floating stats */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.2, duration: 0.8 }}
-          className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto"
+          className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-2xl mx-auto"
         >
-          {stats.map((stat, index) => (
-            <Counter key={index} value={stat.number} label={stat.label} />
+          {[
+            { number: '5+', label: 'Projects Delivered' },
+            { number: '5+', label: 'Happy Clients' },
+            { number: '24/7', label: 'Support' },
+            { number: '3+', label: 'Years Experience' },
+          ].map((stat, index) => (
+            <motion.div
+              key={index}
+              whileHover={{ scale: 1.05 }}
+              className="text-center"
+            >
+              <div className="text-2xl font-bold gradient-text">{stat.number}</div>
+              <div className="text-sm text-muted-foreground">{stat.label}</div>
+            </motion.div>
           ))}
         </motion.div>
       </div>
 
-      {/* Scroll Indicator */}
+      {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

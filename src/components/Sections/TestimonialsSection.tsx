@@ -3,105 +3,77 @@ import { Marquee } from "@/components/magicui/marquee";
 
 const reviews = [
   {
-    name: "Milan Kumar Mondal",
-    username: "Owner, Maa Laxmirani Restaurant",
-    body: "Great experience with ULMIND, they built a modern website that improved our online ordering.",
-    img: "/MLR.png",
-    rating: 5,
+    name: "Jack",
+    username: "@jack",
+    body: "I've never seen anything like this before. It's amazing. I love it.",
+    img: "https://avatar.vercel.sh/jack",
   },
   {
-    name: "Dibyendu Pramanik",
-    username: "Owner, Jamai Da Hotel",
-    body: "A nice experience with a well-made website that improved our online presence.",
-    img: "/JamaiDa.png",
-    rating: 4,
+    name: "Jill",
+    username: "@jill",
+    body: "I don't know what to say. I'm speechless. This is amazing.",
+    img: "https://avatar.vercel.sh/jill",
   },
   {
-    name: "Ayan Bagdi",
-    username: "Engineer, Smart Invest Solutions",
-    body: "Very satisfied with the service. Proper guidance and quick response.",
-    img: "SIS2.png",
-    rating: 5,
+    name: "John",
+    username: "@john",
+    body: "I'm at a loss for words. This is amazing. I love it.",
+    img: "https://avatar.vercel.sh/john",
   },
   {
-    name: "Mithilesh Kumar Singh",
-    username: "Reporter, JharkhandBihar Update",
-    body: "Professional and quick delivery. Excellent work.",
-    img: "JB_update.png",
-    rating: 5,
+    name: "Jane",
+    username: "@jane",
+    body: "I'm at a loss for words. This is amazing. I love it.",
+    img: "https://avatar.vercel.sh/jane",
   },
   {
-    name: "Surya Dutta",
-    username: "Professor, Smart Invest Solutions",
-    body: "Clear guidance and honest advice.",
-    img: "SIS.png",
-    rating: 4,
+    name: "Jenny",
+    username: "@jenny",
+    body: "I'm at a loss for words. This is amazing. I love it.",
+    img: "https://avatar.vercel.sh/jenny",
   },
   {
-    name: "Shatadip Mukherjee",
-    username: "Medical Representatives, Smart Invest Solutions",
-    body: "Very Good Guidance & services.",
-    img: "SIS3.png",
-    rating: 5,
+    name: "James",
+    username: "@james",
+    body: "I'm at a loss for words. This is amazing. I love it.",
+    img: "https://avatar.vercel.sh/james",
   },
 ];
 
 const firstRow = reviews.slice(0, reviews.length / 2);
 const secondRow = reviews.slice(reviews.length / 2);
 
-/* ⭐ Star renderer */
-const Stars = ({ rating }) => (
-  <div className="flex gap-0.5 mt-1">
-    {Array.from({ length: 5 }).map((_, i) => (
-      <span
-        key={i}
-        className={`text-sm ${
-          i < rating ? "text-yellow-500" : "text-gray-300"
-        }`}
-      >
-        ★
-      </span>
-    ))}
-  </div>
-);
-
-const ReviewCard = ({ img, name, username, body, rating }) => {
+const ReviewCard = ({
+  img,
+  name,
+  username,
+  body,
+}: {
+  img: string;
+  name: string;
+  username: string;
+  body: string;
+}) => {
   return (
     <figure
       className={cn(
         "relative h-full w-64 cursor-pointer overflow-hidden rounded-xl border p-4",
+        // light styles
         "border-gray-950/[.1] bg-gray-950/[.01] hover:bg-gray-950/[.05]",
-        "dark:border-gray-50/[.1] dark:bg-gray-50/[.10] dark:hover:bg-gray-50/[.15]"
+        // dark styles
+        "dark:border-gray-50/[.1] dark:bg-gray-50/[.10] dark:hover:bg-gray-50/[.15]",
       )}
     >
-      <div className="flex items-start gap-3">
-        <img
-          className="rounded-full"
-          width="36"
-          height="36"
-          alt={name}
-          src={img}
-        />
-
+      <div className="flex flex-row items-center gap-2">
+        <img className="rounded-full" width="32" height="32" alt="" src={img} />
         <div className="flex flex-col">
-          {/* Name */}
-          <figcaption className="text-sm font-semibold dark:text-white">
+          <figcaption className="text-sm font-medium dark:text-white">
             {name}
           </figcaption>
-
-          {/* Username */}
-          <p className="text-xs font-medium text-muted-foreground">
-            {username}
-          </p>
-
-          {/* ⭐ Rating (NOW AFTER NAME + USERNAME) */}
-          <Stars rating={rating} />
+          <p className="text-xs font-medium dark:text-white/40">{username}</p>
         </div>
       </div>
-
-      <blockquote className="mt-3 text-sm text-muted-foreground">
-        {body}
-      </blockquote>
+      <blockquote className="mt-2 text-sm">{body}</blockquote>
     </figure>
   );
 };
@@ -115,25 +87,23 @@ export const TestimonialsSection = () => {
             What Our Clients Say
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Real feedback from clients who trusted ULMIND with their projects.
+            Don't just take our word for it. Here's what our amazing clients have to say about working with us.
           </p>
         </div>
 
         <div className="relative flex w-full flex-col items-center justify-center overflow-hidden">
           <Marquee pauseOnHover className="[--duration:20s]">
-            {firstRow.map((review, i) => (
-              <ReviewCard key={i} {...review} />
+            {firstRow.map((review) => (
+              <ReviewCard key={review.username} {...review} />
             ))}
           </Marquee>
-
           <Marquee reverse pauseOnHover className="[--duration:20s]">
-            {secondRow.map((review, i) => (
-              <ReviewCard key={i} {...review} />
+            {secondRow.map((review) => (
+              <ReviewCard key={review.username} {...review} />
             ))}
           </Marquee>
-
-          <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-background" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-background" />
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-background"></div>
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-background"></div>
         </div>
       </div>
     </section>

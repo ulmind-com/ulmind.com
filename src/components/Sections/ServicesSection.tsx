@@ -10,11 +10,8 @@ import {
   ArrowRight,
   CheckCircle,
   Cpu,
-<<<<<<< Updated upstream
-=======
   Brush,
   FileText,
->>>>>>> Stashed changes
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -105,16 +102,6 @@ const services = [
       "Real-Time Decision Making",
     ],
   },
-<<<<<<< Updated upstream
-];
-
-export const ServicesSection = () => {
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
-
-=======
   {
     icon: <Brush className="w-8 h-8" />,
     title: "Graphic Design",
@@ -142,15 +129,15 @@ export const ServicesSection = () => {
 ];
 
 export const ServicesSection = () => {
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
->>>>>>> Stashed changes
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
+
   const navigate = useNavigate();
 
   return (
-    <section
-      ref={ref}
-      className="py-20 px-4 sm:px-6 lg:px-8 bg-muted/30"
-    >
+    <section ref={ref} className="py-20 px-4 sm:px-6 lg:px-8 bg-muted/30">
       <div className="max-w-7xl mx-auto">
         {/* HEADER */}
         <motion.div
@@ -159,15 +146,12 @@ export const ServicesSection = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">Our Services</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            Our Services
+          </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             We offer comprehensive digital solutions to help your business thrive
-<<<<<<< Updated upstream
-            in the modern world. From concept to deployment, we've got you
-            covered.
-=======
             in the modern world. From concept to deployment, we've got you covered.
->>>>>>> Stashed changes
           </p>
         </motion.div>
 
@@ -180,13 +164,12 @@ export const ServicesSection = () => {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: index * 0.1 }}
             >
-              <Card className="p-6 h-full group hover:shadow-glow transition">
-                <div className="text-primary mb-4 group-hover:scale-110 transition">
+              <Card className="p-6 h-full group hover:shadow-glow transition-all duration-300">
+                <div className="text-primary mb-4 group-hover:scale-110 transition-transform duration-300">
                   {service.icon}
                 </div>
-<<<<<<< Updated upstream
 
-                <h3 className="text-xl font-bold text-foreground mb-3">
+                <h3 className="text-xl font-bold mb-3">
                   {service.title}
                 </h3>
 
@@ -200,7 +183,7 @@ export const ServicesSection = () => {
                       key={i}
                       className="flex items-center gap-2 text-sm text-muted-foreground"
                     >
-                      <CheckCircle className="w-4 h-4 text-primary flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-primary" />
                       <span>{feature}</span>
                     </li>
                   ))}
@@ -208,52 +191,16 @@ export const ServicesSection = () => {
 
                 <Button
                   variant="outline"
-                  className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300"
-=======
-                <h3 className="text-xl font-bold mb-3">{service.title}</h3>
-                <p className="text-muted-foreground mb-4">
-                  {service.description}
-                </p>
-                <ul className="space-y-2 mb-6">
-                  {service.features.map((feature, i) => (
-                    <li key={i} className="flex gap-2 text-sm">
-                      <CheckCircle className="w-4 h-4 text-primary" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                <Button
-                  variant="outline"
                   className="w-full"
->>>>>>> Stashed changes
                   onClick={() => navigate("/contact")}
                 >
-                  Learn More <ArrowRight className="ml-2 w-4 h-4" />
+                  Learn More
+                  <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </Card>
             </motion.div>
           ))}
         </div>
-<<<<<<< Updated upstream
-
-        {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="text-center mt-16"
-        >
-          <Button
-            size="lg"
-            className="bg-gradient-primary hover:opacity-90 text-primary-foreground px-8 py-3"
-            onClick={() => navigate("/contact")}
-          >
-            Start Your Project
-            <ArrowRight className="ml-2 w-5 h-5" />
-          </Button>
-        </motion.div>
-=======
->>>>>>> Stashed changes
       </div>
     </section>
   );
