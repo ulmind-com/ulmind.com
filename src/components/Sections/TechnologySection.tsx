@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
+import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 import {
   SiReact,
   SiSpring,
@@ -13,24 +13,25 @@ import {
   SiDocker,
   SiKubernetes,
   SiGooglecloud,
-} from 'react-icons/si';
-import { FaJava } from 'react-icons/fa';
+} from "react-icons/si";
+import { FaJava } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const technologies = [
-  { name: 'React', icon: SiReact, color: '#61DAFB' },
-  { name: 'Java', icon: FaJava, color: '#007396' },
-  { name: 'Spring', icon: SiSpring, color: '#6DB33F' },
-  { name: 'Node.js', icon: SiNodedotjs, color: '#339933' },
-  { name: 'Kotlin', icon: SiKotlin, color: '#7F52FF' },
-  { name: 'Python', icon: SiPython, color: '#3776AB' },
-  { name: 'Next.js', icon: SiNextdotjs, color: '#000000' },
-  { name: 'Angular', icon: SiAngular, color: '#DD0031' },
-  { name: 'Flutter', icon: SiFlutter, color: '#02569B' },
-  { name: 'Dart', icon: SiDart, color: '#0175C2' },
-  { name: 'React Native', icon: SiReact, color: '#61DAFB' },
-  { name: 'Docker', icon: SiDocker, color: '#2496ED' },
-  { name: 'Kubernetes', icon: SiKubernetes, color: '#326CE5' },
-  { name: 'Cloud', icon: SiGooglecloud, color: '#4285F4' },
+  { name: "React", icon: SiReact, color: "#61DAFB" },
+  { name: "Java", icon: FaJava, color: "#007396" },
+  { name: "Spring", icon: SiSpring, color: "#6DB33F" },
+  { name: "Node.js", icon: SiNodedotjs, color: "#339933" },
+  { name: "Kotlin", icon: SiKotlin, color: "#7F52FF" },
+  { name: "Python", icon: SiPython, color: "#3776AB" },
+  { name: "Next.js", icon: SiNextdotjs, color: "#000000" },
+  { name: "Angular", icon: SiAngular, color: "#DD0031" },
+  { name: "Flutter", icon: SiFlutter, color: "#02569B" },
+  { name: "Dart", icon: SiDart, color: "#0175C2" },
+  { name: "React Native", icon: SiReact, color: "#61DAFB" },
+  { name: "Docker", icon: SiDocker, color: "#2496ED" },
+  { name: "Kubernetes", icon: SiKubernetes, color: "#326CE5" },
+  { name: "Cloud", icon: SiGooglecloud, color: "#4285F4" },
 ];
 
 export const TechnologySection = () => {
@@ -39,10 +40,12 @@ export const TechnologySection = () => {
     threshold: 0.1,
   });
 
+  const navigate = useNavigate();
+
   return (
     <section ref={ref} className="py-20 bg-secondary/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
+        {/* HEADER */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -53,11 +56,12 @@ export const TechnologySection = () => {
             Our <span className="gradient-text">Technology Stack</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            We use cutting-edge technologies to build scalable, performant, and future-ready solutions.
+            We use cutting-edge technologies to build scalable, performant, and
+            future-ready solutions.
           </p>
         </motion.div>
 
-        {/* Technology Icons Grid */}
+        {/* TECH GRID */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 justify-items-center">
           {technologies.map((tech, index) => (
             <motion.div
@@ -69,7 +73,11 @@ export const TechnologySection = () => {
               className="bg-card rounded-2xl p-6 text-center shadow-card hover:shadow-floating smooth-transition group w-full"
             >
               <div className="mb-3 group-hover:animate-pulse">
-                <tech.icon size={40} color={tech.color} className="mx-auto" />
+                <tech.icon
+                  size={40}
+                  color={tech.color}
+                  className="mx-auto"
+                />
               </div>
               <h3 className="font-semibold text-sm group-hover:text-primary smooth-transition">
                 {tech.name}
@@ -78,7 +86,7 @@ export const TechnologySection = () => {
           ))}
         </div>
 
-        {/* CTA Section */}
+        {/* CTA */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -90,12 +98,15 @@ export const TechnologySection = () => {
               Ready to leverage these technologies?
             </h3>
             <p className="text-white/80 mb-6">
-              Let's discuss how we can bring your vision to life with our comprehensive tech stack.
+              Let's discuss how we can bring your vision to life with our
+              comprehensive tech stack.
             </p>
+
+            {/* ✅ FIXED BUTTON */}
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => navigate("/contact")}
               className="bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 smooth-transition"
             >
               Start Your Project

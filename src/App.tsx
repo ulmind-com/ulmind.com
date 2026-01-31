@@ -5,291 +5,211 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/providers/theme-provider";
+import Layout from "@/components/Layout/Layout";
+import ScrollToTop from "@/components/ScrollToTop";
+
+// Pages
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Projects from "./pages/Projects";
 import Team from "./pages/Team";
 import Methodology from "./pages/Methodology";
 import Career from "./pages/Career";
+import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
-// ✅ Snowfall import
-import Snowfall from "react-snowfall";
+// Icons
+import { Phone, Video, MoreVertical, Send } from "lucide-react";
 
-// WhatsApp Floating Widget
+/* ===========================
+   WhatsApp Floating Widget
+=========================== */
 const WhatsAppFloat: React.FC = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [message, setMessage] = useState("");
 
+  const isDark =
+    typeof document !== "undefined" &&
+    document.documentElement.classList.contains("dark");
+
   const openWhatsApp = () => {
-    const messageWithLink = message
-      ? `${message}\n\nhttps://www.ULMiND.com`
-      : "Hi there 👋\nHow can I help you?\n\nwww.ULMiND.com";
-    const encodedMessage = encodeURIComponent(
-      messageWithLink || "Hi there 👋\nHow can I help you?"
-    );
+    const text = message || "Hi 👋 I want to know more.";
     window.open(
-      `https://wa.me/918537861040?text=${encodedMessage}`,
+      `https://wa.me/918537861040?text=${encodeURIComponent(text)}`,
       "_blank"
     );
-    setShowPopup(false);
     setMessage("");
+    setShowPopup(false);
   };
 
   return (
     <>
-      {/* Floating WhatsApp Button */}
-      <div
+      {/* CALL BUTTON (RESTORED) */}
+      <a
+        href="tel:8537861040"
         style={{
           position: "fixed",
-          bottom: "24px",
-          right: "24px",
-          zIndex: 999999,
-          cursor: "pointer",
-          width: "60px",
-          height: "60px",
-          borderRadius: "30px",
+          bottom: 100,
+          right: 22,
+          width: 56,
+          height: 56,
+          borderRadius: "50%",
+          backgroundColor: "#3B82F6",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          boxShadow: "0 6px 16px rgba(0,0,0,0.35)",
+          zIndex: 9999,
+        }}
+      >
+        <Phone size={26} color="#fff" />
+      </a>
+
+      {/* WHATSAPP BUTTON */}
+      <div
+        onClick={() => setShowPopup(true)}
+        style={{
+          position: "fixed",
+          bottom: 24,
+          right: 22,
+          width: 56,
+          height: 56,
+          borderRadius: "50%",
           backgroundColor: "#25D366",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+          cursor: "pointer",
+          boxShadow: "0 6px 16px rgba(0,0,0,0.35)",
+          zIndex: 9999,
         }}
-        onClick={() => setShowPopup(true)}
-        title="Chat with ULMiND on WhatsApp"
       >
-        <svg viewBox="0 0 32 32" width="36" height="36" fill="white">
-          <path d="M16 0C7.164 0 0 7.164 0 16c0 2.828.736 5.484 2.024 7.792L0 32l8.416-2.208A15.928 15.928 0 0016 32c8.836 0 16-7.164 16-16S24.836 0 16 0zm0 29.6a13.6 13.6 0 01-6.944-1.904l-.496-.296-5.152 1.352 1.376-5.024-.324-.516A13.544 13.544 0 012.4 16c0-7.512 6.088-13.6 13.6-13.6S29.6 8.488 29.6 16 23.512 29.6 16 29.6zm7.456-10.176c-.408-.204-2.416-1.192-2.792-1.328-.376-.136-.648-.204-.92.204-.272.408-1.056 1.328-1.296 1.6-.24.272-.48.308-.888.104-.408-.204-1.72-.632-3.276-2.02-1.212-1.08-2.032-2.416-2.272-2.824-.24-.408-.024-.628.18-.832.184-.184.408-.48.612-.72.204-.24.272-.408.408-.68.136-.272.068-.508-.032-.712-.104-.204-.92-2.216-1.26-3.036-.332-.8-.668-.692-.92-.704-.236-.012-.508-.016-.78-.016-.272 0-.716.104-1.092.508-.376.408-1.44 1.408-1.44 3.432 0 2.024 1.476 3.98 1.68 4.252.204.272 2.888 4.408 6.996 6.184.976.424 1.74.676 2.336.864.98.312 1.872.268 2.576.164.788-.116 2.416-.988 2.756-1.94.34-.952.34-1.768.24-1.94-.104-.172-.376-.272-.784-.476z" />
-        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" viewBox="0 0 48 48" id="whatsapp">
+  <rect width="48" height="48" fill="#0DC143" rx="24"></rect>
+  <path fill="#fff" d="M34.7507 13.2115C32.1777 10.5628 28.621 9.125 24.9885 9.125C17.2696 9.125 11.0642 15.4061 11.1399 23.0493C11.1399 25.4709 11.821 27.8169 12.9561 29.9358L10.9885 37.125L18.3291 35.2331C20.3723 36.3682 22.6426 36.898 24.9128 36.898C32.5561 36.898 38.7615 30.6169 38.7615 22.9736C38.7615 19.2655 37.3237 15.7845 34.7507 13.2115ZM24.9885 34.552C22.9453 34.552 20.902 34.0223 19.1615 32.9628L18.7074 32.7358L14.3183 33.8709L15.4534 29.5574L15.1507 29.1034C11.821 23.7304 13.4101 16.6169 18.8588 13.2872C24.3074 9.95743 31.3453 11.5466 34.675 16.9953C38.0047 22.4439 36.4156 29.4818 30.9669 32.8115C29.2264 33.9466 27.1074 34.552 24.9885 34.552ZM31.648 26.152L30.8156 25.7736C30.8156 25.7736 29.6047 25.2439 28.848 24.8655C28.7723 24.8655 28.6966 24.7899 28.621 24.7899C28.3939 24.7899 28.2426 24.8655 28.0912 24.9412C28.0912 24.9412 28.0156 25.0169 26.9561 26.2277C26.8804 26.3791 26.7291 26.4547 26.5777 26.4547H26.502C26.4264 26.4547 26.275 26.3791 26.1993 26.3034L25.821 26.152C24.9885 25.7736 24.2318 25.3196 23.6264 24.7142C23.475 24.5628 23.248 24.4115 23.0966 24.2601C22.5669 23.7304 22.0372 23.125 21.6588 22.4439L21.5831 22.2926C21.5074 22.2169 21.5074 22.1412 21.4318 21.9899C21.4318 21.8385 21.4318 21.6872 21.5074 21.6115C21.5074 21.6115 21.8101 21.2331 22.0372 21.0061C22.1885 20.8547 22.2642 20.6277 22.4156 20.4764C22.5669 20.2493 22.6426 19.9466 22.5669 19.7196C22.4912 19.3412 21.5831 17.298 21.3561 16.8439C21.2047 16.6169 21.0534 16.5412 20.8264 16.4655H20.5993C20.448 16.4655 20.221 16.4655 19.9939 16.4655C19.8426 16.4655 19.6912 16.5412 19.5399 16.5412L19.4642 16.6169C19.3128 16.6926 19.1615 16.8439 19.0101 16.9196C18.8588 17.0709 18.7831 17.2223 18.6318 17.3736C18.102 18.0547 17.7993 18.8872 17.7993 19.7196C17.7993 20.325 17.9507 20.9304 18.1777 21.4601L18.2534 21.6872C18.9345 23.125 19.8426 24.4115 21.0534 25.5466L21.3561 25.8493C21.5831 26.0764 21.8101 26.2277 21.9615 26.4547C23.5507 27.8169 25.3669 28.8007 27.4101 29.3304C27.6372 29.4061 27.9399 29.4061 28.1669 29.4818C28.3939 29.4818 28.6966 29.4818 28.9237 29.4818C29.302 29.4818 29.7561 29.3304 30.0588 29.1791C30.2858 29.0277 30.4372 29.0277 30.5885 28.8764L30.7399 28.725C30.8912 28.5736 31.0426 28.498 31.1939 28.3466C31.3453 28.1953 31.4966 28.0439 31.5723 27.8926C31.7237 27.5899 31.7993 27.2115 31.875 26.8331C31.875 26.6818 31.875 26.4547 31.875 26.3034C31.875 26.3034 31.7993 26.2277 31.648 26.152Z"></path>
+</svg>
       </div>
 
-      {/* Popup Dialog */}
       {showPopup && (
         <>
+          {/* Overlay */}
           <div
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              width: "100vw",
-              height: "100vh",
-              zIndex: 999998,
-              background: "rgba(0,0,0,0.4)",
-            }}
             onClick={() => setShowPopup(false)}
+            style={{
+              position: "fixed",
+              inset: 0,
+              background: "rgba(0,0,0,0.45)",
+              zIndex: 9998,
+            }}
           />
+
+          {/* Chat Box */}
           <div
             style={{
               position: "fixed",
-              bottom: "100px",
-              right: "24px",
-              background: "#fff",
-              borderRadius: "20px",
-              boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
-              zIndex: 999999,
-              width: "360px",
+              bottom: 96,
+              right: 22,
+              width: 360,
+              borderRadius: 16,
               overflow: "hidden",
-              fontFamily:
-                "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif",
+              background: isDark ? "#0B141A" : "#ECE5DD",
+              boxShadow: "0 12px 32px rgba(0,0,0,0.45)",
+              zIndex: 9999,
             }}
-            onClick={(e) => e.stopPropagation()}
           >
-            {/* Header */}
+            {/* HEADER */}
             <div
               style={{
-                background: "#00897B",
+                background: "#075E54",
                 color: "#fff",
-                padding: "18px 20px",
+                padding: 12,
                 display: "flex",
                 alignItems: "center",
-                gap: "12px",
-                position: "relative",
+                gap: 10,
               }}
             >
-              <div style={{ position: "relative" }}>
-                <img
-                  src="/ULmindlogo1.png"
-                  alt="ULMiND"
-                  style={{
-                    width: "48px",
-                    height: "48px",
-                    borderRadius: "50%",
-                    objectFit: "cover",
-                    backgroundColor: "#fff",
-                  }}
-                />
-                <div
-                  style={{
-                    position: "absolute",
-                    bottom: "2px",
-                    right: "2px",
-                    width: "12px",
-                    height: "12px",
-                    borderRadius: "50%",
-                    backgroundColor: "#4CAF50",
-                    border: "2px solid #00897B",
-                  }}
-                />
-              </div>
+              <img
+                src="/logo.png"
+                alt="ULMiND"
+                style={{
+                  width: 36,
+                  height: 36,
+                  borderRadius: "50%",
+                }}
+              />
 
               <div style={{ flex: 1 }}>
-                <div
-                  style={{
-                    fontWeight: "600",
-                    fontSize: "16px",
-                    marginBottom: "2px",
-                  }}
-                >
-                  ULMiND
-                </div>
-                <div style={{ fontSize: "13px", opacity: 0.9 }}>
-                  +91 85378 61040
-                </div>
+                <div style={{ fontWeight: 600 }}>ULMiND</div>
+                <div style={{ fontSize: 12, opacity: 0.85 }}>online</div>
               </div>
 
-              <div style={{ marginRight: "8px" }}>
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="2"
-                >
-                  <rect x="3" y="3" width="7" height="7" />
-                  <rect x="14" y="3" width="7" height="7" />
-                  <rect x="3" y="14" width="7" height="7" />
-                  <rect x="14" y="14" width="7" height="7" />
-                </svg>
-              </div>
-
-              <div
-                style={{
-                  cursor: "pointer",
-                  fontSize: "28px",
-                  lineHeight: "20px",
-                  fontWeight: "300",
-                }}
+              <Video size={18} />
+              <Phone size={18} />
+              <MoreVertical size={18} />
+              <span
+                style={{ cursor: "pointer", fontSize: 22 }}
                 onClick={() => setShowPopup(false)}
               >
                 ×
-              </div>
+              </span>
             </div>
 
-            {/* Chat Body */}
-            <div
-              style={{
-                padding: "20px",
-                background: "#E5DDD5",
-                backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d9d9d9' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-                minHeight: "200px",
-              }}
-            >
-              <div style={{ textAlign: "center", marginBottom: "16px" }}>
-                <span
-                  style={{
-                    fontSize: "12px",
-                    color: "#667781",
-                    backgroundColor: "rgba(255,255,255,0.8)",
-                    padding: "4px 12px",
-                    borderRadius: "12px",
-                  }}
-                >
-                  11:18
-                </span>
-              </div>
-
-              <div style={{ marginBottom: "20px" }}>
-                <div
-                  style={{
-                    background: "#FFFFFF",
-                    color: "#111B21",
-                    borderRadius: "8px",
-                    padding: "8px 12px",
-                    marginBottom: "6px",
-                    maxWidth: "85%",
-                    display: "inline-block",
-                    boxShadow: "0 1px 1px rgba(0,0,0,0.1)",
-                    fontSize: "14.2px",
-                    lineHeight: "1.5",
-                  }}
-                >
-                  Hi there 👋
-                </div>
+            {/* BODY */}
+            <div style={{ padding: 16, minHeight: 180 }}>
+              <div
+                style={{
+                  background: isDark ? "#1E40AF" : "#FFFFFF",
+                  color: isDark ? "#FFFFFF" : "#111827",
+                  padding: 14,
+                  borderRadius: 12,
+                  maxWidth: "85%",
+                }}
+              >
+                Hi 👋
                 <br />
-                <div
-                  style={{
-                    background: "#FFFFFF",
-                    color: "#111B21",
-                    borderRadius: "8px",
-                    padding: "8px 12px",
-                    maxWidth: "85%",
-                    display: "inline-block",
-                    boxShadow: "0 1px 1px rgba(0,0,0,0.1)",
-                    fontSize: "14.2px",
-                    lineHeight: "1.5",
-                  }}
-                >
-                  How can I help you?
-                </div>
+                How can we help you?
               </div>
             </div>
 
-            {/* Input Area */}
+            {/* INPUT */}
             <div
               style={{
-                background: "#F0F2F5",
-                padding: "12px 16px",
+                background: isDark ? "#202C33" : "#F0F2F5",
+                padding: 8,
                 display: "flex",
-                alignItems: "center",
-                gap: "8px",
+                gap: 8,
               }}
             >
               <input
-                type="text"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && openWhatsApp()}
-                placeholder="Enter Your Message..."
+                placeholder="Type a message"
                 style={{
                   flex: 1,
-                  padding: "10px 16px",
+                  borderRadius: 20,
+                  padding: "10px 14px",
                   border: "none",
-                  borderRadius: "24px",
-                  fontSize: "14px",
-                  backgroundColor: "#FFFFFF",
-                  color: "#111B21",
                   outline: "none",
+                  background: isDark ? "#2A3942" : "#FFFFFF",
+                  color: isDark ? "#FFFFFF" : "#000",
                 }}
-                autoFocus
               />
-              <div
-                style={{
-                  color: "#54656F",
-                  cursor: "pointer",
-                  fontSize: "20px",
-                }}
-              >
-                ⋮
-              </div>
-              <div
+              <button
                 onClick={openWhatsApp}
                 style={{
-                  width: "48px",
-                  height: "48px",
+                  width: 40,
+                  height: 40,
                   borderRadius: "50%",
-                  backgroundColor: "#25D366",
+                  background: "#25D366",
+                  border: "none",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   cursor: "pointer",
-                  boxShadow: "0 2px 8px rgba(37,211,102,0.4)",
                 }}
               >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-                </svg>
-              </div>
+                <Send size={18} color="#fff" />
+              </button>
             </div>
           </div>
         </>
@@ -298,51 +218,34 @@ const WhatsAppFloat: React.FC = () => {
   );
 };
 
-// Main App
+/* ===========================
+   App
+=========================== */
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="light"
-      enableSystem
-      disableTransitionOnChange
-    >
+    <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
       <TooltipProvider>
         <Toaster />
         <Sonner />
 
-        {/* 🎄 GfG-like Snowfall */}
-        <Snowfall
-          style={{
-            position: "fixed",
-            width: "100vw",
-            height: "100vh",
-            top: 0,
-            left: 0,
-            pointerEvents: "none",
-            zIndex: 500, // below WhatsApp zIndex 999999
-          }}
-          color="#ffffff"
-          snowflakeCount={80}        // sparse like banner
-          radius={[1.2, 3.2]}        // small round dots
-          speed={[0.5, 1.5]}         // gentle fall
-          wind={[-0.3, 0.6]}         // slight horizontal drift
-          opacity={[0.6, 1]}
-        />
-
         <BrowserRouter>
+          <ScrollToTop />
           <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/team" element={<Team />} />
-            <Route path="/methodology" element={<Methodology />} />
-            <Route path="/career" element={<Career />} />
+            <Route element={<Layout />}>
+              <Route path="/" element={<Index />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/projects" element={<Projects />} />
+              <Route path="/team" element={<Team />} />
+              <Route path="/methodology" element={<Methodology />} />
+              <Route path="/career" element={<Career />} />
+              <Route path="/contact" element={<Contact />} />
+            </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
+
         <WhatsAppFloat />
       </TooltipProvider>
     </ThemeProvider>
