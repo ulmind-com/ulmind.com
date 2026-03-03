@@ -38,6 +38,9 @@
 
     --radius: 0.75rem;
 
+    /* MagicUI Marquee Gap Variable */
+    --gap: 1rem;
+
     /* Typography */
     --font-display: 'Playfair Display', serif;
     --font-body: 'Inter', sans-serif;
@@ -183,8 +186,37 @@
   .tracking-premium {
     letter-spacing: 0.2em;
   }
+
+  /* --- Marquee Scrolling Classes --- */
+  .animate-marquee {
+    animation: marquee var(--duration) linear infinite;
+  }
+
+  .animate-marquee-vertical {
+    animation: marquee-vertical var(--duration) linear infinite;
+  }
 }
 
+/* Keyframes for Auto-scrolling */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+  }
+}
+
+@keyframes marquee-vertical {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(calc(-100% - var(--gap)));
+  }
+}
+
+/* Existing Floating Animations */
 @keyframes floating {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
