@@ -22,7 +22,7 @@ const BrandIntroSection = () => {
             >
               <img src="/JBU.png" className="w-28 md:w-36 mb-4" />
               <h2 className="text-4xl md:text-6xl font-black text-white">
-                Jharkhand <span className="block text-white/70">Update</span>
+                Jharkhand <span className="block text-white/70">Updates</span>
               </h2>
             </motion.div>
 
