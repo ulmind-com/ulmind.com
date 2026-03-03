@@ -182,11 +182,11 @@ const PartnershipSection = ({ opacity, scale }: PartnershipSectionProps) => {
                   className="w-full h-[260px] md:h-[400px] object-cover"
                 />
 
-                {/* Trusted Partner */}
+                {/* Trusted Partner - Forced text-black for visibility on light bg in dark mode */}
                 <motion.div
                   animate={{ y: [0, -10, 0] }}
                   transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute top-6 md:top-10 right-4 md:right-8 bg-white/90 backdrop-blur px-3 md:px-4 py-1.5 md:py-2 rounded-xl shadow-xl flex items-center gap-2"
+                  className="absolute top-6 md:top-10 right-4 md:right-8 bg-white/90 backdrop-blur px-3 md:px-4 py-1.5 md:py-2 rounded-xl shadow-xl flex items-center gap-2 text-black"
                 >
                   <span className="text-xs font-bold">Trusted Partner</span>
                   <span className="flex items-center gap-1 bg-black text-white px-2 py-0.5 rounded text-[10px]">
@@ -195,11 +195,11 @@ const PartnershipSection = ({ opacity, scale }: PartnershipSectionProps) => {
                   </span>
                 </motion.div>
 
-                {/* Regional Reach */}
+                {/* Regional Reach - Forced text-black for visibility on light bg in dark mode */}
                 <motion.div
                   animate={{ y: [0, 10, 0] }}
                   transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute bottom-6 md:bottom-10 left-4 md:left-8 bg-white/90 backdrop-blur px-3 md:px-4 py-1.5 md:py-2 rounded-xl shadow-xl flex items-center gap-2"
+                  className="absolute bottom-6 md:bottom-10 left-4 md:left-8 bg-white/90 backdrop-blur px-3 md:px-4 py-1.5 md:py-2 rounded-xl shadow-xl flex items-center gap-2 text-black"
                 >
                   <span className="text-xs font-bold">Regional Reach</span>
                   <span className="flex items-center gap-1 bg-black text-white px-2 py-0.5 rounded text-[10px]">
@@ -217,8 +217,8 @@ const PartnershipSection = ({ opacity, scale }: PartnershipSectionProps) => {
       {/* Modal */}
       {openForm && (
         <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
-          <div className="bg-background rounded-lg w-full max-w-xl max-h-[90vh] overflow-y-auto p-6 relative">
-            <button onClick={() => setOpenForm(false)} className="absolute top-4 right-4">
+          <div className="bg-background rounded-lg w-full max-w-xl max-h-[90vh] overflow-y-auto p-6 relative text-foreground">
+            <button onClick={() => setOpenForm(false)} className="absolute top-4 right-4 text-foreground hover:opacity-70 transition-opacity">
               <X />
             </button>
 

@@ -22,7 +22,7 @@ const BrandIntroSection = () => {
             >
               <img src="/JBU.png" className="w-28 md:w-36 mb-4" />
               <h2 className="text-4xl md:text-6xl font-black text-white">
-                JharkhandBihar <span className="block text-white/70">Update</span>
+                Jharkhand <span className="block text-white/70">Update</span>
               </h2>
             </motion.div>
 
@@ -32,7 +32,7 @@ const BrandIntroSection = () => {
               transition={{ duration: 0.7 }}
             >
               <p className="text-lg text-white/80 max-w-md">
-                JharkhandBihar Update is a trusted regional digital news platform delivering authentic stories across Jharkhand and Bihar.
+                Jharkhand Update is a trusted regional digital news platform delivering authentic stories across Jharkhand and Bihar.
               </p>
               <div className="h-0.5 w-12 bg-white/30 mt-8" />
             </motion.div>
@@ -40,14 +40,20 @@ const BrandIntroSection = () => {
         </div>
 
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 w-[90%] md:w-auto">
-          <div className="flex items-center justify-between bg-[#0f3f2a] border border-white/20 rounded-full px-5 py-3 shadow-lg w-full md:w-auto">
+          {/* Added anchor tag for redirecting to the website */}
+          <a 
+            href="https://www.jharkhandupdates.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center justify-between bg-[#0f3f2a] border border-white/20 rounded-full px-5 py-3 shadow-lg w-full md:w-auto hover:bg-[#145338] transition-colors cursor-pointer"
+          >
             <span className="text-white/90 text-sm md:text-base">
-              www.jharkhandbiharupdates.com
+              www.jharkhandupdates.com
             </span>
             <div className="ml-4 w-9 h-9 flex items-center justify-center border border-white/30 rounded-full">
               🔍
             </div>
-          </div>
+          </a>
         </div>
 
       </div>
