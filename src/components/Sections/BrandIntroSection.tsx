@@ -32,7 +32,7 @@ const BrandIntroSection = () => {
               transition={{ duration: 0.7 }}
             >
               <p className="text-lg text-white/80 max-w-md">
-                Jharkhand Update is a trusted regional digital news platform delivering authentic stories across Jharkhand.
+                Jharkhand Updates is a trusted regional digital news platform delivering authentic stories across Jharkhand.
               </p>
               <div className="h-0.5 w-12 bg-white/30 mt-8" />
             </motion.div>
