@@ -69,7 +69,7 @@ export default function Team() {
     },
     {
       name: "Sagnik Mondal",
-      role: "Co-Founder & Developer",
+      role: "Co-Founder & COO",
       image: "/sagnik2.jpg",
       bio: "MERN developer focused on responsive and scalable apps.",
       skills: ["MongoDB", "Express", "React", "NodeJS", "NextJS"],
