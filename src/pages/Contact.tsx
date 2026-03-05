@@ -211,6 +211,8 @@ const Contact = () => {
                     <option value="E-commerce">E-commerce</option>
                     <option value="SaaS">SaaS</option>
                     <option value="Consulting">Consulting</option>
+                    <option value="Graphics Design">Graphics Design</option>
+                    <option value="Content Writing">Content Writing</option>
                   </select>
 
                   <div className="grid md:grid-cols-2 gap-4">
@@ -223,11 +225,13 @@ const Contact = () => {
                       className="w-full px-3 py-2 rounded-md bg-background border border-input"
                     >
                       <option value="">Select budget range</option>
-                      <option value="Under $10,000">Under $10,000</option>
-                      <option value="$10,000 - $25,000">$10,000 - $25,000</option>
-                      <option value="$25,000 - $50,000">$25,000 - $50,000</option>
-                      <option value="$50,000 - $100,000">$50,000 - $100,000</option>
-                      <option value="Over $100,000">Over $100,000</option>
+                      {/* Budget ranges updated for variety of services */}
+                      <option value="Under $500">Under $500 (Design/Content)</option>
+                      <option value="$500 - $2,000">$500 - $2,000</option>
+                      <option value="$2,000 - $5,000">$2,000 - $5,000</option>
+                      <option value="$5,000 - $15,000">$5,000 - $15,000</option>
+                      <option value="$15,000 - $50,000">$15,000 - $50,000</option>
+                      <option value="Over $50,000">Over $50,000 (Enterprise/SaaS)</option>
                     </select>
 
                     <select
@@ -270,65 +274,62 @@ const Contact = () => {
             </Card>
           </motion.div>
  
-{/* INFO */}
-<motion.div
-  initial={{ opacity: 0, x: 40 }}
-  animate={inView ? { opacity: 1, x: 0 } : {}}
-  transition={{ duration: 0.8 }}
-  className="space-y-6"
->
-  {contactInfo.map((info) => (
-    <div
-      key={info.title}
-      className="flex gap-4 p-6 bg-card rounded-xl shadow"
-    >
-      <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
-        <info.icon className="w-6 h-6 text-white" />
-      </div>
-
-      <div>
-        <h4 className="font-semibold mb-1">{info.title}</h4>
-
-        {/* 🔗 Updated Links */}
-        {info.title === "Email Us" && (
-          <a
-            href="mailto:contact@ulmind.com"
-            className="text-primary hover:underline text-sm"
+          {/* INFO */}
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.8 }}
+            className="space-y-6"
           >
-            contact@ulmind.com
-          </a>
-        )}
+            {contactInfo.map((info) => (
+              <div
+                key={info.title}
+                className="flex gap-4 p-6 bg-card rounded-xl shadow"
+              >
+                <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
+                  <info.icon className="w-6 h-6 text-white" />
+                </div>
 
-        {info.title === "Call Us" && (
-          <a
-            href="tel:+918537861040"
-            className="text-primary hover:underline text-sm"
-          >
-            +91 85378 61040
-          </a>
-        )}
+                <div>
+                  <h4 className="font-semibold mb-1">{info.title}</h4>
 
-        {info.title === "Visit Us" && (
-          <a
-            href="https://maps.app.goo.gl/hyKu5FMJXY8sxYTQ7"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary hover:underline text-sm"
-          >
-            Haldia, West Bengal, India
-          </a>
-        )}
+                  {/* 🔗 Updated Links */}
+                  {info.title === "Email Us" && (
+                    <a
+                      href="mailto:contact@ulmind.com"
+                      className="text-primary hover:underline text-sm"
+                    >
+                      contact@ulmind.com
+                    </a>
+                  )}
 
-        <p className="text-sm text-muted-foreground mt-1">
-          {info.description}
-        </p>
-      </div>
-    </div>
-  ))}
-</motion.div>
+                  {info.title === "Call Us" && (
+                    <a
+                      href="tel:+918537861040"
+                      className="text-primary hover:underline text-sm"
+                    >
+                      +91 85378 61040
+                    </a>
+                  )}
 
+                  {info.title === "Visit Us" && (
+                    <a
+                      href="https://maps.app.goo.gl/hyKu5FMJXY8sxYTQ7"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline text-sm"
+                    >
+                      Haldia, West Bengal, India
+                    </a>
+                  )}
 
-
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {info.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </motion.div>
         </div>
       </div>
     </section>
