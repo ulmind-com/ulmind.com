@@ -46,10 +46,10 @@ export default function About() {
   ];
 
   const stats = [
-    { number: '5+', label: 'Projects Completed' },
-    { number: '5+', label: 'Happy Clients' },
+    { number: '7+', label: 'Projects Completed' },
+    { number: '7+', label: 'Happy Clients' },
     { number: '3+', label: 'Years Experience' },
-    { number: '9+', label: 'Team Members' },
+    { number: '8+', label: 'Team Members' },
   ];
 
   return (

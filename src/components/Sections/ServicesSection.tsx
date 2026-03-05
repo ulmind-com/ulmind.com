@@ -10,6 +10,7 @@ import {
   ArrowRight,
   CheckCircle,
   Cpu,
+  PenTool,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -98,6 +99,30 @@ const services = [
       "Process Automation",
       "Predictive Analytics",
       "Real-Time Decision Making",
+    ],
+  },
+   {
+    icon: <Palette className="w-8 h-8" />,
+    title: "Graphics Design & Branding",
+    description:
+      "Crafting high-impact visual identities and premium UI/UX designs that elevate your brand's digital presence.",
+    features: [
+      "Logo & Brand Identity",
+      "UI/UX Visual Design",
+      "Motion Graphics",
+      "Marketing Collaterals",
+    ],
+  },
+  {
+    icon: <PenTool className="w-8 h-8" />,
+    title: "Content Writing & Strategy",
+    description:
+      "Creating persuasive, SEO-optimized narratives that engage audiences and drive meaningful business growth.",
+    features: [
+      "SEO Content Writing",
+      "Technical Copywriting",
+      "Brand Storytelling",
+      "Social Media Strategy",
     ],
   },
 ];

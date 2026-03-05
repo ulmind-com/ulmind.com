@@ -61,8 +61,8 @@ export const HeroSection = () => {
   // Updated stats to match your video/requirements
   const stats = [
     { number: '3', label: 'Years Experience' },
-    { number: '5', label: 'Completed Projects' },
-    { number: '10+', label: 'Clients Worldwide' },
+    { number: '7+', label: 'Completed Projects' },
+    { number: '7+', label: 'Clients Worldwide' },
     { number: '24/7', label: 'Support' },
   ];
 

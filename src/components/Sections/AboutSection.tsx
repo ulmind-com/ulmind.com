@@ -106,11 +106,11 @@ export const AboutSection = () => {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="bg-primary/10 rounded-xl p-4 text-center">
-                      <div className="text-2xl font-bold text-primary">100+</div>
+                      <div className="text-2xl font-bold text-primary">7+</div>
                       <div className="text-sm text-muted-foreground">Projects</div>
                     </div>
                     <div className="bg-accent/10 rounded-xl p-4 text-center">
-                      <div className="text-2xl font-bold text-accent">50+</div>
+                      <div className="text-2xl font-bold text-accent">7+</div>
                       <div className="text-sm text-muted-foreground">Clients</div>
                     </div>
                   </div>
