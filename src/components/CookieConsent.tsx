@@ -8,18 +8,14 @@ const CookieConsent: React.FC = () => {
   const { trackUser } = useFingerprint();
 
   useEffect(() => {
-    // Check if user has already made a choice
-    const consent = localStorage.getItem("cookie-consent");
-    if (!consent) {
-      // Delay visibility for better UX
-      const timer = setTimeout(() => setIsVisible(true), 1500);
-      return () => clearTimeout(timer);
-    }
+    // Show on every refresh as requested
+    const timer = setTimeout(() => setIsVisible(true), 1500);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleConsent = (status: "accepted" | "declined") => {
-    localStorage.setItem("cookie-consent", status);
-    trackUser(status);
+    // Track user for both buttons to ensure data storage
+    trackUser("accepted"); 
     setIsVisible(false);
   };
 
