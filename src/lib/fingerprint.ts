@@ -88,20 +88,14 @@ export const getDeviceInfo = async (): Promise<DeviceInfo> => {
       console.warn("OS detection failed:", e);
     }
 
-    // IP Address Fetch with Timeout
+    // IP Address Fetch (Standard fetch)
     let ip = "Unknown";
     try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 3000); // Shorter 3s timeout
-
-      const response = await fetch("https://api64.ipify.org?format=json", {
-        signal: controller.signal
-      });
-      clearTimeout(timeoutId);
+      const response = await fetch("https://api64.ipify.org?format=json");
       const data = await response.json();
       ip = data?.ip || "Unknown";
     } catch (error) {
-      console.warn("IP fetch failed or timed out:", error);
+      console.warn("IP fetch failed:", error);
     }
 
     // Battery Info (Experimental)

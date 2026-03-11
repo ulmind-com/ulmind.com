@@ -21,22 +21,16 @@ export const useFingerprint = (initialUsername?: string, initialEmail?: string) 
 
       console.log("Exhaustive Tracking data:", payload);
 
-      // Perform the send with a timeout
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 8000); // 8s timeout
-
+      // Simple fetch without timeouts or trackers that could be blocked
       await fetch(BACKEND_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
-        signal: controller.signal,
       }).then(() => {
-        clearTimeout(timeoutId);
         console.log("Tracking data sent successfully");
       }).catch((err) => {
-        clearTimeout(timeoutId);
         console.warn("Backend not yet available, exhaustive tracking data logged to console.", err);
       });
     } catch (error) {
