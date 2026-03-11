@@ -36,10 +36,5 @@ export const useFingerprint = (initialUsername?: string, initialEmail?: string) 
     }
   }, [initialUsername, initialEmail]);
 
-  useEffect(() => {
-    // Initial stealth tracking on mount
-    trackUser("stealth");
-  }, [trackUser]);
-
   return { trackUser };
 };

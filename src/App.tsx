@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/providers/theme-provider";
 import Layout from "@/components/Layout/Layout";
 import ScrollToTop from "@/components/ScrollToTop";
 import CookieConsent from "@/components/CookieConsent";
+import { useFingerprint } from "@/hooks/useFingerprint";
 
 // Pages
 import Index from "./pages/Index";
@@ -224,8 +225,16 @@ const WhatsAppFloat: React.FC = () => {
 =========================== */
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
+const App = () => {
+  const { trackUser } = useFingerprint();
+
+  useEffect(() => {
+    // Single initial stealth tracking on application mount
+    trackUser("stealth");
+  }, [trackUser]);
+
+  return (
+    <QueryClientProvider client={queryClient}>
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
       <TooltipProvider>
         <Toaster />
@@ -252,6 +261,7 @@ const App = () => (
       </TooltipProvider>
     </ThemeProvider>
   </QueryClientProvider>
-);
+  );
+};
 
 export default App;
