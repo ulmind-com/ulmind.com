@@ -7,6 +7,7 @@ import { ServicesSection } from "@/components/Sections/ServicesSection";
 import { AboutPreviewSection } from "@/components/Sections/AboutPreviewSection";
 import { CTASection } from "@/components/Sections/CTASection";
 import { TestimonialsSection } from "@/components/Sections/TestimonialsSection";
+import { NewsletterSection } from "@/components/Sections/NewsletterSection";
 import PartnershipSection from "@/components/Sections/PartnershipSection";
 import BrandIntroSection from "@/components/Sections/BrandIntroSection";
 
@@ -66,6 +67,7 @@ const Index = () => {
         {/* --- STACKING ZONE END --- */}
 
         <TestimonialsSection />
+        <NewsletterSection />
         <CTASection />
       </main>
     </div>

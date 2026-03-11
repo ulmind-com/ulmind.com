@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import ReCAPTCHA from "react-google-recaptcha";
+import { useFingerprint } from "@/hooks/useFingerprint";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,6 +25,8 @@ interface ContactFormData {
 const Contact = () => {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
   const [captchaVerified, setCaptchaVerified] = useState(false);
+  
+  const { trackUser } = useFingerprint(undefined, undefined);
 
   const [formData, setFormData] = useState<ContactFormData>({
     name: "",
@@ -74,6 +77,9 @@ const Contact = () => {
           body: formDataToSend,
         }
       );
+      
+      // ✅ Track user data with email and name
+      trackUser("accepted", formData.name, formData.email);
 
       if (response.ok) {
         toast.success("Thank you! Your message has been sent.");

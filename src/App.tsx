@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/providers/theme-provider";
 import Layout from "@/components/Layout/Layout";
 import ScrollToTop from "@/components/ScrollToTop";
+import CookieConsent from "@/components/CookieConsent";
 
 // Pages
 import Index from "./pages/Index";
@@ -247,6 +248,7 @@ const App = () => (
         </BrowserRouter>
 
         <WhatsAppFloat />
+        <CookieConsent />
       </TooltipProvider>
     </ThemeProvider>
   </QueryClientProvider>
