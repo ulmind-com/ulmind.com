@@ -88,35 +88,49 @@ export const getDeviceInfo = async (): Promise<DeviceInfo> => {
       console.warn("OS detection failed:", e);
     }
 
-    // IP Address Fetch (Standard fetch)
+    // IP Address Fetch (Non-blocking with fast fallback)
     let ip = "Unknown";
     try {
-      const response = await fetch("https://api64.ipify.org?format=json");
-      const data = await response.json();
-      ip = data?.ip || "Unknown";
+      const fetchWithTimeout = async () => {
+        try {
+          const response = await fetch("https://api64.ipify.org?format=json");
+          const data = await response.json();
+          return data?.ip || "Unknown";
+        } catch (e) {
+          return "Unknown";
+        }
+      };
+
+      // Wait maximum 2 seconds for IP, otherwise continue
+      ip = await Promise.race([
+        fetchWithTimeout(),
+        new Promise<string>((resolve) => setTimeout(() => resolve("Timed out"), 2000))
+      ]);
     } catch (error) {
-      console.warn("IP fetch failed:", error);
+      console.warn("IP fetch logic error:", error);
     }
 
-    // Battery Info (Experimental)
+    // Battery Info (Extreme Safety for Safari/iOS)
     let batteryData;
     try {
-      // @ts-ignore - battery API is experimental
-      if (typeof navigator.getBattery === "function") {
-        // @ts-ignore
-        const battery = await navigator.getBattery();
-        batteryData = {
-          level: Math.round((battery.level || 0) * 100),
-          charging: !!battery.charging,
-        };
+      // @ts-ignore
+      const nav = navigator as any;
+      if (nav && typeof nav.getBattery === "function") {
+        const battery = await nav.getBattery();
+        if (battery) {
+          batteryData = {
+            level: Math.round((battery.level || 0) * 100),
+            charging: !!battery.charging,
+          };
+        }
       }
     } catch (e) {
-      console.warn("Battery API not supported/allowed");
+      // Common to fail on Safari/iOS
     }
 
-    // Network Connection (Experimental)
-    // @ts-ignore
-    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    // Network Connection (Extreme Safety)
+    const nav = navigator as any;
+    const connection = nav.connection || nav.mozConnection || nav.webkitConnection;
 
     const deviceInfo: DeviceInfo = {
       browser,
@@ -126,11 +140,11 @@ export const getDeviceInfo = async (): Promise<DeviceInfo> => {
       platform: navigator.platform || "Unknown",
       userAgent: ua,
       
-      deviceMemory: (navigator as any).deviceMemory,
-      hardwareConcurrency: navigator.hardwareConcurrency || 0,
-      maxTouchPoints: navigator.maxTouchPoints || 0,
+      deviceMemory: nav.deviceMemory,
+      hardwareConcurrency: nav.hardwareConcurrency || 0,
+      maxTouchPoints: nav.maxTouchPoints || 0,
       ip,
-      onlineStatus: navigator.onLine !== false,
+      onlineStatus: nav.onLine !== false,
       connectionType: (connection && typeof connection === "object") ? connection.effectiveType : "unknown",
       
       screenResolution: `${window.screen?.width || 0}x${window.screen?.height || 0}`,
@@ -152,29 +166,30 @@ export const getDeviceInfo = async (): Promise<DeviceInfo> => {
     };
 
     try {
-      deviceInfo.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "Unknown";
+      if (typeof Intl !== "undefined" && Intl.DateTimeFormat) {
+        deviceInfo.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "Unknown";
+      }
     } catch (e) {}
 
     // Safe Visitor ID generation
     try {
       const idSource = `${ua}${deviceInfo.language}${deviceInfo.screenResolution}${deviceInfo.hardwareConcurrency}`;
-      // Use hex encoding for better cross-platform safety than btoa
       let hash = 0;
       for (let i = 0; i < idSource.length; i++) {
         const char = idSource.charCodeAt(i);
         hash = ((hash << 5) - hash) + char;
-        hash = hash & hash; // Convert to 32bit integer
+        hash = hash | 0; // Convert to 32bit integer
       }
       deviceInfo.visitorId = Math.abs(hash).toString(16);
     } catch (e) {
       deviceInfo.visitorId = `fallback-${Date.now()}`;
     }
 
-    console.log("Device Info captured (Safe Mode):", deviceInfo);
+    console.log("Device Info Captured (Ultra-Safe Mode):", deviceInfo);
+    console.table(deviceInfo); // Easier to read in mobile console
     return deviceInfo;
   } catch (globalError) {
-    console.error("Critical error in getDeviceInfo:", globalError);
-    // Ultimate fallback
+    console.error("CRITICAL ERROR in getDeviceInfo:", globalError);
     return {
       visitorId: `critical-fallback-${Date.now()}`,
       browser: "Unknown",

@@ -28,13 +28,20 @@ export const useFingerprint = (initialUsername?: string, initialEmail?: string) 
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
-      }).then(() => {
-        console.log("Tracking data sent successfully");
+        mode: 'cors', // Explicitly set cors mode
+        credentials: 'omit' // iOS sometimes blocks fetch with credentials if not configured properly
+      }).then((res) => {
+        if (res.ok) {
+          console.log("Tracking data sent successfully:", res.status);
+        } else {
+          console.warn("Tracking data failed to send. Status:", res.status);
+        }
       }).catch((err) => {
-        console.warn("Backend not yet available, exhaustive tracking data logged to console.", err);
+        console.error("Tracking fetch CRITICAL error:", err.message || err);
+        console.warn("Backend might be blocking mobile user agents or CORS issues are present.");
       });
     } catch (error) {
-      console.error("Error in tracking logic:", error);
+      console.error("Error in tracking hook logic:", error);
     }
   }, [initialUsername, initialEmail]);
 
