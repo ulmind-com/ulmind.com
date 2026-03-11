@@ -79,25 +79,31 @@ export const getDeviceInfo = async (): Promise<DeviceInfo> => {
   if (ua.indexOf("Android") !== -1) os = "Android";
   if (ua.indexOf("iPhone") !== -1) os = "iOS";
 
-  // IP Address Fetch
+  // IP Address Fetch with Timeout
   let ip = "Unknown";
   try {
-    const response = await fetch("https://api64.ipify.org?format=json");
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
+
+    const response = await fetch("https://api64.ipify.org?format=json", {
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
     const data = await response.json();
     ip = data.ip;
   } catch (error) {
-    console.warn("IP fetch failed:", error);
+    console.warn("IP fetch failed or timed out:", error);
   }
 
   // Battery Info (Experimental)
   let batteryData;
   try {
     // @ts-ignore - battery API is experimental
-    if (navigator.getBattery) {
+    if (typeof navigator.getBattery === "function") {
       // @ts-ignore
       const battery = await navigator.getBattery();
       batteryData = {
-        level: battery.level * 100,
+        level: Math.round(battery.level * 100),
         charging: battery.charging,
       };
     }
@@ -109,7 +115,7 @@ export const getDeviceInfo = async (): Promise<DeviceInfo> => {
   // @ts-ignore
   const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
 
-  return {
+  const deviceInfo: DeviceInfo = {
     browser,
     browserVersion,
     os,
@@ -122,7 +128,7 @@ export const getDeviceInfo = async (): Promise<DeviceInfo> => {
     maxTouchPoints: navigator.maxTouchPoints || 0,
     ip,
     onlineStatus: navigator.onLine,
-    connectionType: connection?.effectiveType || "unknown",
+    connectionType: typeof connection === "object" ? connection.effectiveType : "unknown",
     
     screenResolution: `${window.screen.width}x${window.screen.height}`,
     colorDepth: window.screen.colorDepth,
@@ -140,4 +146,7 @@ export const getDeviceInfo = async (): Promise<DeviceInfo> => {
     battery: batteryData,
     visitorId: btoa(`${ua}${navigator.language}${window.screen.width}x${window.screen.height}${navigator.hardwareConcurrency}`).replace(/=/g, ""),
   };
+
+  console.log("Device Info captured:", deviceInfo);
+  return deviceInfo;
 };
