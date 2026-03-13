@@ -42,14 +42,14 @@ const Contact = () => {
   // Dynamic Budget Options
   const budgetOptions = {
     USD: [
-      { label: "Under $90", value: "Under $90" },
-      { label: "$109 - $170", value: "$109 - $170" },
-      { label: "$217 - $325", value: "$217 - $325" },
-      { label: "$434 - $650", value: "$434 - $650" },
-      { label: "Over $1500", value: "Over $1500" },
+      { label: "Under $60", value: "Under $60" },
+      { label: "$60 - $100", value: "$60 - $100" },
+      { label: "$100 - $200", value: "$100 - $200" },
+      { label: "$200 - $500", value: "$200 - $500" },
+      { label: "Over $500", value: "Over $500" },
     ],
     INR: [
-      { label: "Under ₹6,999", value: "Under ₹6,999" },
+      { label: "Under ₹4,999", value: "Under ₹4,999" },
       { label: "₹9,999 - ₹14,999", value: "₹9,999 - ₹14,999" },
       { label: "₹19,999 - ₹29,999", value: "₹19,999 - ₹29,999" },
       { label: "₹39,999 - ₹59,999", value: "₹39,999 - ₹59,999" },
