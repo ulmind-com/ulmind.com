@@ -101,7 +101,10 @@ const AnimatedHeroVisuals = () => {
                             muted
                             playsInline
                             onEnded={handleVideoEnd} // Triggers next slide ONLY when video finishes
-                            className="w-full h-full object-cover"
+                            onContextMenu={(e) => e.preventDefault()} // Prevents right click and save
+                            controlsList="nodownload" // Removes download option if controls were visible
+                            disablePictureInPicture // Disables picture in picture mode
+                            className="w-full h-full object-cover pointer-events-none select-none" // pointer-events-none prevents dragging
                         />
                     </div>
 
