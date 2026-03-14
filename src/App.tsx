@@ -46,13 +46,13 @@ const WhatsAppFloat: React.FC = () => {
 
   return (
     <>
-      {/* CALL BUTTON */}
+      {/* CALL BUTTON (RESTORED) */}
       <a
         href="tel:8537861040"
         style={{
           position: "fixed",
-          bottom: 96, 
-          right: 16,  
+          bottom: 96, // Ektu adjust kora hoyeche jate overlap na hoy
+          right: 16,  // Mobile e screen er baire jate na jay tar jonno 16 kora hoyeche
           width: 56,
           height: 56,
           borderRadius: "50%",
@@ -73,7 +73,7 @@ const WhatsAppFloat: React.FC = () => {
         style={{
           position: "fixed",
           bottom: 24,
-          right: 16, 
+          right: 16, // Mobile safe right margin
           width: 56,
           height: 56,
           borderRadius: "50%",
@@ -94,6 +94,7 @@ const WhatsAppFloat: React.FC = () => {
 
       {showPopup && (
         <>
+          {/* Overlay */}
           <div
             onClick={() => setShowPopup(false)}
             style={{
@@ -104,14 +105,16 @@ const WhatsAppFloat: React.FC = () => {
             }}
           />
 
+          {/* Chat Box */}
           <div
             style={{
               position: "fixed",
               bottom: 96,
               right: 16,
               width: 360,
+              // ETAI MAIN FIX: Mobile screen er theke chat box jate boro na hoy
               maxWidth: "calc(100vw - 32px)", 
-              boxSizing: "border-box", 
+              boxSizing: "border-box", // Padding jate width na baray
               borderRadius: 16,
               overflow: "hidden",
               background: isDark ? "#0B141A" : "#ECE5DD",
@@ -196,7 +199,7 @@ const WhatsAppFloat: React.FC = () => {
                   outline: "none",
                   background: isDark ? "#2A3942" : "#FFFFFF",
                   color: isDark ? "#FFFFFF" : "#000",
-                  width: "100%", 
+                  width: "100%", // Input field shrink korar jonno
                 }}
               />
               <button
@@ -204,7 +207,7 @@ const WhatsAppFloat: React.FC = () => {
                 style={{
                   width: 40,
                   height: 40,
-                  flexShrink: 0, 
+                  flexShrink: 0, // Button jate choto na hoye jay
                   borderRadius: "50%",
                   background: "#25D366",
                   border: "none",
@@ -233,6 +236,7 @@ const App = () => {
   const { trackUser } = useFingerprint();
 
   useEffect(() => {
+    // Single initial stealth tracking on application mount
     trackUser("stealth");
   }, [trackUser]);
 
@@ -240,30 +244,27 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
         <TooltipProvider>
-          {/* THE MASTER FIX: Wrap everything in this div to strictly prevent any horizontal scrolling */}
-          <div className="relative w-full max-w-[100vw] overflow-x-hidden flex flex-col min-h-screen">
-            <Toaster />
-            <Sonner />
+          <Toaster />
+          <Sonner />
 
-            <BrowserRouter>
-              <ScrollToTop />
-              <Routes>
-                <Route element={<Layout />}>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/projects" element={<Projects />} />
-                  <Route path="/team" element={<Team />} />
-                  <Route path="/methodology" element={<Methodology />} />
-                  <Route path="/career" element={<Career />} />
-                  <Route path="/contact" element={<Contact />} />
-                </Route>
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </BrowserRouter>
+          <BrowserRouter>
+            <ScrollToTop />
+            <Routes>
+              <Route element={<Layout />}>
+                <Route path="/" element={<Index />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/projects" element={<Projects />} />
+                <Route path="/team" element={<Team />} />
+                <Route path="/methodology" element={<Methodology />} />
+                <Route path="/career" element={<Career />} />
+                <Route path="/contact" element={<Contact />} />
+              </Route>
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
 
-            <WhatsAppFloat />
-            <CookieConsent />
-          </div>
+          <WhatsAppFloat />
+          <CookieConsent />
         </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>
