@@ -21,7 +21,7 @@ import {
   Wifi
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 // Combined Animated component for seamless sliding of videos AND orbiting icons
 const AnimatedHeroVisuals = () => {
@@ -186,7 +186,13 @@ const AnimatedHeroVisuals = () => {
 };
 
 // Counter component for the animated numbers
-const Counter = ({ value, label, icon: Icon }: { value: string, label: string, icon?: any }) => {
+interface CounterProps {
+  value: string;
+  label: string;
+  icon?: React.ElementType; // Fixed TS 'any' type to prevent Vercel build errors
+}
+
+const Counter = ({ value, label, icon: Icon }: CounterProps) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: false, amount: 0.5 });
   
@@ -298,20 +304,22 @@ export const HeroSection = () => {
               </span>
             </motion.div>
 
-            {/* Headline with Dashed Box for "Digital" */}
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold mb-6 leading-[1.1] text-foreground">
-              Building Tomorrow's
+            {/* Headline with 3D Ultra Premium Styling */}
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black mb-6 leading-[1.1] tracking-tight">
+              <span className="text-foreground drop-shadow-md">Building Tomorrow's</span>
               <br />
-              <span className="relative inline-block border-2 border-dashed border-orange-500 text-orange-500 px-4 py-1 mx-2 my-2 bg-orange-500/5">
-                Digital
-                {/* Dashed Box Corner Squares */}
-                <span className="absolute -top-1.5 -left-1.5 w-2.5 h-2.5 bg-background border border-orange-500" />
-                <span className="absolute -top-1.5 -right-1.5 w-2.5 h-2.5 bg-background border border-orange-500" />
-                <span className="absolute -bottom-1.5 -left-1.5 w-2.5 h-2.5 bg-background border border-orange-500" />
-                <span className="absolute -bottom-1.5 -right-1.5 w-2.5 h-2.5 bg-background border border-orange-500" />
+              <span className="relative inline-block border-[3px] border-dashed border-orange-400/80 px-5 py-2 mx-2 my-3 bg-gradient-to-r from-orange-500/10 to-amber-500/5 shadow-[0_0_20px_rgba(249,115,22,0.15)] rounded-lg transform -rotate-1 hover:rotate-0 transition-transform duration-300">
+                <span className="bg-clip-text text-transparent bg-gradient-to-br from-orange-400 via-orange-500 to-red-500 drop-shadow-[0_2px_2px_rgba(0,0,0,0.1)]">
+                  Digital
+                </span>
+                {/* 3D Glowing Dashed Box Corner Squares */}
+                <span className="absolute -top-1.5 -left-1.5 w-3 h-3 bg-white dark:bg-background border-2 border-orange-500 rounded-sm shadow-[0_0_8px_rgba(249,115,22,0.6)]" />
+                <span className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-white dark:bg-background border-2 border-orange-500 rounded-sm shadow-[0_0_8px_rgba(249,115,22,0.6)]" />
+                <span className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-white dark:bg-background border-2 border-orange-500 rounded-sm shadow-[0_0_8px_rgba(249,115,22,0.6)]" />
+                <span className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-white dark:bg-background border-2 border-orange-500 rounded-sm shadow-[0_0_8px_rgba(249,115,22,0.6)]" />
               </span>
               <br />
-              Solutions
+              <span className="text-foreground drop-shadow-md">Solutions</span>
             </h1>
 
             {/* Paragraph */}

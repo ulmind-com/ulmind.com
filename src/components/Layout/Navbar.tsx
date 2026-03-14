@@ -34,19 +34,21 @@ export const Navbar = () => {
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className="fixed top-6 left-6 right-6 z-50"
+      /* Changed left-6 right-6 to smaller gaps for mobile to prevent overflow */
+      className="fixed top-4 md:top-6 left-4 right-4 md:left-6 md:right-6 z-50"
     >
       <div
         className={`glass-card rounded-2xl border border-white/20 backdrop-blur-xl transition-all duration-300 ${
           scrolled ? "bg-background/80 shadow-elegant" : "bg-background/60"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 sm:px-8">
-          <div className="flex justify-between items-center py-4">
-            {/* Logo */}
+        {/* Adjusted px-6 to px-4 for mobile */}
+        <div className="max-w-7xl mx-auto px-4 md:px-6 sm:px-8">
+          <div className="flex justify-between items-center py-3 md:py-4">
+            {/* Logo: Added flex-shrink-0 and reduced max-width for mobile */}
             <div
               onClick={() => navigate("/")}
-              className="cursor-pointer h-12 w-auto max-w-[260px]"
+              className="cursor-pointer h-10 md:h-12 w-auto max-w-[160px] md:max-w-[260px] flex-shrink-0"
             >
               <img
                 src="/ULmindLogo.png"
@@ -89,8 +91,8 @@ export const Navbar = () => {
               <ThemeToggle />
             </div>
 
-            {/* Mobile */}
-            <div className="md:hidden flex items-center gap-2">
+            {/* Mobile Nav Triggers - Added flex-shrink-0 to keep buttons intact */}
+            <div className="md:hidden flex items-center gap-2 flex-shrink-0">
               <ThemeToggle />
               <Button
                 variant="ghost"
@@ -111,9 +113,10 @@ export const Navbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass-card rounded-b-2xl border-t border-white/20 mt-2 mx-6"
+            /* Removed 'mx-6' because parent already controls width, added overflow-hidden */
+            className="md:hidden glass-card rounded-b-2xl border-t border-white/20 mt-2 overflow-hidden"
           >
-            <div className="px-6 py-6 space-y-4">
+            <div className="px-4 py-6 space-y-4">
               {navItems.map((item) => {
                 const active = isActive(item.href);
 
