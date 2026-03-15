@@ -1,50 +1,68 @@
-import { Globe } from "@/components/ui/globe";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+"use client";
+import { Globe3D, GlobeMarker } from "@/components/ui/3d-globe";
+import { BlobButton } from "@/components/ui/blob-button";
 import { useNavigate } from "react-router-dom";
+
+const sampleMarkers: GlobeMarker[] = [
+  { lat: 40.7128, lng: -74.006, src: "https://assets.aceternity.com/avatars/1.webp", label: "New York" },
+  { lat: 51.5074, lng: -0.1278, src: "https://assets.aceternity.com/avatars/2.webp", label: "London" },
+  { lat: 35.6762, lng: 139.6503, src: "https://assets.aceternity.com/avatars/3.webp", label: "Tokyo" },
+  { lat: -33.8688, lng: 151.2093, src: "https://assets.aceternity.com/avatars/4.webp", label: "Sydney" },
+  { lat: 48.8566, lng: 2.3522, src: "https://assets.aceternity.com/avatars/5.webp", label: "Paris" },
+  { lat: 28.6139, lng: 77.209, src: "https://assets.aceternity.com/avatars/6.webp", label: "New Delhi" },
+  { lat: 55.7558, lng: 37.6173, src: "https://assets.aceternity.com/avatars/7.webp", label: "Moscow" },
+  { lat: -22.9068, lng: -43.1729, src: "https://assets.aceternity.com/avatars/8.webp", label: "Rio de Janeiro" },
+  { lat: 31.2304, lng: 121.4737, src: "https://assets.aceternity.com/avatars/9.webp", label: "Shanghai" },
+  { lat: 25.2048, lng: 55.2708, src: "https://assets.aceternity.com/avatars/10.webp", label: "Dubai" },
+  { lat: -34.6037, lng: -58.3816, src: "https://assets.aceternity.com/avatars/11.webp", label: "Buenos Aires" },
+  { lat: 1.3521, lng: 103.8198, src: "https://assets.aceternity.com/avatars/12.webp", label: "Singapore" },
+  { lat: 37.5665, lng: 126.978, src: "https://assets.aceternity.com/avatars/13.webp", label: "Seoul" },
+];
 
 export function GlobeSection() {
   const navigate = useNavigate();
 
   return (
-    <section className="relative w-full min-h-[600px] bg-[#0B0B0F] overflow-hidden">
-      {/* Globe positioned to the right */}
-      <div className="absolute right-[-10%] md:right-[-5%] top-1/2 -translate-y-1/2 w-[80%] sm:w-[60%] md:w-[50%] opacity-80 pointer-events-auto">
-        <Globe />
-      </div>
-
-      {/* Content overlay on the left */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 h-full flex flex-col justify-center min-h-[600px] py-20">
-        <div className="max-w-xl">
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-white mb-6 leading-[1.1] tracking-tight">
-            Trusted by{" "}
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-violet-500 to-orange-400">
-              Clients Worldwide
-            </span>
+    <div className="mx-auto max-w-7xl px-4 my-16">
+      <div className="relative mx-auto h-[450px] md:h-[500px] w-full overflow-hidden rounded-xl bg-white dark:bg-[#0a0a0a] shadow-sm ring-1 ring-black/10 dark:ring-white/10 transition-colors duration-300">
+        <div className="relative z-10 p-6 md:p-12 pointer-events-none">
+          <h2 className="mb-4 max-w-2xl text-4xl font-extrabold tracking-tight text-balance text-neutral-900 dark:text-white md:text-5xl lg:text-6xl">
+            Play all over the <br /> world with a click.
           </h2>
-          <p className="text-lg sm:text-xl text-gray-400 mb-10 max-w-lg leading-relaxed">
-            Delivering cutting-edge digital solutions to partners across the globe. Join our network of successful businesses today.
+          <p className="mt-2 max-w-lg text-balance text-neutral-600 dark:text-neutral-400 md:mt-8 md:text-lg">
+            Sign up for an account and start posting all over the world with one
+            click. Join our network of successful businesses today.
           </p>
-          <div className="flex flex-wrap gap-4">
-            <Button
-              size="lg"
-              onClick={() => navigate("/contact")}
-              className="bg-white text-black hover:bg-gray-200 rounded-full px-8 py-6 text-base font-bold shadow-lg transition-transform hover:scale-105 group"
-            >
+
+          <div className="mt-10 flex gap-4 md:mt-12 pointer-events-auto">
+            <BlobButton onClick={() => navigate("/contact")}>
               Get Started
-              <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={() => navigate("/about")}
-              className="rounded-full px-8 py-6 text-base font-bold border-2 border-gray-600 text-white hover:bg-white/10"
-            >
-              Learn More
-            </Button>
+            </BlobButton>
           </div>
         </div>
+
+        {/* Globe container - Sized up and positioned precisely to match Aceternity image */}
+        <div className="absolute -right-48 -bottom-72 md:-right-[300px] md:-bottom-[450px] lg:-right-[350px] lg:-bottom-[500px] z-10 w-[600px] h-[600px] md:w-[900px] md:h-[900px] lg:w-[1000px] lg:h-[1000px]">
+          <Globe3D
+            className="h-full w-full cursor-grab active:cursor-grabbing"
+            markers={sampleMarkers}
+            config={{
+              atmosphereColor: "#4da6ff",
+              atmosphereIntensity: 20,
+              bumpScale: 5,
+              autoRotateSpeed: 1.0, // Increased speed from 0.3 to 1.0 (over 3x faster)
+            }}
+            onMarkerClick={(marker) => {
+              console.log("Clicked marker:", marker.label);
+            }}
+            onMarkerHover={(marker) => {
+              if (marker) {
+                console.log("Hovering:", marker.label);
+              }
+            }}
+          />
+        </div>
       </div>
-    </section>
+    </div>
   );
 }
