@@ -52,7 +52,7 @@ export function MacbookScrollSection() {
     <div className="w-full overflow-hidden bg-background">
       <MacbookScroll
         title={
-          <div className="flex flex-col items-center justify-center -mt-10 mb-8 px-4">
+          <div className="flex flex-col items-center justify-center -mt-48 mb-8 px-4">
             <span className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-foreground drop-shadow-md tracking-tight text-center">
               Crafting the Future of
             </span>
