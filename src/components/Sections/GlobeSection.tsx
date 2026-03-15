@@ -24,25 +24,30 @@ export function GlobeSection() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 my-16">
-      <div className="relative mx-auto h-[450px] md:h-[500px] w-full overflow-hidden rounded-xl bg-white dark:bg-[#0a0a0a] shadow-sm ring-1 ring-black/10 dark:ring-white/10 transition-colors duration-300">
-        <div className="relative z-10 p-6 md:p-12 pointer-events-none">
+      {/* Container height adjusted for mobile to give the globe breathing room, md: stays exactly same */}
+      <div className="relative mx-auto h-[550px] md:h-[500px] w-full overflow-hidden rounded-2xl md:rounded-xl bg-white dark:bg-[#0a0a0a] shadow-sm ring-1 ring-black/10 dark:ring-white/10 transition-colors duration-300">
+        
+        {/* Z-index increased to 20 so text stays clearly above the globe on mobile */}
+        <div className="relative z-20 p-6 pt-10 md:p-12 pointer-events-none">
           <h2 className="mb-4 max-w-2xl text-4xl font-extrabold tracking-tight text-balance text-neutral-900 dark:text-white md:text-5xl lg:text-6xl">
             Play all over the <br /> world with a click.
           </h2>
-          <p className="mt-2 max-w-lg text-balance text-neutral-600 dark:text-neutral-400 md:mt-8 md:text-lg">
+          <p className="mt-2 max-w-lg text-balance text-neutral-600 dark:text-neutral-400 md:mt-8 text-base md:text-lg">
             Sign up for an account and start posting all over the world with one
             click. Join our network of successful businesses today.
           </p>
 
-          <div className="mt-10 flex gap-4 md:mt-12 pointer-events-auto">
+          <div className="mt-8 md:mt-12 flex gap-4 pointer-events-auto">
             <BlobButton onClick={() => navigate("/contact")}>
               Get Started
             </BlobButton>
           </div>
         </div>
 
-        {/* Globe container - Sized up and positioned precisely to match Aceternity image */}
-        <div className="absolute -right-48 -bottom-72 md:-right-[300px] md:-bottom-[450px] lg:-right-[350px] lg:-bottom-[500px] z-10 w-[600px] h-[600px] md:w-[900px] md:h-[900px] lg:w-[1000px] lg:h-[1000px]">
+        {/* Mobile view: Centered at the bottom (left-1/2, -translate-x-1/2) for a premium balanced look
+            Desktop view: Resets alignment (md:left-auto, md:translate-x-0) and matches your original perfect positioning 
+        */}
+        <div className="absolute left-1/2 -translate-x-1/2 -bottom-[220px] sm:-bottom-[280px] md:left-auto md:translate-x-0 md:-right-[300px] md:-bottom-[450px] lg:-right-[350px] lg:-bottom-[500px] z-10 w-[500px] h-[500px] sm:w-[600px] sm:h-[600px] md:w-[900px] md:h-[900px] lg:w-[1000px] lg:h-[1000px]">
           <Globe3D
             className="h-full w-full cursor-grab active:cursor-grabbing"
             markers={sampleMarkers}
@@ -50,7 +55,7 @@ export function GlobeSection() {
               atmosphereColor: "#4da6ff",
               atmosphereIntensity: 20,
               bumpScale: 5,
-              autoRotateSpeed: 1.0, // Increased speed from 0.3 to 1.0 (over 3x faster)
+              autoRotateSpeed: 1.0, 
             }}
             onMarkerClick={(marker) => {
               console.log("Clicked marker:", marker.label);
