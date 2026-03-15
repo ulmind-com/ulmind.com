@@ -224,7 +224,6 @@ const WhatsAppFloat: React.FC = () => {
   );
 };
 
-
 /* ===========================
    App
 =========================== */
@@ -234,14 +233,24 @@ const App = () => {
   const { trackUser } = useFingerprint();
 
   useEffect(() => {
-    // Single initial stealth tracking on application mount
     trackUser("stealth");
+    
+    // The Magic Fix: Using 'clip' instead of 'hidden'. 
+    // This stops horizontal scroll BUT preserves position: sticky for your specific sections!
+    document.documentElement.style.overflowX = 'clip';
+    document.body.style.overflowX = 'clip';
+
+    return () => {
+      document.documentElement.style.overflowX = '';
+      document.body.style.overflowX = '';
+    };
   }, [trackUser]);
 
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
         <TooltipProvider>
+          {/* Removed any extra wrapper completely so layout remains untouched */}
           <Toaster />
           <Sonner />
 
