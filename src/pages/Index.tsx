@@ -10,6 +10,7 @@ import { TestimonialsSection } from "@/components/Sections/TestimonialsSection";
 import { NewsletterSection } from "@/components/Sections/NewsletterSection";
 import PartnershipSection from "@/components/Sections/PartnershipSection";
 import BrandIntroSection from "@/components/Sections/BrandIntroSection";
+import { GlobeSection } from "@/components/Sections/GlobeSection";
 
 const Index = () => {
   /* ===== STACK SCROLL SETUP ===== */
@@ -68,6 +69,7 @@ const Index = () => {
 
         <TestimonialsSection />
         <NewsletterSection />
+        <GlobeSection />
         <CTASection />
       </main>
     </div>
