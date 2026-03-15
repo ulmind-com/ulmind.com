@@ -18,6 +18,8 @@ import Team from "./pages/Team";
 import Methodology from "./pages/Methodology";
 import Career from "./pages/Career";
 import Contact from "./pages/Contact";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
 import NotFound from "./pages/NotFound";
 
 // Icons
@@ -265,6 +267,8 @@ const App = () => {
                 <Route path="/methodology" element={<Methodology />} />
                 <Route path="/career" element={<Career />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms-of-service" element={<TermsOfService />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
