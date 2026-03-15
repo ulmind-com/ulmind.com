@@ -70,14 +70,18 @@ export const MacbookScroll = ({
   return (
     <div
       ref={ref}
-      className="flex min-h-[200vh] shrink-0 scale-[0.35] transform flex-col items-center justify-start py-0 [perspective:800px] sm:scale-50 md:scale-100 md:py-80"
+      className={cn(
+        "flex shrink-0 transform flex-col items-center justify-start [perspective:800px]",
+        "min-h-[120vh] sm:min-h-[150vh] md:min-h-[200vh] py-10 sm:py-20 md:py-80",
+        "scale-[0.55] sm:scale-75 md:scale-100 -mx-10 md:mx-0"
+      )}
     >
       <motion.h2
         style={{
           translateY: textTransform,
           opacity: textOpacity,
         }}
-        className="mb-20 text-center text-3xl font-bold text-neutral-800 dark:text-white"
+        className="mb-8 md:mb-20 text-center text-2xl md:text-3xl font-bold text-neutral-800 dark:text-white px-4"
       >
         {title || (
           <span>
