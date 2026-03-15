@@ -1,9 +1,9 @@
 import React from "react";
 import { MacbookScroll } from "@/components/ui/macbook-scroll";
 
-import image1 from "@/assets/GD/image1.png";
-import image2 from "@/assets/GD/image2.png";
-import image3 from "@/assets/GD/image3.png";
+import image1 from "@/assets/GD/image1.jpg";
+import image2 from "@/assets/GD/image2.jpg";
+import image3 from "@/assets/GD/image3.jpg";
 
 const Badge = ({ className }: { className?: string }) => {
   return (
@@ -52,11 +52,11 @@ export function MacbookScrollSection() {
     <div className="w-full overflow-hidden bg-background">
       <MacbookScroll
         title={
-          <div className="flex flex-col items-center justify-center -mt-10 mb-8">
-            <span className="text-4xl md:text-5xl lg:text-6xl font-black text-foreground drop-shadow-md tracking-tight">
+          <div className="flex flex-col items-center justify-center -mt-10 mb-8 px-4">
+            <span className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-foreground drop-shadow-md tracking-tight text-center">
               Crafting the Future of
             </span>
-            <span className="text-4xl md:text-5xl lg:text-6xl font-black bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-orange-500 drop-shadow-sm mt-2">
+            <span className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-orange-500 drop-shadow-sm mt-2 text-center">
               Digital Experiences.
             </span>
           </div>
