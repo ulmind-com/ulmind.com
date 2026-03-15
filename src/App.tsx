@@ -46,13 +46,13 @@ const WhatsAppFloat: React.FC = () => {
 
   return (
     <>
-      {/* CALL BUTTON (RESTORED) */}
+      {/* CALL BUTTON */}
       <a
         href="tel:8537861040"
         style={{
           position: "fixed",
-          bottom: 96, // Ektu adjust kora hoyeche jate overlap na hoy
-          right: 16,  // Mobile e screen er baire jate na jay tar jonno 16 kora hoyeche
+          bottom: 96, 
+          right: 16,  
           width: 56,
           height: 56,
           borderRadius: "50%",
@@ -73,7 +73,7 @@ const WhatsAppFloat: React.FC = () => {
         style={{
           position: "fixed",
           bottom: 24,
-          right: 16, // Mobile safe right margin
+          right: 16, 
           width: 56,
           height: 56,
           borderRadius: "50%",
@@ -94,7 +94,6 @@ const WhatsAppFloat: React.FC = () => {
 
       {showPopup && (
         <>
-          {/* Overlay */}
           <div
             onClick={() => setShowPopup(false)}
             style={{
@@ -105,16 +104,14 @@ const WhatsAppFloat: React.FC = () => {
             }}
           />
 
-          {/* Chat Box */}
           <div
             style={{
               position: "fixed",
               bottom: 96,
               right: 16,
               width: 360,
-              // ETAI MAIN FIX: Mobile screen er theke chat box jate boro na hoy
               maxWidth: "calc(100vw - 32px)", 
-              boxSizing: "border-box", // Padding jate width na baray
+              boxSizing: "border-box", 
               borderRadius: 16,
               overflow: "hidden",
               background: isDark ? "#0B141A" : "#ECE5DD",
@@ -199,7 +196,7 @@ const WhatsAppFloat: React.FC = () => {
                   outline: "none",
                   background: isDark ? "#2A3942" : "#FFFFFF",
                   color: isDark ? "#FFFFFF" : "#000",
-                  width: "100%", // Input field shrink korar jonno
+                  width: "100%", 
                 }}
               />
               <button
@@ -207,7 +204,7 @@ const WhatsAppFloat: React.FC = () => {
                 style={{
                   width: 40,
                   height: 40,
-                  flexShrink: 0, // Button jate choto na hoye jay
+                  flexShrink: 0, 
                   borderRadius: "50%",
                   background: "#25D366",
                   border: "none",
@@ -226,6 +223,7 @@ const WhatsAppFloat: React.FC = () => {
     </>
   );
 };
+
 
 /* ===========================
    App
