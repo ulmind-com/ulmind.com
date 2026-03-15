@@ -22,6 +22,9 @@ import NotFound from "./pages/NotFound";
 
 // Icons
 import { Phone, Video, MoreVertical, Send } from "lucide-react";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
+import CookiePolicyPage from "./pages/CookiePolicyPage";
 
 /* ===========================
    WhatsApp Floating Widget
@@ -265,6 +268,10 @@ const App = () => {
                 <Route path="/methodology" element={<Methodology />} />
                 <Route path="/career" element={<Career />} />
                 <Route path="/contact" element={<Contact />} />
+
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/terms-of-service" element={<TermsOfService />} />
+              <Route path="/cookie-policy" element={<CookiePolicyPage />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>

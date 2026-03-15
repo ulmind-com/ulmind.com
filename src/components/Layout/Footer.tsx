@@ -8,7 +8,8 @@ import {
   Instagram,
   Facebook,
 } from "lucide-react";
-import { useLocation, useNavigate } from "react-router-dom";
+// Link ta ekhane import kora holo
+import { useLocation, useNavigate, Link } from "react-router-dom";
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -182,16 +183,23 @@ export const Footer = () => {
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Bottom Bar */}
-        <div className="py-6 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
+      {/* Bottom Bar - Added light gray background (bg-muted/30) and separator */}
+      <div className="bg-muted/30 border-t border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground">
             © {currentYear} ULMiND. All rights reserved.
           </p>
-          <div className="flex gap-6 text-sm text-muted-foreground">
-            <button className="hover:text-red-500 transition">Privacy Policy</button>
-            <button className="hover:text-red-500 transition">Terms of Service</button>
-            <button className="hover:text-red-500 transition">Cookie Policy</button>
+          
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <Link to="/privacy-policy" className="hover:text-red-500 transition">
+              Privacy Policy
+            </Link>
+            <span className="text-border">|</span>
+            <Link to="/terms-of-service" className="hover:text-red-500 transition">
+              Terms of Service
+            </Link>
           </div>
         </div>
       </div>
