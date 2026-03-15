@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useRef, useState } from 'react';
+import { MacbookScrollSection } from './MacbookScrollSection';
 
 // Combined Animated component for seamless sliding of videos AND orbiting icons
 const AnimatedHeroVisuals = () => {
@@ -368,6 +369,11 @@ export const HeroSection = () => {
             <AnimatedHeroVisuals />
 
           </motion.div>
+        </div>
+
+        {/* Macbook Scroll Effect injected before Our Impact */}
+        <div className="relative z-20 mb-32 -mx-4 sm:-mx-6 lg:-mx-8">
+          <MacbookScrollSection />
         </div>
 
         {/* Bottom Section: Stats Cards */}
