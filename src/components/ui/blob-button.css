@@ -70,6 +70,8 @@
   display: block;
   height: 100%;
   filter: url("#goo");
+  will-change: filter;
+  transform: translateZ(0);
 }
 
 .blob-btn__blob {
@@ -81,6 +83,8 @@
   border-radius: 100%;
   transform: translate3d(0, 150%, 0) scale(1.7);
   transition: transform 0.45s;
+  will-change: transform;
+  backface-visibility: hidden;
 }
 .dark .blob-btn__blob {
   background: var(--blob-bg-dark, #ffffff);

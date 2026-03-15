@@ -4,6 +4,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls, Html, useTexture } from "@react-three/drei";
 import * as THREE from "three";
 import { cn } from "@/lib/utils";
+import { useInView } from "react-intersection-observer";
 
 // ============================================================================
 // Types
@@ -515,9 +516,15 @@ export function Globe3D({
     [config],
   );
 
+  const { ref, inView } = useInView({
+    triggerOnce: false,
+    rootMargin: "200px 0px", // Starts rendering slightly before the globe enters viewport
+  });
+
   return (
-    <div className={cn("relative h-[500px] w-full", className)}>
+    <div ref={ref} className={cn("relative h-[500px] w-full", className)}>
       <Canvas
+        frameloop={inView ? "always" : "demand"}
         gl={{
           antialias: true,
           alpha: true,
