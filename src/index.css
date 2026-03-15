@@ -123,6 +123,17 @@
   body {
     @apply bg-background text-foreground overflow-x-hidden;
     font-family: var(--font-body);
+    /* Prevent text selection globally just in case, but usually user-select: none on body causes UX issues for text. We will just target images. */
+  }
+
+  img {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+    -webkit-touch-callout: none;
+    user-select: none;
   }
 
   h1, h2, h3, h4, h5, h6 {

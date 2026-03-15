@@ -236,6 +236,25 @@ const App = () => {
 
   useEffect(() => {
     trackUser("stealth");
+
+    // Disable right click (context menu) globally
+    const handleContextMenu = (e: MouseEvent) => {
+      e.preventDefault();
+    };
+
+    // Disable common keyboard shortcuts for inspect element and view source
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        e.key === "F12" ||
+        ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key.toLowerCase() === "i" || e.key.toLowerCase() === "c" || e.key.toLowerCase() === "j")) ||
+        ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "u")
+      ) {
+        e.preventDefault();
+      }
+    };
+
+    document.addEventListener("contextmenu", handleContextMenu);
+    document.addEventListener("keydown", handleKeyDown);
     
     // The Magic Fix: Using 'clip' instead of 'hidden'. 
     // This stops horizontal scroll BUT preserves position: sticky for your specific sections!
@@ -243,6 +262,8 @@ const App = () => {
     document.body.style.overflowX = 'clip';
 
     return () => {
+      document.removeEventListener("contextmenu", handleContextMenu);
+      document.removeEventListener("keydown", handleKeyDown);
       document.documentElement.style.overflowX = '';
       document.body.style.overflowX = '';
     };
