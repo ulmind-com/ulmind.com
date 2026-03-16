@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { CTASection } from '@/components/Sections/CTASection';
 
 export default function Methodology() {
   const methodologies = [
@@ -170,6 +171,9 @@ export default function Methodology() {
           ))}
         </div>
       </section>
+
+      {/* CTA */}
+      <CTASection />
     </div>
   );
 }

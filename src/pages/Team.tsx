@@ -3,6 +3,7 @@ import { Linkedin, Github, Twitter, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
+import { CTASection } from "@/components/Sections/CTASection";
 
 export default function Team() {
   const navigate = useNavigate();
@@ -187,20 +188,7 @@ export default function Team() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 text-center">
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}>
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Join Our Growing Team
-          </h2>
-          <p className="text-xl text-muted-foreground mb-8">
-            We're always looking for passionate people to grow with us.
-          </p>
-          <Button size="lg" onClick={() => navigate("/career")}>
-            View Open Positions
-            <ArrowRight className="ml-2 w-5 h-5" />
-          </Button>
-        </motion.div>
-      </section>
+      <CTASection />
     </div>
   );
 }

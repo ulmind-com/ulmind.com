@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { Home, ArrowLeft } from 'lucide-react';
+import { CTASection } from '@/components/Sections/CTASection';
 
 export default function NotFound() {
   const navigate = useNavigate();
@@ -43,6 +44,9 @@ export default function NotFound() {
           </div>
         </motion.div>
       </div>
+      
+      {/* CTA */}
+      <CTASection />
     </div>
   );
 }

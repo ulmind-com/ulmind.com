@@ -1,4 +1,5 @@
 import React from 'react';
+import { CTASection } from '@/components/Sections/CTASection';
 
 const CookiePolicyPage = () => {
   return (
@@ -34,6 +35,9 @@ const CookiePolicyPage = () => {
           </p>
         </div>
       </div>
+      
+      {/* CTA */}
+      <CTASection />
     </div>
   );
 };
