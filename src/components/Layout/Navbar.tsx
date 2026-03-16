@@ -146,7 +146,7 @@ export const Navbar = () => {
           </motion.div>
 
           {/* Right Section / Mobile Triggers */}
-          <motion.div layout className="flex items-center gap-2 flex-shrink-0 mr-1">
+          <motion.div layout className={`flex items-center gap-2 flex-shrink-0 mr-1 ${isCompact ? "hidden md:flex" : ""}`}>
             <ThemeToggle />
             <Button
               variant="ghost"
@@ -159,7 +159,7 @@ export const Navbar = () => {
           </motion.div>
         </div>
 
-        {/* ULTRA-PREMIUM Mobile Menu */}
+        {/* Mobile Menu */}
         <AnimatePresence>
           {isOpen && (
             <motion.div
@@ -167,61 +167,28 @@ export const Navbar = () => {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }} // Premium Apple-like easing
-              className="md:hidden border-t border-white/10 dark:border-white/5 overflow-hidden"
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="md:hidden border-t border-white/10 dark:border-white/5"
             >
-              <motion.div
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                variants={{
-                  visible: {
-                    transition: { staggerChildren: 0.05, delayChildren: 0.1 },
-                  },
-                  exit: {
-                    transition: { staggerChildren: 0.03, staggerDirection: -1 },
-                  },
-                }}
-                className="px-4 py-5 space-y-2 flex flex-col"
-              >
+              <div className="px-4 py-6 space-y-4">
                 {navItems.map((item) => {
                   const active = isActive(item.href);
 
                   return (
-                    <motion.button
+                    <button
                       key={item.name}
-                      variants={{
-                        hidden: { opacity: 0, y: 10, filter: "blur(4px)" },
-                        visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.4, ease: "easeOut" } },
-                        exit: { opacity: 0, y: -10, filter: "blur(2px)", transition: { duration: 0.2 } },
-                      }}
                       onClick={() => {
                         navigate(item.href);
                         setIsOpen(false);
                       }}
-                      className={`relative flex items-center justify-between w-full px-5 py-3.5 rounded-2xl font-medium tracking-wide transition-all duration-300 ease-out overflow-hidden group ${active
-                          ? "text-red-500 bg-red-500/10 dark:bg-red-500/15"
-                          : "text-foreground/70 hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5"
+                      className={`block w-full text-left font-medium transition-colors duration-300 ease-in-out ${active ? "text-red-500" : "text-foreground hover:text-red-500"
                         }`}
                     >
-                      <span className="text-base z-10">{item.name}</span>
-
-                      {/* Active indicator dot */}
-                      {active && (
-                        <motion.span
-                          layoutId="mobileActiveIndicator"
-                          className="w-1.5 h-1.5 rounded-full bg-red-500 z-10"
-                        />
-                      )}
-
-                      {/* Subtle hover background effect */}
-                      {!active && (
-                        <span className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-black/5 dark:via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                      )}
-                    </motion.button>
+                      {item.name}
+                    </button>
                   );
                 })}
-              </motion.div>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
