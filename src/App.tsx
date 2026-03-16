@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/providers/theme-provider";
 import Layout from "@/components/Layout/Layout";
 import ScrollToTop from "@/components/ScrollToTop";
 import CookieConsent from "@/components/CookieConsent";
+import { FaviconTransition } from "@/components/FaviconTransition";
 import { useFingerprint } from "@/hooks/useFingerprint";
 
 // Pages
@@ -279,6 +280,7 @@ const App = () => {
 
           <BrowserRouter>
             <ScrollToTop />
+            <FaviconTransition />
             <Routes>
               <Route element={<Layout />}>
                 <Route path="/" element={<Index />} />
