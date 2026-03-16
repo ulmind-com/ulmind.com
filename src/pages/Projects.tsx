@@ -4,6 +4,7 @@ import { ExternalLink, Github, Calendar, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import BlurBlob from "@/components/BlurBlob";
+import { CTASection } from "@/components/Sections/CTASection";
 
 const ProjectCard = ({ project, index }) => {
   const cardRef = useRef(null);
@@ -165,6 +166,9 @@ export default function Projects() {
           ))}
         </div>
       </section>
+
+      {/* CTA */}
+      <CTASection />
     </div>
   );
 }

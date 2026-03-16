@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import { CTASection } from "@/components/Sections/CTASection";
 
 /* ---------------- Job Data ---------------- */
 
@@ -285,6 +286,9 @@ const Career = () => {
           </div>
         </div>
       )}
+
+      {/* CTA */}
+      <CTASection />
     </div>
   );
 };

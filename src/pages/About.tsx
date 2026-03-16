@@ -10,6 +10,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useNavigate } from 'react-router-dom';
+import { CTASection } from '@/components/Sections/CTASection';
 
 export default function About() {
   const navigate = useNavigate();
@@ -144,25 +145,7 @@ export default function About() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 text-center px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="max-w-4xl mx-auto"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Ready to Start Your Project?
-          </h2>
-          <p className="text-xl text-muted-foreground mb-8">
-            Let’s turn your ideas into powerful digital solutions.
-          </p>
-          <Button size="lg" onClick={() => navigate('/contact')}>
-            Start Your Project
-            <ArrowRight className="ml-2 w-5 h-5" />
-          </Button>
-        </motion.div>
-      </section>
+      <CTASection />
     </div>
   );
 }
