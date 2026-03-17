@@ -240,3 +240,9 @@
 .animate-float-delayed {
   animation: floating 4s ease-in-out infinite 0.5s;
 }
+
+@keyframes border-beam {
+  100% {
+    offset-distance: 100%;
+  }
+}

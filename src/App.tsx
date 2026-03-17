@@ -18,6 +18,7 @@ import Projects from "./pages/Projects";
 import Team from "./pages/Team";
 import Methodology from "./pages/Methodology";
 import Career from "./pages/Career";
+import Merchandise from "./pages/Merchandise";
 import Contact from "./pages/Contact";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
@@ -289,6 +290,7 @@ const App = () => {
                 <Route path="/team" element={<Team />} />
                 <Route path="/methodology" element={<Methodology />} />
                 <Route path="/career" element={<Career />} />
+                <Route path="/merchandise" element={<Merchandise />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="/terms-of-service" element={<TermsOfService />} />
