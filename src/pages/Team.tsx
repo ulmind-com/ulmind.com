@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Linkedin, Github, Twitter, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { TeamCard } from "@/components/ui/TeamCard";
 import { useNavigate } from "react-router-dom";
 import { CTASection } from "@/components/Sections/CTASection";
 
@@ -12,6 +13,7 @@ export default function Team() {
     {
       name: "Soumyajit Banerjee",
       role: "Founder & CTO",
+      techRole: "Backend & Devops Engineer",
       image: "/Soumyajit.jpg",
       bio: "Passionate developer with expertise in full stack web technologies and scalable, secure systems.",
       skills: ["SpringBoot", "React", "DevOps", "Microservices", "Cloud"],
@@ -23,7 +25,8 @@ export default function Team() {
     },
     {
       name: "Arnab Senapati",
-      role: "Co-Founder, MD & CEO",
+      role: "Co-Founder & CEO",
+      techRole: "Full Stack Developer",
       image: "/arnabsenapati.png",
       bio: "Focused on building a company that helps businesses grow through technology and strategy.",
       skills: [
@@ -41,6 +44,7 @@ export default function Team() {
     {
       name: "Samiran Samanta",
       role: "Co-Founder & CTO",
+      techRole: "Full Stack App & Devops Engineer",
       image: "/samiransamanta.png",
       bio: "Senior Full Stack Developer & DevOps Engineer building robust, scalable solutions.",
       skills: [
@@ -59,6 +63,7 @@ export default function Team() {
     {
       name: "Tirtha Ghosh",
       role: "Co-Founder & CTO",
+      techRole: "Full Stack Developer",
       image: "/TirthaGhosh.jpg",
       bio: "Full Stack Developer building end-to-end web applications.",
       skills: ["MERN", "NodeJS", "Express", "React"],
@@ -71,6 +76,7 @@ export default function Team() {
     {
       name: "Sagnik Mondal",
       role: "Co-Founder & COO",
+      techRole: "Full Stack Developer",
       image: "/sagnik2.jpg",
       bio: "MERN developer focused on responsive and scalable apps.",
       skills: ["MongoDB", "Express", "React", "NodeJS", "NextJS"],
@@ -82,6 +88,7 @@ export default function Team() {
     {
       name: "Swastika Roy",
       role: "Co-Founder & CHRO",
+      techRole: "Backend Developer",
       image: "/swastika.jpg",
       bio: "Spring Boot–focused Full Stack Developer specializing in building reliable microservices and high-performance REST APIs with Java and MySQL. I architect clean, maintainable backends, optimize database performance, and automate workflows with Python. I care deeply about code quality, security, and delivering scalable features that serve real users.",
       skills: ["MySQL", "Java", "Spring Boot", "Microservices", "Python"],
@@ -93,7 +100,8 @@ export default function Team() {
     },
     {
       name: "Roni Routh",
-      role: "Python Developer & ML Engineer",
+      role: "Software Development Engineer",
+      techRole: "Machine Learning Engineer",
       image: "ronirouth.jpg",
       bio: "Passionate Python Developer specializing in Machine Learning and Data Analysis. Skilled in C++, Python, and key ML libraries like NumPy, Pandas, Scikit-learn, and FastAPI, focusing on building intelligent, data-driven applications with clean, efficient code.",
       skills: [
@@ -115,7 +123,7 @@ export default function Team() {
   return (
     <div className="min-h-screen bg-background">
       {/* HERO */}
-      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 text-center">
+      <section className="pt-32 pb-8 px-4 sm:px-6 lg:px-8 text-center">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
           <h1 className="text-4xl md:text-6xl font-bold gradient-text mb-6">
             Meet Our Team
@@ -127,7 +135,7 @@ export default function Team() {
       </section>
 
       {/* TEAM GRID */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      <section className="pt-8 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {team.map((member, index) => (
             <motion.div
@@ -137,51 +145,7 @@ export default function Team() {
               transition={{ delay: index * 0.1 }}
               viewport={{ once: true }}
             >
-              <Card className="overflow-hidden hover:shadow-glow transition-all">
-                <div className="relative">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-full h-64 object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black/60 opacity-0 hover:opacity-100 transition flex items-end justify-center pb-4 gap-2">
-                    {member.social.linkedin && (
-                      <a href={member.social.linkedin} target="_blank" rel="noopener noreferrer">
-                        <Linkedin className="w-5 h-5 text-white" />
-                      </a>
-                    )}
-                    {member.social.github && (
-                      <a href={member.social.github} target="_blank" rel="noopener noreferrer">
-                        <Github className="w-5 h-5 text-white" />
-                      </a>
-                    )}
-                    {member.social.twitter && (
-                      <a href={member.social.twitter} target="_blank" rel="noopener noreferrer">
-                        <Twitter className="w-5 h-5 text-white" />
-                      </a>
-                    )}
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  <h3 className="text-xl font-bold">{member.name}</h3>
-                  <p className="text-primary text-sm mb-2">{member.role}</p>
-                  <p className="text-muted-foreground text-sm mb-4 line-clamp-3">
-                    {member.bio}
-                  </p>
-
-                  <div className="flex flex-wrap gap-2">
-                    {member.skills.map((skill) => (
-                      <span
-                        key={skill}
-                        className="px-2 py-1 text-xs bg-primary/10 text-primary rounded-md"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </Card>
+              <TeamCard member={member} />
             </motion.div>
           ))}
         </div>
