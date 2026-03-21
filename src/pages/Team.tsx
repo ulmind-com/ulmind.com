@@ -102,7 +102,7 @@ export default function Team() {
       name: "Roni Routh",
       role: "Software Development Engineer",
       techRole: "Machine Learning Engineer",
-      image: "ronirouth.jpg",
+      image: "/ronirouth.jpg",
       bio: "Passionate Python Developer specializing in Machine Learning and Data Analysis. Skilled in C++, Python, and key ML libraries like NumPy, Pandas, Scikit-learn, and FastAPI, focusing on building intelligent, data-driven applications with clean, efficient code.",
       skills: [
         "C++",
