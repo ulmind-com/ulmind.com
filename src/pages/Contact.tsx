@@ -155,27 +155,116 @@ const Contact = () => {
   ];
 
   return (
-    <section id="contact" ref={ref} className="py-20 bg-secondary/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <span className="inline-block px-4 py-2 mb-4 rounded-full bg-primary/10 text-primary text-sm font-medium">
-            Let’s Connect
-          </span>
+    <div className="min-h-screen bg-background">
+      {/* HERO */}
+      <section className="relative pt-24 pb-12 lg:pt-36 lg:pb-16 overflow-hidden bg-[#020b16]">
+        {/* Background Image with Overlay */}
+        <div className="absolute inset-0 z-0">
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
+            style={{
+              backgroundImage: "url('https://images.unsplash.com/photo-1557425955-df376b5903c8?q=80&w=2070&auto=format&fit=crop')"
+            }}
+          />
+          {/* Gradient overlay similar to the image */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#021124] via-[#021124]/95 to-[#021124]/60" />
+        </div>
 
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            Ready to Start Your <span className="gradient-text">Project?</span>
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Let’s discuss your vision and turn it into a powerful digital solution.
-          </p>
-        </motion.div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left Content */}
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className="max-w-xl"
+          >
+            {/* Badge */}
+            <div className="inline-block px-5 py-1.5 rounded-[20px] bg-white/5 border border-white/10 backdrop-blur-md mb-6 shadow-sm">
+              <span className="text-sm font-semibold tracking-wider text-[#ff5a5f] uppercase">
+                Let's Connect
+              </span>
+            </div>
+            
+            <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-4 tracking-tight">
+              Contact Us
+            </h1>
+            
+            <div className="w-16 h-1 bg-[#ff5a5f] mb-6" />
+            
+            <p className="text-base md:text-lg text-gray-300 leading-relaxed max-w-lg">
+              Ready to start your project? Let’s discuss your vision and turn it into a powerful digital solution. We combine technical excellence with strategic thinking.
+            </p>
+          </motion.div>
+
+          {/* Right Image */}
+          <motion.div 
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="relative lg:ml-auto w-full"
+            style={{ perspective: 1200 }}
+          >
+            {/* Glowing background blob behind image */}
+            <div className="absolute inset-0 bg-[#ff5a5f] opacity-20 blur-[60px] rounded-full scale-90 translate-y-4" />
+            
+            <motion.div 
+              className="relative rounded-[24px] overflow-hidden shadow-2xl w-full border border-white/10 z-10 bg-[#0a1120]"
+              animate={{ 
+                y: [0, -20, 0]
+              }}
+              transition={{ 
+                duration: 6,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              whileHover={{ 
+                scale: 1.05,
+                rotateX: 0,
+                rotateY: 0,
+                transition: { duration: 0.4 }
+              }}
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070&auto=format&fit=crop" 
+                alt="Contact Us" 
+                className="w-full h-[280px] md:h-[360px] object-cover transition-transform duration-700"
+              />
+              {/* Subtle glass overlay inside image container */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
+            </motion.div>
+            
+            {/* Floating Phone Badge */}
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ 
+                opacity: 1, 
+                scale: 1, 
+                y: [0, -8, 0] 
+              }}
+              transition={{ 
+                opacity: { duration: 0.5, delay: 0.6 },
+                scale: { duration: 0.5, delay: 0.6 },
+                y: { duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.6 }
+              }}
+              className="absolute -left-4 top-1/2 -translate-y-1/2 bg-[#222a36]/90 backdrop-blur-md p-3 md:p-4 rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.4)] border border-white/10 hidden md:flex items-center justify-center transform hover:scale-110 transition-transform z-20 group"
+            >
+              <div className="w-8 h-8 rounded-full border-2 border-emerald-500 flex items-center justify-center group-hover:bg-emerald-500/10 transition-colors">
+                <Phone className="w-5 h-5 text-emerald-500" />
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      <section id="contact" ref={ref} className="py-20 relative overflow-hidden bg-background">
+        {/* Continuous Dynamic Gradient Background */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden flex justify-center items-center opacity-50">
+          <motion.div animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 0] }} transition={{ duration: 30, repeat: Infinity, ease: "linear" }} className="absolute top-[10%] -left-[10%] w-[900px] h-[900px] bg-rose-500/10 dark:bg-rose-500/15 rounded-full blur-[150px]" />
+          <motion.div animate={{ scale: [1, 1.1, 1], rotate: [0, -90, 0] }} transition={{ duration: 40, repeat: Infinity, ease: "linear" }} className="absolute bottom-[20%] -right-[10%] w-[1000px] h-[1000px] bg-blue-500/10 dark:bg-blue-500/15 rounded-full blur-[150px]" />
+          <motion.div animate={{ y: [0, 50, 0] }} transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }} className="absolute top-[40%] left-[30%] w-[700px] h-[700px] bg-violet-500/5 dark:bg-violet-500/10 rounded-full blur-[140px]" />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
         <div className="grid lg:grid-cols-2 gap-12">
           
@@ -352,6 +441,7 @@ const Contact = () => {
         </div>
       </div>
     </section>
+    </div>
   );
 };
 

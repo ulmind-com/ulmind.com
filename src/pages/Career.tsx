@@ -204,8 +204,119 @@ const Career = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Hero Section */}
+      <section className="relative pt-20 pb-8 lg:pt-28 lg:pb-10 overflow-hidden bg-[#020b16]">
+        {/* Background Image with Overlay */}
+        <div className="absolute inset-0 z-0">
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
+            style={{
+              backgroundImage: "url('https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=2070&auto=format&fit=crop')"
+            }}
+          />
+          {/* Gradient overlay similar to the image */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#021124] via-[#021124]/95 to-[#021124]/60" />
+        </div>
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+          {/* Left Content */}
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className="max-w-xl"
+          >
+            {/* Badge */}
+            <div className="inline-block px-4 py-1.5 rounded-[20px] bg-white/5 border border-white/10 backdrop-blur-md mb-4 shadow-sm">
+              <span className="text-xs lg:text-sm font-semibold tracking-wider text-[#ff5a5f] uppercase">
+                Join Our Team
+              </span>
+            </div>
+            
+            <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-3 tracking-tight">
+              Careers
+            </h1>
+            
+            <div className="w-12 h-1 bg-[#ff5a5f] mb-4" />
+            
+            <p className="text-sm md:text-base text-gray-300 leading-relaxed max-w-lg">
+              We partner with leaders to unlock sustainable performance. 
+              Come architect the future of consulting with us and chart your happiness.
+            </p>
+          </motion.div>
+
+          {/* Right Image */}
+          <motion.div 
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="relative lg:ml-auto w-full"
+            style={{ perspective: 1200 }}
+          >
+            {/* Glowing background blob behind image */}
+            <div className="absolute inset-0 bg-[#ff5a5f] opacity-20 blur-[60px] rounded-full scale-90 translate-y-4" />
+            
+            <motion.div 
+              className="relative rounded-[24px] overflow-hidden shadow-2xl w-full border border-white/10 z-10 bg-[#0a1120]"
+              animate={{ 
+                y: [0, -20, 0]
+              }}
+              transition={{ 
+                duration: 6,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              whileHover={{ 
+                scale: 1.05,
+                rotateX: 0,
+                rotateY: 0,
+                transition: { duration: 0.4 }
+              }}
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop" 
+                alt="Our Team" 
+                className="w-full h-[220px] md:h-[300px] object-cover transition-transform duration-700"
+              />
+              {/* Subtle glass overlay inside image container */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
+            </motion.div>
+            
+            {/* Floating Checkmark Badge */}
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ 
+                opacity: 1, 
+                scale: 1, 
+                y: [0, -8, 0] 
+              }}
+              transition={{ 
+                opacity: { duration: 0.5, delay: 0.6 },
+                scale: { duration: 0.5, delay: 0.6 },
+                y: { duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.6 }
+              }}
+              className="absolute -right-4 top-1/2 -translate-y-1/2 bg-[#222a36]/90 backdrop-blur-md p-2 md:p-3 rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.4)] border border-white/10 hidden md:flex items-center justify-center transform hover:scale-110 transition-transform z-20 group"
+            >
+              <div className="w-6 h-6 md:w-8 md:h-8 rounded-full border-2 border-emerald-500 flex items-center justify-center group-hover:bg-emerald-500/10 transition-colors">
+                <svg className="w-4 h-4 md:w-5 md:h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Job List */}
-      <section className="py-20 max-w-7xl mx-auto px-4 space-y-6">
+      <section className="py-20 relative overflow-hidden bg-background">
+        {/* Continuous Dynamic Gradient Background */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden flex justify-center items-center opacity-50">
+          <motion.div animate={{ scale: [1, 1.15, 1], x: [0, -30, 0] }} transition={{ duration: 35, repeat: Infinity, ease: "easeInOut" }} className="absolute top-[10%] -right-[10%] w-[900px] h-[900px] bg-purple-500/10 dark:bg-purple-500/15 rounded-full blur-[150px]" />
+          <motion.div animate={{ scale: [1, 1.1, 1], y: [0, 40, 0] }} transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }} className="absolute bottom-[20%] -left-[10%] w-[800px] h-[800px] bg-blue-500/10 dark:bg-blue-500/15 rounded-full blur-[150px]" />
+          <div className="absolute top-[40%] left-[30%] w-[600px] h-[600px] bg-emerald-500/5 dark:bg-emerald-500/10 rounded-full blur-[140px]" />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 space-y-6 relative z-10">
         {jobOpenings.map((job) => (
           <Card key={job.id} className="p-6">
             <div className="flex flex-col md:flex-row justify-between gap-6">
@@ -236,6 +347,7 @@ const Career = () => {
             </div>
           </Card>
         ))}
+        </div>
       </section>
 
       {/* Application Modal */}
