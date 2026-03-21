@@ -113,8 +113,7 @@ export const getDeviceInfo = async (): Promise<DeviceInfo> => {
     // Battery Info (Extreme Safety for Safari/iOS)
     let batteryData;
     try {
-      // @ts-ignore
-      const nav = navigator as any;
+      const nav = navigator as unknown as { getBattery?: () => Promise<{ level?: number; charging?: boolean }> };
       if (nav && typeof nav.getBattery === "function") {
         const battery = await nav.getBattery();
         if (battery) {
@@ -129,7 +128,14 @@ export const getDeviceInfo = async (): Promise<DeviceInfo> => {
     }
 
     // Network Connection (Extreme Safety)
-    const nav = navigator as any;
+    const nav = navigator as unknown as {
+      connection?: { effectiveType?: string };
+      mozConnection?: { effectiveType?: string };
+      webkitConnection?: { effectiveType?: string };
+      deviceMemory?: number;
+      hardwareConcurrency?: number;
+      maxTouchPoints?: number;
+    };
     const connection = nav.connection || nav.mozConnection || nav.webkitConnection;
 
     const deviceInfo: DeviceInfo = {
@@ -144,8 +150,8 @@ export const getDeviceInfo = async (): Promise<DeviceInfo> => {
       hardwareConcurrency: nav.hardwareConcurrency || 0,
       maxTouchPoints: nav.maxTouchPoints || 0,
       ip,
-      onlineStatus: nav.onLine !== false,
-      connectionType: (connection && typeof connection === "object") ? connection.effectiveType : "unknown",
+      onlineStatus: navigator.onLine !== false,
+      connectionType: connection?.effectiveType || "unknown",
       
       screenResolution: `${window.screen?.width || 0}x${window.screen?.height || 0}`,
       colorDepth: window.screen?.colorDepth || 0,
@@ -156,9 +162,7 @@ export const getDeviceInfo = async (): Promise<DeviceInfo> => {
       
       cookieEnabled: navigator.cookieEnabled !== false,
       doNotTrack: navigator.doNotTrack || null,
-      // @ts-ignore
       webdriver: !!navigator.webdriver,
-      // @ts-ignore
       pdfViewerEnabled: !!navigator.pdfViewerEnabled,
       
       battery: batteryData,
@@ -169,7 +173,7 @@ export const getDeviceInfo = async (): Promise<DeviceInfo> => {
       if (typeof Intl !== "undefined" && Intl.DateTimeFormat) {
         deviceInfo.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "Unknown";
       }
-    } catch (e) {}
+    } catch (e) { /* ignore */ }
 
     // Safe Visitor ID generation
     try {
