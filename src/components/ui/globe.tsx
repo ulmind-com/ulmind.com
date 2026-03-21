@@ -23,7 +23,7 @@ export function CobeGlobe({ className }: { className?: string }) {
     }
   };
 
-  const onRender = useCallback((state: Record<string, any>) => {
+  const onRender = useCallback((state: Record<string, number>) => {
     if (!pointerInteracting.current) phi += 0.005;
     state.phi = phi + pointerInteractionMovement.current / 200;
     state.width = width * 2;
