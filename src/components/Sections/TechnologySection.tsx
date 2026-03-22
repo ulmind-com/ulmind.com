@@ -16,6 +16,7 @@ import {
 } from "react-icons/si";
 import { FaJava } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import BlurBlob from "@/components/BlurBlob";
 
 const technologies = [
   { name: "React", icon: SiReact, color: "#61DAFB" },
@@ -43,8 +44,10 @@ export const TechnologySection = () => {
   const navigate = useNavigate();
 
   return (
-    <section ref={ref} className="py-20 bg-secondary/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section ref={ref} className="py-20 bg-secondary/30 relative overflow-hidden">
+      <BlurBlob position={{ top: "30%", left: "20%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-cyan-300" opacityClass="opacity-20" />
+      <BlurBlob position={{ top: "70%", left: "80%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-indigo-300" opacityClass="opacity-20" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10 relative">
         {/* HEADER */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}

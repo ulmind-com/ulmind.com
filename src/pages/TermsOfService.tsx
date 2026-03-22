@@ -1,11 +1,15 @@
 import React from 'react';
 import { CTASection } from '@/components/Sections/CTASection';
+import BlurBlob from "@/components/BlurBlob";
 
 const TermsOfService = () => {
   return (
     // 'pb-20' and 'min-h-screen' class removed to let CTA attach directly to the footer
-    <div className="bg-background pt-[100px] md:pt-[15px]">
-      
+    <div className="bg-background pt-[100px] md:pt-[15px] relative overflow-hidden">
+      <BlurBlob position={{ top: "10%", left: "10%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-cyan-300 dark:bg-cyan-600" opacityClass="opacity-40 dark:opacity-20" />
+      <BlurBlob position={{ top: "50%", left: "80%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-fuchsia-300 dark:bg-fuchsia-600" opacityClass="opacity-40 dark:opacity-20" />
+      <BlurBlob position={{ top: "90%", left: "20%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-yellow-200 dark:bg-yellow-600" opacityClass="opacity-40 dark:opacity-20" />
+
       {/* Top Banner */}
       <div className="w-full bg-[#F94E4E] h-[120px] md:h-[140px] flex items-center justify-center">
         <h1 className="text-3xl md:text-5xl font-bold text-white m-0 leading-none">

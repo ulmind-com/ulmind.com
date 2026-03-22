@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import BlurBlob from "@/components/BlurBlob";
 
 const services = [
   { icon: Code, title: "Web Development", description: "Custom web applications built with modern frameworks like React, Next.js, and Node.js", features: ["Responsive Design", "SEO Optimized", "Performance Focused", "Scalable Architecture"] },
@@ -126,7 +127,9 @@ export const ServicesSection = () => {
 
   return (
     <section ref={ref} className="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden transition-colors duration-300">
-      <div className="max-w-7xl mx-auto">
+      <BlurBlob position={{ top: "20%", left: "80%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-pink-400" opacityClass="opacity-20" />
+      <BlurBlob position={{ top: "80%", left: "20%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-yellow-300" opacityClass="opacity-20" />
+      <div className="max-w-7xl mx-auto z-10 relative">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}} className="text-center mb-20">
           <div className="inline-block px-4 py-1.5 mb-6 rounded-full border border-rose-500/20 dark:border-red-500/20 bg-rose-500/5 dark:bg-red-500/10 backdrop-blur-md">
             <span className="text-rose-600 dark:text-red-500 text-[10px] font-black tracking-[0.4em] uppercase">Expertise</span>

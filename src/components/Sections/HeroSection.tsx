@@ -23,6 +23,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useRef, useState } from 'react';
 import { MacbookScrollSection } from './MacbookScrollSection';
+import BlurBlob from "@/components/BlurBlob";
 
 // Combined Animated component for seamless sliding of videos AND orbiting icons
 const AnimatedHeroVisuals = () => {
@@ -283,7 +284,9 @@ export const HeroSection = () => {
       // CHANGED: Reduced top padding from pt-32 to pt-20 to pull the section up closer to the navbar
       className="relative min-h-screen pt-20 pb-20 overflow-hidden bg-gradient-to-br from-background via-violet-50/50 dark:via-violet-900/10 to-background"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <BlurBlob position={{ top: "20%", left: "10%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-cyan-300 dark:bg-cyan-600" opacityClass="opacity-40 dark:opacity-20" />
+      <BlurBlob position={{ top: "60%", left: "90%" }} size={{ width: "700px", height: "700px" }} colorClass="bg-fuchsia-300 dark:bg-fuchsia-600" opacityClass="opacity-40 dark:opacity-20" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Main 2-Column Grid */}
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center mb-24">

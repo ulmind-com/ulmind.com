@@ -1,9 +1,13 @@
 import React from 'react';
 import { CTASection } from '@/components/Sections/CTASection';
+import BlurBlob from "@/components/BlurBlob";
 
 const CookiePolicyPage = () => {
   return (
-    <div className="min-h-screen bg-background pb-20 pt-[80px] md:pt-[10px]">
+    <div className="min-h-screen bg-background pb-20 pt-[80px] md:pt-[10px] relative overflow-hidden">
+      <BlurBlob position={{ top: "10%", left: "10%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-cyan-300 dark:bg-cyan-600" opacityClass="opacity-40 dark:opacity-20" />
+      <BlurBlob position={{ top: "50%", left: "80%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-fuchsia-300 dark:bg-fuchsia-600" opacityClass="opacity-40 dark:opacity-20" />
+      <BlurBlob position={{ top: "90%", left: "20%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-yellow-200 dark:bg-yellow-600" opacityClass="opacity-40 dark:opacity-20" />
       
       {/* Top Banner */}
       <div className="w-full bg-[#F94E4E] h-[120px] md:h-[140px] flex items-center justify-center">

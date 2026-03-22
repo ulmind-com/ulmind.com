@@ -4,6 +4,7 @@ import { Users, Target, Award, ArrowRight } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
+import BlurBlob from "@/components/BlurBlob";
 
 const features = [
   {
@@ -39,8 +40,9 @@ export const AboutPreviewSection = () => {
   const navigate = useNavigate();
 
   return (
-    <section ref={ref} className="py-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <section ref={ref} className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <BlurBlob position={{ top: "50%", left: "50%" }} size={{ width: "800px", height: "800px" }} colorClass="bg-green-300" opacityClass="opacity-20" />
+      <div className="max-w-7xl mx-auto z-10 relative">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div
             initial={{ opacity: 0, x: -50 }}

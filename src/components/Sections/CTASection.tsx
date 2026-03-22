@@ -1,10 +1,12 @@
 import { motion } from "framer-motion";
+import BlurBlob from "@/components/BlurBlob";
 
 export const CTASection = () => {
   return (
     <section className="relative overflow-hidden bg-[#ff4d4f] py-28">
+      <BlurBlob position={{ top: "50%", left: "50%" }} size={{ width: "800px", height: "800px" }} colorClass="bg-white" opacityClass="opacity-20" />
       {/* BACKGROUND DECOR */}
-      <div className="absolute inset-0 pointer-events-none">
+      <div className="absolute inset-0 pointer-events-none z-10">
         {/* dotted grid */}
         <div className="absolute right-32 top-1/2 -translate-y-1/2 grid grid-cols-6 gap-3 opacity-15">
           {Array.from({ length: 36 }).map((_, i) => (
@@ -18,7 +20,7 @@ export const CTASection = () => {
         <div className="absolute bottom-20 right-52 w-8 h-8 border border-white/20 rotate-45" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 z-20">
         <div className="grid md:grid-cols-2 items-center gap-16">
           
           {/* LEFT TEXT */}

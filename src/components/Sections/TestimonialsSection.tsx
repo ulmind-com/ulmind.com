@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Marquee } from "@/components/magicui/marquee";
+import BlurBlob from "@/components/BlurBlob";
 
 const reviews = [
   {
@@ -105,8 +106,10 @@ const ReviewCard = ({ img, name, username, body, rating }) => {
 
 export const TestimonialsSection = () => {
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-20 relative overflow-hidden max-w-[100vw]">
+      <BlurBlob position={{ top: "30%", left: "20%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-pink-300" opacityClass="opacity-20" />
+      <BlurBlob position={{ top: "70%", left: "80%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-yellow-200" opacityClass="opacity-20" />
+      <div className="max-w-7xl mx-auto z-10 relative px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-primary-glow to-accent bg-clip-text text-transparent mb-6">
             What Our Clients Say
@@ -116,34 +119,31 @@ export const TestimonialsSection = () => {
             Real feedback from clients who trusted ULMIND with their projects.
           </p>
         </div>
+      </div>
 
-        <div className="relative flex w-full flex-col items-center justify-center overflow-hidden gap-8">
+      <div className="relative flex w-full flex-col items-center justify-center overflow-hidden gap-8 z-10">
 
-          {/* Top Row → Left to Right */}
-          <Marquee
-            pauseOnHover
-            className="[--duration:30s]"
-          >
-            {firstRow.map((review, i) => (
-              <ReviewCard key={i} {...review} />
-            ))}
-          </Marquee>
+        {/* Top Row → Left to Right */}
+        <Marquee
+          pauseOnHover
+          className="[--duration:30s]"
+        >
+          {firstRow.map((review, i) => (
+            <ReviewCard key={i} {...review} />
+          ))}
+        </Marquee>
 
-          {/* Bottom Row → Right to Left */}
-          <Marquee
-            reverse
-            pauseOnHover
-            className="[--duration:30s]"
-          >
-            {secondRow.map((review, i) => (
-              <ReviewCard key={i} {...review} />
-            ))}
-          </Marquee>
+        {/* Bottom Row → Right to Left */}
+        <Marquee
+          reverse
+          pauseOnHover
+          className="[--duration:30s]"
+        >
+          {secondRow.map((review, i) => (
+            <ReviewCard key={i} {...review} />
+          ))}
+        </Marquee>
 
-          {/* Fade edges */}
-          <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-background" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-background" />
-        </div>
       </div>
     </section>
   );

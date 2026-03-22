@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { TeamCard } from "@/components/ui/TeamCard";
 import { useNavigate } from "react-router-dom";
 import { CTASection } from "@/components/Sections/CTASection";
+import BlurBlob from "@/components/BlurBlob";
 
 export default function Team() {
   const navigate = useNavigate();
@@ -121,7 +122,11 @@ export default function Team() {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      <BlurBlob position={{ top: "10%", left: "10%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-cyan-300 dark:bg-cyan-600" opacityClass="opacity-40 dark:opacity-20" />
+      <BlurBlob position={{ top: "50%", left: "80%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-fuchsia-300 dark:bg-fuchsia-600" opacityClass="opacity-40 dark:opacity-20" />
+      <BlurBlob position={{ top: "90%", left: "20%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-yellow-200 dark:bg-yellow-600" opacityClass="opacity-40 dark:opacity-20" />
+
       {/* HERO */}
       <section className="pt-32 pb-8 px-4 sm:px-6 lg:px-8 text-center">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
