@@ -16,6 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { CTASection } from "@/components/Sections/CTASection";
+import BlurBlob from "@/components/BlurBlob";
 
 /* ---------------- Job Data ---------------- */
 
@@ -203,7 +204,11 @@ const Career = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      <BlurBlob position={{ top: "10%", left: "10%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-cyan-300 dark:bg-cyan-600" opacityClass="opacity-40 dark:opacity-20" />
+      <BlurBlob position={{ top: "50%", left: "80%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-fuchsia-300 dark:bg-fuchsia-600" opacityClass="opacity-40 dark:opacity-20" />
+      <BlurBlob position={{ top: "90%", left: "20%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-yellow-200 dark:bg-yellow-600" opacityClass="opacity-40 dark:opacity-20" />
+
       {/* Hero Section */}
       <section className="relative pt-20 pb-8 lg:pt-28 lg:pb-10 overflow-hidden bg-[#020b16]">
         {/* Background Image with Overlay */}
@@ -217,6 +222,8 @@ const Career = () => {
           {/* Gradient overlay similar to the image */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#021124] via-[#021124]/95 to-[#021124]/60" />
         </div>
+        <BlurBlob position={{ top: "50%", left: "5%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-cyan-500" opacityClass="opacity-30 mix-blend-screen" className="z-10" />
+        <BlurBlob position={{ top: "50%", left: "95%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-fuchsia-500" opacityClass="opacity-30 mix-blend-screen" className="z-10" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left Content */}

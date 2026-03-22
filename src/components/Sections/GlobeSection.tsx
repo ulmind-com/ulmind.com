@@ -2,6 +2,7 @@
 import { Globe3D, GlobeMarker } from "@/components/ui/3d-globe";
 import { BlobButton } from "@/components/ui/blob-button";
 import { useNavigate } from "react-router-dom";
+import BlurBlob from "@/components/BlurBlob";
 
 const sampleMarkers: GlobeMarker[] = [
   { lat: 40.7128, lng: -74.006, src: "https://assets.aceternity.com/avatars/1.webp", label: "New York" },
@@ -26,6 +27,7 @@ export function GlobeSection() {
     <div className="mx-auto max-w-7xl px-4 my-16">
       {/* Container height adjusted for mobile to give the globe breathing room, md: stays exactly same */}
       <div className="relative mx-auto h-[550px] md:h-[500px] w-full overflow-hidden rounded-2xl md:rounded-xl bg-white dark:bg-[#0a0a0a] shadow-sm ring-1 ring-black/10 dark:ring-white/10 transition-colors duration-300">
+        <BlurBlob position={{ top: "30%", left: "70%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-cyan-300" opacityClass="opacity-30" />
         
         {/* Z-index increased to 20 so text stays clearly above the globe on mobile */}
         <div className="relative z-20 p-6 pt-10 md:p-12 pointer-events-none">

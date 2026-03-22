@@ -3,13 +3,18 @@ import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { Home, ArrowLeft } from 'lucide-react';
 import { CTASection } from '@/components/Sections/CTASection';
+import BlurBlob from "@/components/BlurBlob";
 
 export default function NotFound() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-4">
-      <div className="text-center max-w-md mx-auto">
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-4 relative overflow-hidden">
+      <BlurBlob position={{ top: "10%", left: "10%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-cyan-300 dark:bg-cyan-600" opacityClass="opacity-40 dark:opacity-20" />
+      <BlurBlob position={{ top: "50%", left: "80%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-fuchsia-300 dark:bg-fuchsia-600" opacityClass="opacity-40 dark:opacity-20" />
+      <BlurBlob position={{ top: "90%", left: "20%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-yellow-200 dark:bg-yellow-600" opacityClass="opacity-40 dark:opacity-20" />
+      
+      <div className="text-center max-w-md mx-auto z-10 flex-grow flex flex-col justify-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}

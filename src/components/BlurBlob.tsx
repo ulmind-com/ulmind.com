@@ -1,4 +1,5 @@
 import React from "react";
+import { cn } from "@/lib/utils";
 
 interface BlurBlobProps {
   position: {
@@ -9,12 +10,15 @@ interface BlurBlobProps {
     width: string;
     height: string;
   };
+  colorClass?: string;
+  className?: string;
+  opacityClass?: string;
 }
 
-const BlurBlob: React.FC<BlurBlobProps> = ({ position, size }) => {
+const BlurBlob: React.FC<BlurBlobProps> = ({ position, size, colorClass, className, opacityClass }) => {
   return (
     <div
-      className="absolute -z-10"
+      className={cn("absolute -z-10 pointer-events-none", className)}
       style={{
         top: position.top,
         left: position.left,
@@ -23,7 +27,11 @@ const BlurBlob: React.FC<BlurBlobProps> = ({ position, size }) => {
         transform: "translate(-50%, -50%)",
       }}
     >
-      <div className="w-full h-full bg-primary rounded-full opacity-20 blur-3xl animate-blob" />
+      <div className={cn(
+        "w-full h-full rounded-full blur-3xl animate-blob", 
+        colorClass || "bg-primary",
+        opacityClass || "opacity-20"
+      )} />
     </div>
   );
 };

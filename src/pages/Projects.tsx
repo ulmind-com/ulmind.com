@@ -145,8 +145,8 @@ export default function Projects() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-background relative overflow-hidden font-sans transition-colors duration-300">
-      <BlurBlob position={{ top: "20%", left: "15%" }} size={{ width: "400px", height: "400px" }} />
-      <BlurBlob position={{ top: "70%", left: "85%" }} size={{ width: "450px", height: "450px" }} />
+      <BlurBlob position={{ top: "15%", left: "10%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-cyan-300 dark:bg-cyan-600" opacityClass="opacity-40 dark:opacity-20" />
+      <BlurBlob position={{ top: "75%", left: "80%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-fuchsia-300 dark:bg-fuchsia-600" opacityClass="opacity-40 dark:opacity-20" />
 
       {/* HERO */}
       <section className="relative pt-24 pb-12 lg:pt-36 lg:pb-16 overflow-hidden bg-[#020b16]">
@@ -161,6 +161,8 @@ export default function Projects() {
           {/* Gradient overlay similar to the image */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#021124] via-[#021124]/95 to-[#021124]/60" />
         </div>
+        <BlurBlob position={{ top: "50%", left: "5%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-cyan-500" opacityClass="opacity-30 mix-blend-screen" className="z-10" />
+        <BlurBlob position={{ top: "50%", left: "95%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-fuchsia-500" opacityClass="opacity-30 mix-blend-screen" className="z-10" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
