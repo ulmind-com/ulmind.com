@@ -59,7 +59,7 @@ export const Footer = () => {
         
         {/* Huge ULMIND Background Text */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-[22vw] font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-zinc-900/[0.08] to-zinc-900/[0.02] dark:from-white/[0.08] dark:to-white/[0.02] uppercase select-none leading-none pb-12">
+          <span className="text-[16vw] font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-zinc-900/[0.08] to-zinc-900/[0.02] dark:from-white/[0.08] dark:to-white/[0.02] uppercase select-none leading-none pb-12">
             ULMIND
           </span>
         </div>
