@@ -37,12 +37,13 @@ export const Footer = () => {
   ];
 
   const services = [
-    "Web Development",
-    "Mobile App Development",
-    "Cloud Solutions",
-    "DevOps Services",
-    "AI/ML Development",
-    "Consulting",
+    "Web & App Development",
+    "DevOps & Deployment",
+    "Database Design",
+    "Cloud Services",
+    "UI/UX & Graphic Design",
+    "SEO & Content",
+    "AI/ML & Backend Solutions",
   ];
 
   return (
@@ -167,9 +168,12 @@ export const Footer = () => {
               {services.map((service) => (
                 <li
                   key={service}
-                  className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+                  className="group flex items-center gap-2 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:text-red-500 dark:hover:text-red-500 transition-all cursor-default"
                 >
-                  {service}
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500/0 group-hover:bg-red-500 transition-colors" />
+                  <span className="group-hover:translate-x-1 transition-transform duration-300">
+                    {service}
+                  </span>
                 </li>
               ))}
             </ul>
