@@ -48,7 +48,7 @@ export const Footer = () => {
   return (
     <footer className="relative border-t overflow-hidden">
       {/* Background Image and Adaptive Overlays */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <img 
           src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop" 
           alt="Abstract Technology Background" 
@@ -56,6 +56,13 @@ export const Footer = () => {
         />
         {/* Light mode overlay (almost white, blurred) / Dark mode overlay (almost dark blue/black, blurred) */}
         <div className="absolute inset-0 bg-white/95 dark:bg-[#020b16]/95 backdrop-blur-xl transition-colors duration-300" />
+        
+        {/* Huge ULMIND Background Text */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-[22vw] font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-zinc-900/[0.08] to-zinc-900/[0.02] dark:from-white/[0.08] dark:to-white/[0.02] uppercase select-none leading-none pb-12">
+            ULMIND
+          </span>
+        </div>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
