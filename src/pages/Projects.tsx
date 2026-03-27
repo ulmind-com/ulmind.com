@@ -119,11 +119,6 @@ const ProjectCard = ({ project, index }) => {
                   Live
                 </a>
               </Button>
-              <Button variant="outline" asChild className="border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5">
-                <a href={project.githubUrl} target="_blank" rel="noreferrer">
-                  <Github className="w-4 h-4 text-zinc-800 dark:text-white" />
-                </a>
-              </Button>
             </div>
           </div>
         </div>
