@@ -158,10 +158,9 @@ export default function About() {
       {/* STORY SECTION */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-background">
         {/* Ultra Premium Ambient Mesh Gradient */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden flex justify-center items-center">
-          <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-rose-500/10 dark:bg-rose-500/15 rounded-full blur-[140px]" />
-          <div className="absolute bottom-[-20%] left-[-10%] w-[800px] h-[800px] bg-violet-500/10 dark:bg-violet-500/15 rounded-full blur-[150px]" />
-          <div className="absolute top-[20%] left-[20%] w-[500px] h-[500px] bg-blue-500/10 dark:bg-blue-500/15 rounded-full blur-[150px]" />
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-rose-500/8 dark:bg-rose-500/12 rounded-full blur-[120px]" />
+          <div className="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-violet-500/8 dark:bg-violet-500/12 rounded-full blur-[120px]" />
         </div>
         
         <div className="max-w-7xl mx-auto relative z-10">
@@ -175,7 +174,7 @@ export default function About() {
             <div className="flex-1 space-y-8 relative z-10 w-full">
               {/* Floating Badge */}
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-md shadow-[0_0_15px_rgba(var(--primary),0.1)]">
-                <div className="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_10px_rgba(var(--primary),0.8)]" />
+                <div className="w-2 h-2 rounded-full bg-primary shadow-[0_0_10px_rgba(var(--primary),0.8)]" />
                 <span className="text-xs font-bold tracking-widest text-primary uppercase">
                   Our Origin
                 </span>
@@ -211,7 +210,7 @@ export default function About() {
             {/* Right Illustration Node */}
             <div className="flex-1 w-full flex justify-center relative">
               <div className="relative w-80 h-80 md:w-96 md:h-96 flex items-center justify-center perspective-1000">
-                <div className="absolute inset-0 bg-primary/20 blur-[60px] rounded-full scale-110 animate-pulse" />
+                <div className="absolute inset-0 bg-primary/15 blur-[60px] rounded-full scale-110" />
                 <motion.div 
                   className="absolute inset-4 rounded-full bg-gradient-to-tr from-background/80 via-card/80 to-primary/10 border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.1)] dark:shadow-[0_0_50px_rgba(255,255,255,0.05)] flex items-center justify-center backdrop-blur-xl"
                   animate={{ rotate: 360 }}
@@ -234,32 +233,10 @@ export default function About() {
       {/* CORE VALUES (Dynamic Z-Pattern Layout) */}
       <section className="py-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-background">
         
-        {/* Continuous Dynamic Gradient Background */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden flex justify-center items-center opacity-70">
-          <motion.div 
-            animate={{ 
-              scale: [1, 1.1, 1],
-              rotate: [0, 90, 0]
-            }}
-            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-            className="absolute top-0 -left-[10%] w-[1000px] h-[1000px] bg-blue-500/10 dark:bg-blue-500/15 rounded-full blur-[150px]" 
-          />
-          <motion.div 
-            animate={{ 
-              scale: [1, 1.2, 1],
-              rotate: [0, -90, 0]
-            }}
-            transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-            className="absolute bottom-0 -right-[10%] w-[1200px] h-[1200px] bg-purple-500/10 dark:bg-purple-500/15 rounded-full blur-[160px]" 
-          />
-          <motion.div 
-            animate={{ 
-              y: [0, 100, 0],
-              x: [0, 50, 0]
-            }}
-            transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-[40%] left-[30%] w-[800px] h-[800px] bg-emerald-500/5 dark:bg-emerald-500/10 rounded-full blur-[140px]" 
-          />
+        {/* Static Gradient Background */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-0 -left-[10%] w-[700px] h-[700px] bg-blue-500/8 dark:bg-blue-500/12 rounded-full blur-[120px]" />
+          <div className="absolute bottom-0 -right-[10%] w-[800px] h-[800px] bg-purple-500/8 dark:bg-purple-500/12 rounded-full blur-[120px]" />
         </div>
         
         {/* Top subtle structural border */}
@@ -272,7 +249,7 @@ export default function About() {
             </span>
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-7xl font-extrabold tracking-tight text-foreground drop-shadow-sm">
-            Our Core <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-rose-500 animate-pulse">Values</span>
+            Our Core <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-rose-500">Values</span>
           </h2>
           <p className="mt-8 text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             The principles that guide every decision we make.
@@ -338,10 +315,8 @@ export default function About() {
                 <div className="flex-1 w-full flex justify-center relative">
                   <div className="relative w-80 h-80 md:w-96 md:h-96 flex items-center justify-center">
                     {/* Glowing Orb Background */}
-                    <motion.div 
+                    <div 
                       className={`absolute inset-4 rounded-full bg-gradient-to-br ${value.gradient} opacity-10 dark:opacity-20 blur-3xl`}
-                      animate={{ scale: [1, 1.1, 1] }}
-                      transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
                     />
                     
                     {/* Main Circular Container */}

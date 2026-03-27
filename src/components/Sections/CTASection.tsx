@@ -1,10 +1,8 @@
 import { motion } from "framer-motion";
-import BlurBlob from "@/components/BlurBlob";
 
 export const CTASection = () => {
   return (
     <section className="relative overflow-hidden bg-[#ff4d4f] py-28">
-      <BlurBlob position={{ top: "50%", left: "50%" }} size={{ width: "800px", height: "800px" }} colorClass="bg-white" opacityClass="opacity-20" />
       {/* BACKGROUND DECOR */}
       <div className="absolute inset-0 pointer-events-none z-10">
         {/* dotted grid */}
