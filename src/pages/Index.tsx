@@ -22,8 +22,8 @@ const Index = () => {
   });
 
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
+    stiffness: 30,
+    damping: 40,
     restDelta: 0.001,
   });
 

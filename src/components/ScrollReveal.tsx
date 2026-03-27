@@ -27,13 +27,14 @@ export const ScrollReveal = ({ children, direction = "up" }: ScrollRevealProps) 
         y: 0 
       }}
       viewport={{ 
-        once: true, // Eta true thakle ekbari animate hobe scroll korle. False korle barbar hobe.
-        amount: 0.1 // 10% section screen e aslei animation start hobe
+        once: true,
+        amount: 0.1
       }}
       transition={{ 
-        duration: 0.8, 
-        ease: [0.22, 1, 0.36, 1] // Ekta premium smooth ease effect
+        duration: 0.6, 
+        ease: [0.22, 1, 0.36, 1]
       }}
+      style={{ willChange: "transform, opacity" }}
     >
       {children}
     </motion.div>
