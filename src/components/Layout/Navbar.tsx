@@ -4,7 +4,7 @@ import { Menu, X } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Button } from "@/components/ui/button";
-import { BorderBeam } from "@/components/ui/border-beam";
+import { ShineBorder } from "@/components/ui/shine-border";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -70,8 +70,12 @@ export const Navbar = () => {
             : "rounded-3xl w-full max-w-7xl"
           }`}
       >
-        <BorderBeam size={250} duration={12} anchor={90} borderWidth={1.5} colorFrom="#ef4444" colorTo="transparent" className="opacity-80" />
-        <BorderBeam size={250} duration={12} anchor={90} borderWidth={1.5} colorFrom="#ef4444" colorTo="transparent" className="opacity-80" reverse />
+        <ShineBorder 
+          borderRadius={isCompact ? 9999 : 24} 
+          borderWidth={1.5} 
+          color={["#89E900", "#27187E", "#FB3640", "#004643", "#2EF2E2"]}
+          className="absolute inset-0 pointer-events-none bg-transparent !p-0 border-none opacity-80"
+        />
         
         <div className="flex items-center justify-between px-3 md:px-6 py-2 md:py-3 gap-3 md:gap-6 relative z-10">
 
