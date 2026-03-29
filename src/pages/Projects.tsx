@@ -4,6 +4,7 @@ import { ExternalLink, Github, Calendar, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import BlurBlob from "@/components/BlurBlob";
+import { ShineBorder } from "@/components/ui/shine-border";
 import { CTASection } from "@/components/Sections/CTASection";
 
 const ProjectCard = ({ project, index }) => {
@@ -51,77 +52,84 @@ const ProjectCard = ({ project, index }) => {
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        className="group relative rounded-[1.5rem] bg-white/40 dark:bg-transparent border border-black/5 dark:border-white/10 backdrop-blur-md transition-all duration-200 overflow-hidden cursor-default shadow-xl dark:shadow-2xl"
+        className="group relative rounded-[1.5rem] transition-all duration-200 cursor-default shadow-xl dark:shadow-2xl h-full"
       >
-        <div
-          className="pointer-events-none absolute -inset-px rounded-[1.5rem] opacity-0 group-hover:opacity-100 transition duration-500 z-0"
-          style={{
-            background: `radial-gradient(400px circle at ${mouseX}px ${mouseY}px, var(--glow-color), transparent 40%)`,
-          }}
-        />
-        <style dangerouslySetInnerHTML={{ __html: `
-          :root { --glow-color: rgba(225, 29, 72, 0.1); }
-          .dark { --glow-color: rgba(255, 0, 0, 0.15); }
-        `}} />
+        <ShineBorder
+          borderRadius={24}
+          borderWidth={1.5}
+          color={["#FF007F", "#39FF14", "#00FFFF"]}
+          className="bg-white/40 dark:bg-transparent backdrop-blur-md overflow-hidden h-full w-full !p-[1.5px] !text-inherit border-none"
+        >
+          <div
+            className="pointer-events-none absolute -inset-px rounded-[1.5rem] opacity-0 group-hover:opacity-100 transition duration-500 z-0"
+            style={{
+              background: `radial-gradient(400px circle at ${mouseX}px ${mouseY}px, var(--glow-color), transparent 40%)`,
+            }}
+          />
+          <style dangerouslySetInnerHTML={{ __html: `
+            :root { --glow-color: rgba(225, 29, 72, 0.1); }
+            .dark { --glow-color: rgba(255, 0, 0, 0.15); }
+          `}} />
 
-        <div
-          className="pointer-events-none absolute -inset-px rounded-[1.5rem] border-[2px] border-rose-500 dark:border-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 shadow-[0_0_20px_rgba(255,0,0,0.1)]"
-          style={{
-            maskImage: `radial-gradient(200px circle at ${mouseX}px ${mouseY}px, black 0%, transparent 100%)`,
-            WebkitMaskImage: `radial-gradient(200px circle at ${mouseX}px ${mouseY}px, black 0%, transparent 100%)`,
-          }}
-        />
+          <div
+            className="pointer-events-none absolute -inset-px rounded-[1.5rem] border-[2px] border-rose-500 dark:border-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 shadow-[0_0_20px_rgba(255,0,0,0.1)]"
+            style={{
+              maskImage: `radial-gradient(200px circle at ${mouseX}px ${mouseY}px, black 0%, transparent 100%)`,
+              WebkitMaskImage: `radial-gradient(200px circle at ${mouseX}px ${mouseY}px, black 0%, transparent 100%)`,
+            }}
+          />
 
-        <div style={{ transform: "translateZ(50px)" }} className="relative z-20">
-          <div className="relative overflow-hidden">
-            <img
-              src={project.image}
-              alt={project.title}
-              className="w-full h-56 object-cover opacity-95 group-hover:scale-105 transition-transform duration-500"
-            />
-            <Badge className="absolute top-4 left-4 bg-rose-600/10 dark:bg-red-600/20 text-rose-600 dark:text-red-500 border-rose-600/20 dark:border-red-600/30 backdrop-blur-md">
-              {project.category}
-            </Badge>
-          </div>
+          <div style={{ transform: "translateZ(50px)" }} className="relative z-20 w-full h-full flex flex-col">
+            <div className="relative overflow-hidden flex-shrink-0 rounded-t-[22.5px]">
+              <img
+                src={project.image}
+                alt={project.title}
+                className="w-full h-56 object-cover opacity-95 group-hover:scale-105 transition-transform duration-500"
+              />
+              <Badge className="absolute top-4 left-4 bg-rose-600/10 dark:bg-red-600/20 text-rose-600 dark:text-red-500 border-rose-600/20 dark:border-red-600/30 backdrop-blur-md">
+                {project.category}
+              </Badge>
+            </div>
 
-          <div className="p-6">
-            <h3 className="text-xl font-bold mb-3 text-zinc-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-red-500 transition-colors">
-              {project.title}
-            </h3>
+            <div className="p-6 flex-grow flex flex-col">
+              <h3 className="text-xl font-bold mb-3 text-zinc-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-red-500 transition-colors flex-shrink-0">
+                {project.title}
+              </h3>
 
-            <p className="text-zinc-600 dark:text-zinc-400 mb-4 line-clamp-3 text-sm leading-relaxed">
-              {project.description}
-            </p>
+              <p className="text-zinc-600 dark:text-zinc-400 mb-4 line-clamp-3 text-sm leading-relaxed flex-grow">
+                {project.description}
+              </p>
 
-            <div className="flex gap-4 text-xs text-zinc-500 mb-4 font-mono">
-              <div className="flex items-center gap-1">
-                <Calendar className="w-3.5 h-3.5 text-rose-500 dark:text-red-500" />
-                {project.timeline}
+              <div className="flex gap-4 text-xs text-zinc-500 mb-4 font-mono flex-shrink-0">
+                <div className="flex items-center gap-1">
+                  <Calendar className="w-3.5 h-3.5 text-rose-500 dark:text-red-500" />
+                  {project.timeline}
+                </div>
+                <div className="flex items-center gap-1">
+                  <Users className="w-3.5 h-3.5 text-rose-500 dark:text-red-500" />
+                  {project.teamSize}
+                </div>
               </div>
-              <div className="flex items-center gap-1">
-                <Users className="w-3.5 h-3.5 text-rose-500 dark:text-red-500" />
-                {project.teamSize}
+
+              <div className="flex flex-wrap gap-2 mb-6 flex-shrink-0">
+                {project.technologies.map((tech) => (
+                  <Badge key={tech} variant="outline" className="text-[10px] border-black/10 dark:border-white/10 text-zinc-600 dark:text-zinc-300 bg-white/50 dark:bg-transparent">
+                    {tech}
+                  </Badge>
+                ))}
+              </div>
+
+              <div className="flex gap-3 flex-shrink-0">
+                <Button asChild className="flex-1 bg-rose-600 dark:bg-red-600 hover:bg-rose-700 dark:hover:bg-red-700 text-white font-bold transition-all shadow-lg shadow-rose-600/20 dark:shadow-red-600/20">
+                  <a href={project.demoUrl} target="_blank" rel="noreferrer">
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    Live
+                  </a>
+                </Button>
               </div>
             </div>
-
-            <div className="flex flex-wrap gap-2 mb-6">
-              {project.technologies.map((tech) => (
-                <Badge key={tech} variant="outline" className="text-[10px] border-black/10 dark:border-white/10 text-zinc-600 dark:text-zinc-300 bg-white/50 dark:bg-transparent">
-                  {tech}
-                </Badge>
-              ))}
-            </div>
-
-            <div className="flex gap-3">
-              <Button asChild className="flex-1 bg-rose-600 dark:bg-red-600 hover:bg-rose-700 dark:hover:bg-red-700 text-white font-bold transition-all shadow-lg shadow-rose-600/20 dark:shadow-red-600/20">
-                <a href={project.demoUrl} target="_blank" rel="noreferrer">
-                  <ExternalLink className="w-4 h-4 mr-2" />
-                  Live
-                </a>
-              </Button>
-            </div>
           </div>
-        </div>
+        </ShineBorder>
       </motion.div>
     </motion.div>
   );

@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Button } from '@/components/ui/button';
 import { ExternalLink, Github, ArrowRight } from 'lucide-react';
+import { ShineBorder } from '@/components/ui/shine-border';
 
 const projects = [
   {
@@ -126,73 +127,80 @@ export const ProjectsSection = () => {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: index * 0.1, duration: 0.6 }}
               whileHover={{ y: -10 }}
-              className="bg-card rounded-2xl overflow-hidden shadow-card hover:shadow-floating smooth-transition group"
+              className="bg-card rounded-2xl overflow-hidden shadow-card hover:shadow-floating smooth-transition group h-full relative"
             >
-              {/* Project Image */}
-              <div className="relative overflow-hidden">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-48 object-cover group-hover:scale-110 smooth-transition"
-                />
-                <div className="absolute top-4 left-4">
-                  <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-medium rounded-full">
-                    {project.category}
-                  </span>
-                </div>
-                <div className="absolute top-4 right-4">
-                  <span className={`px-3 py-1 text-xs font-medium rounded-full ${getStatusColor(project.status)}`}>
-                    {project.status}
-                  </span>
-                </div>
-              </div>
-
-              {/* Project Content */}
-              <div className="p-6">
-                <h3 className="text-xl font-bold mb-3 group-hover:text-primary smooth-transition">
-                  {project.title}
-                </h3>
-                <p className="text-muted-foreground text-sm mb-4 line-clamp-3">
-                  {project.description}
-                </p>
-
-                {/* Technologies */}
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {project.technologies.map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-md"
-                    >
-                      {tech}
+              <ShineBorder
+                borderRadius={16}
+                borderWidth={1.5}
+                color={["#FF007F", "#39FF14", "#00FFFF"]}
+                className="bg-transparent h-full w-full !p-[1.5px] !text-inherit border-none overflow-hidden"
+              >
+                {/* Project Image */}
+                <div className="relative overflow-hidden flex-shrink-0 rounded-t-[14.5px]">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-48 object-cover group-hover:scale-110 smooth-transition"
+                  />
+                  <div className="absolute top-4 left-4">
+                    <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-medium rounded-full text-black">
+                      {project.category}
                     </span>
-                  ))}
+                  </div>
+                  <div className="absolute top-4 right-4">
+                    <span className={`px-3 py-1 text-xs font-medium rounded-full ${getStatusColor(project.status)}`}>
+                      {project.status}
+                    </span>
+                  </div>
                 </div>
 
-                {/* Action Buttons */}
-                <div className="flex gap-3">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex-1 group/btn"
-                    asChild
-                  >
-                    <a href={project.links.demo} target="_blank" rel="noopener noreferrer">
-                      <ExternalLink className="w-4 h-4 mr-2 group-hover/btn:scale-110 smooth-transition" />
-                      Demo
-                    </a>
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="group/btn"
-                    asChild
-                  >
-                    <a href={project.links.github} target="_blank" rel="noopener noreferrer">
-                      <Github className="w-4 h-4 group-hover/btn:scale-110 smooth-transition" />
-                    </a>
-                  </Button>
+                {/* Project Content */}
+                <div className="p-6 flex-grow flex flex-col">
+                  <h3 className="text-xl font-bold mb-3 group-hover:text-primary smooth-transition flex-shrink-0">
+                    {project.title}
+                  </h3>
+                  <p className="text-muted-foreground text-sm mb-4 line-clamp-3 flex-grow">
+                    {project.description}
+                  </p>
+
+                  {/* Technologies */}
+                  <div className="flex flex-wrap gap-2 mb-6 flex-shrink-0">
+                    {project.technologies.map((tech) => (
+                      <span
+                        key={tech}
+                        className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-md"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex gap-3 flex-shrink-0">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex-1 group/btn"
+                      asChild
+                    >
+                      <a href={project.links.demo} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="w-4 h-4 mr-2 group-hover/btn:scale-110 smooth-transition" />
+                        Demo
+                      </a>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="group/btn"
+                      asChild
+                    >
+                      <a href={project.links.github} target="_blank" rel="noopener noreferrer">
+                        <Github className="w-4 h-4 group-hover/btn:scale-110 smooth-transition" />
+                      </a>
+                    </Button>
+                  </div>
                 </div>
-              </div>
+              </ShineBorder>
             </motion.div>
           ))}
         </div>

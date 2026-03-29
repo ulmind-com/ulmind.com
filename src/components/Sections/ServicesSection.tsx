@@ -16,6 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import BlurBlob from "@/components/BlurBlob";
+import { ShineBorder } from "@/components/ui/shine-border";
 
 const services = [
   { icon: Code, title: "Web Development", description: "Custom web applications built with modern frameworks like React, Next.js, and Node.js", features: ["Responsive Design", "SEO Optimized", "Performance Focused", "Scalable Architecture"] },
@@ -67,55 +68,62 @@ const ServiceCard = ({ service, index, inView }) => {
         onMouseMove={handleMouseMove}
         onMouseLeave={() => { x.set(0); y.set(0); }}
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        className="group relative rounded-[2rem] bg-white/10 dark:bg-white/5 border border-black/5 dark:border-white/10 backdrop-blur-xl transition-all duration-200 overflow-hidden cursor-default shadow-2xl h-full"
+        className="group relative rounded-[2rem] transition-all duration-200 cursor-default shadow-2xl h-full"
       >
-        <div
-          className="pointer-events-none absolute -inset-px rounded-[2rem] opacity-0 group-hover:opacity-100 transition duration-300 z-0"
-          style={{ background: `radial-gradient(500px circle at ${glowPos.x}px ${glowPos.y}px, var(--glow-color), transparent 50%)` }}
-        />
-        <style dangerouslySetInnerHTML={{ __html: `
-          :root { --glow-color: rgba(225, 29, 72, 0.15); } 
-          .dark { --glow-color: rgba(255, 0, 0, 0.25); } 
-        `}} />
+        <ShineBorder
+          borderRadius={32}
+          borderWidth={1.5}
+          color={["#FF007F", "#39FF14", "#00FFFF"]}
+          className="bg-white/10 dark:bg-white/5 backdrop-blur-xl overflow-hidden h-full w-full !p-0 !text-inherit !bg-transparent group-hover:bg-white/10 dark:group-hover:bg-white/5 border-none"
+        >
+          <div
+            className="pointer-events-none absolute -inset-px rounded-[2rem] opacity-0 group-hover:opacity-100 transition duration-300 z-0"
+            style={{ background: `radial-gradient(500px circle at ${glowPos.x}px ${glowPos.y}px, var(--glow-color), transparent 50%)` }}
+          />
+          <style dangerouslySetInnerHTML={{ __html: `
+            :root { --glow-color: rgba(225, 29, 72, 0.15); } 
+            .dark { --glow-color: rgba(255, 0, 0, 0.25); } 
+          `}} />
 
-        <div
-          className="pointer-events-none absolute -inset-px rounded-[2rem] border-[2.5px] border-rose-600 dark:border-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
-          style={{
-            maskImage: `radial-gradient(250px circle at ${glowPos.x}px ${glowPos.y}px, black 0%, transparent 100%)`,
-            WebkitMaskImage: `radial-gradient(250px circle at ${glowPos.x}px ${glowPos.y}px, black 0%, transparent 100%)`,
-          }}
-        />
+          <div
+            className="pointer-events-none absolute -inset-px rounded-[2rem] border-[2.5px] border-rose-600 dark:border-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
+            style={{
+              maskImage: `radial-gradient(250px circle at ${glowPos.x}px ${glowPos.y}px, black 0%, transparent 100%)`,
+              WebkitMaskImage: `radial-gradient(250px circle at ${glowPos.x}px ${glowPos.y}px, black 0%, transparent 100%)`,
+            }}
+          />
 
-        <div style={{ transform: "translateZ(70px)" }} className="relative z-20 p-8 text-left">
-          <div className="text-rose-600 dark:text-red-500 mb-6 group-hover:scale-110 transition-transform duration-500 group-hover:drop-shadow-[0_0_15px_rgba(255,0,0,0.5)]">
-            <Icon className="w-8 h-8" />
+          <div style={{ transform: "translateZ(70px)" }} className="relative z-20 p-8 text-left w-full h-full flex flex-col">
+            <div className="text-rose-600 dark:text-red-500 mb-6 group-hover:scale-110 transition-transform duration-500 group-hover:drop-shadow-[0_0_15px_rgba(255,0,0,0.5)]">
+              <Icon className="w-8 h-8" />
+            </div>
+
+            <h3 className="text-2xl font-black mb-4 text-zinc-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-red-500 transition-colors tracking-tight uppercase flex-shrink-0">
+              {service.title}
+            </h3>
+
+            <p className="text-zinc-600 dark:text-zinc-400 mb-6 text-sm leading-relaxed font-medium flex-grow">
+              {service.description}
+            </p>
+
+            <ul className="space-y-3 mb-8 flex-shrink-0">
+              {service.features.map((f, i) => (
+                <li key={i} className="flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400 font-bold tracking-wide">
+                  <CheckCircle className="w-4 h-4 text-rose-600 dark:text-red-600 flex-shrink-0" />
+                  <span>{f}</span>
+                </li>
+              ))}
+            </ul>
+
+            <Button
+              variant="outline"
+              className="w-full h-12 border-black/10 dark:border-white/20 hover:border-rose-600 dark:hover:border-red-600 hover:bg-rose-600 dark:hover:bg-red-600 hover:text-white transition-all duration-300 rounded-xl font-black text-xs uppercase tracking-widest flex-shrink-0"
+              onClick={() => navigate("/contact")}
+            >
+              Learn More <ArrowRight className="ml-2 w-4 h-4" />
+            </Button>
           </div>
-
-          <h3 className="text-2xl font-black mb-4 text-zinc-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-red-500 transition-colors tracking-tight uppercase">
-            {service.title}
-          </h3>
-
-          <p className="text-zinc-600 dark:text-zinc-400 mb-6 text-sm leading-relaxed font-medium">
-            {service.description}
-          </p>
-
-          <ul className="space-y-3 mb-8">
-            {service.features.map((f, i) => (
-              <li key={i} className="flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400 font-bold tracking-wide">
-                <CheckCircle className="w-4 h-4 text-rose-600 dark:text-red-600 flex-shrink-0" />
-                <span>{f}</span>
-              </li>
-            ))}
-          </ul>
-
-          <Button
-            variant="outline"
-            className="w-full h-12 border-black/10 dark:border-white/20 hover:border-rose-600 dark:hover:border-red-600 hover:bg-rose-600 dark:hover:bg-red-600 hover:text-white transition-all duration-300 rounded-xl font-black text-xs uppercase tracking-widest"
-            onClick={() => navigate("/contact")}
-          >
-            Learn More <ArrowRight className="ml-2 w-4 h-4" />
-          </Button>
-        </div>
+        </ShineBorder>
       </motion.div>
     </motion.div>
   );
