@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useFingerprint } from "@/hooks/useFingerprint";
 import { Send, CheckCircle2, Mail, Sparkles } from "lucide-react";
 import { toast } from "sonner";
+import { ShineBorder } from "@/components/ui/shine-border";
 
 export const NewsletterSection: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -42,7 +43,12 @@ export const NewsletterSection: React.FC = () => {
 
       <div className="max-w-5xl mx-auto px-6">
         {/* Glassmorphism Card */}
-        <div className="relative p-10 md:p-16 rounded-[40px] border border-white/60 dark:border-white/10 bg-white/30 dark:bg-black/40 backdrop-blur-3xl shadow-[0_8px_40px_-12px_rgba(0,0,0,0.1)] dark:shadow-[0_8px_40px_-12px_rgba(0,0,0,0.5)] overflow-hidden text-center transition-all duration-500 group/card">
+        <ShineBorder
+          borderRadius={40}
+          borderWidth={1.5}
+          color={["#FF007F", "#39FF14", "#00FFFF"]}
+          className="relative !p-10 md:!p-16 border border-white/60 dark:border-white/10 bg-white/30 dark:bg-black/40 backdrop-blur-3xl shadow-[0_8px_40px_-12px_rgba(0,0,0,0.1)] dark:shadow-[0_8px_40px_-12px_rgba(0,0,0,0.5)] overflow-hidden text-center transition-all duration-500 group/card"
+        >
           
           {/* Subtle inner top highlight for 3D feel */}
           <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/70 dark:via-white/20 to-transparent" />
@@ -117,7 +123,7 @@ export const NewsletterSection: React.FC = () => {
               <span className="w-8 h-[1px] bg-border hidden sm:inline-block"></span>
             </p>
           </motion.div>
-        </div>
+        </ShineBorder>
       </div>
     </section>
   );
