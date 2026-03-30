@@ -3,17 +3,11 @@ import { ShopApparelCarousel } from "@/components/Sections/Shop/ShopApparelCarou
 import { ShopBuildInStyle } from "@/components/Sections/Shop/ShopBuildInStyle";
 import { ShopAccessoriesCarousel } from "@/components/Sections/Shop/ShopAccessoriesCarousel";
 import { ShopOnTheGo } from "@/components/Sections/Shop/ShopOnTheGo";
-import { useEffect } from "react";
 import { ReactLenis } from '@studio-freight/react-lenis';
 import { motion } from "framer-motion";
 import BlurBlob from "@/components/BlurBlob";
 
 export default function Merchandise() {
-  
-  // Update document title for this route
-  useEffect(() => {
-    document.title = "Shop | ULMiND";
-  }, []);
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] flex flex-col items-center justify-center relative overflow-hidden">
