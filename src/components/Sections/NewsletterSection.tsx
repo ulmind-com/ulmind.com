@@ -95,7 +95,7 @@ export const NewsletterSection: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="px-8 py-4 rounded-2xl bg-primary text-primary-foreground font-bold text-base transition-all duration-300 hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 disabled:opacity-70 disabled:hover:scale-100 shadow-[0_4px_14px_0_hsl(var(--primary)/0.3)] hover:shadow-[0_6px_20px_hsl(var(--primary)/0.4)] border border-white/20 dark:border-none"
+                  className="px-8 py-4 rounded-2xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700 text-white font-bold text-base transition-all duration-300 hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 disabled:opacity-70 disabled:hover:scale-100 shadow-[0_0_20px_rgba(225,29,72,0.4)] hover:shadow-[0_0_30px_rgba(225,29,72,0.6)] border border-red-500/30"
                 >
                   {isLoading ? "Joining..." : (
                     <>

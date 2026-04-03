@@ -23,6 +23,18 @@ import Contact from "./pages/Contact";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import NotFound from "./pages/NotFound";
+import WebDevelopmentPage from "./pages/services/WebDevelopment";
+import ServiceDetail from "./pages/services/ServiceDetail";
+import MobileAppsPage from "./pages/services/MobileApps";
+import CloudSolutionsPage from "./pages/services/CloudSolutions";
+import BackendDevelopmentPage from "./pages/services/BackendDevelopment";
+import EcommerceSolutionsPage from "./pages/services/EcommerceSolutions";
+import AiMachineLearningPage from "./pages/services/AiMachineLearning";
+import GraphicsDesignBrandingPage from "./pages/services/GraphicsDesignBranding";
+import ContentWritingStrategyPage from "./pages/services/ContentWritingStrategy";
+import UiUxDesignPage from "./pages/services/UiUxDesign";
+import Technologies from "./pages/Technologies";
+
 
 // Icons
 import { Phone, Video, MoreVertical, Send } from "lucide-react";
@@ -294,6 +306,17 @@ const App = () => {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="/terms-of-service" element={<TermsOfService />} />
+                <Route path="/services/web-development" element={<WebDevelopmentPage />} />
+                <Route path="/services/mobile-apps" element={<MobileAppsPage />} />
+                <Route path="/services/cloud" element={<CloudSolutionsPage />} />
+                <Route path="/services/backend-development" element={<BackendDevelopmentPage />} />
+                <Route path="/services/ecommerce-solutions" element={<EcommerceSolutionsPage />} />
+                <Route path="/services/ai-machine-learning" element={<AiMachineLearningPage />} />
+                <Route path="/services/graphics-design-branding" element={<GraphicsDesignBrandingPage />} />
+                <Route path="/services/content-writing-strategy" element={<ContentWritingStrategyPage />} />
+                <Route path="/services/ui-ux-design" element={<UiUxDesignPage />} />
+                <Route path="/services/:serviceId" element={<ServiceDetail />} />
+                <Route path="/technologies" element={<Technologies />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
