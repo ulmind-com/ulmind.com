@@ -1,39 +1,8 @@
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import {
-  SiReact,
-  SiSpring,
-  SiNodedotjs,
-  SiKotlin,
-  SiPython,
-  SiNextdotjs,
-  SiAngular,
-  SiFlutter,
-  SiDart,
-  SiDocker,
-  SiKubernetes,
-  SiGooglecloud,
-} from "react-icons/si";
-import { FaJava } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import BlurBlob from "@/components/BlurBlob";
-
-const technologies = [
-  { name: "React", icon: SiReact, color: "#61DAFB" },
-  { name: "Java", icon: FaJava, color: "#007396" },
-  { name: "Spring", icon: SiSpring, color: "#6DB33F" },
-  { name: "Node.js", icon: SiNodedotjs, color: "#339933" },
-  { name: "Kotlin", icon: SiKotlin, color: "#7F52FF" },
-  { name: "Python", icon: SiPython, color: "#3776AB" },
-  { name: "Next.js", icon: SiNextdotjs, color: "#000000" },
-  { name: "Angular", icon: SiAngular, color: "#DD0031" },
-  { name: "Flutter", icon: SiFlutter, color: "#02569B" },
-  { name: "Dart", icon: SiDart, color: "#0175C2" },
-  { name: "React Native", icon: SiReact, color: "#61DAFB" },
-  { name: "Docker", icon: SiDocker, color: "#2496ED" },
-  { name: "Kubernetes", icon: SiKubernetes, color: "#326CE5" },
-  { name: "Cloud", icon: SiGooglecloud, color: "#4285F4" },
-];
+import { technologies } from "@/data/technologies";
 
 export const TechnologySection = () => {
   const [ref, inView] = useInView({
@@ -42,6 +11,9 @@ export const TechnologySection = () => {
   });
 
   const navigate = useNavigate();
+
+  // Show exactly 18 items (3 rows on extra large screens)
+  const displayTechnologies = technologies.slice(0, 18);
 
   return (
     <section ref={ref} className="py-20 bg-secondary/30 relative overflow-hidden">
@@ -66,14 +38,14 @@ export const TechnologySection = () => {
 
         {/* TECH GRID */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 justify-items-center">
-          {technologies.map((tech, index) => (
+          {displayTechnologies.map((tech, index) => (
             <motion.div
               key={tech.name}
               initial={{ opacity: 0, scale: 0.5 }}
               animate={inView ? { opacity: 1, scale: 1 } : {}}
               transition={{ delay: index * 0.05, duration: 0.5 }}
               whileHover={{ scale: 1.1, y: -10 }}
-              className="bg-card rounded-2xl p-6 text-center shadow-card hover:shadow-floating smooth-transition group w-full"
+              className="bg-card rounded-2xl p-6 text-center shadow-card hover:shadow-floating smooth-transition group w-full flex flex-col items-center justify-center"
             >
               <div className="mb-3 group-hover:animate-pulse">
                 <tech.icon
@@ -89,32 +61,28 @@ export const TechnologySection = () => {
           ))}
         </div>
 
-        {/* CTA */}
+        {/* SEE MORE BUTTON */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 1.5, duration: 0.8 }}
+          transition={{ delay: 0.5, duration: 0.8 }}
           className="text-center mt-16"
         >
-          <div className="bg-gradient-primary rounded-2xl p-8 max-w-4xl mx-auto">
-            <h3 className="text-2xl font-bold text-white mb-4">
-              Ready to leverage these technologies?
-            </h3>
-            <p className="text-white/80 mb-6">
-              Let's discuss how we can bring your vision to life with our
-              comprehensive tech stack.
-            </p>
-
-            {/* ✅ FIXED BUTTON */}
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => navigate("/contact")}
-              className="bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 smooth-transition"
+          <button
+            onClick={() => navigate("/technologies")}
+            className="group relative inline-flex items-center justify-center px-8 py-3.5 text-base font-bold text-white transition-all duration-300 bg-gradient-to-r from-rose-600 to-red-600 border border-red-500/30 rounded-full hover:from-rose-700 hover:to-red-700 focus:outline-none shadow-[0_0_20px_rgba(225,29,72,0.4)] hover:shadow-[0_0_30px_rgba(225,29,72,0.6)] hover:scale-105"
+          >
+            Explore All Technologies
+            <svg
+              className="w-5 h-5 ml-2 -mr-1 transition-transform duration-200 group-hover:translate-x-1"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
-              Start Your Project
-            </motion.button>
-          </div>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </button>
         </motion.div>
       </div>
     </section>

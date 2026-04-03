@@ -222,10 +222,10 @@ export const ProjectsSection = () => {
             <Button
               size="lg"
               onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
-              className="bg-white text-primary hover:bg-gray-100 smooth-transition group"
+              className="bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700 text-white rounded-full px-8 py-6 text-base font-bold shadow-[0_0_20px_rgba(225,29,72,0.4)] hover:shadow-[0_0_30px_rgba(225,29,72,0.6)] border border-red-500/30 transition-all hover:scale-105 group"
             >
               Start Your Project
-              <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 smooth-transition" />
+              <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Button>
           </div>
         </motion.div>

@@ -340,7 +340,7 @@ export const HeroSection = () => {
               <Button
                 size="lg"
                 onClick={() => navigate('/contact')}
-                className="bg-violet-600 hover:bg-violet-700 text-white rounded-full px-8 py-6 text-base font-bold shadow-lg shadow-violet-600/25 transition-all hover:scale-105 group"
+                className="bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700 text-white rounded-full px-8 py-6 text-base font-bold shadow-[0_0_20px_rgba(225,29,72,0.4)] hover:shadow-[0_0_30px_rgba(225,29,72,0.6)] border border-red-500/30 transition-all hover:scale-105 group"
               >
                 Start Your Project
                 <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
