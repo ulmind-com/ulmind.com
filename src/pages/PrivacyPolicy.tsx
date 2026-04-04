@@ -1,4 +1,5 @@
 import React from 'react';
+import { ShieldCheck } from "lucide-react";
 import { CTASection } from '@/components/Sections/CTASection';
 import BlurBlob from "@/components/BlurBlob";
 
@@ -10,19 +11,26 @@ const PrivacyPolicy = () => {
       <BlurBlob position={{ top: "50%", left: "80%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-fuchsia-300 dark:bg-fuchsia-600" opacityClass="opacity-40 dark:opacity-20" />
       <BlurBlob position={{ top: "90%", left: "20%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-yellow-200 dark:bg-yellow-600" opacityClass="opacity-40 dark:opacity-20" />
       
-      {/* Top Banner - Exact shape, thickness, and perfect middle centering */}
-      <div className="w-full relative bg-gradient-to-r from-rose-600 via-red-500 to-orange-500 h-[140px] md:h-[180px] flex flex-col items-center justify-center overflow-hidden shadow-lg">
-        {/* Decorative elements for premium feel */}
-        <div className="absolute inset-0 bg-black/10 mix-blend-overlay"></div>
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2"></div>
+      {/* Top Banner - Ultra Premium Glassmorphism Design */}
+      <div className="w-full relative bg-gradient-to-r from-rose-600 via-red-500 to-orange-500 h-[140px] md:h-[180px] flex flex-col items-center justify-center overflow-hidden border-b border-white/10 shadow-xl">
+        {/* Dynamic mesh gradient / glow blobs */}
+        <div className="absolute inset-0 bg-black/10 mix-blend-overlay pointer-events-none"></div>
+        <div className="absolute -top-24 -right-24 w-72 h-72 bg-white/20 rounded-full blur-3xl shadow-[0_0_50px_rgba(255,255,255,0.6)]"></div>
+        <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-white/20 rounded-full blur-3xl shadow-[0_0_50px_rgba(255,255,255,0.6)]"></div>
         
-        <h1 className="text-3xl md:text-5xl font-extrabold text-white m-0 leading-tight relative z-10 tracking-tight drop-shadow-sm">
-          Privacy Policy
-        </h1>
-        <p className="text-white/90 mt-2 text-sm md:text-base font-medium relative z-10 tracking-wide">
-          Last updated 24 Mar, 2026
-        </p>
+        <div className="flex items-center gap-3 md:gap-4 mb-2 relative z-10 scale-95 md:scale-100">
+          <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+            <ShieldCheck className="w-5 h-5 md:w-7 md:h-7 text-white drop-shadow-md" />
+          </div>
+          <h1 className="text-3xl md:text-5xl font-black text-white m-0 leading-tight tracking-[-0.02em] drop-shadow-md">
+            Privacy Policy
+          </h1>
+        </div>
+        <div className="relative z-10 mt-1 md:mt-2 bg-black/20 backdrop-blur-sm border border-white/10 px-4 py-1.5 rounded-full flex items-center shadow-lg">
+          <p className="text-white/90 text-[10px] md:text-xs font-bold tracking-[0.1em] md:tracking-[0.2em] uppercase">
+            Updated On: <span className="text-white">04/04/2026</span>
+          </p>
+        </div>
       </div>
 
       {/* Content Area - Added pb-20 here to ensure gap before CTA */}

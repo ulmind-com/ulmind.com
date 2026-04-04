@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, CheckCircle2, Smartphone, ChevronRight, Zap, Shield, Bell, Star, Globe, Code2 } from "lucide-react";
 import BlurBlob from "@/components/BlurBlob";
+import { TimelineGlowLine } from "@/components/ui/TimelineGlowLine";
 import { ShineBorder } from "@/components/ui/shine-border";
 
 // ---- Reveal wrapper ----
@@ -207,8 +208,8 @@ export default function MobileAppsPage() {
             <img
               src="/illustrations/mobile-app.png"
               alt="Mobile App Development"
-              className="w-full max-w-lg rounded-3xl shadow-2xl shadow-indigo-500/20"
-              style={{ filter: "drop-shadow(0 20px 60px rgba(99,102,241,0.3))" }}
+              className="w-full max-w-lg service-illustration"
+              style={{ filter: "drop-shadow(0 20px 60px rgba(99,102,241,0.45)) drop-shadow(0 0 40px rgba(59,130,246,0.25))" }}
             />
           </motion.div>
         </Reveal>
@@ -226,8 +227,8 @@ export default function MobileAppsPage() {
               <img
                 src="/illustrations/mobile-perf.png"
                 alt="Mobile Performance"
-                className="w-full max-w-md mx-auto rounded-3xl shadow-xl shadow-blue-500/15"
-                style={{ filter: "drop-shadow(0 15px 40px rgba(59,130,246,0.25))" }}
+                className="w-full max-w-md mx-auto service-illustration"
+                style={{ filter: "drop-shadow(0 15px 50px rgba(59,130,246,0.45)) drop-shadow(0 0 30px rgba(6,182,212,0.25))" }}
               />
             </motion.div>
           </Reveal>
@@ -287,7 +288,7 @@ export default function MobileAppsPage() {
 
           {/* Timeline */}
           <div className="relative space-y-8">
-            <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-indigo-300 via-blue-200 to-cyan-200 dark:from-indigo-800 dark:via-blue-900 dark:to-cyan-900 hidden md:block" />
+            <TimelineGlowLine containerClass="left-1/2 -translate-x-1/2 hidden md:block" colors={phases.map(p => p.color)} />
 
             {phases.map((phase, i) => (
               <Reveal key={phase.phase} delay={i * 0.08}>
@@ -413,8 +414,8 @@ export default function MobileAppsPage() {
                 <img
                   src="/illustrations/mobile-app.png"
                   alt="Mobile App Features"
-                  className="w-full max-w-md mx-auto rounded-3xl shadow-xl shadow-indigo-500/15"
-                  style={{ filter: "drop-shadow(0 20px 50px rgba(99,102,241,0.2))" }}
+                  className="w-full max-w-md mx-auto service-illustration"
+                  style={{ filter: "drop-shadow(0 20px 60px rgba(99,102,241,0.4)) drop-shadow(0 0 40px rgba(59,130,246,0.2))" }}
                 />
               </motion.div>
             </Reveal>

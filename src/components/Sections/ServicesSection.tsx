@@ -68,20 +68,19 @@ const ServiceCard = ({ service, index, inView }) => {
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.8, delay: index * 0.1 }}
       style={{ perspective: "1500px" }}
-      className="transform-gpu will-change-transform"
     >
       <motion.div
         ref={cardRef}
         onMouseMove={handleMouseMove}
         onMouseLeave={() => { x.set(0); y.set(0); }}
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        className="group relative rounded-[2rem] transition-all duration-200 cursor-default shadow-2xl h-full transform-gpu will-change-transform"
+        className="group relative rounded-[2rem] transition-all duration-200 cursor-default shadow-2xl h-full"
       >
         <ShineBorder
           borderRadius={32}
           borderWidth={1.5}
           color={["#FF007F", "#39FF14", "#00FFFF"]}
-          className="bg-white/10 dark:bg-white/5 backdrop-blur-xl overflow-hidden h-full w-full !p-0 !text-inherit !bg-transparent group-hover:bg-white/10 dark:group-hover:bg-white/5 border-none transform-gpu will-change-transform"
+          className="bg-white/10 dark:bg-white/5 backdrop-blur-md overflow-hidden h-full w-full !p-0 !text-inherit !bg-transparent group-hover:bg-white/10 dark:group-hover:bg-white/5 border-none"
         >
           <motion.div
             className="pointer-events-none absolute -inset-px rounded-[2rem] opacity-0 group-hover:opacity-100 transition duration-300 z-0"
