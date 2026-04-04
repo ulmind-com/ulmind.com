@@ -397,7 +397,7 @@ export const HeroSection = () => {
                     transition={{ repeat: Infinity, duration: 1.2, delay, ease: "easeInOut" }}
                   >
                     <svg width="14" height="8" viewBox="0 0 14 8" fill="none" className="text-foreground/40 dark:text-white/40">
-                      <path d="M1 1L7 7L13 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M1 1L7 7L13 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </motion.div>
                 ))}
