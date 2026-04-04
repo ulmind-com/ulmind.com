@@ -5,6 +5,7 @@ import {
   Code,
   CheckCircle,
   ArrowRight,
+  ArrowLeft,
   Zap,
   Shield,
   TrendingUp,
@@ -17,8 +18,10 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BlurBlob from "@/components/BlurBlob";
+import { technologies } from "@/data/technologies";
 
-/* ─── Phase Data ─────────────────────────────────────── */
+/* ─── Phase Data ─────────────────────────────────────── */import { TimelineGlowLine } from "@/components/ui/TimelineGlowLine";
+
 const phases = [
   {
     phase: "PHASE 1",
@@ -101,13 +104,12 @@ const phases = [
   },
 ];
 
-const techStack = [
-  { category: "Frontend", tech: "React / Next.js", icon: "⚛️" },
-  { category: "Backend", tech: "Node.js / Express", icon: "🟢" },
-  { category: "Database", tech: "MongoDB / PostgreSQL", icon: "🗄️" },
-  { category: "Styling", tech: "Tailwind / CSS", icon: "🎨" },
-  { category: "Hosting", tech: "Vercel / AWS", icon: "☁️" },
+// Web tech shown in the tech stack section
+const webTechNames = [
+  "React", "Next.js", "TypeScript", "Node.js", "MongoDB",
+  "PostgreSQL", "Tailwind", "Vercel", "Docker", "GraphQL",
 ];
+const techStack = technologies.filter((t) => webTechNames.includes(t.name));
 
 const features = [
   { icon: Globe, title: "Responsive Design", desc: "Works perfectly on mobile, tablet, and desktop." },
@@ -225,6 +227,18 @@ const WebDevelopmentPage: React.FC = () => {
         <BlurBlob position={{ top: "10%", left: "5%" }} size={{ width: "500px", height: "500px" }} colorClass="bg-rose-400" opacityClass="opacity-20" />
         <BlurBlob position={{ top: "50%", left: "70%" }} size={{ width: "400px", height: "400px" }} colorClass="bg-purple-400" opacityClass="opacity-20" />
 
+        {/* ── BACK TO HOME — absolute, no layout impact ── */}
+        <motion.button
+          onClick={() => navigate("/")}
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+          className="absolute top-8 left-6 z-20 flex items-center gap-2 text-sm font-semibold text-rose-600 dark:text-rose-400 hover:gap-3 transition-all duration-200 group"
+        >
+          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+          Back to Home
+        </motion.button>
+
         <div className="max-w-7xl mx-auto w-full grid md:grid-cols-2 gap-12 items-center relative z-10">
           {/* LEFT text */}
           <motion.div style={{ y: heroY, opacity: heroOpacity }}>
@@ -297,8 +311,8 @@ const WebDevelopmentPage: React.FC = () => {
               <img
                 src="/illustrations/web-dev.png"
                 alt="Web Development"
-                className="w-full max-w-lg rounded-3xl shadow-2xl"
-                style={{ filter: "drop-shadow(0 20px 60px rgba(225,29,72,0.25))" }}
+                className="w-full max-w-lg service-illustration"
+                style={{ filter: "drop-shadow(0 20px 60px rgba(225,29,72,0.4)) drop-shadow(0 0 40px rgba(168,85,247,0.25))" }}
               />
             </motion.div>
           </Reveal>
@@ -318,8 +332,8 @@ const WebDevelopmentPage: React.FC = () => {
               <img
                 src="/illustrations/design.png"
                 alt="What You Get"
-                className="w-full max-w-md mx-auto rounded-3xl shadow-xl"
-                style={{ filter: "drop-shadow(0 15px 40px rgba(139,92,246,0.2))" }}
+                className="w-full max-w-md mx-auto service-illustration"
+                style={{ filter: "drop-shadow(0 15px 50px rgba(139,92,246,0.45)) drop-shadow(0 0 30px rgba(225,29,72,0.25))" }}
               />
             </motion.div>
           </Reveal>
@@ -379,8 +393,8 @@ const WebDevelopmentPage: React.FC = () => {
 
           {/* Timeline */}
           <div className="relative">
-            {/* Center line */}
-            <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-zinc-300 dark:via-zinc-700 to-transparent -translate-x-1/2" />
+            {/* Dynamic Animated Center Line */}
+            <TimelineGlowLine colors={phases.map(p => p.color)} />
 
             <div className="space-y-12">
               {phases.map((phase, i) => (
@@ -393,7 +407,7 @@ const WebDevelopmentPage: React.FC = () => {
 
       {/* ── TECH STACK ── */}
       <section className="py-24 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <Reveal className="text-center mb-12">
             <div className="inline-block px-4 py-1.5 mb-4 rounded-full border border-blue-500/20 bg-blue-500/10">
               <span className="text-blue-600 dark:text-blue-400 text-[10px] font-black tracking-[0.4em] uppercase">Stack</span>
@@ -403,19 +417,19 @@ const WebDevelopmentPage: React.FC = () => {
             </h2>
           </Reveal>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {techStack.map((item, i) => (
-              <Reveal key={i} delay={i * 0.08}>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {techStack.map((tech, i) => (
+              <Reveal key={tech.name} delay={i * 0.06}>
                 <motion.div
-                  whileHover={{ scale: 1.03 }}
-                  className="relative p-6 rounded-2xl bg-zinc-50 dark:bg-white/[0.03] border border-zinc-200/50 dark:border-white/10 overflow-hidden group"
+                  whileHover={{ scale: 1.06, y: -6 }}
+                  className="bg-card rounded-2xl p-5 text-center shadow-card hover:shadow-floating transition-all duration-300 group flex flex-col items-center justify-center gap-3 border border-border hover:border-rose-500/30"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-rose-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="relative z-10">
-                    <span className="text-3xl mb-3 block">{item.icon}</span>
-                    <p className="text-xs font-black text-zinc-400 uppercase tracking-widest mb-1">{item.category}</p>
-                    <p className="text-lg font-black text-zinc-900 dark:text-white">{item.tech}</p>
+                  <div className="w-14 h-14 rounded-2xl bg-secondary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <tech.icon size={32} color={tech.color} />
                   </div>
+                  <span className="text-sm font-semibold text-foreground/80 group-hover:text-foreground transition-colors">
+                    {tech.name}
+                  </span>
                 </motion.div>
               </Reveal>
             ))}
@@ -468,8 +482,8 @@ const WebDevelopmentPage: React.FC = () => {
               <img
                 src="/illustrations/web-dev.png"
                 alt="Key Features"
-                className="w-full max-w-md mx-auto rounded-3xl shadow-xl"
-                style={{ filter: "drop-shadow(0 20px 50px rgba(225,29,72,0.2))" }}
+                className="w-full max-w-md mx-auto service-illustration"
+                style={{ filter: "drop-shadow(0 20px 60px rgba(225,29,72,0.4)) drop-shadow(0 0 40px rgba(16,185,129,0.25))" }}
               />
             </motion.div>
           </Reveal>
@@ -599,19 +613,17 @@ const WebDevelopmentPage: React.FC = () => {
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button
                     size="lg"
-                    className="h-14 px-10 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white rounded-2xl font-black text-sm shadow-2xl shadow-rose-600/40 uppercase tracking-widest border-0"
+                    className="h-14 px-10 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white rounded-2xl font-black text-sm shadow-[0_0_20px_rgba(225,29,72,0.4)] hover:shadow-[0_0_30px_rgba(225,29,72,0.6)] uppercase tracking-widest border border-rose-500/30 hover:scale-105 transition-all duration-300"
                     onClick={() => navigate("/contact")}
                   >
                     Get Started Now <ArrowRight className="ml-2 w-5 h-5" />
                   </Button>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="h-14 px-10 border-white/20 text-white hover:bg-white/10 rounded-2xl font-black text-sm uppercase tracking-widest"
+                  <button
+                    className="inline-flex items-center justify-center h-14 px-10 bg-white/5 hover:bg-white/10 border border-white/20 hover:border-white/50 text-white rounded-2xl font-black text-sm shadow-[0_8px_32px_rgba(0,0,0,0.12)] hover:shadow-[0_8px_32px_rgba(255,255,255,0.15)] backdrop-blur-md uppercase tracking-widest transition-all duration-300 hover:scale-105"
                     onClick={() => navigate("/projects")}
                   >
                     See Our Work
-                  </Button>
+                  </button>
                 </div>
               </div>
             </div>

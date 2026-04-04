@@ -8,6 +8,7 @@ import {
   Grid, BarChart2, Users, Crosshair, Activity,
 } from "lucide-react";
 import BlurBlob from "@/components/BlurBlob";
+import { TimelineGlowLine } from "@/components/ui/TimelineGlowLine";
 import { ShineBorder } from "@/components/ui/shine-border";
 
 /* ─── Reveal ─────────────────────────────────────── */
@@ -547,7 +548,7 @@ const UiUxDesignPage: React.FC = () => {
           </Reveal>
 
           <div className="relative">
-            <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-pink-400 dark:via-pink-700 to-transparent -translate-x-1/2" />
+            <TimelineGlowLine colors={phases.map(p => p.color)} />
             <div className="space-y-12">
               {phases.map((phase, i) => <PhaseCard key={i} phase={phase} index={i} />)}
             </div>

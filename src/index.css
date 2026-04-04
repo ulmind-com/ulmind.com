@@ -143,8 +143,22 @@
     user-drag: none;
     -webkit-touch-callout: none;
     user-select: none;
-    /* Prevent images from triggering layout during scroll */
-    content-visibility: auto;
+  }
+
+  /* Contain layout recalculations to individual sections */
+  section {
+    contain: layout style;
+  }
+
+  /* ── Service page illustrations: remove white bg in both modes ── */
+  .service-illustration {
+    /* Light mode: multiply makes white background vanish into the light page */
+    mix-blend-mode: multiply;
+  }
+
+  .dark .service-illustration {
+    /* Dark mode: screen makes white background vanish into the dark page */
+    mix-blend-mode: screen;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -193,7 +207,11 @@
   }
 
   .smooth-transition {
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Avoid 'all' — it forces composite on every property including opacity/color */
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .bounce-transition {

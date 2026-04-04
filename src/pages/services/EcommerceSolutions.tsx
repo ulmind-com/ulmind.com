@@ -23,6 +23,7 @@ import {
   Layers,
 } from "lucide-react";
 import BlurBlob from "@/components/BlurBlob";
+import { TimelineGlowLine } from "@/components/ui/TimelineGlowLine";
 import { ShineBorder } from "@/components/ui/shine-border";
 
 /* ─── Reveal wrapper ──────────────────────────────── */
@@ -697,8 +698,8 @@ const EcommerceSolutionsPage: React.FC = () => {
               <img
                 src="/illustrations/ecommerce-dashboard.png"
                 alt="E-Commerce Admin Dashboard"
-                className="w-full max-w-lg mx-auto rounded-3xl shadow-2xl"
-                style={{ filter: "drop-shadow(0 20px 60px rgba(124,58,237,0.3))" }}
+                className="w-full max-w-lg mx-auto service-illustration"
+                style={{ filter: "drop-shadow(0 20px 60px rgba(124,58,237,0.4)) drop-shadow(0 0 40px rgba(192,38,211,0.25))" }}
               />
             </motion.div>
           </Reveal>
@@ -756,7 +757,7 @@ const EcommerceSolutionsPage: React.FC = () => {
           </Reveal>
 
           <div className="relative">
-            <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-violet-300 dark:via-violet-700 to-transparent -translate-x-1/2" />
+            <TimelineGlowLine colors={phases.map(p => p.color)} />
             <div className="space-y-12">
               {phases.map((phase, i) => (
                 <PhaseCard key={i} phase={phase} index={i} />

@@ -74,7 +74,7 @@ const AnimatedHeroVisuals = () => {
     setIndex((prevIndex) => (prevIndex + 1) % slides.length);
   };
 
-  const ORBIT_DURATION = 20; // Time in seconds for one full circle rotation
+  const ORBIT_DURATION = 30; // slower = fewer GPU frames per second
 
   const CurrentSlide = slides[index];
   const CardIcon = CurrentSlide.card.icon;
@@ -124,8 +124,8 @@ const AnimatedHeroVisuals = () => {
                 transition={{ repeat: Infinity, duration: ORBIT_DURATION, ease: "linear" }}
               >
                 <motion.div
-                  animate={{ y: [-10, 10, -10] }}
-                  transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+                  animate={{ y: [-8, 8, -8] }}
+                  transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
                   className="bg-background p-4 rounded-2xl shadow-2xl border border-border/50 flex flex-col items-center gap-2"
                 >
                   <div className={`w-12 h-12 rounded-full flex items-center justify-center ${CurrentSlide.card.bg}`}>
@@ -199,7 +199,7 @@ interface CounterProps {
 
 const Counter = ({ value, label, icon: Icon }: CounterProps) => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: false, amount: 0.5 });
+  const isInView = useInView(ref, { once: true, amount: 0.5 });
 
   const match = value.match(/(\d+)(.*)/);
   const numericValue = match ? parseInt(match[1]) : 0;
@@ -259,24 +259,9 @@ export const HeroSection = () => {
     { number: '24/7', label: 'Support', icon: Settings },
   ];
 
-  // Mouse parallax effect for the 3D depth of the circle
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  // Map mouse positions to slight rotation degrees
-  const rotateX = useTransform(mouseY, [-300, 300], [15, -15]);
-  const rotateY = useTransform(mouseX, [-300, 300], [-15, 15]);
-
-  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    mouseX.set(event.clientX - rect.left - rect.width / 2);
-    mouseY.set(event.clientY - rect.top - rect.height / 2);
-  };
-
-  const handleMouseLeave = () => {
-    mouseX.set(0);
-    mouseY.set(0);
-  };
+  // Mouse parallax removed — mousemove listener on a large section causes
+  // a forced layout on every pointer event which tanks scroll FPS.
+  // Replaced with a static CSS perspective tilt on the ring only.
 
   return (
     <section
@@ -296,7 +281,7 @@ export const HeroSection = () => {
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-left z-10"
+            className="text-left z-10 mt-2 sm:mt-0 lg:-mt-16"
           >
             {/* Top Badge */}
             <motion.div
