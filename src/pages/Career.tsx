@@ -1,24 +1,24 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   MapPin,
   Clock,
-  Send,
-  X,
   Briefcase,
   Sparkles,
+  ArrowRight,
+  CheckCircle2,
+  Users,
+  Globe,
+  Zap,
+  Shield,
 } from "lucide-react";
-import ReCAPTCHA from "react-google-recaptcha";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/use-toast";
 import { CTASection } from "@/components/Sections/CTASection";
 import BlurBlob from "@/components/BlurBlob";
+import CareerApplicationForm from "@/components/CareerApplicationForm";
 
-/* ---------------- Job Data ---------------- */
+/* ════════════════════════════════════════════════
+   Job Data
+   ════════════════════════════════════════════════ */
 
 const jobOpenings = [
   {
@@ -31,6 +31,7 @@ const jobOpenings = [
     skills: ["Java", "Spring Boot", "Microservices", "SQL", "REST API"],
     description:
       "We're looking for a Java developer to build scalable backend services.",
+    accent: "cyan",
   },
   {
     id: 2,
@@ -42,6 +43,7 @@ const jobOpenings = [
     skills: ["React", "Node.js", "MongoDB", "REST API", "Git"],
     description:
       "Work across frontend and backend to build complete, scalable web applications.",
+    accent: "violet",
   },
   {
     id: 3,
@@ -53,6 +55,7 @@ const jobOpenings = [
     skills: ["React Native", "Flutter", "Android", "iOS"],
     description:
       "Build high-quality mobile applications for Android and iOS platforms.",
+    accent: "emerald",
   },
   {
     id: 4,
@@ -64,6 +67,7 @@ const jobOpenings = [
     skills: ["Photoshop", "Illustrator", "Figma", "Brand Design"],
     description:
       "Create visually appealing designs for web, social media, and branding.",
+    accent: "rose",
   },
   {
     id: 5,
@@ -75,336 +79,603 @@ const jobOpenings = [
     skills: ["Premiere Pro", "After Effects", "Motion Graphics"],
     description:
       "Edit promotional videos, reels, and digital marketing content.",
+    accent: "amber",
   },
 ];
 
-/* ---------------- Types ---------------- */
+/* ════════════════════════════════════════════════
+   Accent colour map
+   ════════════════════════════════════════════════ */
 
-interface ApplicationFormData {
-  name: string;
-  email: string;
-  phone: string;
-  experience: string;
-  coverLetter: string;
-  resume: File | null;
-}
+const accentMap: Record<
+  string,
+  {
+    badge: string;
+    badgeDot: string;
+    skillBg: string;
+    skillText: string;
+    btnGrad: string;
+    btnShadow: string;
+    iconBg: string;
+    iconText: string;
+    borderHover: string;
+    glowBg: string;
+  }
+> = {
+  cyan: {
+    badge: "bg-cyan-100/80 dark:bg-cyan-400/20 text-cyan-700 dark:text-cyan-200 border-cyan-200/60 dark:border-cyan-400/40",
+    badgeDot: "bg-cyan-500 dark:bg-cyan-300",
+    skillBg: "bg-cyan-50 dark:bg-cyan-500/10 border-cyan-200/50 dark:border-cyan-500/15",
+    skillText: "text-cyan-700 dark:text-cyan-300",
+    btnGrad: "from-cyan-500 to-cyan-600",
+    btnShadow: "shadow-[0_0_20px_rgba(6,182,212,0.35)]",
+    iconBg: "bg-gradient-to-br from-cyan-100 to-cyan-50 dark:from-cyan-500/20 dark:to-cyan-600/10",
+    iconText: "text-cyan-600 dark:text-cyan-400",
+    borderHover: "hover:border-cyan-300/60 dark:hover:border-cyan-500/25",
+    glowBg: "bg-cyan-400/20 dark:bg-cyan-500/10",
+  },
+  violet: {
+    badge: "bg-violet-100/80 dark:bg-violet-400/20 text-violet-700 dark:text-violet-200 border-violet-200/60 dark:border-violet-400/40",
+    badgeDot: "bg-violet-500 dark:bg-violet-300",
+    skillBg: "bg-violet-50 dark:bg-violet-500/10 border-violet-200/50 dark:border-violet-500/15",
+    skillText: "text-violet-700 dark:text-violet-300",
+    btnGrad: "from-violet-500 to-violet-600",
+    btnShadow: "shadow-[0_0_20px_rgba(139,92,246,0.35)]",
+    iconBg: "bg-gradient-to-br from-violet-100 to-violet-50 dark:from-violet-500/20 dark:to-violet-600/10",
+    iconText: "text-violet-600 dark:text-violet-400",
+    borderHover: "hover:border-violet-300/60 dark:hover:border-violet-500/25",
+    glowBg: "bg-violet-400/20 dark:bg-violet-500/10",
+  },
+  emerald: {
+    badge: "bg-emerald-100/80 dark:bg-emerald-400/20 text-emerald-700 dark:text-emerald-200 border-emerald-200/60 dark:border-emerald-400/40",
+    badgeDot: "bg-emerald-500 dark:bg-emerald-300",
+    skillBg: "bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200/50 dark:border-emerald-500/15",
+    skillText: "text-emerald-700 dark:text-emerald-300",
+    btnGrad: "from-emerald-500 to-emerald-600",
+    btnShadow: "shadow-[0_0_20px_rgba(16,185,129,0.35)]",
+    iconBg: "bg-gradient-to-br from-emerald-100 to-emerald-50 dark:from-emerald-500/20 dark:to-emerald-600/10",
+    iconText: "text-emerald-600 dark:text-emerald-400",
+    borderHover: "hover:border-emerald-300/60 dark:hover:border-emerald-500/25",
+    glowBg: "bg-emerald-400/20 dark:bg-emerald-500/10",
+  },
+  rose: {
+    badge: "bg-rose-100/80 dark:bg-rose-400/20 text-rose-700 dark:text-rose-200 border-rose-200/60 dark:border-rose-400/40",
+    badgeDot: "bg-rose-500 dark:bg-rose-300",
+    skillBg: "bg-rose-50 dark:bg-rose-500/10 border-rose-200/50 dark:border-rose-500/15",
+    skillText: "text-rose-700 dark:text-rose-300",
+    btnGrad: "from-rose-500 to-rose-600",
+    btnShadow: "shadow-[0_0_20px_rgba(244,63,94,0.35)]",
+    iconBg: "bg-gradient-to-br from-rose-100 to-rose-50 dark:from-rose-500/20 dark:to-rose-600/10",
+    iconText: "text-rose-600 dark:text-rose-400",
+    borderHover: "hover:border-rose-300/60 dark:hover:border-rose-500/25",
+    glowBg: "bg-rose-400/20 dark:bg-rose-500/10",
+  },
+  amber: {
+    badge: "bg-amber-100/80 dark:bg-amber-400/20 text-amber-700 dark:text-amber-200 border-amber-200/60 dark:border-amber-400/40",
+    badgeDot: "bg-amber-500 dark:bg-amber-300",
+    skillBg: "bg-amber-50 dark:bg-amber-500/10 border-amber-200/50 dark:border-amber-500/15",
+    skillText: "text-amber-700 dark:text-amber-300",
+    btnGrad: "from-amber-500 to-amber-600",
+    btnShadow: "shadow-[0_0_20px_rgba(245,158,11,0.35)]",
+    iconBg: "bg-gradient-to-br from-amber-100 to-amber-50 dark:from-amber-500/20 dark:to-amber-600/10",
+    iconText: "text-amber-600 dark:text-amber-400",
+    borderHover: "hover:border-amber-300/60 dark:hover:border-amber-500/25",
+    glowBg: "bg-amber-400/20 dark:bg-amber-500/10",
+  },
+};
 
-/* ---------------- Component ---------------- */
+const departmentIcons: Record<string, React.ElementType> = {
+  "Backend Development": Zap,
+  Engineering: Globe,
+  "Mobile Development": Sparkles,
+  Design: Sparkles,
+  "Media & Content": Sparkles,
+};
+
+
+
+/* ════════════════════════════════════════════════
+   Perks
+   ════════════════════════════════════════════════ */
+const perks = [
+  { icon: Globe, title: "100% Remote", desc: "Work from anywhere in the world" },
+  { icon: Users, title: "Great Team", desc: "Collaborate with talented people" },
+  { icon: Zap, title: "Fast Growth", desc: "Accelerate your career progress" },
+  { icon: Shield, title: "Job Security", desc: "Stable and long-term roles" },
+];
+
+/* ════════════════════════════════════════════════
+   Career Component
+   ════════════════════════════════════════════════ */
 
 const Career = () => {
   const [selectedJob, setSelectedJob] =
     useState<(typeof jobOpenings)[0] | null>(null);
 
-  const [formData, setFormData] = useState<ApplicationFormData>({
-    name: "",
-    email: "",
-    phone: "",
-    experience: "",
-    coverLetter: "",
-    resume: null,
-  });
-
-  const [acceptedTerms, setAcceptedTerms] = useState(false);
-  const [acceptedPolicy, setAcceptedPolicy] = useState(false);
-  const [captchaVerified, setCaptchaVerified] = useState(false);
-
-  const { toast } = useToast();
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((p) => ({ ...p, [name]: value }));
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((p) => ({
-      ...p,
-      resume: e.target.files?.[0] || null,
-    }));
-  };
-
-  /* ✅ FORM SUBMIT via FormSubmit */
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedJob) return;
-
-    if (!acceptedTerms || !acceptedPolicy) {
-      toast({
-        title: "Please accept required terms",
-        description: "You must accept Terms & Conditions and Privacy Policy.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (!captchaVerified) {
-      toast({
-        title: "Captcha required",
-        description: "Please verify that you are not a robot.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    const submitData = new FormData();
-    submitData.append("_subject", `Job Application – ${selectedJob.title}`);
-    submitData.append("_template", "table");
-    submitData.append("_captcha", "false");
-
-    submitData.append("Job Title", selectedJob.title);
-    submitData.append("Name", formData.name);
-    submitData.append("Email", formData.email);
-    submitData.append("Phone", formData.phone);
-    submitData.append("Experience", formData.experience);
-    submitData.append("Cover Letter", formData.coverLetter);
-
-    if (formData.resume) {
-      submitData.append("Resume", formData.resume);
-    }
-
-    try {
-      const res = await fetch(
-        "https://formsubmit.co/ulmindpvtltd@gmail.com",
-        {
-          method: "POST",
-          body: submitData,
-        }
-      );
-
-      if (res.ok) {
-        toast({
-          title: "Application submitted",
-          description: `Your application for ${selectedJob.title} was sent successfully.`,
-        });
-
-        setSelectedJob(null);
-        setAcceptedTerms(false);
-        setAcceptedPolicy(false);
-        setCaptchaVerified(false);
-
-        setFormData({
-          name: "",
-          email: "",
-          phone: "",
-          experience: "",
-          coverLetter: "",
-          resume: null,
-        });
-      } else {
-        throw new Error();
-      }
-    } catch {
-      toast({
-        title: "Submission failed",
-        description: "Please try again later.",
-        variant: "destructive",
-      });
-    }
-  };
-
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
-      <BlurBlob position={{ top: "10%", left: "10%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-cyan-300 dark:bg-cyan-600" opacityClass="opacity-40 dark:opacity-20" />
-      <BlurBlob position={{ top: "50%", left: "80%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-fuchsia-300 dark:bg-fuchsia-600" opacityClass="opacity-40 dark:opacity-20" />
-      <BlurBlob position={{ top: "90%", left: "20%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-yellow-200 dark:bg-yellow-600" opacityClass="opacity-40 dark:opacity-20" />
+      {/* ═══════════════════════════════════════════
+          SCOPED CSS — liquid glass cards
+          ═══════════════════════════════════════════ */}
+      <style>{`
+        .career-glass-card {
+          border-radius: 24px;
+          position: relative;
+          overflow: hidden;
+          will-change: transform;
+          contain: layout style;
+          transform: translateZ(0);
+          transition:
+            transform 0.25s cubic-bezier(0.22,1,0.36,1),
+            box-shadow 0.25s ease,
+            background 0.25s ease,
+            border-color 0.25s ease;
+        }
+        :root .career-glass-card {
+          background: rgba(255,255,255,0.60);
+          border: 1px solid rgba(255,255,255,0.75);
+          box-shadow:
+            0 2px 16px rgba(0,0,0,0.05),
+            inset 0 1px 0 rgba(255,255,255,0.95);
+          backdrop-filter: blur(8px) saturate(150%);
+          -webkit-backdrop-filter: blur(8px) saturate(150%);
+        }
+        .dark .career-glass-card {
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(255,255,255,0.08);
+          box-shadow:
+            0 2px 20px rgba(0,0,0,0.25),
+            inset 0 1px 0 rgba(255,255,255,0.06);
+          backdrop-filter: blur(8px) saturate(140%);
+          -webkit-backdrop-filter: blur(8px) saturate(140%);
+        }
+        :root .career-glass-card:hover {
+          transform: translateZ(0) translateY(-3px);
+          background: rgba(255,255,255,0.75);
+          border-color: rgba(255,255,255,0.95);
+          box-shadow:
+            0 10px 40px rgba(0,0,0,0.07),
+            inset 0 1px 0 rgba(255,255,255,1);
+        }
+        .dark .career-glass-card:hover {
+          transform: translateZ(0) translateY(-3px);
+          background: rgba(255,255,255,0.07);
+          border-color: rgba(255,255,255,0.14);
+          box-shadow:
+            0 10px 40px rgba(0,0,0,0.35),
+            inset 0 1px 0 rgba(255,255,255,0.10);
+        }
+        .career-glass-highlight {
+          position: absolute;
+          top: 0; left: 20px; right: 20px;
+          height: 1px;
+          border-radius: 9999px;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.65), transparent);
+          opacity: 0.6;
+          pointer-events: none;
+        }
+        .dark .career-glass-highlight {
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+        }
 
-      {/* Hero Section */}
+        /* Modal glass */
+        .career-modal-glass {
+          border-radius: 28px;
+          overflow: hidden;
+          will-change: transform;
+        }
+        :root .career-modal-glass {
+          background: rgba(255,255,255,0.88);
+          border: 1px solid rgba(255,255,255,0.9);
+          box-shadow: 0 20px 60px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,1);
+          backdrop-filter: blur(20px) saturate(180%);
+          -webkit-backdrop-filter: blur(20px) saturate(180%);
+        }
+        .dark .career-modal-glass {
+          background: rgba(15,20,30,0.90);
+          border: 1px solid rgba(255,255,255,0.08);
+          box-shadow: 0 20px 60px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06);
+          backdrop-filter: blur(20px) saturate(160%);
+          -webkit-backdrop-filter: blur(20px) saturate(160%);
+        }
+
+        /* Perk card */
+        .perk-glass-card {
+          border-radius: 20px;
+          position: relative;
+          overflow: hidden;
+          will-change: transform;
+          transform: translateZ(0);
+          transition:
+            transform 0.22s cubic-bezier(0.22,1,0.36,1),
+            box-shadow 0.22s ease;
+        }
+        :root .perk-glass-card {
+          background: rgba(255,255,255,0.55);
+          border: 1px solid rgba(255,255,255,0.70);
+          box-shadow: 0 2px 14px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.90);
+          backdrop-filter: blur(8px) saturate(150%);
+          -webkit-backdrop-filter: blur(8px) saturate(150%);
+        }
+        .dark .perk-glass-card {
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(255,255,255,0.07);
+          box-shadow: 0 2px 16px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.05);
+          backdrop-filter: blur(8px) saturate(130%);
+          -webkit-backdrop-filter: blur(8px) saturate(130%);
+        }
+        :root .perk-glass-card:hover {
+          transform: translateZ(0) translateY(-3px) scale(1.02);
+          box-shadow: 0 8px 28px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,1);
+        }
+        .dark .perk-glass-card:hover {
+          transform: translateZ(0) translateY(-3px) scale(1.02);
+          box-shadow: 0 8px 30px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.08);
+        }
+      `}</style>
+
+      {/* ═══════════════════════════════════════════
+          HERO SECTION
+          ═══════════════════════════════════════════ */}
       <section className="relative pt-20 pb-8 lg:pt-28 lg:pb-10 overflow-hidden bg-[#020b16]">
-        {/* Background Image with Overlay */}
+        {/* Background Image */}
         <div className="absolute inset-0 z-0">
-          <div 
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
+          <div
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.15]"
             style={{
-              backgroundImage: "url('https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=2070&auto=format&fit=crop')"
+              backgroundImage:
+                "url('https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=2070&auto=format&fit=crop')",
             }}
           />
-          {/* Gradient overlay similar to the image */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#021124] via-[#021124]/95 to-[#021124]/60" />
         </div>
-        <BlurBlob position={{ top: "50%", left: "5%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-cyan-500" opacityClass="opacity-30 mix-blend-screen" className="z-10" />
-        <BlurBlob position={{ top: "50%", left: "95%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-fuchsia-500" opacityClass="opacity-30 mix-blend-screen" className="z-10" />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <BlurBlob
+          position={{ top: "50%", left: "5%" }}
+          size={{ width: "600px", height: "600px" }}
+          colorClass="bg-cyan-500"
+          opacityClass="opacity-30 mix-blend-screen"
+          className="z-10"
+        />
+        <BlurBlob
+          position={{ top: "50%", left: "95%" }}
+          size={{ width: "600px", height: "600px" }}
+          colorClass="bg-fuchsia-500"
+          opacityClass="opacity-30 mix-blend-screen"
+          className="z-10"
+        />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left Content */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
             className="max-w-xl"
           >
-            {/* Badge */}
-            <div className="inline-block px-4 py-1.5 rounded-[20px] bg-white/5 border border-white/10 backdrop-blur-md mb-4 shadow-sm">
-              <span className="text-xs lg:text-sm font-semibold tracking-wider text-[#ff5a5f] uppercase">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-5 shadow-sm">
+              <Sparkles className="w-3.5 h-3.5 text-[#ff5a5f]" />
+              <span className="text-xs sm:text-sm font-semibold tracking-wider text-[#ff5a5f] uppercase">
                 Join Our Team
               </span>
             </div>
-            
-            <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-3 tracking-tight">
-              Careers
+
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-4 tracking-tight leading-[1.1]">
+              Build Your{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ff5a5f] to-pink-400">
+                Career
+              </span>
             </h1>
-            
-            <div className="w-12 h-1 bg-[#ff5a5f] mb-4" />
-            
-            <p className="text-sm md:text-base text-gray-300 leading-relaxed max-w-lg">
-              We partner with leaders to unlock sustainable performance. 
-              Come architect the future of consulting with us and chart your happiness.
+
+            <div className="w-14 h-1 bg-gradient-to-r from-[#ff5a5f] to-pink-400 mb-5 rounded-full" />
+
+            <p className="text-sm sm:text-base lg:text-lg text-gray-300/90 leading-relaxed max-w-lg">
+              We partner with leaders to unlock sustainable performance. Come
+              architect the future of consulting with us and chart your
+              happiness.
             </p>
+
+            {/* Stats pills */}
+            <div className="flex flex-wrap gap-3 mt-6">
+              {[
+                { label: "Open Roles", val: `${jobOpenings.length}+` },
+                { label: "Remote", val: "100%" },
+                { label: "Team Size", val: "Growing" },
+              ].map((s) => (
+                <div
+                  key={s.label}
+                  className="flex items-center gap-2 px-3.5 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md text-xs font-semibold text-white/80"
+                >
+                  <span className="text-[#ff5a5f] font-black">{s.val}</span>
+                  <span className="text-white/50">{s.label}</span>
+                </div>
+              ))}
+            </div>
           </motion.div>
 
           {/* Right Image */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="relative lg:ml-auto w-full"
-            style={{ perspective: 1200 }}
+            className="relative hidden sm:block lg:ml-auto w-full"
           >
-            {/* Glowing background blob behind image */}
-            <div className="absolute inset-0 bg-[#ff5a5f] opacity-20 blur-[60px] rounded-full scale-90 translate-y-4" />
-            
-            <motion.div 
-              className="relative rounded-[24px] overflow-hidden shadow-2xl w-full border border-white/10 z-10 bg-[#0a1120]"
-              animate={{ 
-                y: [0, -20, 0]
-              }}
-              transition={{ 
-                duration: 6,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-              whileHover={{ 
-                scale: 1.05,
-                rotateX: 0,
-                rotateY: 0,
-                transition: { duration: 0.4 }
-              }}
+            <div className="absolute inset-0 bg-[#ff5a5f] opacity-15 blur-[60px] rounded-full scale-90 translate-y-4" />
+
+            <div
+              className="relative rounded-[20px] sm:rounded-[24px] overflow-hidden shadow-2xl w-full border border-white/10 z-10 bg-[#0a1120]"
             >
-              <img 
-                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop" 
-                alt="Our Team" 
-                className="w-full h-[220px] md:h-[300px] object-cover transition-transform duration-700"
+              <img
+                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop"
+                alt="Our Team"
+                className="w-full h-[180px] sm:h-[220px] md:h-[260px] lg:h-[300px] object-cover"
               />
-              {/* Subtle glass overlay inside image container */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
-            </motion.div>
-            
-            {/* Floating Checkmark Badge */}
-            <motion.div 
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
+            </div>
+
+            {/* Floating badge */}
+            <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ 
-                opacity: 1, 
-                scale: 1, 
-                y: [0, -8, 0] 
-              }}
-              transition={{ 
+              animate={{ opacity: 1, scale: 1, y: [0, -8, 0] }}
+              transition={{
                 opacity: { duration: 0.5, delay: 0.6 },
                 scale: { duration: 0.5, delay: 0.6 },
-                y: { duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.6 }
+                y: {
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: 0.6,
+                },
               }}
-              className="absolute -right-4 top-1/2 -translate-y-1/2 bg-[#222a36]/90 backdrop-blur-md p-2 md:p-3 rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.4)] border border-white/10 hidden md:flex items-center justify-center transform hover:scale-110 transition-transform z-20 group"
+              className="absolute -left-4 top-1/2 -translate-y-1/2 bg-[#222a36]/90 backdrop-blur-md p-3 md:p-4 rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.4)] border border-white/10 hidden md:flex items-center justify-center z-20 group hover:scale-110 transition-transform"
             >
-              <div className="w-6 h-6 md:w-8 md:h-8 rounded-full border-2 border-emerald-500 flex items-center justify-center group-hover:bg-emerald-500/10 transition-colors">
-                <svg className="w-4 h-4 md:w-5 md:h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                </svg>
+              <div className="w-8 h-8 rounded-full border-2 border-emerald-500 flex items-center justify-center group-hover:bg-emerald-500/10 transition-colors">
+                <CheckCircle2 className="w-5 h-5 text-emerald-500" />
               </div>
             </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* Job List */}
-      <section className="py-20 relative overflow-hidden bg-background">
-        {/* Continuous Dynamic Gradient Background */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden flex justify-center items-center opacity-50">
-          <motion.div animate={{ scale: [1, 1.15, 1], x: [0, -30, 0] }} transition={{ duration: 35, repeat: Infinity, ease: "easeInOut" }} className="absolute top-[10%] -right-[10%] w-[900px] h-[900px] bg-purple-500/10 dark:bg-purple-500/15 rounded-full blur-[150px]" />
-          <motion.div animate={{ scale: [1, 1.1, 1], y: [0, 40, 0] }} transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }} className="absolute bottom-[20%] -left-[10%] w-[800px] h-[800px] bg-blue-500/10 dark:bg-blue-500/15 rounded-full blur-[150px]" />
-          <div className="absolute top-[40%] left-[30%] w-[600px] h-[600px] bg-emerald-500/5 dark:bg-emerald-500/10 rounded-full blur-[140px]" />
-        </div>
+      {/* ═══════════════════════════════════════════
+          WHY JOIN US — Perks
+          ═══════════════════════════════════════════ */}
+      <section className="py-14 sm:py-16 relative overflow-hidden bg-background">
+        <BlurBlob
+          position={{ top: "50%", left: "10%" }}
+          size={{ width: "500px", height: "500px" }}
+          colorClass="bg-cyan-300 dark:bg-cyan-600"
+          opacityClass="opacity-25 dark:opacity-15"
+        />
+        <BlurBlob
+          position={{ top: "50%", left: "85%" }}
+          size={{ width: "500px", height: "500px" }}
+          colorClass="bg-fuchsia-300 dark:bg-fuchsia-600"
+          opacityClass="opacity-25 dark:opacity-15"
+        />
 
-        <div className="max-w-7xl mx-auto px-4 space-y-6 relative z-10">
-        {jobOpenings.map((job) => (
-          <Card key={job.id} className="p-6">
-            <div className="flex flex-col md:flex-row justify-between gap-6">
-              <div>
-                <h3 className="text-xl font-bold">{job.title}</h3>
-                <Badge className="mt-2">{job.department}</Badge>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-10"
+          >
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-800 dark:text-white tracking-tight">
+              Why Join{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ff5a5f] to-pink-400">
+                ULMIND
+              </span>
+              ?
+            </h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-lg mx-auto">
+              We offer an environment where creativity thrives and talent grows.
+            </p>
+          </motion.div>
 
-                <p className="text-muted-foreground mt-4">
-                  {job.description}
-                </p>
-
-                <div className="flex gap-4 text-sm mt-4">
-                  <span className="flex items-center gap-1">
-                    <MapPin className="w-4 h-4" /> {job.location}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Clock className="w-4 h-4" /> {job.type}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Briefcase className="w-4 h-4" /> {job.experience}
-                  </span>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {perks.map((perk, i) => (
+              <motion.div
+                key={perk.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08, duration: 0.5 }}
+                className="perk-glass-card p-5 sm:p-6 text-center"
+              >
+                <div className="career-glass-highlight" />
+                <div className="w-12 h-12 mx-auto rounded-2xl bg-gradient-to-br from-[#ff5a5f]/15 to-pink-500/10 dark:from-[#ff5a5f]/20 dark:to-pink-600/10 flex items-center justify-center mb-3 border border-[#ff5a5f]/15 dark:border-[#ff5a5f]/20">
+                  <perk.icon className="w-6 h-6 text-[#ff5a5f]" />
                 </div>
-              </div>
-
-              <Button onClick={() => setSelectedJob(job)}>
-                Apply Now <Sparkles className="ml-2 w-4 h-4" />
-              </Button>
-            </div>
-          </Card>
-        ))}
+                <h4 className="text-sm font-bold text-slate-800 dark:text-white mb-1">
+                  {perk.title}
+                </h4>
+                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                  {perk.desc}
+                </p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Application Modal */}
-      {selectedJob && (
-        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
-          <div className="bg-background rounded-lg w-full max-w-2xl p-6 relative">
-            <button
-              onClick={() => setSelectedJob(null)}
-              className="absolute top-4 right-4"
-            >
-              <X />
-            </button>
+      {/* ═══════════════════════════════════════════
+          JOB OPENINGS — Liquid Glass Cards
+          ═══════════════════════════════════════════ */}
+      <section className="py-14 sm:py-20 relative overflow-hidden bg-background">
+        {/* Ambient blobs */}
+        <BlurBlob
+          position={{ top: "10%", left: "10%" }}
+          size={{ width: "600px", height: "600px" }}
+          colorClass="bg-cyan-300 dark:bg-cyan-600"
+          opacityClass="opacity-30 dark:opacity-15"
+        />
+        <BlurBlob
+          position={{ top: "50%", left: "80%" }}
+          size={{ width: "600px", height: "600px" }}
+          colorClass="bg-fuchsia-300 dark:bg-fuchsia-600"
+          opacityClass="opacity-30 dark:opacity-15"
+        />
+        <BlurBlob
+          position={{ top: "90%", left: "20%" }}
+          size={{ width: "600px", height: "600px" }}
+          colorClass="bg-yellow-200 dark:bg-yellow-600"
+          opacityClass="opacity-25 dark:opacity-10"
+        />
 
-            <h2 className="text-2xl font-bold mb-6">
-              Apply for {selectedJob.title}
+        {/* Static gradient background — no infinite animations for perf */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+          <div className="absolute top-[10%] -right-[10%] w-[700px] h-[700px] bg-purple-500/8 dark:bg-purple-500/12 rounded-full blur-[120px]" />
+          <div className="absolute bottom-[20%] -left-[10%] w-[600px] h-[600px] bg-blue-500/8 dark:bg-blue-500/12 rounded-full blur-[120px]" />
+          <div className="absolute top-[40%] left-[30%] w-[500px] h-[500px] bg-emerald-500/5 dark:bg-emerald-500/8 rounded-full blur-[110px]" />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          {/* Section heading */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 backdrop-blur-md mb-4 shadow-sm">
+              <Briefcase className="w-3.5 h-3.5 text-[#ff5a5f]" />
+              <span className="text-xs font-bold tracking-widest text-[#ff5a5f] uppercase">
+                Open Positions
+              </span>
+            </div>
+
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-800 dark:text-white tracking-tight">
+              Current{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ff5a5f] to-pink-400">
+                Openings
+              </span>
             </h2>
+            <p className="text-sm sm:text-base text-slate-500 dark:text-slate-400 mt-2 max-w-lg mx-auto">
+              Explore our available positions and find your perfect role.
+            </p>
+          </motion.div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <Input name="name" placeholder="Full name" required value={formData.name} onChange={handleChange} />
-              <Input name="email" type="email" placeholder="Email" required value={formData.email} onChange={handleChange} />
-              <Input name="phone" placeholder="Phone" value={formData.phone} onChange={handleChange} />
-              <Input name="experience" placeholder="Years of experience" required value={formData.experience} onChange={handleChange} />
-              <Textarea name="coverLetter" placeholder="Why should we hire you?" rows={5} required value={formData.coverLetter} onChange={handleChange} />
-              <Input type="file" onChange={handleFileChange} required />
+          {/* Job cards */}
+          <div className="space-y-5">
+            {jobOpenings.map((job, index) => {
+              const colors = accentMap[job.accent] || accentMap.cyan;
+              const DeptIcon = departmentIcons[job.department] || Briefcase;
 
-              {/* ✅ TERMS */}
-              <div className="space-y-2 text-sm">
-                <label className="flex gap-2">
-                  <input type="checkbox" checked={acceptedTerms} onChange={(e) => setAcceptedTerms(e.target.checked)} />
-                  I agree to the Terms & Conditions
-                </label>
-                <label className="flex gap-2">
-                  <input type="checkbox" checked={acceptedPolicy} onChange={(e) => setAcceptedPolicy(e.target.checked)} />
-                  I agree to the Privacy Policy
-                </label>
-              </div>
+              return (
+                <motion.div
+                  key={job.id}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{
+                    delay: index * 0.06,
+                    duration: 0.5,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                  className={`career-glass-card ${colors.borderHover} group`}
+                >
+                  {/* Top highlight */}
+                  <div className="career-glass-highlight" />
 
-              {/* ✅ CAPTCHA */}
-              <ReCAPTCHA
-                sitekey="6Lc5pTgsAAAAAMCtIJaKj5iK79KYT6hSfwE4CMBk"
-                onChange={() => setCaptchaVerified(true)}
-              />
+                  {/* Corner glow blob */}
+                  <div
+                    className={`absolute -top-12 -right-12 w-36 h-36 rounded-full blur-3xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${colors.glowBg}`}
+                  />
 
-              <Button type="submit" className="w-full">
-                Submit Application <Send className="ml-2 w-4 h-4" />
-              </Button>
-            </form>
+                  <div className="relative z-10 p-5 sm:p-7">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
+                      {/* Left content */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-3 mb-3">
+                          {/* Icon badge */}
+                          <div
+                            className={`w-11 h-11 rounded-xl flex items-center justify-center border ${colors.iconBg} border-white/60 dark:border-white/10 shadow-sm`}
+                          >
+                            <DeptIcon
+                              className={`w-5 h-5 ${colors.iconText}`}
+                            />
+                          </div>
+
+                          <div>
+                            <h3 className="text-lg sm:text-xl font-bold text-slate-800 dark:text-white tracking-tight leading-tight">
+                              {job.title}
+                            </h3>
+                            {/* Department badge */}
+                            <div
+                              className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wide border mt-1 ${colors.badge}`}
+                            >
+                              <div
+                                className={`w-1.5 h-1.5 rounded-full ${colors.badgeDot}`}
+                              />
+                              {job.department}
+                            </div>
+                          </div>
+                        </div>
+
+                        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4 max-w-xl">
+                          {job.description}
+                        </p>
+
+                        {/* Meta info */}
+                        <div className="flex flex-wrap gap-3 text-xs text-slate-500 dark:text-slate-400 mb-4">
+                          <span className="flex items-center gap-1.5 font-medium">
+                            <MapPin className="w-3.5 h-3.5" /> {job.location}
+                          </span>
+                          <span className="flex items-center gap-1.5 font-medium">
+                            <Clock className="w-3.5 h-3.5" /> {job.type}
+                          </span>
+                          <span className="flex items-center gap-1.5 font-medium">
+                            <Briefcase className="w-3.5 h-3.5" />{" "}
+                            {job.experience}
+                          </span>
+                        </div>
+
+                        {/* Skills */}
+                        <div className="flex flex-wrap gap-1.5">
+                          {job.skills.map((skill) => (
+                            <span
+                              key={skill}
+                              className={`px-2.5 py-1 text-[10px] font-bold rounded-lg border ${colors.skillBg} ${colors.skillText}`}
+                            >
+                              {skill}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Apply button */}
+                      <div className="shrink-0">
+                        <button
+                          onClick={() => setSelectedJob(job)}
+                          className={`group/btn relative inline-flex items-center justify-center px-7 py-3 text-sm font-bold text-white transition-all duration-300 bg-gradient-to-r ${colors.btnGrad} rounded-full hover:scale-105 active:scale-95 ${colors.btnShadow} hover:shadow-lg`}
+                        >
+                          Apply Now
+                          <ArrowRight className="w-4 h-4 ml-2 transition-transform duration-200 group-hover/btn:translate-x-1" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
-      )}
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          APPLICATION MODAL — Glassmorphism
+          ═══════════════════════════════════════════ */}
+      <AnimatePresence>
+        {selectedJob && (
+          <CareerApplicationForm
+            job={selectedJob}
+            onClose={() => setSelectedJob(null)}
+          />
+        )}
+      </AnimatePresence>
 
       {/* CTA */}
       <CTASection />

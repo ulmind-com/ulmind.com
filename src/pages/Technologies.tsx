@@ -63,7 +63,7 @@ const categoryMeta: Record<
    don't cost GPU during scroll
 ───────────────────────────────────────── */
 const TechCard: React.FC<{
-  tech: { name: string; icon: React.FC<any>; color: string; category: string };
+  tech: { name: string; icon: React.FC<{ className?: string; size?: number; color?: string }>; color: string; category: string };
   accentColor: string;
   glowColor: string;
 }> = ({ tech, accentColor, glowColor }) => {
@@ -100,7 +100,7 @@ const CategorySection: React.FC<{
   catIndex: number;
 }> = ({ category, techs, catIndex }) => {
   const meta = categoryMeta[category] ?? {
-    icon: ({ className }: any) => <Sparkles className={className} />,
+    icon: ({ className }: { className?: string }) => <Sparkles className={className} />,
     gradient: "from-gray-400 to-gray-600",
     accentColor: "#94a3b8",
     glowColor: "rgba(148,163,184,0.2)",

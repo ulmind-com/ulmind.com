@@ -500,11 +500,11 @@ const Contact = () => {
     <div className="min-h-screen bg-background relative overflow-x-hidden">
 
       {/* ─── HERO SECTION ─── */}
-      <section className="relative pt-20 pb-10 sm:pt-28 sm:pb-14 lg:pt-36 lg:pb-16 overflow-hidden bg-[#020b16]">
+      <section className="relative pt-20 pb-6 sm:pt-24 sm:pb-8 lg:pt-28 lg:pb-10 overflow-hidden bg-[#020b16]">
         {/* BG image */}
         <div className="absolute inset-0 z-0">
           <div
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-25"
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.12]"
             style={{ backgroundImage: "url('https://images.unsplash.com/photo-1557425955-df376b5903c8?q=80&w=2070&auto=format&fit=crop')" }}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[#021124]/98 via-[#021124]/90 to-[#020b16]" />
@@ -572,7 +572,7 @@ const Contact = () => {
                 <img
                   src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070&auto=format&fit=crop"
                   alt="Contact Us"
-                  className="w-full h-[220px] sm:h-[280px] md:h-[340px] lg:h-[380px] object-cover"
+                  className="w-full h-[180px] sm:h-[220px] md:h-[250px] lg:h-[280px] object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
               </motion.div>
