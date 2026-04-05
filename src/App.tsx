@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { ThemeProvider } from "@/providers/theme-provider";
 import Layout from "@/components/Layout/Layout";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -11,32 +11,107 @@ import CookieConsent from "@/components/CookieConsent";
 import { FaviconTransition } from "@/components/FaviconTransition";
 import { useFingerprint } from "@/hooks/useFingerprint";
 
-// Pages
-import Index from "./pages/Index";
-import About from "./pages/About";
-import Projects from "./pages/Projects";
-import Team from "./pages/Team";
-import Methodology from "./pages/Methodology";
-import Career from "./pages/Career";
-import Merchandise from "./pages/Merchandise";
-import Contact from "./pages/Contact";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import TermsOfService from "./pages/TermsOfService";
-import NotFound from "./pages/NotFound";
-import WebDevelopmentPage from "./pages/services/WebDevelopment";
-import ServiceDetail from "./pages/services/ServiceDetail";
-import MobileAppsPage from "./pages/services/MobileApps";
-import CloudSolutionsPage from "./pages/services/CloudSolutions";
-import BackendDevelopmentPage from "./pages/services/BackendDevelopment";
-import EcommerceSolutionsPage from "./pages/services/EcommerceSolutions";
-import AiMachineLearningPage from "./pages/services/AiMachineLearning";
-import GraphicsDesignBrandingPage from "./pages/services/GraphicsDesignBranding";
-import ContentWritingStrategyPage from "./pages/services/ContentWritingStrategy";
-import UiUxDesignPage from "./pages/services/UiUxDesign";
-import Technologies from "./pages/Technologies";
+// Pages — lazy loaded for code splitting (massive perf win)
+const Index = lazy(() => import("./pages/Index"));
+const About = lazy(() => import("./pages/About"));
+const Projects = lazy(() => import("./pages/Projects"));
+const Team = lazy(() => import("./pages/Team"));
+const Methodology = lazy(() => import("./pages/Methodology"));
+const Career = lazy(() => import("./pages/Career"));
+const Merchandise = lazy(() => import("./pages/Merchandise"));
+const Contact = lazy(() => import("./pages/Contact"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const TermsOfService = lazy(() => import("./pages/TermsOfService"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const WebDevelopmentPage = lazy(() => import("./pages/services/WebDevelopment"));
+const ServiceDetail = lazy(() => import("./pages/services/ServiceDetail"));
+const MobileAppsPage = lazy(() => import("./pages/services/MobileApps"));
+const CloudSolutionsPage = lazy(() => import("./pages/services/CloudSolutions"));
+const BackendDevelopmentPage = lazy(() => import("./pages/services/BackendDevelopment"));
+const EcommerceSolutionsPage = lazy(() => import("./pages/services/EcommerceSolutions"));
+const AiMachineLearningPage = lazy(() => import("./pages/services/AiMachineLearning"));
+const GraphicsDesignBrandingPage = lazy(() => import("./pages/services/GraphicsDesignBranding"));
+const ContentWritingStrategyPage = lazy(() => import("./pages/services/ContentWritingStrategy"));
+const UiUxDesignPage = lazy(() => import("./pages/services/UiUxDesign"));
+const Technologies = lazy(() => import("./pages/Technologies"));
+
+// Premium brand video loader
+const VideoLoader = () => (
+  <div style={{
+    position: "fixed",
+    inset: 0,
+    zIndex: 99999,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    background: "#000",
+    animation: "loaderFadeIn 0.2s ease forwards",
+  }}>
+    <video
+      src="/ulmind_loader.mp4"
+      autoPlay
+      muted
+      playsInline
+      loop
+      style={{
+        width: "min(340px, 80vw)",
+        height: "auto",
+        objectFit: "contain",
+        borderRadius: "16px",
+      }}
+    />
+    <style>{`
+      @keyframes loaderFadeIn {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+      }
+      @keyframes loaderFadeOut {
+        from { opacity: 1; }
+        to   { opacity: 0; }
+      }
+    `}</style>
+  </div>
+);
+
+// Suspense fallback (first-load)
+const PageLoader = () => <VideoLoader />;
 
 
-// Icons
+// Route-change transition loader — useLayoutEffect fires BEFORE paint (no flash)
+const RouteTransitionLoader: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const location = useLocation();
+  // Show loader on initial mount (refresh) for 2s
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const prevPath = React.useRef(location.pathname);
+
+  // Initial load — show video loader once on mount
+  useEffect(() => {
+    const timer = setTimeout(() => setInitialLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Route change
+  React.useLayoutEffect(() => {
+    if (location.pathname !== prevPath.current) {
+      prevPath.current = location.pathname;
+      setLoading(true);
+      const timer = setTimeout(() => setLoading(false), 1800);
+      return () => clearTimeout(timer);
+    }
+  }, [location.pathname]);
+
+  const isLoading = initialLoading || loading;
+
+  return (
+    <>
+      {isLoading && <VideoLoader />}
+      <div style={{ visibility: isLoading ? "hidden" : "visible" }}>
+        {children}
+      </div>
+    </>
+  );
+};
 import { Phone, Video, MoreVertical, Send } from "lucide-react";
 
 /* ===========================
@@ -285,7 +360,7 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+      <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} storageKey="ulmind-theme">
         <TooltipProvider>
           {/* Removed any extra wrapper completely so layout remains untouched */}
           <Toaster />
@@ -294,32 +369,36 @@ const App = () => {
           <BrowserRouter>
             <ScrollToTop />
             <FaviconTransition />
-            <Routes>
-              <Route element={<Layout />}>
-                <Route path="/" element={<Index />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/projects" element={<Projects />} />
-                <Route path="/team" element={<Team />} />
-                <Route path="/methodology" element={<Methodology />} />
-                <Route path="/career" element={<Career />} />
-                <Route path="/merchandise" element={<Merchandise />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                <Route path="/terms-of-service" element={<TermsOfService />} />
-                <Route path="/services/web-development" element={<WebDevelopmentPage />} />
-                <Route path="/services/mobile-apps" element={<MobileAppsPage />} />
-                <Route path="/services/cloud" element={<CloudSolutionsPage />} />
-                <Route path="/services/backend-development" element={<BackendDevelopmentPage />} />
-                <Route path="/services/ecommerce-solutions" element={<EcommerceSolutionsPage />} />
-                <Route path="/services/ai-machine-learning" element={<AiMachineLearningPage />} />
-                <Route path="/services/graphics-design-branding" element={<GraphicsDesignBrandingPage />} />
-                <Route path="/services/content-writing-strategy" element={<ContentWritingStrategyPage />} />
-                <Route path="/services/ui-ux-design" element={<UiUxDesignPage />} />
-                <Route path="/services/:serviceId" element={<ServiceDetail />} />
-                <Route path="/technologies" element={<Technologies />} />
-              </Route>
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <RouteTransitionLoader>
+              <Suspense fallback={<PageLoader />}>
+                <Routes>
+                  <Route element={<Layout />}>
+                    <Route path="/" element={<Index />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/projects" element={<Projects />} />
+                    <Route path="/team" element={<Team />} />
+                    <Route path="/methodology" element={<Methodology />} />
+                    <Route path="/career" element={<Career />} />
+                    <Route path="/merchandise" element={<Merchandise />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                    <Route path="/terms-of-service" element={<TermsOfService />} />
+                    <Route path="/services/web-development" element={<WebDevelopmentPage />} />
+                    <Route path="/services/mobile-apps" element={<MobileAppsPage />} />
+                    <Route path="/services/cloud" element={<CloudSolutionsPage />} />
+                    <Route path="/services/backend-development" element={<BackendDevelopmentPage />} />
+                    <Route path="/services/ecommerce-solutions" element={<EcommerceSolutionsPage />} />
+                    <Route path="/services/ai-machine-learning" element={<AiMachineLearningPage />} />
+                    <Route path="/services/graphics-design-branding" element={<GraphicsDesignBrandingPage />} />
+                    <Route path="/services/content-writing-strategy" element={<ContentWritingStrategyPage />} />
+                    <Route path="/services/ui-ux-design" element={<UiUxDesignPage />} />
+                    <Route path="/services/:serviceId" element={<ServiceDetail />} />
+                    <Route path="/technologies" element={<Technologies />} />
+                  </Route>
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Suspense>
+            </RouteTransitionLoader>
           </BrowserRouter>
 
           <WhatsAppFloat />
