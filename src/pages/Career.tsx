@@ -202,7 +202,6 @@ const Career = () => {
           border-radius: 24px;
           position: relative;
           overflow: hidden;
-          will-change: transform;
           contain: layout style;
           transform: translateZ(0);
           transition:
@@ -211,39 +210,41 @@ const Career = () => {
             background 0.25s ease,
             border-color 0.25s ease;
         }
+        /* IDLE: NO backdrop-filter — this is the scroll-lag killer */
         :root .career-glass-card {
-          background: rgba(255,255,255,0.60);
-          border: 1px solid rgba(255,255,255,0.75);
+          background: rgba(255,255,255,0.75);
+          border: 1px solid rgba(255,255,255,0.80);
           box-shadow:
-            0 2px 16px rgba(0,0,0,0.05),
+            0 2px 16px rgba(0,0,0,0.06),
             inset 0 1px 0 rgba(255,255,255,0.95);
-          backdrop-filter: blur(8px) saturate(150%);
-          -webkit-backdrop-filter: blur(8px) saturate(150%);
         }
         .dark .career-glass-card {
-          background: rgba(255,255,255,0.04);
-          border: 1px solid rgba(255,255,255,0.08);
+          background: rgba(20,28,40,0.80);
+          border: 1px solid rgba(255,255,255,0.09);
           box-shadow:
-            0 2px 20px rgba(0,0,0,0.25),
+            0 2px 20px rgba(0,0,0,0.28),
             inset 0 1px 0 rgba(255,255,255,0.06);
-          backdrop-filter: blur(8px) saturate(140%);
-          -webkit-backdrop-filter: blur(8px) saturate(140%);
         }
+        /* HOVER: blur activates only on hover */
         :root .career-glass-card:hover {
           transform: translateZ(0) translateY(-3px);
-          background: rgba(255,255,255,0.75);
+          background: rgba(255,255,255,0.88);
           border-color: rgba(255,255,255,0.95);
           box-shadow:
-            0 10px 40px rgba(0,0,0,0.07),
+            0 12px 40px rgba(0,0,0,0.09),
             inset 0 1px 0 rgba(255,255,255,1);
+          backdrop-filter: blur(20px) saturate(180%);
+          -webkit-backdrop-filter: blur(20px) saturate(180%);
         }
         .dark .career-glass-card:hover {
           transform: translateZ(0) translateY(-3px);
-          background: rgba(255,255,255,0.07);
-          border-color: rgba(255,255,255,0.14);
+          background: rgba(255,255,255,0.08);
+          border-color: rgba(255,255,255,0.15);
           box-shadow:
-            0 10px 40px rgba(0,0,0,0.35),
+            0 12px 40px rgba(0,0,0,0.40),
             inset 0 1px 0 rgba(255,255,255,0.10);
+          backdrop-filter: blur(20px) saturate(160%);
+          -webkit-backdrop-filter: blur(20px) saturate(160%);
         }
         .career-glass-highlight {
           position: absolute;
@@ -258,59 +259,57 @@ const Career = () => {
           background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
         }
 
-        /* Modal glass */
+        /* Modal glass — only used when modal is open, GPU cost isolated */
         .career-modal-glass {
           border-radius: 28px;
           overflow: hidden;
-          will-change: transform;
         }
         :root .career-modal-glass {
-          background: rgba(255,255,255,0.88);
+          background: rgba(255,255,255,0.92);
           border: 1px solid rgba(255,255,255,0.9);
           box-shadow: 0 20px 60px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,1);
           backdrop-filter: blur(20px) saturate(180%);
           -webkit-backdrop-filter: blur(20px) saturate(180%);
         }
         .dark .career-modal-glass {
-          background: rgba(15,20,30,0.90);
-          border: 1px solid rgba(255,255,255,0.08);
+          background: rgba(15,20,30,0.92);
+          border: 1px solid rgba(255,255,255,0.09);
           box-shadow: 0 20px 60px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06);
           backdrop-filter: blur(20px) saturate(160%);
           -webkit-backdrop-filter: blur(20px) saturate(160%);
         }
 
-        /* Perk card */
+        /* Perk card — NO idle blur */
         .perk-glass-card {
           border-radius: 20px;
           position: relative;
           overflow: hidden;
-          will-change: transform;
           transform: translateZ(0);
           transition:
             transform 0.22s cubic-bezier(0.22,1,0.36,1),
             box-shadow 0.22s ease;
         }
         :root .perk-glass-card {
-          background: rgba(255,255,255,0.55);
-          border: 1px solid rgba(255,255,255,0.70);
-          box-shadow: 0 2px 14px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.90);
-          backdrop-filter: blur(8px) saturate(150%);
-          -webkit-backdrop-filter: blur(8px) saturate(150%);
+          background: rgba(255,255,255,0.70);
+          border: 1px solid rgba(255,255,255,0.80);
+          box-shadow: 0 2px 14px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.90);
         }
         .dark .perk-glass-card {
-          background: rgba(255,255,255,0.04);
-          border: 1px solid rgba(255,255,255,0.07);
-          box-shadow: 0 2px 16px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.05);
-          backdrop-filter: blur(8px) saturate(130%);
-          -webkit-backdrop-filter: blur(8px) saturate(130%);
+          background: rgba(20,28,40,0.75);
+          border: 1px solid rgba(255,255,255,0.08);
+          box-shadow: 0 2px 16px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.05);
         }
         :root .perk-glass-card:hover {
           transform: translateZ(0) translateY(-3px) scale(1.02);
-          box-shadow: 0 8px 28px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,1);
+          box-shadow: 0 8px 28px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,1);
+          backdrop-filter: blur(16px) saturate(160%);
+          -webkit-backdrop-filter: blur(16px) saturate(160%);
         }
         .dark .perk-glass-card:hover {
           transform: translateZ(0) translateY(-3px) scale(1.02);
-          box-shadow: 0 8px 30px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.08);
+          box-shadow: 0 8px 30px rgba(0,0,0,0.40), inset 0 1px 0 rgba(255,255,255,0.08);
+          backdrop-filter: blur(16px) saturate(140%);
+          -webkit-backdrop-filter: blur(16px) saturate(140%);
         }
       `}</style>
 
@@ -416,17 +415,8 @@ const Career = () => {
             {/* Floating badge */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1, y: [0, -8, 0] }}
-              transition={{
-                opacity: { duration: 0.5, delay: 0.6 },
-                scale: { duration: 0.5, delay: 0.6 },
-                y: {
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: 0.6,
-                },
-              }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ opacity: { duration: 0.5, delay: 0.6 }, scale: { duration: 0.5, delay: 0.6 } }}
               className="absolute -left-4 top-1/2 -translate-y-1/2 bg-[#222a36]/90 backdrop-blur-md p-3 md:p-4 rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.4)] border border-white/10 hidden md:flex items-center justify-center z-20 group hover:scale-110 transition-transform"
             >
               <div className="w-8 h-8 rounded-full border-2 border-emerald-500 flex items-center justify-center group-hover:bg-emerald-500/10 transition-colors">

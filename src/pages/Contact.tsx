@@ -566,8 +566,9 @@ const Contact = () => {
               <div className="absolute inset-0 bg-[#ff5a5f] opacity-15 blur-[60px] rounded-full scale-90 translate-y-4" />
               <motion.div
                 className="relative rounded-[20px] sm:rounded-[24px] overflow-hidden shadow-2xl w-full border border-white/10 z-10 bg-[#0a1120]"
-                animate={{ y: [0, -16, 0] }}
-                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.3 }}
               >
                 <img
                   src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070&auto=format&fit=crop"
@@ -580,12 +581,8 @@ const Contact = () => {
               {/* Floating badge */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1, y: [0, -8, 0] }}
-                transition={{
-                  opacity: { duration: 0.5, delay: 0.6 },
-                  scale: { duration: 0.5, delay: 0.6 },
-                  y: { duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.6 },
-                }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ opacity: { duration: 0.5, delay: 0.6 }, scale: { duration: 0.5, delay: 0.6 } }}
                 className="absolute -left-4 top-1/2 -translate-y-1/2 bg-[#222a36]/90 backdrop-blur-md p-3 md:p-4 rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.4)] border border-white/10 hidden md:flex items-center justify-center z-20 group hover:scale-110 transition-transform"
               >
                 <div className="w-8 h-8 rounded-full border-2 border-emerald-500 flex items-center justify-center group-hover:bg-emerald-500/10 transition-colors">

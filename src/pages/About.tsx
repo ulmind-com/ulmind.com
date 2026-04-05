@@ -108,20 +108,9 @@ export default function About() {
             
             <motion.div 
               className="relative rounded-[24px] overflow-hidden shadow-2xl w-full border border-white/10 z-10 bg-[#0a1120]"
-              animate={{ 
-                y: [0, -20, 0]
-              }}
-              transition={{ 
-                duration: 6,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-              whileHover={{ 
-                scale: 1.05,
-                rotateX: 0,
-                rotateY: 0,
-                transition: { duration: 0.4 }
-              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
             >
               <img 
                 src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop" 
@@ -135,16 +124,8 @@ export default function About() {
             {/* Floating Checkmark Badge */}
             <motion.div 
               initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ 
-                opacity: 1, 
-                scale: 1, 
-                y: [0, -8, 0] 
-              }}
-              transition={{ 
-                opacity: { duration: 0.5, delay: 0.6 },
-                scale: { duration: 0.5, delay: 0.6 },
-                y: { duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.6 }
-              }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ opacity: { duration: 0.5, delay: 0.6 }, scale: { duration: 0.5, delay: 0.6 } }}
               className="absolute -left-4 top-1/2 -translate-y-1/2 bg-[#222a36]/90 backdrop-blur-md p-3 md:p-4 rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.4)] border border-white/10 hidden md:flex items-center justify-center transform hover:scale-110 transition-transform z-20 group"
             >
               <div className="w-8 h-8 rounded-full border-2 border-blue-500 flex items-center justify-center group-hover:bg-blue-500/10 transition-colors">
@@ -211,16 +192,16 @@ export default function About() {
             <div className="flex-1 w-full flex justify-center relative">
               <div className="relative w-80 h-80 md:w-96 md:h-96 flex items-center justify-center perspective-1000">
                 <div className="absolute inset-0 bg-primary/15 blur-[60px] rounded-full scale-110" />
-                <motion.div 
+                <div 
                   className="absolute inset-4 rounded-full bg-gradient-to-tr from-background/80 via-card/80 to-primary/10 border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.1)] dark:shadow-[0_0_50px_rgba(255,255,255,0.05)] flex items-center justify-center backdrop-blur-xl"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                  style={{ animation: "about-spin 30s linear infinite" }}
                 >
+                  <style>{`@keyframes about-spin { to { transform: rotate(360deg); } }`}</style>
                   {/* Orbital dots */}
                   <div className="absolute top-10 left-10 w-3 h-3 rounded-full bg-rose-400 shadow-[0_0_15px_rgba(251,113,133,0.8)]" />
                   <div className="absolute bottom-20 right-10 w-4 h-4 rounded-full bg-blue-400 shadow-[0_0_15px_rgba(96,165,250,0.8)]" />
                   <div className="absolute top-1/2 -left-4 w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.8)]" />
-                </motion.div>
+                </div>
                 <div className="relative z-10 w-40 h-40 bg-card/80 backdrop-blur-md rounded-3xl shadow-2xl flex items-center justify-center border border-white/20 transform rotate-12 hover:rotate-0 transition-transform duration-500">
                   <Sparkles className="w-20 h-20 text-primary drop-shadow-[0_0_20px_rgba(var(--primary),0.8)]" />
                 </div>
@@ -328,7 +309,9 @@ export default function About() {
                        {/* Floating Center Image Wrapper */}
                        <motion.div 
                          className="relative z-10 w-32 h-32 md:w-48 md:h-48 rounded-[2rem] md:rounded-[3rem] shadow-2xl border border-white/20 flex items-center justify-center overflow-hidden"
-                         animate={{ y: [0, -15, 0] }}
+                         initial={{ y: 0 }}
+                         whileInView={{ y: [0, -10, 0] }}
+                         viewport={{ once: false }}
                          transition={{ duration: 4 + i, repeat: Infinity, ease: "easeInOut" }}
                        >
                          <img src={valueImages[i]} alt={value.title} className="w-full h-full object-cover scale-105" />
@@ -337,15 +320,14 @@ export default function About() {
                     </div>
 
                     {/* Orbiting / Abstract Decorative Dots */}
-                    <motion.div 
+                    <div 
                       className="absolute inset-0 z-20 pointer-events-none"
-                      animate={{ rotate: isEven ? 360 : -360 }}
-                      transition={{ duration: 20 + i * 2, repeat: Infinity, ease: "linear" }}
+                      style={{ animation: `about-orbit-${i} ${20 + i * 2}s linear infinite` }}
                     >
                       <div className="absolute top-8 right-16 w-4 h-4 rounded-full bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.8)]" />
                       <div className="absolute bottom-8 left-16 w-5 h-5 rounded-full bg-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.8)]" />
                       <div className="absolute top-1/2 -left-2 w-3 h-3 rounded-full bg-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.8)]" />
-                    </motion.div>
+                    </div>
                   </div>
                 </div>
               </motion.div>
