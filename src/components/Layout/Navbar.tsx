@@ -50,6 +50,12 @@ export const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Auto-close mobile menu whenever the route changes
+  useEffect(() => {
+    setIsOpen(false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [location.pathname]);
+
   const isActive = (href: string) => location.pathname === href;
 
   // When mobile menu is open, we force expansion to fit the menu nicely.
@@ -176,25 +182,51 @@ export const Navbar = () => {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="md:hidden border-t border-white/10 dark:border-white/5"
+              transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+              className="md:hidden overflow-hidden"
             >
-              <div className="px-4 py-6 space-y-4">
-                {navItems.map((item) => {
+              {/* Glassy divider */}
+              <div className="mx-4 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+
+              <div className="px-5 py-5 flex flex-col gap-1">
+                {navItems.map((item, index) => {
                   const active = isActive(item.href);
 
                   return (
-                    <button
+                    <motion.button
                       key={item.name}
+                      initial={{ opacity: 0, x: -16 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{
+                        duration: 0.28,
+                        ease: "easeOut",
+                        delay: index * 0.045,
+                      }}
                       onClick={() => {
                         navigate(item.href);
-                        setIsOpen(false);
                       }}
-                      className={`block w-full text-left font-medium transition-colors duration-300 ease-in-out ${active ? "text-red-500" : "text-foreground hover:text-red-500"
-                        }`}
+                      className={`
+                        group relative w-full text-left py-3 px-3 rounded-xl
+                        text-[15px] font-[450] tracking-wide
+                        transition-all duration-200 ease-out
+                        ${
+                          active
+                            ? "text-red-500 bg-red-500/8"
+                            : "text-white/85 hover:text-white hover:bg-white/8"
+                        }
+                      `}
+                      style={{ fontVariationSettings: "'wght' 450", WebkitFontSmoothing: "antialiased" }}
                     >
-                      {item.name}
-                    </button>
+                      {/* Left accent bar */}
+                      <span
+                        className={`absolute left-0 top-1/2 -translate-y-1/2 w-[3px] rounded-full transition-all duration-200 ${
+                          active
+                            ? "h-5 bg-red-500"
+                            : "h-0 bg-red-500 group-hover:h-4"
+                        }`}
+                      />
+                      <span className="pl-2">{item.name}</span>
+                    </motion.button>
                   );
                 })}
               </div>

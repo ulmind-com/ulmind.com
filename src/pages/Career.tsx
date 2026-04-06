@@ -204,6 +204,8 @@ const Career = () => {
           overflow: hidden;
           contain: layout style;
           transform: translateZ(0);
+          will-change: transform;
+          backface-visibility: hidden;
           transition:
             transform 0.25s cubic-bezier(0.22,1,0.36,1),
             box-shadow 0.25s ease,
@@ -285,6 +287,8 @@ const Career = () => {
           position: relative;
           overflow: hidden;
           transform: translateZ(0);
+          will-change: transform;
+          backface-visibility: hidden;
           transition:
             transform 0.22s cubic-bezier(0.22,1,0.36,1),
             box-shadow 0.22s ease;
