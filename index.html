@@ -77,5 +77,39 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <!-- ── Auto Cache Clearer via Service Worker (no backend needed) ── -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        // Register on window load to not block page paint
+        window.addEventListener('load', () => {
+          navigator.serviceWorker
+            .register('/sw.js')
+            .then((reg) => {
+              console.log('[SW] Registered. Scope:', reg.scope);
+
+              // If a new SW is waiting, tell it to activate immediately
+              if (reg.waiting) {
+                reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+              }
+
+              // Also listen for future updates
+              reg.addEventListener('updatefound', () => {
+                const newWorker = reg.installing;
+                if (newWorker) {
+                  newWorker.addEventListener('statechange', () => {
+                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                      // New version available — activate it and refresh silently
+                      newWorker.postMessage({ type: 'SKIP_WAITING' });
+                      window.location.reload();
+                    }
+                  });
+                }
+              });
+            })
+            .catch((err) => console.warn('[SW] Registration failed:', err));
+        });
+      }
+    </script>
   </body>
 </html>

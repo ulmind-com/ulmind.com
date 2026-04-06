@@ -41,7 +41,7 @@ export const AboutPreviewSection = () => {
 
   return (
     <section ref={ref} className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      <BlurBlob position={{ top: "50%", left: "50%" }} size={{ width: "800px", height: "800px" }} colorClass="bg-green-300" opacityClass="opacity-20" />
+      <BlurBlob position={{ top: "50%", left: "50%" }} size={{ width: "800px", height: "800px" }} colorClass="bg-red-500" opacityClass="opacity-15" />
       <div className="max-w-7xl mx-auto z-10 relative">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div
@@ -70,7 +70,7 @@ export const AboutPreviewSection = () => {
                   transition={{ duration: 0.8, delay: index * 0.1 }}
                   className="flex items-start gap-3"
                 >
-                  <div className="text-primary mt-1">{feature.icon}</div>
+                  <div className="mt-1" style={{ color: "#e11d48" }}>{feature.icon}</div>
                   <div>
                     <h3 className="font-semibold text-foreground">{feature.title}</h3>
                     <p className="text-muted-foreground text-sm">{feature.description}</p>
@@ -79,14 +79,17 @@ export const AboutPreviewSection = () => {
               ))}
             </div>
 
-            <Button 
-              size="lg" 
-              className="bg-gradient-primary hover:opacity-90 text-primary-foreground"
+            <button
               onClick={() => navigate('/about')}
+              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-sm text-white transition-all hover:scale-[1.03] active:scale-95"
+              style={{
+                background: "linear-gradient(135deg, #e11d48 0%, #9f1239 100%)",
+                boxShadow: "0 4px 24px 0 rgba(225,29,72,0.4), 0 1.5px 6px 0 rgba(159,18,57,0.25)",
+              }}
             >
               Learn More About Us
-              <ArrowRight className="ml-2 w-5 h-5" />
-            </Button>
+              <ArrowRight className="w-5 h-5" />
+            </button>
           </motion.div>
 
           <motion.div
@@ -103,7 +106,7 @@ export const AboutPreviewSection = () => {
                 transition={{ duration: 0.8, delay: 0.3 + index * 0.1 }}
               >
                 <Card className="p-6 text-center bg-card/50 backdrop-blur-sm border-border/50 hover:shadow-glow transition-all duration-300">
-                  <div className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-2">
+                  <div className="text-3xl font-bold mb-2 bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(135deg, #e11d48 0%, #f43f5e 60%, #9f1239 100%)" }}>
                     {stat.number}
                   </div>
                   <div className="text-muted-foreground text-sm">{stat.label}</div>
