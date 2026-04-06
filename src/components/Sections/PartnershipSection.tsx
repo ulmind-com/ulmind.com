@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import BlurBlob from "@/components/BlurBlob";
+
 
 interface PartnershipSectionProps {
   opacity: MotionValue<number>;
@@ -133,7 +133,7 @@ const PartnershipSection = ({ opacity, scale }: PartnershipSectionProps) => {
       style={{ opacity, scale }}
       className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden z-10 px-4 md:px-10"
     >
-      <BlurBlob position={{ top: "50%", left: "50%" }} size={{ width: "800px", height: "800px" }} colorClass="bg-cyan-300" opacityClass="opacity-20" />
+      {/* BlurBlob removed from sticky section — large radial gradient + sticky = heavy scroll paint */}
       <div className="w-full max-w-6xl h-[85vh] md:h-[80vh] gradient-premium rounded-[2.5rem] shadow-premium relative overflow-hidden flex items-center z-10">
         <div className="container mx-auto px-8 lg:px-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
@@ -185,30 +185,28 @@ const PartnershipSection = ({ opacity, scale }: PartnershipSectionProps) => {
                 />
 
                 {/* Trusted Partner - Forced text-black for visibility on light bg in dark mode */}
-                <motion.div
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute top-6 md:top-10 right-4 md:right-8 bg-white/90 backdrop-blur px-3 md:px-4 py-1.5 md:py-2 rounded-xl shadow-xl flex items-center gap-2 text-black"
+                <div
+                  style={{ animation: "floatUp 3s ease-in-out infinite" }}
+                  className="absolute top-6 md:top-10 right-4 md:right-8 bg-white/90 px-3 md:px-4 py-1.5 md:py-2 rounded-xl shadow-xl flex items-center gap-2 text-black"
                 >
                   <span className="text-xs font-bold">Trusted Partner</span>
                   <span className="flex items-center gap-1 bg-black text-white px-2 py-0.5 rounded text-[10px]">
                     <Star size={10} className="fill-yellow-400 text-yellow-400" />
                     4.8
                   </span>
-                </motion.div>
+                </div>
 
                 {/* Regional Reach - Forced text-black for visibility on light bg in dark mode */}
-                <motion.div
-                  animate={{ y: [0, 10, 0] }}
-                  transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute bottom-6 md:bottom-10 left-4 md:left-8 bg-white/90 backdrop-blur px-3 md:px-4 py-1.5 md:py-2 rounded-xl shadow-xl flex items-center gap-2 text-black"
+                <div
+                  style={{ animation: "floatDown 3.5s ease-in-out infinite" }}
+                  className="absolute bottom-6 md:bottom-10 left-4 md:left-8 bg-white/90 px-3 md:px-4 py-1.5 md:py-2 rounded-xl shadow-xl flex items-center gap-2 text-black"
                 >
                   <span className="text-xs font-bold">Regional Reach</span>
                   <span className="flex items-center gap-1 bg-black text-white px-2 py-0.5 rounded text-[10px]">
                     <Globe size={10} />
                     4.9
                   </span>
-                </motion.div>
+                </div>
               </div>
             </div>
 

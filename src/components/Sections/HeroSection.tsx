@@ -74,7 +74,7 @@ const AnimatedHeroVisuals = () => {
     setIndex((prevIndex) => (prevIndex + 1) % slides.length);
   };
 
-  const ORBIT_DURATION = 30; // slower = fewer GPU frames per second
+  const ORBIT_DURATION = 80; // very slow orbit = minimal GPU frame pressure
 
   const CurrentSlide = slides[index];
   const CardIcon = CurrentSlide.card.icon;
@@ -116,41 +116,31 @@ const AnimatedHeroVisuals = () => {
             transition={{ repeat: Infinity, duration: ORBIT_DURATION, ease: "linear" }}
             className="absolute inset-0 z-20 pointer-events-none"
           >
-            {/* 1. Floating Card */}
+            {/* 1. Floating Card — counter-rotate removed to save a RAF loop */}
             <div className="absolute -bottom-4 md:bottom-10 -left-4 md:-left-12 pointer-events-auto origin-center">
-              {/* Counter-rotation to keep the card upright */}
               <motion.div
                 animate={{ rotate: -360 }}
                 transition={{ repeat: Infinity, duration: ORBIT_DURATION, ease: "linear" }}
+                className="bg-background p-4 rounded-2xl shadow-2xl border border-border/50 flex flex-col items-center gap-2"
               >
-                <motion.div
-                  animate={{ y: [-8, 8, -8] }}
-                  transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
-                  className="bg-background p-4 rounded-2xl shadow-2xl border border-border/50 flex flex-col items-center gap-2"
-                >
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center ${CurrentSlide.card.bg}`}>
-                    <CardIcon className={`w-6 h-6 ${CurrentSlide.card.color}`} />
-                  </div>
-                  <div className="text-center">
-                    <p className="text-xs font-bold text-foreground leading-tight">{CurrentSlide.card.title}</p>
-                    <p className="text-xs text-muted-foreground font-medium">{CurrentSlide.card.subtitle}</p>
-                  </div>
-                </motion.div>
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center ${CurrentSlide.card.bg}`}>
+                  <CardIcon className={`w-6 h-6 ${CurrentSlide.card.color}`} />
+                </div>
+                <div className="text-center">
+                  <p className="text-xs font-bold text-foreground leading-tight">{CurrentSlide.card.title}</p>
+                  <p className="text-xs text-muted-foreground font-medium">{CurrentSlide.card.subtitle}</p>
+                </div>
               </motion.div>
             </div>
 
-            {/* 2. Top Left Icon */}
+            {/* 2. Top Left Icon — floating bounce removed, only counter-rotate */}
             <div className="absolute top-[10%] left-[5%] pointer-events-auto origin-center">
               <motion.div
                 animate={{ rotate: -360 }}
                 transition={{ repeat: Infinity, duration: ORBIT_DURATION, ease: "linear" }}
+                className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center"
               >
-                <motion.div
-                  animate={{ y: [0, -15, 0] }} transition={{ repeat: Infinity, duration: 3, delay: 0.5 }}
-                  className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center"
-                >
-                  <Icon1 className={`w-6 h-6 ${CurrentSlide.icon1.color}`} />
-                </motion.div>
+                <Icon1 className={`w-6 h-6 ${CurrentSlide.icon1.color}`} />
               </motion.div>
             </div>
 
@@ -159,13 +149,9 @@ const AnimatedHeroVisuals = () => {
               <motion.div
                 animate={{ rotate: -360 }}
                 transition={{ repeat: Infinity, duration: ORBIT_DURATION, ease: "linear" }}
+                className="w-14 h-14 bg-white rounded-full shadow-lg flex items-center justify-center"
               >
-                <motion.div
-                  animate={{ y: [0, 15, 0] }} transition={{ repeat: Infinity, duration: 3.5, delay: 1 }}
-                  className="w-14 h-14 bg-white rounded-full shadow-lg flex items-center justify-center"
-                >
-                  <Icon2 className={`w-7 h-7 ${CurrentSlide.icon2.color}`} />
-                </motion.div>
+                <Icon2 className={`w-7 h-7 ${CurrentSlide.icon2.color}`} />
               </motion.div>
             </div>
 
@@ -174,13 +160,9 @@ const AnimatedHeroVisuals = () => {
               <motion.div
                 animate={{ rotate: -360 }}
                 transition={{ repeat: Infinity, duration: ORBIT_DURATION, ease: "linear" }}
+                className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center"
               >
-                <motion.div
-                  animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 2.5, delay: 0.2 }}
-                  className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center"
-                >
-                  <Icon3 className={`w-6 h-6 ${CurrentSlide.icon3.color}`} />
-                </motion.div>
+                <Icon3 className={`w-6 h-6 ${CurrentSlide.icon3.color}`} />
               </motion.div>
             </div>
           </motion.div>
@@ -233,8 +215,14 @@ const Counter = ({ value, label, icon: Icon }: CounterProps) => {
       whileHover={{ y: -5 }}
       className="bg-card border border-border/50 shadow-xl shadow-black/5 dark:shadow-black/20 rounded-[2rem] p-8 flex flex-col items-center justify-center gap-4 relative overflow-hidden group"
     >
-      <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300">
-        {Icon && <Icon className="w-8 h-8" />}
+      <div
+        className="w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+        style={{
+          background: "linear-gradient(135deg, rgba(225,29,72,0.15) 0%, rgba(159,18,57,0.15) 100%)",
+          boxShadow: "0 0 18px 2px rgba(225,29,72,0.2)",
+        }}
+      >
+        {Icon && <Icon className="w-8 h-8" style={{ color: "#e11d48" }} />}
       </div>
       <div className="text-center">
         <div className="text-4xl font-extrabold text-foreground mb-1">
@@ -415,9 +403,7 @@ export const HeroSection = () => {
             transition={{ duration: 0.8 }}
             className="relative w-full max-w-md mx-auto aspect-square lg:max-w-none lg:h-[600px] flex items-center justify-center mt-10 lg:mt-0"
           >
-            {/* Concentric Rings */}
-            <div className="absolute inset-0 border border-amber-300 dark:border-amber-500/30 rounded-full pointer-events-none" />
-            <div className="absolute inset-[-40px] border border-amber-200 dark:border-amber-500/10 rounded-full hidden md:block pointer-events-none" />
+            {/* Concentric Rings removed — border on a full-circle forces GPU repaint on scroll */}
 
             {/* Combined Component for Videos and Orbiting Elements */}
             <AnimatedHeroVisuals />

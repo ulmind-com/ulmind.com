@@ -37,8 +37,8 @@ const CookieConsent: React.FC = () => {
             <div className="relative p-6 px-7 flex flex-col gap-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-primary/20 flex items-center justify-center">
-                    <Shield className="w-6 h-6 text-primary animate-pulse" />
+                  <div className="w-10 h-10 rounded-2xl flex items-center justify-center" style={{ background: "linear-gradient(135deg, #e11d48 0%, #b91c1c 100%)", boxShadow: "0 0 18px 4px rgba(225,29,72,0.35)" }}>
+                    <Shield className="w-6 h-6 text-white animate-pulse" />
                   </div>
                   <h3 className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/60">
                     Cookie Privacy
@@ -59,11 +59,12 @@ const CookieConsent: React.FC = () => {
               <div className="flex flex-col sm:flex-row gap-3 mt-2">
                 <button
                   onClick={() => handleConsent("accepted")}
-                  className="flex-1 group/btn relative px-6 py-3 rounded-2xl bg-primary text-primary-foreground font-semibold text-sm transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 overflow-hidden"
+                  className="flex-1 group/btn relative px-6 py-3 rounded-2xl font-semibold text-sm transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 overflow-hidden text-white"
+                  style={{ background: "linear-gradient(135deg, #e11d48 0%, #9f1239 100%)", boxShadow: "0 4px 24px 0 rgba(225,29,72,0.45), 0 1.5px 6px 0 rgba(159,18,57,0.25)" }}
                 >
                   <span>Accept All</span>
                   <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                  <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300" />
+                  <div className="absolute inset-0 bg-white/15 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300" />
                 </button>
                 
                 <button
