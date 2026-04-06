@@ -233,6 +233,8 @@ export default function Methodology() {
           border-radius: 28px;
           overflow: hidden;
           transform: translateZ(0);
+          will-change: transform;
+          backface-visibility: hidden;
           transition:
             transform 0.28s cubic-bezier(0.22,1,0.36,1),
             box-shadow  0.28s ease,
@@ -292,6 +294,7 @@ export default function Methodology() {
           overflow: hidden;
           transform: translateZ(0);
           will-change: transform;
+          backface-visibility: hidden;
           transition:
             transform 0.32s cubic-bezier(0.22,1,0.36,1),
             box-shadow 0.32s ease;

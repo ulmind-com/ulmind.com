@@ -199,6 +199,7 @@ const Technologies = () => {
           /* GPU layer – prevents repaint bleeding from neighbours */
           transform: translateZ(0);
           will-change: transform;
+          backface-visibility: hidden;
           /* smooth hover lift */
           transition:
             transform 0.22s cubic-bezier(0.22,1,0.36,1),
@@ -274,6 +275,7 @@ const Technologies = () => {
           /* GPU compositing */
           transform: translateZ(0);
           will-change: transform;
+          backface-visibility: hidden;
         }
 
         :root .tech-icon-pill {
