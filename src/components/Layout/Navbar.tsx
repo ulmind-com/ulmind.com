@@ -183,10 +183,10 @@ export const Navbar = () => {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
-              className="md:hidden overflow-hidden"
+              className="md:hidden overflow-hidden bg-white/95 dark:bg-transparent backdrop-blur-xl"
             >
               {/* Glassy divider */}
-              <div className="mx-4 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+              <div className="mx-4 h-px bg-gradient-to-r from-transparent via-foreground/20 to-transparent" />
 
               <div className="px-5 py-5 flex flex-col gap-1">
                 {navItems.map((item, index) => {
@@ -211,8 +211,8 @@ export const Navbar = () => {
                         transition-all duration-200 ease-out
                         ${
                           active
-                            ? "text-red-500 bg-red-500/8"
-                            : "text-white/85 hover:text-white hover:bg-white/8"
+                            ? "text-red-500 bg-red-500/10"
+                            : "text-foreground/80 hover:text-foreground hover:bg-foreground/8 dark:text-white/85 dark:hover:text-white dark:hover:bg-white/8"
                         }
                       `}
                       style={{ fontVariationSettings: "'wght' 450", WebkitFontSmoothing: "antialiased" }}

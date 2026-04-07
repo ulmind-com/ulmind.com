@@ -397,10 +397,7 @@ const Contact = () => {
       return;
     }
 
-    if (techRequiredTypes.includes(formData.projectType) && formData.technologies.length === 0) {
-      showToast("Technology Required", "Please select at least one technology for your project.", "error");
-      return;
-    }
+
 
     setIsSubmitting(true);
 
@@ -718,8 +715,8 @@ const Contact = () => {
                                 <label className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
                                   Technology Stack
                                 </label>
-                                <span className="text-[9px] font-black uppercase tracking-widest text-rose-400 bg-rose-500/10 border border-rose-400/25 px-2.5 py-1 rounded-full">
-                                  Required
+                                <span className="text-[9px] font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                  Optional
                                 </span>
                               </div>
 
