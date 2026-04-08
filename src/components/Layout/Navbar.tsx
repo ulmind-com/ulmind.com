@@ -371,16 +371,12 @@ export const Navbar = () => {
         </div>
 
         {/* ── Mobile Menu ── */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              layout
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{   opacity: 0, height: 0 }}
-              transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
-              className="md:hidden overflow-hidden bg-white/95 dark:bg-transparent backdrop-blur-xl"
-            >
+        <div
+          className={`md:hidden overflow-hidden transition-all duration-350 ease-in-out ${
+            isOpen ? "max-h-[2000px] opacity-100" : "max-h-0 opacity-0 pointer-events-none"
+          }`}
+        >
+              <div className="relative z-20 bg-white dark:bg-zinc-950 rounded-b-3xl">
               <div className="mx-4 h-px bg-gradient-to-r from-transparent via-foreground/20 to-transparent" />
 
               <div className="px-5 py-5 flex flex-col gap-1">
@@ -388,13 +384,10 @@ export const Navbar = () => {
                 {[navItems[0], navItems[1]].map((item, index) => {
                   const active = isActive(item.href);
                   return (
-                    <motion.button
+                    <button
                       key={item.name}
                       id={`mobile-nav-${item.name.toLowerCase()}`}
-                      initial={{ opacity: 0, x: -16 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.28, ease: "easeOut", delay: index * 0.045 }}
-                      onClick={() => navigate(item.href)}
+                      onClick={() => { navigate(item.href); setIsOpen(false); setMobileServicesOpen(false); }}
                       className={`group relative w-full text-left py-3 px-3 rounded-xl text-[15px] font-[450] tracking-wide transition-all duration-200 ease-out ${
                         active
                           ? "text-red-500 bg-red-500/10"
@@ -406,16 +399,12 @@ export const Navbar = () => {
                         active ? "h-5 bg-red-500" : "h-0 bg-red-500 group-hover:h-4"
                       }`} />
                       <span className="pl-2">{item.name}</span>
-                    </motion.button>
+                    </button>
                   );
                 })}
 
                 {/* ── Mobile Services Accordion ── */}
-                <motion.div
-                  initial={{ opacity: 0, x: -16 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.28, ease: "easeOut", delay: 2 * 0.045 }}
-                >
+                <div>
                   {/* Services trigger */}
                   <button
                     id="mobile-nav-services"
@@ -429,35 +418,26 @@ export const Navbar = () => {
                       }`} />
                       <span className={mobileServicesOpen ? "text-red-500" : ""}>Services</span>
                     </div>
-                    <motion.span
-                      animate={{ rotate: mobileServicesOpen ? 180 : 0 }}
-                      transition={{ duration: 0.25 }}
-                      className="mr-1"
+                    <span
+                      className={`mr-1 inline-flex transition-transform duration-250 ${mobileServicesOpen ? "rotate-180" : "rotate-0"}`}
                     >
                       <ChevronDown className={`h-4 w-4 ${mobileServicesOpen ? "text-red-500" : "text-foreground/50 dark:text-white/40"}`} />
-                    </motion.span>
+                    </span>
                   </button>
 
                   {/* Services accordion content */}
-                  <AnimatePresence>
-                    {mobileServicesOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "auto" }}
-                        exit={{   opacity: 0, height: 0 }}
-                        transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-                        className="overflow-hidden"
-                      >
+                  <div
+                    className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                      mobileServicesOpen ? "max-h-[1200px] opacity-100" : "max-h-0 opacity-0"
+                    }`}
+                  >
                         <div className="ml-3 mt-1 mb-2 grid grid-cols-1 gap-1 border-l-2 border-red-500/20 pl-3">
-                          {serviceItems.map((svc, idx) => {
+                          {serviceItems.map((svc) => {
                             const Icon = svc.icon;
                             return (
-                              <motion.button
+                              <button
                                 key={svc.name}
                                 id={`mobile-service-${svc.name.toLowerCase().replace(/[\s&/]+/g, "-")}`}
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.2, delay: idx * 0.04 }}
                                 onClick={() => { navigate(svc.href); setIsOpen(false); setMobileServicesOpen(false); }}
                                 className="group flex items-center gap-3 py-2.5 px-2 rounded-xl text-left transition-all duration-200 hover:bg-red-500/8 dark:hover:bg-white/6"
                               >
@@ -475,26 +455,21 @@ export const Navbar = () => {
                                     {svc.desc}
                                   </p>
                                 </div>
-                              </motion.button>
+                              </button>
                             );
                           })}
                         </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
+                  </div>
+                </div>
 
                 {/* Rest of nav items (Team → Contact) */}
-                {navItems.slice(2).map((item, index) => {
+                {navItems.slice(2).map((item) => {
                   const active = isActive(item.href);
                   return (
-                    <motion.button
+                    <button
                       key={item.name}
                       id={`mobile-nav-${item.name.toLowerCase()}`}
-                      initial={{ opacity: 0, x: -16 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.28, ease: "easeOut", delay: (index + 3) * 0.045 }}
-                      onClick={() => navigate(item.href)}
+                      onClick={() => { navigate(item.href); setIsOpen(false); setMobileServicesOpen(false); }}
                       className={`group relative w-full text-left py-3 px-3 rounded-xl text-[15px] font-[450] tracking-wide transition-all duration-200 ease-out ${
                         active
                           ? "text-red-500 bg-red-500/10"
@@ -506,13 +481,12 @@ export const Navbar = () => {
                         active ? "h-5 bg-red-500" : "h-0 bg-red-500 group-hover:h-4"
                       }`} />
                       <span className="pl-2">{item.name}</span>
-                    </motion.button>
+                    </button>
                   );
                 })}
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              </div>
+        </div>
       </motion.div>
     </motion.nav>
   );
