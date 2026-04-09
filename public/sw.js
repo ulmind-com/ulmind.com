@@ -58,7 +58,10 @@ self.addEventListener("fetch", (event) => {
         // Clone response before caching (response body can only be read once)
         const clone = networkResponse.clone();
         caches.open(CACHE_VERSION).then((cache) => {
-          cache.put(event.request, clone);
+          // Only cache HTTP 200 responses to prevent errors with 206 Partial Content (videos)
+          if (clone.status === 200) {
+            cache.put(event.request, clone);
+          }
         });
         return networkResponse;
       })

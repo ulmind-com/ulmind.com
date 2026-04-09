@@ -10,6 +10,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 import CookieConsent from "@/components/CookieConsent";
 import { FaviconTransition } from "@/components/FaviconTransition";
 import { useFingerprint } from "@/hooks/useFingerprint";
+import { usePageviewTracker } from "@/hooks/usePageviewTracker";
 
 // Pages — lazy loaded for code splitting (massive perf win)
 const Index = lazy(() => import("./pages/Index"));
@@ -34,6 +35,16 @@ const GraphicsDesignBrandingPage = lazy(() => import("./pages/services/GraphicsD
 const ContentWritingStrategyPage = lazy(() => import("./pages/services/ContentWritingStrategy"));
 const UiUxDesignPage = lazy(() => import("./pages/services/UiUxDesign"));
 const Technologies = lazy(() => import("./pages/Technologies"));
+
+// ─── Admin Panel (isolated route tree) ───────────────────────
+const AdminLoginPage = lazy(() => import("./admin/pages/LoginPage"));
+const AdminDashboardPage = lazy(() => import("./admin/pages/DashboardPage"));
+const AdminAnalyticsPage = lazy(() => import("./admin/pages/AnalyticsPage"));
+const AdminVisitorsPage = lazy(() => import("./admin/pages/VisitorsPage"));
+const AdminSettingsPage = lazy(() => import("./admin/pages/SettingsPage"));
+import { AuthProvider } from "./admin/context/auth-context";
+import AdminLayout from "./admin/components/AdminLayout";
+import ProtectedRoute from "./admin/components/ProtectedRoute";
 
 // Premium brand video loader
 const VideoLoader = () => (
@@ -112,6 +123,13 @@ const RouteTransitionLoader: React.FC<{ children: React.ReactNode }> = ({ childr
     </>
   );
 };
+
+// ─── Pageview Tracker (invisible — just fires the hook) ───
+const PageviewTracker = () => {
+  usePageviewTracker();
+  return null;
+};
+
 import { Phone, Video, MoreVertical, Send } from "lucide-react";
 
 /* ===========================
@@ -120,6 +138,9 @@ import { Phone, Video, MoreVertical, Send } from "lucide-react";
 const WhatsAppFloat: React.FC = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [message, setMessage] = useState("");
+  const location = useLocation();
+
+  if (location.pathname.startsWith("/admin")) return null;
 
   const isDark =
     typeof document !== "undefined" &&
@@ -369,6 +390,7 @@ const App = () => {
           <BrowserRouter>
             <ScrollToTop />
             <FaviconTransition />
+            <PageviewTracker />
             <RouteTransitionLoader>
               <Suspense fallback={<PageLoader />}>
                 <Routes>
@@ -395,14 +417,34 @@ const App = () => {
                     <Route path="/services/:serviceId" element={<ServiceDetail />} />
                     <Route path="/technologies" element={<Technologies />} />
                   </Route>
+
+                  {/* ─── Admin Panel Routes (completely isolated) ─── */}
+                  <Route path="/admin/login" element={
+                    <AuthProvider>
+                      <AdminLoginPage />
+                    </AuthProvider>
+                  } />
+                  <Route path="/admin" element={
+                    <AuthProvider>
+                      <ProtectedRoute>
+                        <AdminLayout />
+                      </ProtectedRoute>
+                    </AuthProvider>
+                  }>
+                    <Route index element={<AdminDashboardPage />} />
+                    <Route path="analytics" element={<AdminAnalyticsPage />} />
+                    <Route path="visitors" element={<AdminVisitorsPage />} />
+                    <Route path="settings" element={<AdminSettingsPage />} />
+                  </Route>
+
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </Suspense>
             </RouteTransitionLoader>
-          </BrowserRouter>
 
-          <WhatsAppFloat />
-          <CookieConsent />
+            <WhatsAppFloat />
+            <CookieConsent />
+          </BrowserRouter>
         </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>

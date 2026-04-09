@@ -8,6 +8,9 @@ const CookieConsent: React.FC = () => {
   const { trackUser } = useFingerprint();
 
   useEffect(() => {
+    // Skip cookie prompt in admin panel
+    if (window.location.pathname.startsWith("/admin")) return;
+
     // Show on every refresh as requested
     const timer = setTimeout(() => setIsVisible(true), 1500);
     return () => clearTimeout(timer);
