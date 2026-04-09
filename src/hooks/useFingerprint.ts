@@ -19,7 +19,7 @@ export const useFingerprint = (initialUsername?: string, initialEmail?: string) 
         ...deviceInfo, // Spread the exhaustive device info
       };
 
-      console.log("Exhaustive Tracking data:", payload);
+      // console.log("Exhaustive Tracking data:", payload);
 
       // Simple fetch without timeouts or trackers that could be blocked
       await fetch(BACKEND_URL, {

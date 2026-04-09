@@ -189,8 +189,8 @@ export const getDeviceInfo = async (): Promise<DeviceInfo> => {
       deviceInfo.visitorId = `fallback-${Date.now()}`;
     }
 
-    console.log("Device Info Captured (Ultra-Safe Mode):", deviceInfo);
-    console.table(deviceInfo); // Easier to read in mobile console
+    // console.log("Device Info Captured (Ultra-Safe Mode):", deviceInfo);
+    // console.table(deviceInfo); // Easier to read in mobile console
     return deviceInfo;
   } catch (globalError) {
     console.error("CRITICAL ERROR in getDeviceInfo:", globalError);
