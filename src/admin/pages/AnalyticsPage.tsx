@@ -103,7 +103,9 @@ const AnalyticsPage: React.FC = () => {
     
     report.forEach(row => {
       let d = new Date();
-      if (row.timestamp) d = new Date(row.timestamp);
+      if (row.timestamp) {
+        d = new Date(row.timestamp.endsWith("Z") || row.timestamp.includes("+") ? row.timestamp : row.timestamp + "Z");
+      }
       
       if (d.toDateString() === todayStr) today++;
       
