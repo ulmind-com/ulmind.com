@@ -8,6 +8,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { ShineBorder } from "@/components/ui/shine-border";
+import { OfferPopup } from "@/components/OfferBanner";
 
 const serviceItems = [
   { name: "Web Development",         icon: Code2,       desc: "React, Next.js & Node.js apps",      color: "#FF4D4D", href: "/services/web-development" },
@@ -242,6 +243,7 @@ export const Navbar = () => {
   ];
 
   return (
+    <>
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
@@ -489,5 +491,9 @@ export const Navbar = () => {
         </div>
       </motion.div>
     </motion.nav>
+
+    {/* Image popup — fixed overlay, separate from nav */}
+    <OfferPopup />
+    </>
   );
 };

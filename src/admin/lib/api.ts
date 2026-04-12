@@ -265,3 +265,71 @@ export const deleteTeamMemberAPI = async (id: string) => {
   if (!res.ok) throw new Error("Failed to delete team member");
   return res.json();
 };
+
+// ═══════════════════════════════════════════════════════════════
+//  OFFERS APIs
+// ═══════════════════════════════════════════════════════════════
+
+export interface Offer {
+  _id: string;
+  title: string;
+  description: string;
+  start_time: string | null;
+  end_time: string | null;
+  is_active: boolean;
+  image: { url: string; public_id: string } | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export const listAllOffersAPI = async (): Promise<Offer[]> => {
+  const res = await authFetch("/offers/");
+  if (!res.ok) throw new Error("Failed to fetch offers");
+  return res.json();
+};
+
+export const createOfferAPI = async (formData: FormData): Promise<Offer> => {
+  const res = await authFetch("/offers/", {
+    method: "POST",
+    body: formData,
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    if (Array.isArray(err.detail)) {
+      throw new Error(err.detail.map((e: any) => e.msg).join(", "));
+    }
+    throw new Error(err.detail || "Failed to create offer");
+  }
+  return res.json();
+};
+
+export const updateOfferAPI = async (id: string, payload: any): Promise<Offer> => {
+  const res = await authFetch(`/offers/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || "Failed to update offer");
+  }
+  return res.json();
+};
+
+export const updateOfferImageAPI = async (id: string, file: File): Promise<Offer> => {
+  const formData = new FormData();
+  formData.append("image", file);
+  const res = await authFetch(`/offers/${id}/image`, {
+    method: "PATCH",
+    body: formData,
+  });
+  if (!res.ok) throw new Error("Failed to update offer image");
+  return res.json();
+};
+
+export const deleteOfferAPI = async (id: string) => {
+  const res = await authFetch(`/offers/${id}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) throw new Error("Failed to delete offer");
+  return res.json();
+};
