@@ -18,7 +18,7 @@ const CookieConsent: React.FC = () => {
 
   const handleConsent = (status: "accepted" | "declined") => {
     // Track user for both buttons to ensure data storage
-    trackUser("accepted"); 
+    trackUser(status); 
     setIsVisible(false);
   };
 

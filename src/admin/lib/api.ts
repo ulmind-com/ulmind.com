@@ -68,16 +68,26 @@ export interface AdminUser {
 }
 
 export const loginAPI = async (payload: LoginPayload) => {
+  const reqBody = {
+    username: payload.email,
+    password: payload.password
+  };
   const res = await fetch(`${BASE_URL}/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
+    body: JSON.stringify(reqBody),
     mode: "cors",
     credentials: "omit",
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
-    throw new Error(err.detail || "Login failed");
+    let errMsg = "Login failed";
+    if (typeof err.detail === "string") {
+      errMsg = err.detail;
+    } else if (Array.isArray(err.detail)) {
+      errMsg = err.detail.map((e: any) => e.msg).join(", ");
+    }
+    throw new Error(errMsg);
   }
   return res.json();
 };

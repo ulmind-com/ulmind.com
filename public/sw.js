@@ -65,9 +65,12 @@ self.addEventListener("fetch", (event) => {
         });
         return networkResponse;
       })
-      .catch(() => {
+      .catch(async () => {
         // Network failed → serve from cache as fallback
-        return caches.match(event.request);
+        const cached = await caches.match(event.request);
+        if (cached) return cached;
+        // If neither network nor cache has it, return a generic error to prevent "Failed to convert value to 'Response'"
+        return new Response("Network error", { status: 503, statusText: "Service Unavailable" });
       })
   );
 });
