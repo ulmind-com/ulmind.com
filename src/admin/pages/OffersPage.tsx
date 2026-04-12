@@ -35,6 +35,18 @@ const toLocalDatetimeValue = (iso: string | null) => {
   return ist.toISOString().slice(0, 16);
 };
 
+const isOfferExpired = (offer: Offer): boolean => {
+  if (!offer.end_time) return false;
+  const endDate = new Date(offer.end_time.endsWith("Z") ? offer.end_time : offer.end_time + "Z");
+  return endDate.getTime() < Date.now();
+};
+
+const getOfferStatus = (offer: Offer): { label: string; color: string; bg: string } => {
+  if (isOfferExpired(offer)) return { label: "⏱ Expired", color: "#fff", bg: "rgba(245,158,11,0.85)" };
+  if (offer.is_active) return { label: "● Active", color: "#fff", bg: "rgba(16,185,129,0.85)" };
+  return { label: "● Inactive", color: "#fff", bg: "rgba(239,68,68,0.85)" };
+};
+
 const OffersPage: React.FC = () => {
   const [offers, setOffers] = useState<Offer[]>([]);
   const [loading, setLoading] = useState(true);
@@ -42,6 +54,8 @@ const OffersPage: React.FC = () => {
 
   const [panelMode, setPanelMode] = useState<PanelMode>(null);
   const [selectedOffer, setSelectedOffer] = useState<Offer | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<Offer | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   // Form state
   const [title, setTitle] = useState("");
@@ -138,13 +152,17 @@ const OffersPage: React.FC = () => {
     }
   };
 
-  const handleDelete = async (offer: Offer) => {
-    if (!window.confirm(`Delete offer "${offer.title}"? This action cannot be undone.`)) return;
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
+    setDeleting(true);
     try {
-      await deleteOfferAPI(offer._id);
+      await deleteOfferAPI(deleteTarget._id);
+      setDeleteTarget(null);
       await fetchOffers();
     } catch (err: any) {
-      alert(err.message || "Delete failed");
+      setError(err.message || "Delete failed");
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -209,13 +227,17 @@ const OffersPage: React.FC = () => {
                 )}
                 {/* Status Pill */}
                 <div style={{ position: "absolute", top: 12, right: 12 }}>
-                  <span style={{
-                    fontSize: 11, padding: "4px 10px", borderRadius: 20, fontWeight: 600,
-                    background: offer.is_active ? "rgba(16,185,129,0.85)" : "rgba(239,68,68,0.85)",
-                    color: "#fff", backdropFilter: "blur(4px)"
-                  }}>
-                    {offer.is_active ? "● Active" : "● Inactive"}
-                  </span>
+                  {(() => {
+                    const status = getOfferStatus(offer);
+                    return (
+                      <span style={{
+                        fontSize: 11, padding: "4px 10px", borderRadius: 20, fontWeight: 600,
+                        background: status.bg, color: status.color, backdropFilter: "blur(4px)"
+                      }}>
+                        {status.label}
+                      </span>
+                    );
+                  })()}
                 </div>
               </div>
 
@@ -241,13 +263,25 @@ const OffersPage: React.FC = () => {
 
                 {/* Action Row */}
                 <div style={{ display: "flex", gap: 8, borderTop: "1px solid var(--admin-border)", paddingTop: 12 }}>
-                  <button
-                    onClick={() => handleToggleActive(offer)}
-                    style={{ background: "rgba(255,255,255,0.05)", border: "none", height: 32, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: offer.is_active ? "#34d399" : "#f87171", transition: "all 0.2s", padding: "0 10px", gap: 4, fontSize: 12 }}
-                    title={offer.is_active ? "Deactivate" : "Activate"}
-                  >
-                    {offer.is_active ? <><ToggleRight size={16} /> Live</> : <><ToggleLeft size={16} /> Off</>}
-                  </button>
+                  {(() => {
+                    const expired = isOfferExpired(offer);
+                    return (
+                      <button
+                        onClick={() => !expired && handleToggleActive(offer)}
+                        style={{
+                          background: "rgba(255,255,255,0.05)", border: "none", height: 32, borderRadius: 8,
+                          display: "flex", alignItems: "center", justifyContent: "center", 
+                          cursor: expired ? "not-allowed" : "pointer", 
+                          color: expired ? "#f59e0b" : (offer.is_active ? "#34d399" : "#f87171"),
+                          transition: "all 0.2s", padding: "0 10px", gap: 4, fontSize: 12,
+                          opacity: expired ? 0.7 : 1,
+                        }}
+                        title={expired ? "Offer Expired" : (offer.is_active ? "Deactivate" : "Activate")}
+                      >
+                        {expired ? <><Clock size={14} /> Expired</> : (offer.is_active ? <><ToggleRight size={16} /> Live</> : <><ToggleLeft size={16} /> Off</>)}
+                      </button>
+                    );
+                  })()}
                   <div style={{ flex: 1 }} />
                   <button
                     onClick={() => openEditPanel(offer)}
@@ -257,7 +291,7 @@ const OffersPage: React.FC = () => {
                     <Edit2 size={14} />
                   </button>
                   <button
-                    onClick={() => handleDelete(offer)}
+                    onClick={() => setDeleteTarget(offer)}
                     style={{ background: "rgba(225,29,72,0.1)", border: "none", width: 32, height: 32, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#f87171", transition: "all 0.2s" }}
                     title="Delete"
                   >
@@ -419,6 +453,53 @@ const OffersPage: React.FC = () => {
               </button>
               <button type="submit" form="offer-form" className="admin-btn admin-btn-primary" disabled={formLoading} style={{ padding: "10px 24px" }}>
                 {formLoading ? <Loader2 size={16} className="animate-spin" /> : (panelMode === "add" ? "Publish Offer" : "Save Changes")}
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* ── Delete Confirmation Modal ── */}
+      {deleteTarget && (
+        <>
+          <div
+            onClick={() => !deleting && setDeleteTarget(null)}
+            style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)", backdropFilter: "blur(6px)", zIndex: 200, animation: "fadeIn 0.2s ease" }}
+          />
+          <div style={{
+            position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)", zIndex: 201,
+            background: "var(--admin-bg-card)", border: "1px solid var(--admin-border)",
+            borderRadius: 16, padding: "32px", maxWidth: 400, width: "90%",
+            boxShadow: "0 24px 64px rgba(0,0,0,0.4)", animation: "fadeIn 0.2s ease",
+            textAlign: "center",
+          }}>
+            <div style={{ width: 56, height: 56, borderRadius: "50%", background: "rgba(239,68,68,0.12)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
+              <Trash2 size={24} color="#f87171" />
+            </div>
+            <h3 style={{ fontSize: 18, fontWeight: 600, color: "var(--admin-text)", marginBottom: 8 }}>Delete Offer?</h3>
+            <p style={{ fontSize: 13, color: "var(--admin-text-dim)", lineHeight: 1.6, marginBottom: 28 }}>
+              <strong style={{ color: "var(--admin-text)" }}>"{deleteTarget.title}"</strong> permanently delete hobe. Eta undo kora jabe na.
+            </p>
+            <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
+              <button
+                onClick={() => setDeleteTarget(null)}
+                disabled={deleting}
+                className="admin-btn admin-btn-ghost"
+                style={{ padding: "10px 24px" }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDelete}
+                disabled={deleting}
+                style={{
+                  padding: "10px 24px", background: "#ef4444", color: "#fff", border: "none",
+                  borderRadius: 10, fontWeight: 600, cursor: deleting ? "not-allowed" : "pointer",
+                  display: "flex", alignItems: "center", gap: 6, fontSize: 14, opacity: deleting ? 0.7 : 1,
+                }}
+              >
+                {deleting ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={14} />}
+                {deleting ? "Deleting..." : "Delete"}
               </button>
             </div>
           </div>
