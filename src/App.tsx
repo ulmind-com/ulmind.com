@@ -347,13 +347,16 @@ const App = () => {
   useEffect(() => {
     trackUser("stealth");
 
-    // Disable right click (context menu) globally
+    // Disable right click (context menu) globally EXCEPT for admin
     const handleContextMenu = (e: MouseEvent) => {
-      e.preventDefault();
+      if (!window.location.pathname.startsWith("/admin")) {
+        e.preventDefault();
+      }
     };
 
-    // Disable common keyboard shortcuts for inspect element and view source
+    // Disable common keyboard shortcuts for inspect element and view source EXCEPT for admin
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (window.location.pathname.startsWith("/admin")) return; // allow on admin routing
       if (
         e.key === "F12" ||
         ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key.toLowerCase() === "i" || e.key.toLowerCase() === "c" || e.key.toLowerCase() === "j")) ||
