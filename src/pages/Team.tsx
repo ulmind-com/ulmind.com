@@ -10,7 +10,7 @@ import BlurBlob from "@/components/BlurBlob";
 export default function Team() {
   const navigate = useNavigate();
 
-  const team = [
+  const staticTeam = [
     {
       name: "Soumyajit Banerjee",
       role: "Founder & CTO",
@@ -121,6 +121,42 @@ export default function Team() {
     }
   ];
 
+  const [dynamicTeam, setDynamicTeam] = React.useState<any[]>([]);
+  const [apiLoading, setApiLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    fetch("https://ulmind-backend.onrender.com/api/v1/team/public")
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setDynamicTeam(data);
+        }
+      })
+      .catch(console.error)
+      .finally(() => setApiLoading(false));
+  }, []);
+
+  const teamToRender = apiLoading 
+    ? staticTeam 
+    : (dynamicTeam.length > 0 
+        ? dynamicTeam.map(dMember => {
+            const sMember = staticTeam.find(s => s.name.toLowerCase() === dMember.full_name?.toLowerCase());
+
+            return {
+              name: dMember.full_name || sMember?.name || "Unknown",
+              role: dMember.position || sMember?.role || "Team Member", 
+              techRole: sMember?.techRole || "", 
+              image: dMember.profile_photo?.url || sMember?.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(dMember.full_name || "M")}&background=7c3aed&color=fff`,
+              bio: sMember?.bio || "",
+              social: {
+                linkedin: dMember.linkedin_url || sMember?.social?.linkedin || null,
+                github: dMember.github_url || sMember?.social?.github || null,
+                twitter: dMember.x_url || sMember?.social?.twitter || null,
+              }
+            };
+          }) 
+        : staticTeam);
+
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
       <BlurBlob position={{ top: "10%", left: "10%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-cyan-300 dark:bg-cyan-600" opacityClass="opacity-40 dark:opacity-20" />
@@ -142,7 +178,7 @@ export default function Team() {
       {/* TEAM GRID */}
       <section className="pt-8 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {team.map((member, index) => (
+          {teamToRender.map((member, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 30 }}
@@ -161,3 +197,4 @@ export default function Team() {
     </div>
   );
 }
+
