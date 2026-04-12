@@ -9,16 +9,22 @@ const CookieConsent: React.FC = () => {
 
   useEffect(() => {
     // Skip cookie prompt in admin panel
-    if (window.location.pathname.startsWith("/admin")) return;
+    if (typeof window !== "undefined" && window.location.pathname.startsWith("/admin")) return;
 
-    // Show on every refresh as requested
+    // Check if user has already made a decision
+    const hasConsented = localStorage.getItem("ulmind_cookie_consent");
+    if (hasConsented) return;
+
+    // Show if no decision has been made
     const timer = setTimeout(() => setIsVisible(true), 1500);
     return () => clearTimeout(timer);
   }, []);
 
-  const handleConsent = (status: "accepted" | "declined") => {
-    // Track user for both buttons to ensure data storage
-    trackUser(status); 
+  const handleConsent = (status: "accepted" | "declined" | "dismissed") => {
+    localStorage.setItem("ulmind_cookie_consent", status);
+    if (status !== "dismissed") {
+      trackUser(status); 
+    }
     setIsVisible(false);
   };
 
@@ -48,7 +54,7 @@ const CookieConsent: React.FC = () => {
                   </h3>
                 </div>
                 <button 
-                  onClick={() => setIsVisible(false)}
+                  onClick={() => handleConsent("dismissed")}
                   className="p-1.5 rounded-full hover:bg-white/10 transition-colors"
                 >
                   <X className="w-4 h-4 text-foreground/40" />
