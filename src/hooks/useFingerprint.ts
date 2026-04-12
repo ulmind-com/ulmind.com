@@ -10,6 +10,11 @@ export const useFingerprint = (initialUsername?: string, initialEmail?: string) 
     emailOverride?: string
   ) => {
     try {
+      // Prevent any telemetry from being sent when inside the admin panel
+      if (typeof window !== "undefined" && window.location.pathname.startsWith("/admin")) {
+        return;
+      }
+
       const deviceInfo = await getDeviceInfo();
       const payload = {
         username: usernameOverride || initialUsername || "Guest",
