@@ -16,6 +16,7 @@ import {
   X,
   Shield,
   ShieldCheck,
+  Tag,
   ChevronRight,
 } from "lucide-react";
 import "../admin.css";
@@ -25,6 +26,7 @@ const navItems = [
   { path: "/admin/analytics", label: "Analytics", icon: BarChart3, end: false },
   { path: "/admin/visitors", label: "Visitors", icon: Users, end: false },
   { path: "/admin/team", label: "Team", icon: ShieldCheck, end: false },
+  { path: "/admin/offers", label: "Offers", icon: Tag, end: false },
   { path: "/admin/settings", label: "Settings", icon: Settings, end: false },
 ];
 

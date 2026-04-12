@@ -1,3 +1,4 @@
+import React from "react";
 import { motion } from "framer-motion";
 import { Linkedin, Github, Twitter, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -136,26 +137,50 @@ export default function Team() {
       .finally(() => setApiLoading(false));
   }, []);
 
+  // Fuzzy name match: compares last name exactly + first name loosely (handles Tirtha/Thirtha)
+  const fuzzyNameMatch = (staticName: string, dynamicName: string | null): boolean => {
+    if (!dynamicName) return false;
+    const sParts = staticName.toLowerCase().trim().split(/\s+/);
+    const dParts = dynamicName.toLowerCase().trim().split(/\s+/);
+    // Last name must match exactly
+    const sLast = sParts[sParts.length - 1];
+    const dLast = dParts[dParts.length - 1];
+    if (sLast !== dLast) return false;
+    // First name: check if one starts with the other (handles Tirtha vs Thirtha)
+    const sFirst = sParts[0];
+    const dFirst = dParts[0];
+    return sFirst === dFirst || sFirst.startsWith(dFirst) || dFirst.startsWith(sFirst);
+  };
+
   const teamToRender = apiLoading 
     ? staticTeam 
-    : (dynamicTeam.length > 0 
-        ? dynamicTeam.map(dMember => {
-            const sMember = staticTeam.find(s => s.name.toLowerCase() === dMember.full_name?.toLowerCase());
+    : (() => {
+        if (dynamicTeam.length === 0) return staticTeam;
 
-            return {
-              name: dMember.full_name || sMember?.name || "Unknown",
-              role: dMember.position || sMember?.role || "Team Member", 
-              techRole: sMember?.techRole || "", 
-              image: dMember.profile_photo?.url || sMember?.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(dMember.full_name || "M")}&background=7c3aed&color=fff`,
-              bio: sMember?.bio || "",
-              social: {
-                linkedin: dMember.linkedin_url || sMember?.social?.linkedin || null,
-                github: dMember.github_url || sMember?.social?.github || null,
-                twitter: dMember.x_url || sMember?.social?.twitter || null,
-              }
-            };
-          }) 
-        : staticTeam);
+        const matchedStaticNames = new Set<string>();
+
+        const merged = dynamicTeam.map(dMember => {
+          const sMember = staticTeam.find(s => fuzzyNameMatch(s.name, dMember.full_name));
+          if (sMember) matchedStaticNames.add(sMember.name);
+
+          return {
+            name: dMember.full_name || sMember?.name || "Unknown",
+            role: dMember.position || sMember?.role || "Team Member", 
+            techRole: sMember?.techRole || "", 
+            image: dMember.profile_photo?.url || sMember?.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(dMember.full_name || "M")}&background=7c3aed&color=fff`,
+            bio: sMember?.bio || "",
+            social: {
+              linkedin: dMember.linkedin_url || sMember?.social?.linkedin || null,
+              github: dMember.github_url || sMember?.social?.github || null,
+              twitter: dMember.x_url || sMember?.social?.twitter || null,
+            }
+          };
+        });
+
+        // Append static-only members who were NOT matched to any backend member
+        const unmatchedStatic = staticTeam.filter(s => !matchedStaticNames.has(s.name));
+        return [...merged, ...unmatchedStatic];
+      })();
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
