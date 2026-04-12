@@ -65,7 +65,29 @@ export interface AdminUser {
     url: string;
     public_id: string;
   };
+  full_name?: string;
+  position?: string;
+  experience?: string;
+  specialization?: string[];
+  linkedin_url?: string;
+  x_url?: string;
+  github_url?: string;
 }
+
+export const updateProfileAPI = async (payload: Partial<AdminUser>) => {
+  const res = await authFetch("/auth/me", {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    if (Array.isArray(err.detail)) {
+      throw new Error(err.detail.map((e: any) => e.msg).join(", "));
+    }
+    throw new Error(err.detail || "Profile update failed");
+  }
+  return res.json();
+};
 
 export const loginAPI = async (payload: LoginPayload) => {
   const reqBody = {
@@ -187,5 +209,59 @@ export const getAnalyticsReport = async (
 export const getTrackingData = async (limit: number = 100, skip: number = 0) => {
   const res = await authFetch(`/track/?limit=${limit}&skip=${skip}`);
   if (!res.ok) throw new Error("Failed to fetch tracking data");
+  return res.json();
+};
+
+// ═══════════════════════════════════════════════════════════════
+//  TEAM APIs
+// ═══════════════════════════════════════════════════════════════
+
+export const listTeamAPI = async (): Promise<AdminUser[]> => {
+  const res = await authFetch("/team/");
+  if (!res.ok) throw new Error("Failed to fetch team members");
+  return res.json();
+};
+
+export const createTeamMemberAPI = async (payload: any): Promise<AdminUser> => {
+  const res = await authFetch("/team/", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    if (Array.isArray(err.detail)) {
+      throw new Error(err.detail.map((e: any) => e.msg).join(", "));
+    }
+    throw new Error(err.detail || "Failed to create team member");
+  }
+  return res.json();
+};
+
+export const getTeamMemberAPI = async (id: string): Promise<AdminUser> => {
+  const res = await authFetch(`/team/${id}`);
+  if (!res.ok) throw new Error("Failed to fetch team member");
+  return res.json();
+};
+
+export const updateTeamMemberAPI = async (id: string, payload: any): Promise<AdminUser> => {
+  const res = await authFetch(`/team/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    if (Array.isArray(err.detail)) {
+      throw new Error(err.detail.map((e: any) => e.msg).join(", "));
+    }
+    throw new Error(err.detail || "Failed to update team member");
+  }
+  return res.json();
+};
+
+export const deleteTeamMemberAPI = async (id: string) => {
+  const res = await authFetch(`/team/${id}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) throw new Error("Failed to delete team member");
   return res.json();
 };
