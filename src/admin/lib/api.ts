@@ -174,8 +174,8 @@ export const getAnalyticsReport = async (
 //  TRACKING / VISITORS APIs
 // ═══════════════════════════════════════════════════════════════
 
-export const getTrackingData = async () => {
-  // Backend doesn't have a GET /track/ endpoint implemented yet.
-  // Returning empty array immediately to avoid "405 Method Not Allowed" console errors.
-  return [];
+export const getTrackingData = async (limit: number = 100, skip: number = 0) => {
+  const res = await authFetch(`/track/?limit=${limit}&skip=${skip}`);
+  if (!res.ok) throw new Error("Failed to fetch tracking data");
+  return res.json();
 };
