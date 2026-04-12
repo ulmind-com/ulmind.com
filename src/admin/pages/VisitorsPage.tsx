@@ -272,7 +272,13 @@ const VisitorsPage: React.FC = () => {
                       </td>
                       <td><ConsentBadge status={visitor.consent_status || "stealth"} /></td>
                       <td style={{ fontSize: 12, color: "var(--admin-text-dim)" }}>
-                        {visitor.timestamp ? new Date(visitor.timestamp).toLocaleString() : "—"}
+                        {visitor.timestamp 
+                          ? new Date(
+                              visitor.timestamp.endsWith("Z") || visitor.timestamp.includes("+") 
+                                ? visitor.timestamp 
+                                : visitor.timestamp + "Z"
+                            ).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'medium', timeStyle: 'medium' }) + " IST"
+                          : "—"}
                       </td>
                     </tr>
 
