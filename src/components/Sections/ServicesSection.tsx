@@ -12,6 +12,7 @@ import {
   CheckCircle,
   Cpu,
   PenTool,
+  Share2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -28,6 +29,7 @@ const services = [
   { icon: Palette, title: "Graphics Design & Branding", slug: "graphics-design-branding", description: "Crafting high-impact visual identities and premium UI/UX designs that elevate your brand's digital presence.", features: ["Logo & Brand Identity", "UI/UX Visual Design", "Motion Graphics", "Marketing Collaterals"] },
   { icon: PenTool, title: "Content Writing & Strategy", slug: "content-writing-strategy", description: "Creating persuasive, SEO-optimized narratives that engage audiences and drive meaningful business growth.", features: ["SEO Content Writing", "Technical Copywriting", "Brand Storytelling", "Social Media Strategy"] },
   { icon: Palette, title: "UI/UX Design", slug: "ui-ux-design", description: "User-centered design solutions that create engaging and intuitive digital experiences", features: ["User Research", "Wireframing", "Prototyping", "Design Systems"] },
+  { icon: Share2, title: "Social Media Management", slug: "social-media-management", description: "Grow your brand's online presence with data-driven social strategies, engaging content, and performance-focused campaigns across all major platforms.", features: ["Content Strategy", "Ad Campaigns", "Analytics & Reporting", "Community Management"] },
 ];
 
 const ServiceCard = ({ service, index, inView }) => {
@@ -153,12 +155,20 @@ export const ServicesSection = () => {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {services.map((s, i) => (
+          {services.slice(0, 6).map((s, i) => (
             <ServiceCard key={i} service={s} index={i} inView={inView} />
           ))}
         </div>
 
-        <div className="text-center mt-20">
+        <div className="text-center mt-20 flex flex-wrap items-center justify-center gap-4">
+          <Button
+            size="lg"
+            variant="outline"
+            className="h-14 px-10 rounded-full font-black text-lg border-2 border-rose-500/40 dark:border-red-500/40 text-rose-600 dark:text-red-400 hover:bg-rose-50 dark:hover:bg-red-950/40 hover:border-rose-600 dark:hover:border-red-500 transition-all duration-300 hover:scale-105 uppercase tracking-widest group"
+            onClick={() => navigate("/services")}
+          >
+            See More Our Services <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </Button>
           <Button
             size="lg"
             className="h-14 px-10 bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700 text-white rounded-full font-black text-lg shadow-[0_0_20px_rgba(225,29,72,0.4)] hover:shadow-[0_0_30px_rgba(225,29,72,0.6)] border border-red-500/30 transition-all duration-300 hover:scale-105 uppercase tracking-widest group"

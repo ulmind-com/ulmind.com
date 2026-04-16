@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Menu, X, ChevronDown,
-  Code2, Smartphone, Server, Database, Cloud, Palette, Search, Brain
+  Code2, Smartphone, Server, Database, Cloud, Palette, Search, Brain, Share2
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
@@ -11,15 +11,16 @@ import { ShineBorder } from "@/components/ui/shine-border";
 import { OfferPopup } from "@/components/OfferBanner";
 
 const serviceItems = [
-  { name: "Web Development",         icon: Code2,       desc: "React, Next.js & Node.js apps",      color: "#FF4D4D", href: "/services/web-development" },
-  { name: "Mobile App Development",  icon: Smartphone,  desc: "iOS & Android solutions",            color: "#FF6B35", href: "/services/mobile-apps" },
-  { name: "Cloud Solutions",         icon: Cloud,       desc: "AWS, Azure & GCP infrastructure",    color: "#2EF2E2", href: "/services/cloud" },
-  { name: "Backend Development",     icon: Server,      desc: "APIs, microservices & databases",    color: "#F7C59F", href: "/services/backend-development" },
-  { name: "E-commerce Solutions",    icon: Database,    desc: "Online stores with full management", color: "#89E900", href: "/services/ecommerce-solutions" },
-  { name: "AI & Machine Learning",   icon: Brain,       desc: "Intelligent automation & insights",  color: "#38BDF8", href: "/services/ai-machine-learning" },
-  { name: "Graphics Design & Branding", icon: Palette,  desc: "Logos, UI design & brand identity", color: "#A78BFA", href: "/services/graphics-design-branding" },
-  { name: "Content Writing & Strategy", icon: Search,   desc: "SEO content & brand storytelling",  color: "#FB923C", href: "/services/content-writing-strategy" },
-  { name: "UI/UX Design",            icon: Palette,     desc: "User-centered digital experiences",  color: "#FF4D8D", href: "/services/ui-ux-design" },
+  { name: "Web Development",           icon: Code2,     desc: "React, Next.js & Node.js apps",        color: "#FF4D4D", href: "/services/web-development" },
+  { name: "Mobile App Development",    icon: Smartphone,desc: "iOS & Android solutions",              color: "#FF6B35", href: "/services/mobile-apps" },
+  { name: "Cloud Solutions",           icon: Cloud,     desc: "AWS, Azure & GCP infrastructure",      color: "#2EF2E2", href: "/services/cloud" },
+  { name: "Backend Development",       icon: Server,    desc: "APIs, microservices & databases",      color: "#F7C59F", href: "/services/backend-development" },
+  { name: "E-commerce Solutions",      icon: Database,  desc: "Online stores with full management",   color: "#89E900", href: "/services/ecommerce-solutions" },
+  { name: "AI & Machine Learning",     icon: Brain,     desc: "Intelligent automation & insights",    color: "#38BDF8", href: "/services/ai-machine-learning" },
+  { name: "Graphics Design & Branding",icon: Palette,   desc: "Logos, UI design & brand identity",   color: "#A78BFA", href: "/services/graphics-design-branding" },
+  { name: "Content Writing & Strategy",icon: Search,    desc: "SEO content & brand storytelling",    color: "#FB923C", href: "/services/content-writing-strategy" },
+  { name: "UI/UX Design",              icon: Palette,   desc: "User-centered digital experiences",   color: "#FF4D8D", href: "/services/ui-ux-design" },
+  { name: "Social Media Management",   icon: Share2,    desc: "Grow your brand across all platforms", color: "#E1306C", href: "/services/social-media-management" },
 ];
 
 const navItems = [
@@ -37,35 +38,44 @@ const navItems = [
 const ServicesDropdown = ({ onNavigate }: { onNavigate: (href: string) => void }) => {
   const [open, setOpen] = useState(false);
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
-  const timeoutRef  = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const lockedRef   = useRef(false); // blocks hover re-open right after a click
+  const [isNavigating, setIsNavigating] = useState(false);
+  const timeoutRef    = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const fallbackRef   = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const location = useLocation();
 
-  // ── Auto-close whenever the route changes ───────────────────────────────────
+  // ── Close + lock whenever the route changes ──────────────────────────────────
   useEffect(() => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    if (timeoutRef.current)  clearTimeout(timeoutRef.current);
+    if (fallbackRef.current) clearTimeout(fallbackRef.current);
+
     setOpen(false);
+    setIsNavigating(true);
+
+    // Safety-net: if the mouse was never on the navbar, no onMouseLeave fires,
+    // so reset the guard after 3 s so the dropdown works on the next hover.
+    fallbackRef.current = setTimeout(() => setIsNavigating(false), 3000);
   }, [location.pathname]);
 
+  // openMenu is blocked while a navigation is in progress
   const openMenu = () => {
-    if (lockedRef.current) return;          // still cooling down after a click
+    if (isNavigating) return;
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setOpen(true);
   };
+
+  // Mouse leaving the wrapper = safe to allow hover again
   const closeMenu = () => {
+    if (fallbackRef.current) clearTimeout(fallbackRef.current); // cancel the 3 s timer
+    setIsNavigating(false);                                      // re-arm immediately
     timeoutRef.current = setTimeout(() => setOpen(false), 120);
   };
 
   const handleServiceClick = (href: string) => {
-    // 1. Immediately close the dropdown
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setOpen(false);
     setHoveredIdx(null);
-    // 2. Lock hover-reopen for 600ms so mouse-still-over-"Services" can't reopen it
-    lockedRef.current = true;
-    setTimeout(() => { lockedRef.current = false; }, 600);
-    // 3. Navigate
+    setIsNavigating(true); // block hover until mouse leaves the wrapper
     onNavigate(href);
   };
 
