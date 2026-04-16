@@ -369,3 +369,37 @@
   0%, 100% { transform: translateY(0) translateZ(0); }
   50%       { transform: translateY(10px) translateZ(0); }
 }
+
+/* === Orbit spin — CSS-only, runs entirely on compositor thread === */
+@keyframes spin-orbit {
+  from { transform: rotate(0deg) translateZ(0); }
+  to   { transform: rotate(360deg) translateZ(0); }
+}
+/* Counter-rotate children so icons stay upright */
+@keyframes spin-orbit-reverse {
+  from { transform: rotate(0deg) translateZ(0); }
+  to   { transform: rotate(-360deg) translateZ(0); }
+}
+
+.animate-spin-orbit {
+  animation: spin-orbit 22s linear infinite;
+  will-change: transform;
+}
+.animate-spin-orbit-reverse {
+  animation: spin-orbit-reverse 22s linear infinite;
+  will-change: transform;
+}
+
+/* Float variants with different speeds (all CSS, zero JS) */
+@keyframes float-y {
+  0%, 100% { transform: translateY(0) translateZ(0); }
+  50%       { transform: translateY(-18px) translateZ(0); }
+}
+.animate-float-slow {
+  animation: float-y 5.5s ease-in-out infinite;
+  will-change: transform;
+}
+.animate-float-medium {
+  animation: float-y 7s ease-in-out infinite;
+  will-change: transform;
+}

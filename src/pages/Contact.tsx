@@ -7,7 +7,7 @@ import { useFingerprint } from "@/hooks/useFingerprint";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, Phone, MapPin, Send, Star, CheckCircle2, XCircle, Sparkles, ArrowRight } from "lucide-react";
+import { Mail, Phone, MapPin, Send, Star, CheckCircle2, XCircle, Sparkles, ArrowRight, Facebook, Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
 import BlurBlob from "@/components/BlurBlob";
 
 // ─────────────────────────────────────────────
@@ -692,6 +692,7 @@ const Contact = () => {
                             <option value="Consulting">Consulting</option>
                             <option value="Graphics Design">Graphics Design</option>
                             <option value="Content Writing">Content Writing</option>
+                            <option value="Social Media Management">Social Media Management</option>
                           </select>
                           <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 dark:text-slate-500">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="6 9 12 15 18 9" /></svg>
@@ -699,7 +700,62 @@ const Contact = () => {
                         </div>
                       </div>
 
-                      {/* Dynamic Tech Stack Selection */}
+                      {/* Dynamic Tech Stack / Platform Selection */}
+                      <AnimatePresence>
+                        {formData.projectType === "Social Media Management" && (
+                          <motion.div
+                            key="social-platforms"
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.35, ease: "easeInOut" }}
+                            className="overflow-hidden"
+                          >
+                            <div className="space-y-3.5 bg-white/40 dark:bg-black/20 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-white/60 dark:border-white/8 shadow-sm">
+                              <div className="flex items-center justify-between">
+                                <label className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+                                  Social Media Platforms
+                                </label>
+                                <span className="text-[9px] font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                  Select all that apply
+                                </span>
+                              </div>
+                              <div className="flex flex-wrap gap-3">
+                                {[
+                                  { name: "Facebook",     icon: Facebook,  color: "#1877F2", activeCls: "bg-[#1877F2] text-white border-[#1877F2] shadow-[0_0_14px_rgba(24,119,242,0.5)]" },
+                                  { name: "Instagram",   icon: Instagram, color: "#E1306C", activeCls: "bg-[#E1306C] text-white border-[#E1306C] shadow-[0_0_14px_rgba(225,48,108,0.5)]" },
+                                  { name: "LinkedIn",    icon: Linkedin,  color: "#0A66C2", activeCls: "bg-[#0A66C2] text-white border-[#0A66C2] shadow-[0_0_14px_rgba(10,102,194,0.5)]" },
+                                  { name: "Twitter (X)", icon: Twitter,   color: "#000000", activeCls: "bg-black text-white border-black dark:border-white dark:bg-white dark:text-black shadow-[0_0_14px_rgba(0,0,0,0.4)]" },
+                                  { name: "YouTube",     icon: Youtube,   color: "#FF0000", activeCls: "bg-[#FF0000] text-white border-[#FF0000] shadow-[0_0_14px_rgba(255,0,0,0.5)]" },
+                                ].map(({ name, icon: Icon, color, activeCls }) => {
+                                  const isSelected = formData.technologies.includes(name);
+                                  return (
+                                    <motion.button
+                                      layout
+                                      key={name}
+                                      type="button"
+                                      initial={{ opacity: 0, scale: 0.85 }}
+                                      animate={{ opacity: 1, scale: 1 }}
+                                      exit={{ opacity: 0, scale: 0.7 }}
+                                      transition={{ type: "spring", stiffness: 380, damping: 24 }}
+                                      onClick={() => toggleTechnology(name)}
+                                      className={`flex items-center gap-2 px-4 py-2 text-sm font-bold rounded-2xl border-2 transition-all duration-250 touch-manipulation ${
+                                        isSelected
+                                          ? activeCls
+                                          : "bg-white/80 dark:bg-black/40 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/30 shadow-sm active:scale-95"
+                                      }`}
+                                    >
+                                      <Icon className="w-4 h-4 flex-shrink-0" style={!isSelected ? { color } : {}} />
+                                      {name}
+                                    </motion.button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+
                       <AnimatePresence>
                         {techRequiredTypes.includes(formData.projectType) && (
                           <motion.div

@@ -25,6 +25,7 @@ const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const WebDevelopmentPage = lazy(() => import("./pages/services/WebDevelopment"));
+const ServicesPage = lazy(() => import("./pages/Services"));
 const ServiceDetail = lazy(() => import("./pages/services/ServiceDetail"));
 const MobileAppsPage = lazy(() => import("./pages/services/MobileApps"));
 const CloudSolutionsPage = lazy(() => import("./pages/services/CloudSolutions"));
@@ -34,6 +35,7 @@ const AiMachineLearningPage = lazy(() => import("./pages/services/AiMachineLearn
 const GraphicsDesignBrandingPage = lazy(() => import("./pages/services/GraphicsDesignBranding"));
 const ContentWritingStrategyPage = lazy(() => import("./pages/services/ContentWritingStrategy"));
 const UiUxDesignPage = lazy(() => import("./pages/services/UiUxDesign"));
+const SocialMediaManagementPage = lazy(() => import("./pages/services/SocialMediaManagement"));
 const Technologies = lazy(() => import("./pages/Technologies"));
 
 // ─── Admin Panel (isolated route tree) ───────────────────────
@@ -410,6 +412,7 @@ const App = () => {
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                     <Route path="/terms-of-service" element={<TermsOfService />} />
+                    <Route path="/services" element={<ServicesPage />} />
                     <Route path="/services/web-development" element={<WebDevelopmentPage />} />
                     <Route path="/services/mobile-apps" element={<MobileAppsPage />} />
                     <Route path="/services/cloud" element={<CloudSolutionsPage />} />
@@ -419,6 +422,7 @@ const App = () => {
                     <Route path="/services/graphics-design-branding" element={<GraphicsDesignBrandingPage />} />
                     <Route path="/services/content-writing-strategy" element={<ContentWritingStrategyPage />} />
                     <Route path="/services/ui-ux-design" element={<UiUxDesignPage />} />
+                    <Route path="/services/social-media-management" element={<SocialMediaManagementPage />} />
                     <Route path="/services/:serviceId" element={<ServiceDetail />} />
                     <Route path="/technologies" element={<Technologies />} />
                   </Route>
