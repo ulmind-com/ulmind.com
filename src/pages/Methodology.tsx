@@ -13,6 +13,12 @@ import {
   Gauge,
   Sparkles,
   ChevronRight,
+  Ruler,
+  Building2,
+  Lock,
+  Layers,
+  Flame,
+  Hexagon,
 } from "lucide-react";
 import BlurBlob from "@/components/BlurBlob";
 import { CTASection } from "@/components/Sections/CTASection";
@@ -188,31 +194,31 @@ const WaterfallSVG: React.FC = () => (
 
 /* ─── Principles Data ──────────────── */
 const practices = [
-  { icon: FlaskConical, emoji: "🧪", title: "Test-First Development", desc: "Quality engineered from the start. Every feature validated through test-first practices, ensuring long-term reliability.", color: "#6366f1", glow: "rgba(99,102,241,0.25)" },
-  { icon: GitBranch,   emoji: "🔄", title: "CI/CD Pipelines",        desc: "Automated build, test, and deployment cycles enabling rapid, stable, and repeatable releases at scale.", color: "#0ea5e9", glow: "rgba(14,165,233,0.25)" },
-  { icon: Users,       emoji: "🤝", title: "DevOps Synergy",          desc: "Deep alignment between development and operations ensuring seamless delivery, monitoring, and scalability.", color: "#8b5cf6", glow: "rgba(139,92,246,0.25)" },
-  { icon: Shield,      emoji: "🔐", title: "Security by Design",      desc: "Security embedded from day one — not added later. Every layer built with protection and compliance in mind.", color: "#ef4444", glow: "rgba(239,68,68,0.25)" },
-  { icon: Gauge,       emoji: "⚡", title: "Performance Engineering",  desc: "Optimized for speed, scalability, and efficiency — systems that perform flawlessly under real-world load.", color: "#f59e0b", glow: "rgba(245,158,11,0.25)" },
-  { icon: Code2,       emoji: "🧼", title: "Code Excellence",          desc: "Clean, maintainable, scalable code enforced through rigorous reviews and engineering best practices.", color: "#10b981", glow: "rgba(16,185,129,0.25)" },
+  { icon: FlaskConical, title: "Test-First Development", desc: "Quality engineered from the start. Every feature validated through test-first practices, ensuring long-term reliability.", color: "#6366f1", glow: "rgba(99,102,241,0.25)" },
+  { icon: GitBranch,   title: "CI/CD Pipelines",        desc: "Automated build, test, and deployment cycles enabling rapid, stable, and repeatable releases at scale.", color: "#0ea5e9", glow: "rgba(14,165,233,0.25)" },
+  { icon: Users,       title: "DevOps Synergy",          desc: "Deep alignment between development and operations ensuring seamless delivery, monitoring, and scalability.", color: "#8b5cf6", glow: "rgba(139,92,246,0.25)" },
+  { icon: Lock,        title: "Security by Design",      desc: "Security embedded from day one — not added later. Every layer built with protection and compliance in mind.", color: "#ef4444", glow: "rgba(239,68,68,0.25)" },
+  { icon: Gauge,       title: "Performance Engineering",  desc: "Optimized for speed, scalability, and efficiency — systems that perform flawlessly under real-world load.", color: "#f59e0b", glow: "rgba(245,158,11,0.25)" },
+  { icon: Code2,       title: "Code Excellence",          desc: "Clean, maintainable, scalable code enforced through rigorous reviews and engineering best practices.", color: "#10b981", glow: "rgba(16,185,129,0.25)" },
 ];
 
 /* ─── lifecycle Steps ──────────────── */
 const lifecycle = [
-  { num: "01", title: "Discovery",                     desc: "Deep understanding of business objectives, technical requirements, and success metrics.",              emoji: "🔍" },
-  { num: "02", title: "Strategic Planning",             desc: "Structured roadmap, defined milestones, and precise resource alignment for execution.",               emoji: "🗺️" },
-  { num: "03", title: "Experience & Architecture Design", desc: "User-centric interface design combined with scalable, resilient system architecture.",              emoji: "✏️" },
-  { num: "04", title: "Engineering & Build",            desc: "Iterative development with continuous validation, performance checks, and quality gates.",            emoji: "🔧" },
-  { num: "05", title: "Quality Assurance",              desc: "Comprehensive testing cycles ensuring stability, accuracy, usability, and edge-case resilience.",     emoji: "🧪" },
-  { num: "06", title: "Deployment & Release",           desc: "Seamless production rollout with monitoring, rollback strategies, and high-availability assurance.", emoji: "🚀" },
-  { num: "07", title: "Continuous Evolution",           desc: "Ongoing optimization, feature enhancement, performance tuning, and long-term support.",               emoji: "♻️" },
+  { num: "01", title: "Discovery",                     desc: "Deep understanding of business objectives, technical requirements, and success metrics." },
+  { num: "02", title: "Strategic Planning",             desc: "Structured roadmap, defined milestones, and precise resource alignment for execution." },
+  { num: "03", title: "Experience & Architecture Design", desc: "User-centric interface design combined with scalable, resilient system architecture." },
+  { num: "04", title: "Engineering & Build",            desc: "Iterative development with continuous validation, performance checks, and quality gates." },
+  { num: "05", title: "Quality Assurance",              desc: "Comprehensive testing cycles ensuring stability, accuracy, usability, and edge-case resilience." },
+  { num: "06", title: "Deployment & Release",           desc: "Seamless production rollout with monitoring, rollback strategies, and high-availability assurance." },
+  { num: "07", title: "Continuous Evolution",           desc: "Ongoing optimization, feature enhancement, performance tuning, and long-term support." },
 ];
 
 /* ─── Signature Badges ─────────────── */
 const signatureBadges = [
-  { label: "Engineered for Scale.",        icon: "📐" },
-  { label: "Built for Reliability.",       icon: "🏗️" },
-  { label: "Optimized for Performance.",   icon: "⚡" },
-  { label: "Secured by Design.",           icon: "🔐" },
+  { label: "Engineered for Scale.",        Icon: Ruler },
+  { label: "Built for Reliability.",       Icon: Building2 },
+  { label: "Optimized for Performance.",   Icon: Zap },
+  { label: "Secured by Design.",           Icon: Lock },
 ];
 
 /* ─── Main Component ────────────────── */
@@ -572,9 +578,9 @@ export default function Methodology() {
               {/* Signature badges */}
               <Reveal delay={0.3}>
                 <div className="flex flex-wrap gap-3">
-                  {signatureBadges.map(({ label, icon }) => (
+                  {signatureBadges.map(({ label, Icon }) => (
                     <div key={label} className="sig-badge">
-                      <span className="text-lg">{icon}</span>
+                      <Icon className="w-4 h-4 text-red-500 flex-shrink-0" />
                       <span className="text-xs font-black tracking-wide text-zinc-700 dark:text-zinc-300">{label}</span>
                     </div>
                   ))}
@@ -629,9 +635,9 @@ export default function Methodology() {
                   <span className="text-[10px] font-black tracking-[0.4em] uppercase text-red-600 dark:text-red-400">Execution Model</span>
                 </div>
 
-                <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-zinc-900 dark:text-white uppercase">
-                  ⚡ Agile<br />
-                  <span className="bg-gradient-to-r from-red-600 to-rose-500 bg-clip-text text-transparent">Engineering</span>
+                <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-zinc-900 dark:text-white uppercase flex items-center gap-3 flex-wrap">
+                  <Zap className="w-9 h-9 text-red-500 flex-shrink-0" />
+                  <span>Agile<br /><span className="bg-gradient-to-r from-red-600 to-rose-500 bg-clip-text text-transparent">Engineering</span></span>
                 </h2>
 
                 <p className="text-lg text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-lg font-medium">
@@ -683,9 +689,9 @@ export default function Methodology() {
                   <span className="text-[10px] font-black tracking-[0.4em] uppercase text-red-600 dark:text-red-400">Structured Model</span>
                 </div>
 
-                <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-zinc-900 dark:text-white uppercase">
-                  🧩 Structured<br />
-                  <span className="bg-gradient-to-r from-red-600 to-rose-400 bg-clip-text text-transparent">Waterfall</span>
+                <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-zinc-900 dark:text-white uppercase flex items-center gap-3 flex-wrap">
+                  <Layers className="w-9 h-9 text-red-500 flex-shrink-0" />
+                  <span>Structured<br /><span className="bg-gradient-to-r from-red-600 to-rose-400 bg-clip-text text-transparent">Waterfall</span></span>
                 </h2>
 
                 <p className="text-lg text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-lg font-medium">
@@ -735,9 +741,9 @@ export default function Methodology() {
               <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-5 rounded-full border border-red-500/20 bg-red-500/10 backdrop-blur-sm">
                 <span className="text-[10px] font-black tracking-[0.4em] uppercase text-red-600 dark:text-red-400">Standards</span>
               </div>
-              <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-zinc-900 dark:text-white uppercase mb-5">
-                🔶 Engineering{" "}
-                <span className="bg-gradient-to-r from-red-600 to-rose-400 bg-clip-text text-transparent">Principles</span>
+              <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-zinc-900 dark:text-white uppercase mb-5 flex items-center justify-center gap-3 flex-wrap">
+                <Hexagon className="w-9 h-9 text-red-500 flex-shrink-0" />
+                <span>Engineering{" "}<span className="bg-gradient-to-r from-red-600 to-rose-400 bg-clip-text text-transparent">Principles</span></span>
               </h2>
               <p className="text-lg text-zinc-500 dark:text-zinc-400 max-w-2xl mx-auto font-medium">
                 The unyielding standards we uphold to build resilient, scalable, and enterprise-grade systems.
@@ -745,7 +751,7 @@ export default function Methodology() {
             </Reveal>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {practices.map(({ icon: Icon, emoji, title, desc, color, glow }, i) => (
+              {practices.map(({ icon: Icon, title, desc, color, glow }, i) => (
                 <Reveal key={i} delay={i * 0.07}>
                   <motion.div
                     whileHover={{ scale: 1.02 }}
@@ -759,7 +765,7 @@ export default function Methodology() {
                       {/* Icon */}
                       <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-5 shadow-lg"
                         style={{ background: `linear-gradient(135deg, ${color}22, ${color}08)`, border: `1px solid ${color}30` }}>
-                        <span className="text-2xl">{emoji}</span>
+                        <Icon className="w-7 h-7" style={{ color }} />
                       </div>
 
                       <h3 className="text-lg font-black text-zinc-900 dark:text-white mb-2 tracking-tight">{title}</h3>
@@ -788,9 +794,9 @@ export default function Methodology() {
               <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-5 rounded-full border border-red-500/20 bg-red-500/10 backdrop-blur-sm">
                 <span className="text-[10px] font-black tracking-[0.4em] uppercase text-red-600 dark:text-red-400">Process</span>
               </div>
-              <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-zinc-900 dark:text-white uppercase mb-5">
-                🔶 Lifecycle{" "}
-                <span className="bg-gradient-to-r from-red-600 to-rose-400 bg-clip-text text-transparent">Architecture</span>
+              <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-zinc-900 dark:text-white uppercase mb-5 flex items-center justify-center gap-3 flex-wrap">
+                <Hexagon className="w-9 h-9 text-red-500 flex-shrink-0" />
+                <span>Lifecycle{" "}<span className="bg-gradient-to-r from-red-600 to-rose-400 bg-clip-text text-transparent">Architecture</span></span>
               </h2>
               <p className="text-lg text-zinc-500 dark:text-zinc-400 max-w-2xl mx-auto font-medium">
                 A controlled, stage-driven journey from concept to continuous evolution.
@@ -799,7 +805,7 @@ export default function Methodology() {
 
             {/* ── Cards Grid ── */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {lifecycle.map(({ num, title, desc, emoji }, i) => {
+              {lifecycle.map(({ num, title, desc }, i) => {
                 const cardColors = [
                   { accent: "#6366f1", glow: "rgba(99,102,241,0.14)",  numBg: "linear-gradient(135deg,#6366f1,#8b5cf6)",  bar: "linear-gradient(90deg,#6366f1,#8b5cf6)"  },
                   { accent: "#0ea5e9", glow: "rgba(14,165,233,0.14)",  numBg: "linear-gradient(135deg,#0ea5e9,#38bdf8)",  bar: "linear-gradient(90deg,#0ea5e9,#38bdf8)"  },
@@ -845,17 +851,6 @@ export default function Methodology() {
                             }}
                           >
                             {num}
-                          </div>
-
-                          {/* Emoji icon */}
-                          <div
-                            className="w-11 h-11 rounded-2xl flex items-center justify-center text-xl flex-shrink-0 transition-transform duration-300 group-hover:scale-110"
-                            style={{
-                              background: `${c.accent}14`,
-                              border: `1px solid ${c.accent}28`,
-                            }}
-                          >
-                            {emoji}
                           </div>
                         </div>
 
@@ -913,8 +908,8 @@ export default function Methodology() {
                 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent pointer-events-none" />
                 <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-red-500/40 to-transparent pointer-events-none" />
 
-                <p className="text-[11px] font-black tracking-[0.5em] uppercase text-red-600 dark:text-red-400 mb-6">
-                  🔥 Our Signature
+                <p className="text-[11px] font-black tracking-[0.5em] uppercase text-red-600 dark:text-red-400 mb-6 flex items-center justify-center gap-2">
+                  <Flame className="w-4 h-4" /> Our Signature
                 </p>
                 <blockquote className="text-2xl md:text-3xl font-black text-zinc-900 dark:text-white tracking-tight leading-snug mb-8">
                   "We don't just deliver software.{" "}
@@ -924,9 +919,9 @@ export default function Methodology() {
                 </blockquote>
 
                 <div className="flex flex-wrap justify-center gap-4">
-                  {signatureBadges.map(({ label, icon }) => (
+                  {signatureBadges.map(({ label, Icon }) => (
                     <div key={label} className="sig-badge">
-                      <span className="text-xl">{icon}</span>
+                      <Icon className="w-4 h-4 text-red-500 flex-shrink-0" />
                       <span className="text-sm font-black text-zinc-700 dark:text-zinc-200">{label}</span>
                     </div>
                   ))}
