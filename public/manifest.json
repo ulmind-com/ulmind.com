@@ -1,6 +1,7 @@
 {
-  "short_name": "ULMIND",
+  "id": "/",
   "name": "ULMIND",
+  "short_name": "ULMIND",
   "description": "ULMIND - Digital Solutions & IT Services Company",
   "icons": [
     {
@@ -17,13 +18,38 @@
       "src": "/logo.png",
       "type": "image/png",
       "sizes": "any",
-      "purpose": "maskable"
+      "purpose": "any maskable"
     }
   ],
   "start_url": "/",
   "background_color": "#000000",
+  "theme_color": "#000000",
   "display": "standalone",
   "scope": "/",
-  "theme_color": "#000000",
-  "orientation": "portrait"
+  "dir": "ltr",
+  "orientation": "any",
+  "categories": ["business", "productivity", "utilities"],
+  "shortcuts": [
+    {
+      "name": "Our Services",
+      "short_name": "Services",
+      "description": "Explore our IT solutions & services",
+      "url": "/services",
+      "icons": [{ "src": "/logo.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "View Projects",
+      "short_name": "Projects",
+      "description": "Browse our portfolio",
+      "url": "/projects",
+      "icons": [{ "src": "/logo.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Contact Us",
+      "short_name": "Contact",
+      "description": "Get in touch with ULMIND",
+      "url": "/contact",
+      "icons": [{ "src": "/logo.png", "sizes": "192x192" }]
+    }
+  ]
 }
