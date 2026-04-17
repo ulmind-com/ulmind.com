@@ -189,16 +189,75 @@ export default function Team() {
       <BlurBlob position={{ top: "90%", left: "20%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-yellow-200 dark:bg-yellow-600" opacityClass="opacity-40 dark:opacity-20" />
 
       {/* HERO */}
-      <section className="pt-32 pb-8 px-4 sm:px-6 lg:px-8 text-center">
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="text-4xl md:text-6xl font-bold gradient-text mb-6">
-            Meet Our Team
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            A passionate group of professionals building impactful digital solutions together.
-          </p>
+      <section className="pt-14 pb-8 px-4 sm:px-6 lg:px-8 text-center relative">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col items-center gap-4"
+        >
+
+          {/* Eyebrow badge */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-rose-500/30 bg-rose-500/8 backdrop-blur-md"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,1)] animate-pulse" />
+            <span className="text-[11px] font-bold tracking-[0.2em] text-rose-500 uppercase">The People Behind ULMiND</span>
+          </motion.div>
+
+          {/* Main heading */}
+          <div className="relative">
+            <motion.h1
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-5xl md:text-7xl font-black tracking-tight leading-none"
+              style={{ letterSpacing: "-0.03em" }}
+            >
+              <span className="text-foreground">Meet </span>
+              <span className="text-foreground">Our </span>
+              <span
+                style={{
+                  background: "linear-gradient(135deg, #f43f5e 0%, #fb923c 50%, #f43f5e 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
+                Team
+              </span>
+            </motion.h1>
+
+            {/* Animated underline accent */}
+            <motion.div
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={{ scaleX: 1, opacity: 1 }}
+              transition={{ duration: 0.7, delay: 0.5, ease: "easeOut" }}
+              className="mt-3 mx-auto h-[3px] w-32 rounded-full origin-left"
+              style={{
+                background: "linear-gradient(90deg, #f43f5e, #fb923c, transparent)",
+              }}
+            />
+          </div>
+
+          {/* Subtitle */}
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.25 }}
+            className="text-muted-foreground text-base md:text-lg max-w-xl mx-auto leading-relaxed"
+          >
+            A passionate group of professionals building{" "}
+            <span className="text-foreground font-semibold">impactful digital solutions</span>{" "}
+            together.
+          </motion.p>
+
         </motion.div>
       </section>
+
 
       {/* TEAM GRID */}
       <section className="pt-8 pb-20 px-4 sm:px-6 lg:px-8">

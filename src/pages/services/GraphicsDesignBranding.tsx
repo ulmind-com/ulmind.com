@@ -19,6 +19,19 @@ import {
   Type,
   Film,
   Layout,
+  Smartphone,
+  BookOpen,
+  MonitorPlay,
+  Package,
+  Shapes,
+  Briefcase,
+  Pipette,
+  Box,
+  TabletSmartphone,
+  Image as ImageIcon,
+  Smile,
+  Mail,
+  BarChart,
 } from "lucide-react";
 import BlurBlob from "@/components/BlurBlob";
 import { TimelineGlowLine } from "@/components/ui/TimelineGlowLine";
@@ -694,7 +707,112 @@ const GraphicsDesignBrandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* ── CTA ── */}
+      {/* ── INFINITE SCROLL GALLERY ── */}
+      <section className="py-20 px-0 relative overflow-hidden">
+        {/* Bg gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-fuchsia-50/30 to-transparent dark:via-fuchsia-950/10 pointer-events-none" />
+
+        {/* Section heading */}
+        <Reveal className="text-center mb-12 px-4">
+          <div className="inline-block px-4 py-1.5 mb-4 rounded-full border border-fuchsia-500/20 bg-fuchsia-500/10">
+            <span className="text-fuchsia-600 dark:text-fuchsia-400 text-[10px] font-black tracking-[0.4em] uppercase">Our Work</span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-black text-zinc-900 dark:text-white uppercase tracking-tighter">
+            Designs That <span className="text-fuchsia-600">Define</span>
+          </h2>
+          <p className="text-zinc-500 dark:text-zinc-400 mt-3 text-base max-w-md mx-auto">
+            A glimpse into brand identities, UI kits, and creative systems we've built.
+          </p>
+        </Reveal>
+
+        {/* CSS for marquee */}
+        <style>{`
+          @keyframes marquee-left  { from { transform: translateX(0); }   to { transform: translateX(-50%); } }
+          @keyframes marquee-right { from { transform: translateX(-50%); } to { transform: translateX(0); }   }
+          .marquee-left  { animation: marquee-left  28s linear infinite; }
+          .marquee-right { animation: marquee-right 32s linear infinite; }
+          .marquee-left:hover,
+          .marquee-right:hover { animation-play-state: paused; }
+        `}</style>
+
+        {/* ROW 1 — left scroll */}
+        <div className="overflow-hidden mb-4 relative">
+          <div className="flex gap-4 w-max marquee-left">
+            {[
+              { label: "Logo Design",         tag: "Brand Identity",   bg: "from-fuchsia-600 to-purple-700",     icon: Palette },
+              { label: "Social Media Kit",    tag: "Marketing",        bg: "from-purple-600 to-fuchsia-800",     icon: Smartphone },
+              { label: "Brand Guidelines",   tag: "Visual System",    bg: "from-fuchsia-700 to-pink-700",       icon: BookOpen },
+              { label: "UI Visual Design",   tag: "Product Design",   bg: "from-violet-600 to-fuchsia-600",     icon: MonitorPlay },
+              { label: "Motion Graphics",    tag: "Animation",        bg: "from-pink-600 to-fuchsia-700",       icon: Film },
+              { label: "Packaging Design",   tag: "Brand & Print",    bg: "from-purple-700 to-violet-700",      icon: Package },
+              { label: "Icon System",         tag: "Iconography",      bg: "from-fuchsia-500 to-purple-600",     icon: Shapes },
+              { label: "Business Card",       tag: "Print Design",     bg: "from-violet-700 to-fuchsia-700",     icon: Briefcase },
+              /* duplicate for seamless loop */
+              { label: "Logo Design",         tag: "Brand Identity",   bg: "from-fuchsia-600 to-purple-700",     icon: Palette },
+              { label: "Social Media Kit",    tag: "Marketing",        bg: "from-purple-600 to-fuchsia-800",     icon: Smartphone },
+              { label: "Brand Guidelines",   tag: "Visual System",    bg: "from-fuchsia-700 to-pink-700",       icon: BookOpen },
+              { label: "UI Visual Design",   tag: "Product Design",   bg: "from-violet-600 to-fuchsia-600",     icon: MonitorPlay },
+              { label: "Motion Graphics",    tag: "Animation",        bg: "from-pink-600 to-fuchsia-700",       icon: Film },
+              { label: "Packaging Design",   tag: "Brand & Print",    bg: "from-purple-700 to-violet-700",      icon: Package },
+              { label: "Icon System",         tag: "Iconography",      bg: "from-fuchsia-500 to-purple-600",     icon: Shapes },
+              { label: "Business Card",       tag: "Print Design",     bg: "from-violet-700 to-fuchsia-700",     icon: Briefcase },
+            ].map((item, i) => (
+              <div
+                key={i}
+                className={`flex-shrink-0 w-56 h-36 rounded-2xl bg-gradient-to-br ${item.bg} p-5 flex flex-col justify-between shadow-xl shadow-fuchsia-500/20 border border-white/10 cursor-default select-none`}
+              >
+                <div className="flex items-start justify-between">
+                  <item.icon className="w-8 h-8 text-white/90" />
+                  <span className="text-[9px] font-black tracking-widest text-white/60 uppercase bg-white/10 px-2 py-0.5 rounded-full">{item.tag}</span>
+                </div>
+                <p className="text-white font-black text-base leading-tight">{item.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ROW 2 — right scroll */}
+        <div className="overflow-hidden relative">
+          <div className="flex gap-4 w-max marquee-right">
+            {[
+              { label: "Color Palette",       tag: "Brand System",    bg: "from-pink-600 to-fuchsia-600",       icon: Pipette },
+              { label: "Typography System",  tag: "Type Design",      bg: "from-fuchsia-800 to-purple-800",     icon: Type },
+              { label: "Product Mockup",      tag: "3D Branding",      bg: "from-violet-800 to-fuchsia-600",     icon: Box },
+              { label: "App UI Design",       tag: "Mobile Design",    bg: "from-purple-800 to-pink-700",        icon: TabletSmartphone },
+              { label: "Billboard Ad",        tag: "Out-of-Home",      bg: "from-fuchsia-600 to-violet-700",     icon: ImageIcon },
+              { label: "Brand Mascot",        tag: "Illustration",     bg: "from-pink-700 to-fuchsia-800",       icon: Smile },
+              { label: "Email Template",      tag: "Digital Design",   bg: "from-violet-600 to-purple-700",      icon: Mail },
+              { label: "Annual Report",       tag: "Corporate",        bg: "from-fuchsia-700 to-violet-800",     icon: BarChart },
+              /* duplicate */
+              { label: "Color Palette",       tag: "Brand System",    bg: "from-pink-600 to-fuchsia-600",       icon: Pipette },
+              { label: "Typography System",  tag: "Type Design",      bg: "from-fuchsia-800 to-purple-800",     icon: Type },
+              { label: "Product Mockup",      tag: "3D Branding",      bg: "from-violet-800 to-fuchsia-600",     icon: Box },
+              { label: "App UI Design",       tag: "Mobile Design",    bg: "from-purple-800 to-pink-700",        icon: TabletSmartphone },
+              { label: "Billboard Ad",        tag: "Out-of-Home",      bg: "from-fuchsia-600 to-violet-700",     icon: ImageIcon },
+              { label: "Brand Mascot",        tag: "Illustration",     bg: "from-pink-700 to-fuchsia-800",       icon: Smile },
+              { label: "Email Template",      tag: "Digital Design",   bg: "from-violet-600 to-purple-700",      icon: Mail },
+              { label: "Annual Report",       tag: "Corporate",        bg: "from-fuchsia-700 to-violet-800",     icon: BarChart },
+            ].map((item, i) => (
+              <div
+                key={i}
+                className={`flex-shrink-0 w-56 h-36 rounded-2xl bg-gradient-to-br ${item.bg} p-5 flex flex-col justify-between shadow-xl shadow-fuchsia-500/20 border border-white/10 cursor-default select-none`}
+              >
+                <div className="flex items-start justify-between">
+                  <item.icon className="w-8 h-8 text-white/90" />
+                  <span className="text-[9px] font-black tracking-widest text-white/60 uppercase bg-white/10 px-2 py-0.5 rounded-full">{item.tag}</span>
+                </div>
+                <p className="text-white font-black text-base leading-tight">{item.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Edge fades */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white dark:from-zinc-950 to-transparent z-10" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white dark:from-zinc-950 to-transparent z-10" />
+      </section>
+
+
       <section className="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         <div className="max-w-4xl mx-auto">
           <Reveal>
