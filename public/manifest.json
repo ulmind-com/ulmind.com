@@ -5,20 +5,28 @@
   "description": "ULMIND - Digital Solutions & IT Services Company",
   "icons": [
     {
-      "src": "/logo-pwa.png",
+      "src": "/logo.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "/logo.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
     },
     {
       "src": "/logo-pwa.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "192x192",
+      "purpose": "maskable"
     },
     {
       "src": "/logo-pwa.png",
       "type": "image/png",
-      "sizes": "any",
-      "purpose": "any maskable"
+      "sizes": "512x512",
+      "purpose": "maskable"
     }
   ],
   "start_url": "/",
@@ -35,21 +43,21 @@
       "short_name": "Services",
       "description": "Explore our IT solutions & services",
       "url": "/services",
-      "icons": [{ "src": "/logo-pwa.png", "sizes": "192x192" }]
+      "icons": [{ "src": "/logo.png", "sizes": "192x192" }]
     },
     {
       "name": "View Projects",
       "short_name": "Projects",
       "description": "Browse our portfolio",
       "url": "/projects",
-      "icons": [{ "src": "/logo-pwa.png", "sizes": "192x192" }]
+      "icons": [{ "src": "/logo.png", "sizes": "192x192" }]
     },
     {
       "name": "Contact Us",
       "short_name": "Contact",
       "description": "Get in touch with ULMIND",
       "url": "/contact",
-      "icons": [{ "src": "/logo-pwa.png", "sizes": "192x192" }]
+      "icons": [{ "src": "/logo.png", "sizes": "192x192" }]
     }
   ]
 }
