@@ -17,7 +17,7 @@ export const TechnologySection = () => {
           border-radius: 24px;
           position: relative;
           overflow: hidden;
-          cursor: default;
+          cursor: pointer;
           transform: translateZ(0);
           will-change: transform;
           backface-visibility: hidden;
@@ -127,6 +127,11 @@ export const TechnologySection = () => {
                 key={tech.name}
                 className={`home-tech-glass-card ${index >= 4 ? "hidden sm:block" : ""}`}
                 style={{ animationDelay: `${index * 35}ms` }}
+                onClick={() => navigate(`/technologies/${tech.slug}`)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === "Enter" && navigate(`/technologies/${tech.slug}`)}
+                aria-label={`Learn more about ${tech.name}`}
               >
                 <div className="home-tech-card-highlight" />
                 <div className="relative z-10 flex flex-col items-center justify-center gap-3 p-5">

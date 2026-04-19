@@ -37,6 +37,7 @@ const ContentWritingStrategyPage = lazy(() => import("./pages/services/ContentWr
 const UiUxDesignPage = lazy(() => import("./pages/services/UiUxDesign"));
 const SocialMediaManagementPage = lazy(() => import("./pages/services/SocialMediaManagement"));
 const Technologies = lazy(() => import("./pages/Technologies"));
+const TechnologyDetail = lazy(() => import("./pages/technologies/TechnologyDetail"));
 
 // ─── Admin Panel (isolated route tree) ───────────────────────
 const AdminLoginPage = lazy(() => import("./admin/pages/LoginPage"));
@@ -425,6 +426,7 @@ const App = () => {
                     <Route path="/services/social-media-management" element={<SocialMediaManagementPage />} />
                     <Route path="/services/:serviceId" element={<ServiceDetail />} />
                     <Route path="/technologies" element={<Technologies />} />
+                    <Route path="/technologies/:slug" element={<TechnologyDetail />} />
                   </Route>
 
                   {/* ─── Admin Panel Routes (completely isolated) ─── */}
