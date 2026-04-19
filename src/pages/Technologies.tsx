@@ -63,30 +63,35 @@ const categoryMeta: Record<
    don't cost GPU during scroll
 ───────────────────────────────────────── */
 const TechCard: React.FC<{
-  tech: { name: string; icon: React.FC<{ className?: string; size?: number; color?: string }>; color: string; category: string };
+  tech: { name: string; slug: string; icon: React.FC<{ className?: string; size?: number; color?: string }>; color: string; category: string; accentColor: string; glowColor: string };
   accentColor: string;
   glowColor: string;
 }> = ({ tech, accentColor, glowColor }) => {
   return (
-    <div
-      className="tech-glass-card group"
-      style={{ "--pill-glow": accentColor, "--card-glow": glowColor } as React.CSSProperties}
-    >
-      {/* Top specular highlight */}
-      <div className="tech-card-highlight" />
+    <Link to={`/technologies/${tech.slug}`} className="block">
+      <div
+        className="tech-glass-card group"
+        style={{ "--pill-glow": accentColor, "--card-glow": glowColor, cursor: "pointer" } as React.CSSProperties}
+      >
+        {/* Top specular highlight */}
+        <div className="tech-card-highlight" />
 
-      {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center gap-3 p-5">
-        <div className="tech-icon-pill">
-          <tech.icon
-            size={28}
-            color={tech.color}
-            className="drop-shadow-sm"
-          />
+        {/* Content */}
+        <div className="relative z-10 flex flex-col items-center justify-center gap-3 p-5">
+          <div className="tech-icon-pill">
+            <tech.icon
+              size={28}
+              color={tech.color}
+              className="drop-shadow-sm"
+            />
+          </div>
+          <span className="tech-card-label">{tech.name}</span>
         </div>
-        <span className="tech-card-label">{tech.name}</span>
+
+        {/* Hover arrow indicator */}
+        <div className="tech-card-arrow" />
       </div>
-    </div>
+    </Link>
   );
 };
 
@@ -318,6 +323,25 @@ const Technologies = () => {
         .dark  .tech-card-label          { color: rgba(255,255,255,0.75); }
         :root  .tech-glass-card:hover .tech-card-label { color: rgba(15,23,42,1); }
         .dark  .tech-glass-card:hover .tech-card-label { color: rgba(255,255,255,0.96); }
+
+        /* ── Arrow hover indicator ── */
+        .tech-card-arrow {
+          position: absolute;
+          bottom: 8px;
+          right: 10px;
+          width: 6px;
+          height: 6px;
+          border-radius: 9999px;
+          background: var(--pill-glow, rgba(99,102,241,0.6));
+          opacity: 0;
+          transform: scale(0.5);
+          transition: opacity 0.22s ease, transform 0.22s ease;
+          pointer-events: none;
+        }
+        .tech-glass-card:hover .tech-card-arrow {
+          opacity: 1;
+          transform: scale(1);
+        }
 
         /* ── Ambient orbs (position:fixed, no filter during scroll) ── */
         .tech-orb {
