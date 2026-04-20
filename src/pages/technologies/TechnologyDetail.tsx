@@ -26,6 +26,8 @@ import { techDetails, TechDetail } from "@/data/techDetails";
 import { TechIllustration } from "@/components/TechIllustrations";
 import { useTheme } from "next-themes";
 
+console.log("Registered tech detail keys:", Object.keys(techDetails));
+
 
 /* ─────────────────────────────────────────
    Reveal animation helper
@@ -75,10 +77,10 @@ const CopyButton: React.FC<{ text: string; color: string }> = ({ text, color }) 
     <motion.button
       onClick={handleCopy}
       whileTap={{ scale: 0.9 }}
-      className={`absolute top-3 right-3 p-2 rounded-lg transition-all duration-200 ${
+      className={`group absolute top-3 right-3 p-2 rounded-lg transition-all duration-200 ${
         copied 
           ? "" 
-          : "bg-slate-200/50 hover:bg-slate-300/50 border border-slate-300/50 dark:bg-white/5 dark:hover:bg-white/10 dark:border-white/10"
+          : "bg-white/5 hover:bg-white/10 border border-white/10 text-white/50 hover:text-white"
       }`}
       style={copied ? {
         background: `${color}30`,
@@ -105,7 +107,7 @@ const CopyButton: React.FC<{ text: string; color: string }> = ({ text, color }) 
             exit={{ scale: 0.5, opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <Copy size={14} className="text-slate-500 dark:text-white/50" />
+            <Copy size={14} className="text-white/60 group-hover:text-white" />
           </motion.div>
         )}
       </AnimatePresence>
@@ -184,7 +186,7 @@ const StatCard: React.FC<{
       />
       <span
         className="text-2xl font-black tracking-tight"
-        style={{ color: isDark ? color : "#0f172a" }}
+        style={{ color: isDark ? color : `color-mix(in srgb, ${color}, black 45%)` }}
       >
         {value}
       </span>
@@ -298,7 +300,7 @@ const TechnologyDetail: React.FC = () => {
       {/* ═══════════════════════════════════════════════
           HERO SECTION
       ═══════════════════════════════════════════════ */}
-      <section className="relative pt-28 pb-12 px-6">
+      <section className="relative pt-14 pb-12 px-6">
         <div className="max-w-7xl mx-auto">
 
           {/* Back button */}
@@ -460,9 +462,9 @@ const TechnologyDetail: React.FC = () => {
                             color: isOpen ? "#fff" : color,
                             border: `2px solid ${color}40`,
                           } : {
-                            background: isOpen ? "#0f172a" : "#f1f5f9",
-                            color: isOpen ? "#fff" : "#64748b",
-                            border: `2px solid ${isOpen ? "#0f172a" : "#e2e8f0"}`,
+                            background: isOpen ? `color-mix(in srgb, ${color}, black 20%)` : `${color}20`,
+                            color: isOpen ? "#fff" : `color-mix(in srgb, ${color}, black 30%)`,
+                            border: `2px solid ${isOpen ? `color-mix(in srgb, ${color}, black 20%)` : `${color}40`}`,
                           }}
                         >
                           {step.step}
@@ -528,14 +530,14 @@ const TechnologyDetail: React.FC = () => {
                 {/* Glow spot */}
                 <div
                   className="absolute top-0 right-0 w-48 h-48 rounded-full blur-3xl opacity-20 pointer-events-none"
-                  style={{ background: isDark ? color : "#94a3b8" }}
+                  style={{ background: isDark ? color : `color-mix(in srgb, ${color}, black 20%)` }}
                 />
                 <div className="flex items-start gap-4">
-                  <div className="mt-0.5 p-2.5 rounded-xl flex-shrink-0 bg-slate-100 border border-slate-200 dark:bg-transparent" style={isDark ? { background: `${color}20`, borderColor: `${color}35` } : {}}>
-                    <Lightbulb size={18} color={isDark ? color : "#64748b"} />
+                  <div className="mt-0.5 p-2.5 rounded-xl flex-shrink-0 border dark:bg-transparent" style={isDark ? { background: `${color}20`, borderColor: `${color}35` } : { background: `${color}15`, borderColor: `${color}30` }}>
+                    <Lightbulb size={18} color={isDark ? color : `color-mix(in srgb, ${color}, black 35%)`} />
                   </div>
                   <div>
-                    <p className="font-bold text-sm uppercase tracking-widest mb-2" style={isDark ? { color } : { color: "#0f172a" }}>
+                    <p className="font-bold text-sm uppercase tracking-widest mb-2" style={isDark ? { color } : { color: `color-mix(in srgb, ${color}, black 40%)` }}>
                       ULMiND Pro Tip
                     </p>
                     <p className="text-slate-700 dark:text-white/70 leading-relaxed text-sm">
