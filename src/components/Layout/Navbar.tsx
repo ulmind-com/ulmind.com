@@ -218,16 +218,25 @@ export const Navbar = () => {
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
+    let ticking = false;
 
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      setScrolled(currentScrollY > 50);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = Math.max(0, window.scrollY); // Prevent negative elasticity on Mac
+          setScrolled(currentScrollY > 50);
 
-      if (currentScrollY < 50)               setIsScrollingDown(false);
-      else if (currentScrollY > lastScrollY) setIsScrollingDown(true);
-      else if (currentScrollY < lastScrollY) setIsScrollingDown(false);
-
-      lastScrollY = currentScrollY;
+          if (currentScrollY < 50) {
+            setIsScrollingDown(false);
+          } else if (Math.abs(currentScrollY - lastScrollY) > 10) {
+            // Apply threshold of 10px to prevent micro-stutters and layout thrashing
+            setIsScrollingDown(currentScrollY > lastScrollY);
+            lastScrollY = currentScrollY;
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });

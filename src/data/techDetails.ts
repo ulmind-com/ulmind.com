@@ -3235,6 +3235,152 @@ jarsigner -verbose -keystore my-release-key.jks \\
       proTip: "At ULMiND, Android development follows Clean Architecture: Data Layer (Room + Retrofit) → Domain Layer (UseCases) → UI Layer (ViewModel + Compose). We use Hilt for DI, WorkManager for background sync, and Firebase Crashlytics for production crash monitoring.",
     },
   },
+  "ios": {
+    techStats: [
+      { label: "Created by", value: "Apple" },
+      { label: "Market Share", value: "28% globally" },
+      { label: "App Store Apps", value: "2.2M+" },
+      { label: "Main Language", value: "Swift" },
+    ],
+    fromScratch: {
+      title: "Building an iOS App from Scratch",
+      environment: "macOS with Xcode 15+ installed from Mac App Store",
+      steps: [
+        {
+          step: 1,
+          title: "Create a New iOS Project in Xcode",
+          command: `# Open Xcode → Create New Project
+# → iOS → App
+# Product Name: MyApp
+# Interface: SwiftUI
+# Language: Swift
+# Include Tests: ✓
+
+# Or use Swift Package Manager for CLI:
+swift package init --name MyApp --type executable`,
+          description: "Always select SwiftUI for the interface (not UIKit Storyboard). SwiftUI is Apple's modern declarative UI framework that works beautifully across iOS, macOS, watchOS, and tvOS.",
+          isCode: true,
+        },
+        {
+          step: 2,
+          title: "Build Premium UI with SwiftUI",
+          command: `// ContentView.swift
+import SwiftUI
+
+struct ProductCard: View {
+    let product: Product
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(product.name)
+                .font(.headline)
+                .fontWeight(.bold)
+                .foregroundStyle(.primary)
+            
+            Text("₹\\(product.price, format: .number)")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+        }
+        .padding()
+        // Apple's signature frosted glass effect
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .shadow(color: .black.opacity(0.1), radius: 10, y: 5)
+    }
+}
+
+#Preview {
+    ProductCard(product: .sample)
+}`,
+          description: "SwiftUI's declarative syntax reads naturally. Materials like `.ultraThinMaterial` create the ultra-premium frosted glass effect native to iOS. `#Preview` shows live previews in Xcode instantly.",
+          isCode: true,
+        },
+        {
+          step: 3,
+          title: "Manage State with @State and @Observable",
+          command: `// Modern approach with @Observable (Swift 5.9+)
+import Observation
+
+@Observable
+class ProductViewModel {
+    var products: [Product] = []
+    var isLoading = false
+    var errorMessage: String?
+    
+    func fetchProducts() async {
+        isLoading = true
+        defer { isLoading = false }
+        
+        do {
+            products = try await APIClient.shared.getProducts()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+}
+
+// In View
+struct ProductListView: View {
+    @State private var viewModel = ProductViewModel()
+    
+    var body: some View {
+        List(viewModel.products) { product in
+            ProductCard(product: product)
+        }
+        .task { await viewModel.fetchProducts() }
+    }
+}`,
+          description: "@Observable (Swift 5.9 +) is incredibly efficient — only the UI that reads a specific property updates when it changes, ensuring silky smooth 120Hz ProMotion scrolling.",
+          isCode: true,
+        },
+        {
+          step: 4,
+          title: "Fetch Data with Swift Concurrency",
+          command: `// APIClient.swift
+struct APIClient {
+    static let shared = APIClient()
+    
+    func getProducts() async throws -> [Product] {
+        let url = URL(string: "https://api.example.com/products")!
+        
+        let (data, response) = try await URLSession.shared.data(from: url)
+        
+        guard let httpResponse = response as? HTTPURLResponse,
+              httpResponse.statusCode == 200 else {
+            throw APIError.badResponse
+        }
+        
+        return try JSONDecoder().decode([Product].self, from: data)
+    }
+}
+
+// Use in ViewModel
+let products = try await APIClient.shared.getProducts()`,
+          description: "Swift's async/await makes asynchronous code read like synchronous code. URLSession.shared.data runs on a background thread automatically — keeping the main thread free for UI rendering.",
+          isCode: true,
+        },
+        {
+          step: 5,
+          title: "Archive and Submit to App Store",
+          command: `# In Xcode:
+# 1. Product → Archive (selects Release scheme automatically)
+# 2. Distribute App → App Store Connect
+# 3. Upload → Automatic signing
+# 4. Wait for processing in App Store Connect
+
+# Command line with xcodebuild for CI/CD:
+xcodebuild -workspace MyApp.xcworkspace \\
+  -scheme MyApp \\
+  -configuration Release \\
+  -archivePath MyApp.xcarchive \\
+  archive`,
+          description: "iOS apps must be submitted through Xcode. The App Store Connect portal provides everything needed for TestFlight beta testing and final release to global users.",
+          isCode: true,
+        },
+      ],
+      proTip: "At ULMiND, our premium native iOS stack leverages Swift 5.9+ alongside SwiftUI and Swift Concurrency. We focus on Apple's Human Interface Guidelines (HIG), utilizing vibrant materials, SF Symbols, and fluid micro-animations to deliver that unmistakably premium 'Apple' feel.",
+    },
+  },
 
   "ionic": {
     techStats: [
