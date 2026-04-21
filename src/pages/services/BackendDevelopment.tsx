@@ -410,9 +410,9 @@ const BackendDevelopmentPage: React.FC = () => {
     <div className="min-h-screen bg-white dark:bg-zinc-950 transition-colors duration-300 overflow-x-hidden">
 
       {/* ── BACK BUTTON ── */}
-      <div className="max-w-7xl mx-auto px-6 pt-8 relative z-20">
+      <div className="max-w-7xl mx-auto px-6 pt-8 relative z-50">
         <motion.button
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/services")}
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
@@ -424,7 +424,7 @@ const BackendDevelopmentPage: React.FC = () => {
       </div>
 
       {/* ── HERO ── */}
-      <section ref={heroRef} className="relative min-h-screen flex items-center pt-16 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <section ref={heroRef} className="relative pt-8 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
         {/* Mesh bg */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-emerald-100/60 via-green-50/20 to-transparent dark:from-emerald-900/20 dark:via-green-950/10 dark:to-transparent pointer-events-none" />
         <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-gradient-to-br from-emerald-400/10 to-transparent dark:from-emerald-500/10 dark:to-transparent rounded-full blur-3xl pointer-events-none" />

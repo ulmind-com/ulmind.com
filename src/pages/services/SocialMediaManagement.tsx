@@ -185,9 +185,9 @@ export default function SocialMediaManagementPage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-pink-50/30 to-rose-50/40 dark:from-[#0a0a14] dark:via-[#120d1a] dark:to-[#0d0a12] overflow-x-hidden">
 
       {/* ── BACK BUTTON ─────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-6 pt-8">
+      <div className="max-w-7xl mx-auto px-6 pt-8 relative z-50">
         <motion.button
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/services")}
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
@@ -199,7 +199,7 @@ export default function SocialMediaManagementPage() {
       </div>
 
       {/* ── HERO ────────────────────────────────── */}
-      <section className="relative max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <section className="relative max-w-7xl mx-auto px-6 pt-8 pb-12 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <BlurBlob position={{ top: "10%", left: "5%" }} size={{ width: "500px", height: "500px" }} colorClass="bg-pink-400" opacityClass="opacity-10" />
         <BlurBlob position={{ top: "50%", left: "60%" }} size={{ width: "400px", height: "400px" }} colorClass="bg-rose-400" opacityClass="opacity-8" />
 
