@@ -173,7 +173,7 @@ const ServiceDetail: React.FC = () => {
                 size="lg"
                 variant="outline"
                 className="h-14 px-10 border-zinc-300 dark:border-white/20 rounded-2xl font-black text-sm uppercase tracking-widest"
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/services")}
               >
                 Back to Services
               </Button>

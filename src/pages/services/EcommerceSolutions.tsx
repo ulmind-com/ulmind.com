@@ -403,9 +403,9 @@ const EcommerceSolutionsPage: React.FC = () => {
     <div className="min-h-screen bg-white dark:bg-zinc-950 transition-colors duration-300 overflow-x-hidden">
 
       {/* ── BACK BUTTON ── */}
-      <div className="max-w-7xl mx-auto px-6 pt-8 relative z-20">
+      <div className="max-w-7xl mx-auto px-6 pt-8 relative z-50">
         <motion.button
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/services")}
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
@@ -417,7 +417,7 @@ const EcommerceSolutionsPage: React.FC = () => {
       </div>
 
       {/* ── HERO ── */}
-      <section ref={heroRef} className="relative min-h-screen flex items-center pt-16 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <section ref={heroRef} className="relative pt-8 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-violet-100/70 via-purple-50/20 to-transparent dark:from-violet-900/20 dark:via-purple-950/10 dark:to-transparent pointer-events-none" />
         <div className="absolute bottom-0 right-0 w-[700px] h-[700px] bg-gradient-to-tl from-violet-400/10 to-transparent dark:from-violet-500/10 rounded-full blur-3xl pointer-events-none" />
         <BlurBlob position={{ top: "20%", left: "5%" }} size={{ width: "400px", height: "400px" }} colorClass="bg-violet-400" opacityClass="opacity-10" />

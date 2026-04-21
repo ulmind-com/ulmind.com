@@ -126,7 +126,7 @@ export default function MobileAppsPage() {
       {/* ── BACK BUTTON ─────────────────────────── */}
       <div className="max-w-7xl mx-auto px-6 pt-8">
         <motion.button
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/services")}
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}

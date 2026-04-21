@@ -229,14 +229,14 @@ const WebDevelopmentPage: React.FC = () => {
 
         {/* ── BACK TO HOME — absolute, no layout impact ── */}
         <motion.button
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/services")}
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
           className="absolute top-8 left-6 z-20 flex items-center gap-2 text-sm font-semibold text-rose-600 dark:text-rose-400 hover:gap-3 transition-all duration-200 group"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-          Back to Home
+          Back to Services
         </motion.button>
 
         <div className="max-w-7xl mx-auto w-full grid md:grid-cols-2 gap-12 items-center relative z-10">
