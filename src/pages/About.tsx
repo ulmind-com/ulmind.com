@@ -56,7 +56,7 @@ export default function About() {
   return (
     <div className="min-h-screen bg-background">
       {/* HERO */}
-      <section className="relative pt-24 pb-12 lg:pt-36 lg:pb-16 overflow-hidden bg-[#020b16]">
+      <section className="relative pt-12 pb-8 lg:pt-16 lg:pb-12 overflow-hidden bg-[#020b16]">
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
           <div 
@@ -69,7 +69,7 @@ export default function About() {
           <div className="absolute inset-0 bg-gradient-to-r from-[#021124] via-[#021124]/95 to-[#021124]/60" />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-8 items-center">
           {/* Left Content */}
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
@@ -78,19 +78,19 @@ export default function About() {
             className="max-w-xl"
           >
             {/* Badge */}
-            <div className="inline-block px-5 py-1.5 rounded-[20px] bg-white/5 border border-white/10 backdrop-blur-md mb-6 shadow-sm">
-              <span className="text-sm font-semibold tracking-wider text-[#ff5a5f] uppercase">
+            <div className="inline-block px-4 py-1 rounded-[20px] bg-white/5 border border-white/10 backdrop-blur-md mb-4 shadow-sm">
+              <span className="text-[11px] md:text-sm font-semibold tracking-wider text-[#ff5a5f] uppercase">
                 Who We Are
               </span>
             </div>
             
-            <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-4 tracking-tight">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 tracking-tight">
               About Us
             </h1>
             
-            <div className="w-16 h-1 bg-[#ff5a5f] mb-6" />
+            <div className="w-12 md:w-16 h-1 bg-[#ff5a5f] mb-4 md:mb-6" />
             
-            <p className="text-base md:text-lg text-gray-300 leading-relaxed max-w-lg">
+            <p className="text-sm md:text-base lg:text-lg text-gray-300 leading-relaxed max-w-lg">
               A passionate team transforming ideas into scalable digital solutions. We believe every business deserves future-ready digital foundations.
             </p>
           </motion.div>
@@ -107,7 +107,7 @@ export default function About() {
             <div className="absolute inset-0 bg-[#ff5a5f] opacity-20 blur-[60px] rounded-full scale-90 translate-y-4" />
             
             <motion.div 
-              className="relative rounded-[24px] overflow-hidden shadow-2xl w-full border border-white/10 z-10 bg-[#0a1120]"
+              className="relative rounded-[20px] md:rounded-[24px] overflow-hidden shadow-2xl w-full border border-white/10 z-10 bg-[#0a1120]"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.2 }}
@@ -115,7 +115,7 @@ export default function About() {
               <img 
                 src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop" 
                 alt="About Our Team" 
-                className="w-full h-[280px] md:h-[360px] object-cover transition-transform duration-700"
+                className="w-full h-[220px] md:h-[280px] lg:h-[320px] object-cover transition-transform duration-700 hover:scale-105"
               />
               {/* Subtle glass overlay inside image container */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
@@ -126,7 +126,7 @@ export default function About() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ opacity: { duration: 0.5, delay: 0.6 }, scale: { duration: 0.5, delay: 0.6 } }}
-              className="absolute -left-4 top-1/2 -translate-y-1/2 bg-[#222a36]/90 backdrop-blur-md p-3 md:p-4 rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.4)] border border-white/10 hidden md:flex items-center justify-center transform hover:scale-110 transition-transform z-20 group"
+              className="absolute -left-4 top-1/2 -translate-y-1/2 bg-[#222a36]/90 backdrop-blur-md p-2.5 md:p-4 rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.4)] border border-white/10 hidden md:flex items-center justify-center transform hover:scale-110 transition-transform z-20 group"
             >
               <div className="w-8 h-8 rounded-full border-2 border-blue-500 flex items-center justify-center group-hover:bg-blue-500/10 transition-colors">
                 <Users className="w-5 h-5 text-blue-500" />
@@ -189,22 +189,26 @@ export default function About() {
             </div>
 
             {/* Right Illustration Node */}
-            <div className="flex-1 w-full flex justify-center relative">
-              <div className="relative w-80 h-80 md:w-96 md:h-96 flex items-center justify-center perspective-1000">
-                <div className="absolute inset-0 bg-primary/15 blur-[60px] rounded-full scale-110" />
-                <div 
-                  className="absolute inset-4 rounded-full bg-gradient-to-tr from-background/80 via-card/80 to-primary/10 border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.1)] dark:shadow-[0_0_50px_rgba(255,255,255,0.05)] flex items-center justify-center backdrop-blur-xl"
-                  style={{ animation: "about-spin 30s linear infinite" }}
-                >
+            <div className="flex-1 w-full flex justify-center relative perspective-1000 h-full min-h-[400px]">
+              <div className="absolute inset-0 bg-primary/20 blur-[100px] rounded-full scale-125 pointer-events-none" />
+              <motion.div
+                className="relative z-10 w-full max-w-[400px] lg:max-w-[550px] flex items-center justify-center"
+                initial={{ y: 0 }}
+                animate={{ y: [-20, 20, -20] }}
+                transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <img
+                  src="/our Story.png"
+                  alt="Our Story"
+                  className="w-full h-auto object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.2)] dark:drop-shadow-[0_20px_50px_rgba(255,255,255,0.05)] transform hover:scale-105 transition-transform duration-700"
+                />
+              </motion.div>
+              {/* Floating Decorative Elements */}
+              <div className="absolute inset-0 pointer-events-none" style={{ animation: "about-spin 30s linear infinite" }}>
                   <style>{`@keyframes about-spin { to { transform: rotate(360deg); } }`}</style>
-                  {/* Orbital dots */}
-                  <div className="absolute top-10 left-10 w-3 h-3 rounded-full bg-rose-400 shadow-[0_0_15px_rgba(251,113,133,0.8)]" />
-                  <div className="absolute bottom-20 right-10 w-4 h-4 rounded-full bg-blue-400 shadow-[0_0_15px_rgba(96,165,250,0.8)]" />
-                  <div className="absolute top-1/2 -left-4 w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.8)]" />
-                </div>
-                <div className="relative z-10 w-40 h-40 bg-card/80 backdrop-blur-md rounded-3xl shadow-2xl flex items-center justify-center border border-white/20 transform rotate-12 hover:rotate-0 transition-transform duration-500">
-                  <Sparkles className="w-20 h-20 text-primary drop-shadow-[0_0_20px_rgba(var(--primary),0.8)]" />
-                </div>
+                  <div className="absolute top-[10%] left-[20%] w-3 h-3 rounded-full bg-rose-400 shadow-[0_0_15px_rgba(251,113,133,0.8)]" />
+                  <div className="absolute bottom-[20%] right-[15%] w-4 h-4 rounded-full bg-primary shadow-[0_0_15px_rgba(var(--primary),0.8)]" />
+                  <div className="absolute top-[50%] right-[5%] w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.8)]" />
               </div>
             </div>
           </motion.div>
@@ -248,12 +252,12 @@ export default function About() {
                "from-purple-600 to-indigo-500 dark:from-indigo-400 dark:to-purple-300"
             ];
             
-            // Abstract premium 3D illustrations for each value
+            // Ultra-Premium custom illustrations for each value
             const valueImages = [
-              "https://images.unsplash.com/photo-1614729939124-032f0b56c9ce?q=80&w=1000&auto=format&fit=crop", // Mission
-              "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop", // Client
-              "https://images.unsplash.com/photo-1633412802994-5c058f151b66?q=80&w=1000&auto=format&fit=crop", // Quality
-              "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=1000&auto=format&fit=crop"  // Innovation
+              "/Our Mission.png",    // Mission
+              "/Our Client.png",     // Client
+              "/Our Quality.png",    // Quality
+              "/Our Innovation.png"  // Innovation
             ];
             
             return (
@@ -292,41 +296,37 @@ export default function About() {
                   </div>
                 </div>
 
-                {/* Abstract Illustration side */}
-                <div className="flex-1 w-full flex justify-center relative">
-                  <div className="relative w-80 h-80 md:w-96 md:h-96 flex items-center justify-center">
+                {/* Premium Animated Illustration side */}
+                <div className="flex-1 w-full flex justify-center relative perspective-1000 h-full min-h-[400px]">
+                  <div className="relative w-full max-w-[400px] lg:max-w-[550px] flex items-center justify-center">
                     {/* Glowing Orb Background */}
                     <div 
-                      className={`absolute inset-4 rounded-full bg-gradient-to-br ${value.gradient} opacity-10 dark:opacity-20 blur-3xl`}
+                      className={`absolute inset-0 bg-gradient-to-br ${value.gradient} opacity-20 dark:opacity-30 blur-[100px] rounded-full scale-125 pointer-events-none`}
                     />
                     
-                    {/* Main Circular Container */}
-                    <div className="absolute inset-8 rounded-full bg-card/80 border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] backdrop-blur-xl flex items-center justify-center overflow-hidden">
-                       {/* Subtle internal grid/rings to look technical */}
-                       <div className="absolute inset-0 border-[0.5px] border-border/50 rounded-full scale-[0.8]" />
-                       <div className="absolute inset-0 border-[0.5px] border-border/50 rounded-full scale-[0.6]" />
-                       
-                       {/* Floating Center Image Wrapper */}
-                       <motion.div 
-                         className="relative z-10 w-32 h-32 md:w-48 md:h-48 rounded-[2rem] md:rounded-[3rem] shadow-2xl border border-white/20 flex items-center justify-center overflow-hidden"
+                    {/* Floating Illustration */}
+                    <motion.div 
+                         className="relative z-10 w-full"
                          initial={{ y: 0 }}
-                         whileInView={{ y: [0, -10, 0] }}
-                         viewport={{ once: false }}
-                         transition={{ duration: 4 + i, repeat: Infinity, ease: "easeInOut" }}
-                       >
-                         <img src={valueImages[i]} alt={value.title} className="w-full h-full object-cover scale-105" />
-                         <div className="absolute inset-0 bg-gradient-to-tr from-black/30 to-transparent pointer-events-none" />
-                       </motion.div>
-                    </div>
+                         animate={{ y: [-15, 15, -15] }}
+                         transition={{ duration: 5 + i, repeat: Infinity, ease: "easeInOut" }}
+                    >
+                         <img 
+                            src={valueImages[i]} 
+                            alt={value.title} 
+                            className="w-full h-auto object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.2)] dark:drop-shadow-[0_20px_50px_rgba(255,255,255,0.05)] transform hover:scale-105 transition-transform duration-700" 
+                         />
+                    </motion.div>
 
                     {/* Orbiting / Abstract Decorative Dots */}
                     <div 
-                      className="absolute inset-0 z-20 pointer-events-none"
+                      className="absolute inset-[-20%] z-20 pointer-events-none"
                       style={{ animation: `about-orbit-${i} ${20 + i * 2}s linear infinite` }}
                     >
-                      <div className="absolute top-8 right-16 w-4 h-4 rounded-full bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.8)]" />
-                      <div className="absolute bottom-8 left-16 w-5 h-5 rounded-full bg-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.8)]" />
-                      <div className="absolute top-1/2 -left-2 w-3 h-3 rounded-full bg-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.8)]" />
+                      <style>{`@keyframes about-orbit-${i} { to { transform: rotate(360deg); } }`}</style>
+                      <div className="absolute top-[10%] right-[20%] w-4 h-4 rounded-full bg-white/20 backdrop-blur-md shadow-[0_0_15px_rgba(255,255,255,0.5)] border border-white/50" />
+                      <div className="absolute bottom-[10%] left-[20%] w-6 h-6 rounded-full bg-white/10 backdrop-blur-md shadow-[0_0_15px_rgba(255,255,255,0.3)] border border-white/30" />
+                      <div className="absolute top-[50%] -left-[10%] w-3 h-3 rounded-full bg-white/30 backdrop-blur-md shadow-[0_0_10px_rgba(255,255,255,0.8)] border border-white/80" />
                     </div>
                   </div>
                 </div>

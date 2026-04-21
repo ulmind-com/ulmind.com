@@ -306,13 +306,12 @@ const WebDevelopmentPage: React.FC = () => {
             <motion.div
               animate={{ y: [0, -18, 0] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-              className="flex justify-center"
+              className="flex justify-center perspective-1000"
             >
               <img
-                src="/illustrations/web-dev.png"
+                src="/web1.png"
                 alt="Web Development"
-                className="w-full max-w-lg service-illustration"
-                style={{ filter: "drop-shadow(0 20px 60px rgba(225,29,72,0.4)) drop-shadow(0 0 40px rgba(168,85,247,0.25))" }}
+                className="w-full max-w-lg object-contain drop-shadow-[0_20px_60px_rgba(225,29,72,0.4)] dark:drop-shadow-[0_20px_50px_rgba(255,255,255,0.05)] transform hover:scale-105 transition-transform duration-700"
               />
             </motion.div>
           </Reveal>
@@ -328,12 +327,12 @@ const WebDevelopmentPage: React.FC = () => {
             <motion.div
               animate={{ y: [0, -14, 0] }}
               transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              className="perspective-1000"
             >
               <img
-                src="/illustrations/design.png"
+                src="/web2.png"
                 alt="What You Get"
-                className="w-full max-w-md mx-auto service-illustration"
-                style={{ filter: "drop-shadow(0 15px 50px rgba(139,92,246,0.45)) drop-shadow(0 0 30px rgba(225,29,72,0.25))" }}
+                className="w-full max-w-lg mx-auto object-contain drop-shadow-[0_20px_50px_rgba(139,92,246,0.3)] dark:drop-shadow-[0_20px_50px_rgba(255,255,255,0.05)] transform hover:scale-105 transition-transform duration-700"
               />
             </motion.div>
           </Reveal>
@@ -478,12 +477,12 @@ const WebDevelopmentPage: React.FC = () => {
             <motion.div
               animate={{ y: [0, -16, 0] }}
               transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+              className="perspective-1000"
             >
               <img
-                src="/illustrations/web-dev.png"
+                src="/web1.png"
                 alt="Key Features"
-                className="w-full max-w-md mx-auto service-illustration"
-                style={{ filter: "drop-shadow(0 20px 60px rgba(225,29,72,0.4)) drop-shadow(0 0 40px rgba(16,185,129,0.25))" }}
+                className="w-full max-w-md mx-auto object-contain drop-shadow-[0_20px_60px_rgba(225,29,72,0.4)] dark:drop-shadow-[0_20px_50px_rgba(255,255,255,0.05)] transform hover:scale-105 transition-transform duration-700"
               />
             </motion.div>
           </Reveal>
