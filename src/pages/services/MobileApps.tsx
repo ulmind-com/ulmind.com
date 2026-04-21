@@ -203,13 +203,12 @@ export default function MobileAppsPage() {
           <motion.div
             animate={{ y: [0, -18, 0] }}
             transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
-            className="flex justify-center"
+            className="flex justify-center perspective-1000"
           >
             <img
-              src="/illustrations/mobile-app.png"
+              src="/app1.png"
               alt="Mobile App Development"
-              className="w-full max-w-lg service-illustration"
-              style={{ filter: "drop-shadow(0 20px 60px rgba(99,102,241,0.45)) drop-shadow(0 0 40px rgba(59,130,246,0.25))" }}
+              className="w-full max-w-lg object-contain drop-shadow-[0_20px_60px_rgba(99,102,241,0.4)] dark:drop-shadow-[0_20px_50px_rgba(255,255,255,0.05)] transform hover:scale-105 transition-transform duration-700"
             />
           </motion.div>
         </Reveal>
@@ -223,12 +222,12 @@ export default function MobileAppsPage() {
             <motion.div
               animate={{ y: [0, -14, 0] }}
               transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              className="perspective-1000"
             >
               <img
-                src="/illustrations/mobile-perf.png"
+                src="/app2.png"
                 alt="Mobile Performance"
-                className="w-full max-w-md mx-auto service-illustration"
-                style={{ filter: "drop-shadow(0 15px 50px rgba(59,130,246,0.45)) drop-shadow(0 0 30px rgba(6,182,212,0.25))" }}
+                className="w-full max-w-lg mx-auto object-contain drop-shadow-[0_20px_50px_rgba(59,130,246,0.3)] dark:drop-shadow-[0_20px_50px_rgba(255,255,255,0.05)] transform hover:scale-105 transition-transform duration-700"
               />
             </motion.div>
           </Reveal>
@@ -410,12 +409,12 @@ export default function MobileAppsPage() {
               <motion.div
                 animate={{ y: [0, -16, 0] }}
                 transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+                className="perspective-1000"
               >
                 <img
-                  src="/illustrations/mobile-app.png"
+                  src="/app1.png"
                   alt="Mobile App Features"
-                  className="w-full max-w-md mx-auto service-illustration"
-                  style={{ filter: "drop-shadow(0 20px 60px rgba(99,102,241,0.4)) drop-shadow(0 0 40px rgba(59,130,246,0.2))" }}
+                  className="w-full max-w-lg mx-auto object-contain drop-shadow-[0_20px_60px_rgba(99,102,241,0.4)] dark:drop-shadow-[0_20px_50px_rgba(255,255,255,0.05)] transform hover:scale-105 transition-transform duration-700"
                 />
               </motion.div>
             </Reveal>
