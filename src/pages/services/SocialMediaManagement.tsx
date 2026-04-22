@@ -261,29 +261,17 @@ export default function SocialMediaManagementPage() {
 
         {/* RIGHT — Platform stack visualization */}
         <Reveal delay={0.3}>
-          {/* CSS float — zero JS overhead */}
-          <div className="flex flex-col gap-3 animate-float-slow">
-            {platforms.map((p, i) => (
-              <motion.div
-                key={p.name}
-                initial={{ opacity: 0, x: 40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.08 }}
-                whileHover={{ x: 8, scale: 1.02 }}
-                className={`flex items-center gap-4 bg-gradient-to-r ${p.bg} text-white px-5 py-4 rounded-2xl shadow-lg cursor-default`}
-              >
-                <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0">
-                  {(() => { const Icon = platformIcons[p.name]; return Icon ? <Icon className="w-5 h-5 text-white" /> : null; })()}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-black text-sm leading-tight">{p.name}</p>
-                  <p className="text-white/80 text-xs">{p.desc}</p>
-                </div>
-                <span className="text-xs font-bold bg-white/20 px-3 py-1 rounded-full whitespace-nowrap flex-shrink-0">{p.users}</span>
-              </motion.div>
-            ))}
-          </div>
+          <motion.div animate={{ y: [0, -15, 0] }} transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }} className="flex justify-center relative">
+            <div className="w-full max-w-lg relative">
+              <div className="absolute inset-0 bg-pink-500/20 dark:bg-pink-500/10 blur-[80px] rounded-full pointer-events-none" />
+              <img 
+                src="/illustrations/smm1.png" 
+                alt="Social Media Management" 
+                className="w-full h-auto relative z-10 transition-transform duration-700 hover:scale-[1.02]"
+                style={{ filter: "drop-shadow(0 20px 50px rgba(236,72,153,0.4))" }}
+              />
+            </div>
+          </motion.div>
         </Reveal>
       </section>
 

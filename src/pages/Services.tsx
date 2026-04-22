@@ -197,7 +197,7 @@ const ServiceCard = ({ service, index }: { service: typeof services[0]; index: n
 // ── Stats row ─────────────────────────────────────────────────────────────
 const stats = [
   { value: "10+", label: "Services Offered" },
-  { value: "150+", label: "Projects Delivered" },
+  { value: "15+", label: "Projects Delivered" },
   { value: "98%", label: "Client Satisfaction" },
   { value: "5+", label: "Years Experience" },
 ];

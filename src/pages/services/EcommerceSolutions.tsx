@@ -491,10 +491,16 @@ const EcommerceSolutionsPage: React.FC = () => {
             <motion.div
               animate={{ y: [0, -18, 0] }}
               transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-              className="flex justify-center"
+              className="flex justify-center relative"
             >
-              <div className="w-full max-w-xl" style={{ filter: "drop-shadow(0 20px 60px rgba(124,58,237,0.3))" }}>
-                <ShoppingFlowSVG />
+              <div className="w-full max-w-lg relative">
+                <div className="absolute inset-0 bg-violet-500/20 dark:bg-violet-500/10 blur-[80px] rounded-full pointer-events-none" />
+                <img 
+                  src="/illustrations/e1.png" 
+                  alt="E-Commerce Store Flow" 
+                  className="w-full h-auto relative z-10 transition-transform duration-700 hover:scale-[1.02]"
+                  style={{ filter: "drop-shadow(0 20px 50px rgba(124,58,237,0.4))" }}
+                />
               </div>
             </motion.div>
           </Reveal>
@@ -510,8 +516,14 @@ const EcommerceSolutionsPage: React.FC = () => {
           {/* LEFT illustration */}
           <Reveal>
             <motion.div animate={{ y: [0, -14, 0] }} transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}>
-              <div className="w-full max-w-lg mx-auto" style={{ filter: "drop-shadow(0 15px 40px rgba(192,38,211,0.2))" }}>
-                <ConversionFunnelSVG />
+              <div className="w-full max-w-md mx-auto relative">
+                <div className="absolute inset-0 bg-fuchsia-500/20 dark:bg-fuchsia-500/10 blur-[80px] rounded-full pointer-events-none" />
+                <img 
+                  src="/illustrations/e2.png" 
+                  alt="User Conversion Flow" 
+                  className="w-full h-auto relative z-10 transition-transform duration-700 hover:scale-[1.02]"
+                  style={{ filter: "drop-shadow(0 20px 50px rgba(192,38,211,0.3))" }}
+                />
               </div>
             </motion.div>
           </Reveal>
@@ -695,12 +707,15 @@ const EcommerceSolutionsPage: React.FC = () => {
           {/* Dashboard image */}
           <Reveal delay={0.2}>
             <motion.div animate={{ y: [0, -14, 0] }} transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}>
-              <img
-                src="/illustrations/ecommerce-dashboard.png"
-                alt="E-Commerce Admin Dashboard"
-                className="w-full max-w-lg mx-auto service-illustration"
-                style={{ filter: "drop-shadow(0 20px 60px rgba(124,58,237,0.4)) drop-shadow(0 0 40px rgba(192,38,211,0.25))" }}
-              />
+              <div className="w-full max-w-lg mx-auto relative">
+                <div className="absolute inset-0 bg-violet-500/20 dark:bg-violet-500/10 blur-[80px] rounded-full pointer-events-none" />
+                <img
+                  src="/illustrations/e3.png"
+                  alt="E-Commerce Admin Dashboard"
+                  className="w-full h-auto relative z-10 transition-transform duration-700 hover:scale-[1.02]"
+                  style={{ filter: "drop-shadow(0 20px 60px rgba(124,58,237,0.4)) drop-shadow(0 0 40px rgba(192,38,211,0.25))" }}
+                />
+              </div>
             </motion.div>
           </Reveal>
         </div>

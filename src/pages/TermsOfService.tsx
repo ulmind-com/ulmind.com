@@ -28,7 +28,7 @@ const TermsOfService = () => {
         </div>
         <div className="relative z-10 mt-1 md:mt-2 bg-black/20 backdrop-blur-sm border border-white/10 px-4 py-1.5 rounded-full flex items-center shadow-lg">
           <p className="text-white/90 text-[10px] md:text-xs font-bold tracking-[0.1em] md:tracking-[0.2em] uppercase">
-            Updated On: <span className="text-white">04/04/2026</span>
+            Updated On: <span className="text-white">22/04/26</span>
           </p>
         </div>
       </div>
@@ -140,11 +140,45 @@ const TermsOfService = () => {
           </ul>
         </div>
 
+        {/* Zero Tolerance Policy */}
+        <div className="space-y-4">
+          <h2 className="text-2xl font-bold text-foreground">Zero Tolerance Policy</h2>
+          <p>
+            At ULMiND, we hold our internal teams, clients, and partners to the highest echelon of professional integrity, ethics, and operational excellence. To protect our ecosystem, our clients' trust, and our proprietary assets, ULMiND enforces an uncompromising Zero Tolerance Policy against any form of misconduct.
+          </p>
+          <p>
+            Engagement with ULMiND requires strict adherence to the following tenets; violation of any will not be entertained under any circumstances:
+          </p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>
+              <strong className="text-foreground font-semibold">Data Compromise & Security Breaches:</strong> Any unauthorized access, extraction, distribution, or personal exploitation of client data, source code, server credentials, or proprietary intellectual property is strictly forbidden. We mandate absolute data sanctity.
+            </li>
+            <li>
+              <strong className="text-foreground font-semibold">Religious Intolerance, Proselytizing & Respect for Personal Liberties:</strong> ULMiND champions a secular, religiously neutral, and harmonious professional ecosystem. We unequivocally respect individual faith and personal liberties; the wearing of religious attire or cultural symbols (e.g., tilak, burqa, hijab, cross, etc.) is a strictly private matter, and ULMiND will never interfere with, question, or dictate these personal choices. Conversely, any form of religious proselytizing, attempts at conversion, or the imposition of personal religious ideologies upon others is strictly prohibited and viewed with extreme suspicion. Furthermore, making direct or indirect comments, subtle gestures, or derogatory mockery regarding an individual's faith, beliefs, or religious attire is completely unacceptable. Faith is strictly personal. Any personnel found engaging in such behavior or violating these boundaries will face immediate and uncompromising disciplinary action.
+            </li>
+            <li>
+              <strong className="text-foreground font-semibold">Workplace Harassment & Discrimination:</strong> We are committed to an inclusive and respectful environment. Any form of physical, verbal, or psychological harassment, discrimination, or abusive conduct directed toward ULMiND personnel, management, or clients will not be tolerated.
+            </li>
+            <li>
+              <strong className="text-foreground font-semibold">Unethical Business Practices:</strong> Engaging in intellectual property theft (plagiarism), fraudulent billing, misrepresentation of working hours, unauthorized sub-contracting, or any deceptive practices that compromise project integrity is deemed a severe violation.
+            </li>
+            <li>
+              <strong className="text-foreground font-semibold">Gross Negligence & Sabotage:</strong> Intentional operational disruption, severe negligence resulting in brand degradation or financial liability, or the deliberate circumvention of established security protocols will be met with immediate action.
+            </li>
+            <li>
+              <strong className="text-foreground font-semibold">Breach of Professional Decorum:</strong> Engaging in unlawful activities, violating explicit company policies, or creating a hostile environment that threatens the seamless execution of our services.
+            </li>
+          </ul>
+          <p>
+            <strong className="text-foreground font-semibold">Consequences of Violation:</strong> Infraction of this Zero Tolerance Policy constitutes a critical material breach of our Service Agreement. ULMiND reserves the absolute right to unilaterally and immediately terminate the engagement without prior notice or grace period. In such events, ULMiND may suspend all ongoing services, forfeit any pending deliverables, and pursue aggressive legal recourse and financial restitution under the governing laws.
+          </p>
+        </div>
+
         {/* Governing Law and Dispute Resolution */}
         <div className="space-y-4">
           <h2 className="text-2xl font-bold text-foreground">Governing Law and Dispute Resolution</h2>
           <p>
-            These Terms and any separate agreements whereby we provide you Services shall be governed by and construed in accordance with the laws of India. Any disputes arising out of or in connection with these Terms shall be subject to the exclusive jurisdiction of the courts located in Haldia, West Bengal, India.
+            These Terms and any separate agreements whereby we provide you Services shall be governed by and construed in accordance with the laws of India. Any disputes arising out of or in connection with these Terms shall be subject to the exclusive jurisdiction of the courts located in Bankura, West Bengal, India.
           </p>
         </div>
 
