@@ -472,9 +472,15 @@ const GraphicsDesignBrandingPage: React.FC = () => {
 
           {/* RIGHT illustration */}
           <Reveal delay={0.3}>
-            <motion.div animate={{ y: [0, -18, 0] }} transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }} className="flex justify-center">
-              <div className="w-full max-w-xl" style={{ filter: "drop-shadow(0 20px 60px rgba(217,70,239,0.28))" }}>
-                <BrandIdentitySVG />
+            <motion.div animate={{ y: [0, -18, 0] }} transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }} className="flex justify-center relative">
+              <div className="w-full max-w-lg relative">
+                <div className="absolute inset-0 bg-fuchsia-500/20 dark:bg-fuchsia-500/10 blur-[80px] rounded-full pointer-events-none" />
+                <img 
+                  src="/illustrations/d1.png" 
+                  alt="Brand Identity Design" 
+                  className="w-full h-auto relative z-10 transition-transform duration-700 hover:scale-[1.02]"
+                  style={{ filter: "drop-shadow(0 20px 50px rgba(217,70,239,0.4))" }}
+                />
               </div>
             </motion.div>
           </Reveal>
@@ -518,8 +524,14 @@ const GraphicsDesignBrandingPage: React.FC = () => {
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center relative z-10">
           <Reveal>
             <motion.div animate={{ y: [0, -15, 0] }} transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}>
-              <div className="w-full max-w-lg mx-auto" style={{ filter: "drop-shadow(0 15px 40px rgba(217,70,239,0.22))" }}>
-                <DesignProcessSVG />
+              <div className="w-full max-w-lg mx-auto relative">
+                <div className="absolute inset-0 bg-purple-500/20 dark:bg-purple-500/10 blur-[80px] rounded-full pointer-events-none" />
+                <img 
+                  src="/illustrations/d2.png" 
+                  alt="Design Process" 
+                  className="w-full h-auto relative z-10 transition-transform duration-700 hover:scale-[1.02]"
+                  style={{ filter: "drop-shadow(0 20px 50px rgba(162,28,175,0.3))" }}
+                />
               </div>
             </motion.div>
           </Reveal>

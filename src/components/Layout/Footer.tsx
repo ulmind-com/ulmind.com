@@ -29,6 +29,8 @@ export const Footer = () => {
   const quickLinks = [
     { name: "Home", href: "/" },
     { name: "About", href: "/about" },
+    { name: "Our Services", href: "/services" },
+    { name: "Technology Stack", href: "/technologies" },
     { name: "Team", href: "/team" },
     { name: "Methodology", href: "/methodology" },
     { name: "Projects", href: "/projects" },
@@ -37,27 +39,30 @@ export const Footer = () => {
   ];
 
   const services = [
-    "Web & App Development",
-    "DevOps & Deployment",
-    "Database Design",
-    "Cloud Services",
-    "UI/UX & Graphic Design",
-    "SEO & Content",
-    "AI/ML & Backend Solutions",
+    { name: "Web Development", href: "/services/web-development" },
+    { name: "Mobile App Development", href: "/services/mobile-apps" },
+    { name: "Cloud Solutions", href: "/services/cloud" },
+    { name: "Backend Development", href: "/services/backend-development" },
+    { name: "E-commerce Solutions", href: "/services/ecommerce-solutions" },
+    { name: "AI & Machine Learning", href: "/services/ai-machine-learning" },
+    { name: "Graphics Design & Branding", href: "/services/graphics-design-branding" },
+    { name: "Content Writing & Strategy", href: "/services/content-writing-strategy" },
+    { name: "UI/UX Design", href: "/services/ui-ux-design" },
+    { name: "Social Media Management", href: "/services/social-media-management" },
   ];
 
   return (
     <footer className="relative border-t overflow-hidden">
       {/* Background Image and Adaptive Overlays */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        <img 
-          src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop" 
-          alt="Abstract Technology Background" 
+        <img
+          src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop"
+          alt="Abstract Technology Background"
           className="w-full h-full object-cover opacity-60 dark:opacity-40"
         />
         {/* Light mode overlay (almost white, blurred) / Dark mode overlay (almost dark blue/black, blurred) */}
         <div className="absolute inset-0 bg-white/95 dark:bg-[#020b16]/95 backdrop-blur-xl transition-colors duration-300" />
-        
+
         {/* Huge ULMIND Background Text */}
         <div className="absolute inset-0 flex items-center justify-center">
           <span className="text-[16vw] font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-zinc-900/[0.08] to-zinc-900/[0.02] dark:from-white/[0.08] dark:to-white/[0.02] uppercase select-none leading-none pb-12">
@@ -93,7 +98,7 @@ export const Footer = () => {
                   rel="noopener noreferrer"
                   className="font-semibold leading-snug"
                 >
-                  Haldia, West Bengal, India
+                  Bankura, West Bengal, India
                 </a>
               </div>
 
@@ -135,19 +140,17 @@ export const Footer = () => {
                       onClick={() => navigate(link.href)}
                       className={`
                         relative text-sm font-medium transition-colors
-                        ${
-                          active
-                            ? "text-red-500"
-                            : "text-zinc-700 dark:text-zinc-300 hover:text-red-500 dark:hover:text-red-500"
+                        ${active
+                          ? "text-red-500"
+                          : "text-zinc-700 dark:text-zinc-300 hover:text-red-500 dark:hover:text-red-500"
                         }
                         after:content-['']
                         after:absolute after:left-0 after:-bottom-1
                         after:h-[2px] after:w-full after:bg-red-500
                         after:origin-left after:transition-transform after:duration-300
-                        ${
-                          active
-                            ? "after:scale-x-100"
-                            : "after:scale-x-0 hover:after:scale-x-100"
+                        ${active
+                          ? "after:scale-x-100"
+                          : "after:scale-x-0 hover:after:scale-x-100"
                         }
                       `}
                     >
@@ -166,14 +169,16 @@ export const Footer = () => {
             </h3>
             <ul className="space-y-3">
               {services.map((service) => (
-                <li
-                  key={service}
-                  className="group flex items-center gap-2 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:text-red-500 dark:hover:text-red-500 transition-all cursor-default"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-red-500/0 group-hover:bg-red-500 transition-colors" />
-                  <span className="group-hover:translate-x-1 transition-transform duration-300">
-                    {service}
-                  </span>
+                <li key={service.name}>
+                  <Link
+                    to={service.href}
+                    className="group flex items-center gap-2 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:text-red-500 dark:hover:text-red-500 transition-all"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-500/0 group-hover:bg-red-500 transition-colors" />
+                    <span className="group-hover:translate-x-1 transition-transform duration-300">
+                      {service.name}
+                    </span>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -213,7 +218,7 @@ export const Footer = () => {
           <p className="text-sm text-muted-foreground">
             © {currentYear} ULMiND. All rights reserved.
           </p>
-          
+
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <Link to="/privacy-policy" className="hover:text-red-500 transition">
               Privacy Policy

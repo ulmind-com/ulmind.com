@@ -480,7 +480,7 @@ const Contact = () => {
     {
       icon: MapPin,
       title: "Visit Us",
-      value: "Haldia, West Bengal, India",
+      value: "Bankura, West Bengal, India",
       href: "https://maps.app.goo.gl/hyKu5FMJXY8sxYTQ7",
       description: "Come say hello at our office",
       color: "from-rose-500/20 to-rose-500/5",

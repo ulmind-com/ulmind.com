@@ -157,7 +157,7 @@ const PrivacyPolicy = () => {
           <ul className="space-y-2 mt-2">
             <li><strong className="text-foreground font-semibold">Email:</strong> contact@ulmind.com</li>
             <li><strong className="text-foreground font-semibold">Phone:</strong> +91 85378 61040</li>
-            <li><strong className="text-foreground font-semibold">Address:</strong> Haldia, West Bengal, India</li>
+            <li><strong className="text-foreground font-semibold">Address:</strong> Bankura, West Bengal, India</li>
           </ul>
         </div>
 
