@@ -111,17 +111,12 @@ const AnimatedHeroVisuals = () => {
           </div>
 
           {/* The Orbiting Wrapper for the 4 Icons */}
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ repeat: Infinity, duration: ORBIT_DURATION, ease: "linear" }}
-            className="absolute inset-0 z-20 pointer-events-none"
-          >
+          <div className="absolute inset-0 z-20 pointer-events-none animate-spin-orbit" style={{ animationDuration: `${ORBIT_DURATION}s` }}>
             {/* 1. Floating Card — counter-rotate removed to save a RAF loop */}
             <div className="absolute -bottom-4 md:bottom-10 -left-4 md:-left-12 pointer-events-auto origin-center">
-              <motion.div
-                animate={{ rotate: -360 }}
-                transition={{ repeat: Infinity, duration: ORBIT_DURATION, ease: "linear" }}
-                className="bg-background p-4 rounded-2xl shadow-2xl border border-border/50 flex flex-col items-center gap-2"
+              <div
+                className="bg-background p-4 rounded-2xl shadow-2xl border border-border/50 flex flex-col items-center gap-2 animate-spin-orbit-reverse"
+                style={{ animationDuration: `${ORBIT_DURATION}s` }}
               >
                 <div className={`w-12 h-12 rounded-full flex items-center justify-center ${CurrentSlide.card.bg}`}>
                   <CardIcon className={`w-6 h-6 ${CurrentSlide.card.color}`} />
@@ -130,42 +125,39 @@ const AnimatedHeroVisuals = () => {
                   <p className="text-xs font-bold text-foreground leading-tight">{CurrentSlide.card.title}</p>
                   <p className="text-xs text-muted-foreground font-medium">{CurrentSlide.card.subtitle}</p>
                 </div>
-              </motion.div>
+              </div>
             </div>
 
             {/* 2. Top Left Icon — floating bounce removed, only counter-rotate */}
             <div className="absolute top-[10%] left-[5%] pointer-events-auto origin-center">
-              <motion.div
-                animate={{ rotate: -360 }}
-                transition={{ repeat: Infinity, duration: ORBIT_DURATION, ease: "linear" }}
-                className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center"
+              <div
+                className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center animate-spin-orbit-reverse"
+                style={{ animationDuration: `${ORBIT_DURATION}s` }}
               >
                 <Icon1 className={`w-6 h-6 ${CurrentSlide.icon1.color}`} />
-              </motion.div>
+              </div>
             </div>
 
             {/* 3. Top Right Icon */}
             <div className="absolute top-[20%] -right-[5%] pointer-events-auto origin-center">
-              <motion.div
-                animate={{ rotate: -360 }}
-                transition={{ repeat: Infinity, duration: ORBIT_DURATION, ease: "linear" }}
-                className="w-14 h-14 bg-white rounded-full shadow-lg flex items-center justify-center"
+              <div
+                className="w-14 h-14 bg-white rounded-full shadow-lg flex items-center justify-center animate-spin-orbit-reverse"
+                style={{ animationDuration: `${ORBIT_DURATION}s` }}
               >
                 <Icon2 className={`w-7 h-7 ${CurrentSlide.icon2.color}`} />
-              </motion.div>
+              </div>
             </div>
 
             {/* 4. Bottom Right Icon */}
             <div className="absolute bottom-[20%] -right-[2%] pointer-events-auto origin-center">
-              <motion.div
-                animate={{ rotate: -360 }}
-                transition={{ repeat: Infinity, duration: ORBIT_DURATION, ease: "linear" }}
-                className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center"
+              <div
+                className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center animate-spin-orbit-reverse"
+                style={{ animationDuration: `${ORBIT_DURATION}s` }}
               >
                 <Icon3 className={`w-6 h-6 ${CurrentSlide.icon3.color}`} />
-              </motion.div>
+              </div>
             </div>
-          </motion.div>
+          </div>
         </motion.div>
       </AnimatePresence>
     </div>
