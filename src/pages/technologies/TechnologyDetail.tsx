@@ -235,6 +235,9 @@ const TechnologyDetail: React.FC = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [slug]);
 
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
+
   if (!tech) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -263,8 +266,6 @@ const TechnologyDetail: React.FC = () => {
   const detail: TechDetail | null = techDetails[tech.slug] ?? null;
 
   const color = tech.accentColor || tech.color || "#6366f1";
-  const { resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === "dark";
   const activeColor = isDark ? color : "#0f172a";
 
   return (
