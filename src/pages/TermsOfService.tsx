@@ -594,9 +594,9 @@ const TermsOfService = () => {
           pt={<h2 className="text-2xl font-bold text-foreground">Lei Aplicável e Resolução de Disputas</h2>}
         />
         <TranslateBlock 
-          en={<p>These Terms and any separate agreements whereby we provide you Services shall be governed by and construed in accordance with the laws of India. Any disputes arising out of or in connection with these Terms shall be subject to the exclusive jurisdiction of the courts located in Bankura, West Bengal, India.</p>}
-          hi={<p>ये शर्तें और कोई भी अलग समझौते जिनके तहत हम आपको सेवाएं प्रदान करते हैं, भारत के कानूनों के अनुसार शासित और विश्लेषित किए जाएंगे। इन शर्तों के संबंध में या उनसे उत्पन्न होने वाले किसी भी विवाद का निपटारा विशेष रूप से बांकुड़ा, पश्चिम बंगाल, भारत में स्थित अदालतों के अनन्य अधिकार क्षेत्र के अधीन होगा।</p>}
-          bn={<p>এই শর্তাবলী এবং আপনাকে প্রদত্ত যেকোনো পরিষেবা সম্পর্কিত পৃথক চুক্তিসমূহ ভারতের আইনের অধীনে পরিচালিত ও বিশ্লেষিত হবে। এই শর্তাবলীর সাথে সম্পর্কিত বা এর থেকে উদ্ভূত যেকোনো বিরোধের নিষ্পত্তি শুধুমাত্র ভারতের পশ্চিমবঙ্গ রাজ্যের বাঁকুড়া জেলায় অবস্থিত আদালতের একচেটিয়া এখতিয়ারভুক্ত হবে।</p>}
+          en={<p>These Terms and any separate agreements whereby we provide you Services shall be governed by and construed in accordance with the laws of India. Any disputes arising out of or in connection with these Terms shall be subject to the exclusive jurisdiction of the courts located in Haldia, West Bengal, India.</p>}
+          hi={<p>ये शर्तें और कोई भी अलग समझौते जिनके तहत हम आपको सेवाएं प्रदान करते हैं, भारत के कानूनों के अनुसार शासित और विश्लेषित किए जाएंगे। इन शर्तों के संबंध में या उनसे उत्पन्न होने वाले किसी भी विवाद का निपटारा विशेष रूप से हल्दिया, पश्चिम बंगाल, भारत में स्थित अदालतों के अनन्य अधिकार क्षेत्र के अधीन होगा।</p>}
+          bn={<p>এই শর্তাবলী এবং আপনাকে প্রদত্ত যেকোনো পরিষেবা সম্পর্কিত পৃথক চুক্তিসমূহ ভারতের আইনের অধীনে পরিচালিত ও বিশ্লেষিত হবে। এই শর্তাবলীর সাথে সম্পর্কিত বা এর থেকে উদ্ভূত যেকোনো বিরোধের নিষ্পত্তি শুধুমাত্র ভারতের পশ্চিমবঙ্গ রাজ্যের হলদিয়াতে অবস্থিত আদালতের একচেটিয়া এখতিয়ারভুক্ত হবে।</p>}
           es={<p>Estos Términos se regirán e interpretarán de acuerdo con las leyes de la India.</p>}
           fr={<p>Ces Conditions seront régies et interprétées conformément aux lois de l'Inde.</p>}
           ar={<p>تخضع هذه الشروط لقوانين الهند.</p>}

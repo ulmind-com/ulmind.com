@@ -584,17 +584,17 @@ const PrivacyPolicy = () => {
           </li>
           <li>
              <TranslateBlock 
-                en={<><strong className="text-foreground font-semibold">Address:</strong> Bankura, West Bengal, India</>}
-                hi={<><strong className="text-foreground font-semibold">पता:</strong> बांकुड़ा, पश्चिम बंगाल, भारत</>}
-                bn={<><strong className="text-foreground font-semibold">ঠিকানা:</strong> বাঁকুড়া, পশ্চিমবঙ্গ, ভারত</>}
-                es={<><strong className="text-foreground font-semibold">Dirección:</strong> Bankura, West Bengal, India</>}
-                fr={<><strong className="text-foreground font-semibold">Adresse :</strong> Bankura, West Bengal, India</>}
-                ar={<><strong className="text-foreground font-semibold">العنوان:</strong> Bankura, West Bengal, India</>}
-                zh={<><strong className="text-foreground font-semibold">地址：</strong> 印度西孟加拉邦班库拉</>}
-                de={<><strong className="text-foreground font-semibold">Adresse:</strong> Bankura, West Bengal, India</>}
-                ja={<><strong className="text-foreground font-semibold">住所：</strong> Bankura, West Bengal, India</>}
-                ru={<><strong className="text-foreground font-semibold">Адрес:</strong> Банкура, Западная Бенгалия, Индия</>}
-                pt={<><strong className="text-foreground font-semibold">Endereço:</strong> Bankura, West Bengal, India</>}
+                en={<><strong className="text-foreground font-semibold">Address:</strong> Haldia, West Bengal, India</>}
+                hi={<><strong className="text-foreground font-semibold">पता:</strong> हल्दिया, पश्चिम बंगाल, भारत</>}
+                bn={<><strong className="text-foreground font-semibold">ঠিকানা:</strong> হলদিয়া, পশ্চিমবঙ্গ, ভারত</>}
+                es={<><strong className="text-foreground font-semibold">Dirección:</strong> Haldia, West Bengal, India</>}
+                fr={<><strong className="text-foreground font-semibold">Adresse :</strong> Haldia, West Bengal, India</>}
+                ar={<><strong className="text-foreground font-semibold">العنوان:</strong> Haldia, West Bengal, India</>}
+                zh={<><strong className="text-foreground font-semibold">地址：</strong> 印度西孟加拉邦霍尔迪亚 (Haldia)</>}
+                de={<><strong className="text-foreground font-semibold">Adresse:</strong> Haldia, West Bengal, India</>}
+                ja={<><strong className="text-foreground font-semibold">住所：</strong> Haldia, West Bengal, India</>}
+                ru={<><strong className="text-foreground font-semibold">Адрес:</strong> Халдия, Западная Бенгалия, Индия</>}
+                pt={<><strong className="text-foreground font-semibold">Endereço:</strong> Haldia, West Bengal, India</>}
              />
           </li>
         </ul>
