@@ -189,7 +189,7 @@ export const Footer = () => {
             <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-6">
               Connect With Us
             </h3>
-            <p className="text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-6">
+            <p className="text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-10">
               Follow us for updates and insights.
             </p>
 
@@ -209,10 +209,10 @@ export const Footer = () => {
                   
                   {/* Premium Animated Tooltip */}
                   <div className="absolute -top-11 left-1/2 -translate-x-1/2 scale-75 opacity-0 group-hover/social:scale-100 group-hover/social:opacity-100 group-hover/social:-translate-y-1 transition-all duration-300 pointer-events-none z-20 origin-bottom">
-                    <div className="bg-zinc-900/90 dark:bg-white/95 text-white dark:text-zinc-900 text-xs font-bold px-3 py-1.5 rounded-lg shadow-xl whitespace-nowrap backdrop-blur-md border border-white/10 dark:border-black/5 flex items-center justify-center">
+                    <div className="bg-red-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-[0_4px_20px_rgba(239,68,68,0.3)] whitespace-nowrap backdrop-blur-md border border-red-400/50 flex items-center justify-center">
                       {social.name}
                       {/* Triangle Pointer */}
-                      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-zinc-900/90 dark:bg-white/95 rotate-45 border-r border-b border-white/10 dark:border-black/5" />
+                      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-red-500 rotate-45 border-r border-b border-red-400/50" />
                     </div>
                   </div>
                 </div>
