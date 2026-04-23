@@ -239,7 +239,7 @@ export const InteractiveLegalLayout = ({
 
         {/* Slider Overlay - Bounded to the relative wrapper */}
         <motion.div 
-          className="absolute inset-0 z-50 pointer-events-none overflow-hidden"
+          className="absolute inset-0 z-20 pointer-events-none overflow-hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: selectedLang === 'en' ? 0 : 1 }}
           transition={{ duration: 0.3 }}

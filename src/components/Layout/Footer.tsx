@@ -19,11 +19,11 @@ export const Footer = () => {
   const isActive = (href: string) => location.pathname === href;
 
   const socialLinks = [
-    { icon: Instagram, href: "https://www.instagram.com/ulmind_official" },
-    { icon: Linkedin, href: "https://www.linkedin.com/company/ulmind" },
-    { icon: Twitter, href: "https://x.com/ULMINDOfficial" },
-    { icon: Facebook, href: "https://www.facebook.com/ulmind.official" },
-    { icon: Mail, href: "mailto:contact@ulmind.com" },
+    { icon: Instagram, href: "https://www.instagram.com/ulmind_official", name: "Instagram" },
+    { icon: Linkedin, href: "https://www.linkedin.com/company/ulmind", name: "LinkedIn" },
+    { icon: Twitter, href: "https://x.com/ULMINDOfficial", name: "Twitter" },
+    { icon: Facebook, href: "https://www.facebook.com/ulmind.official", name: "Facebook" },
+    { icon: Mail, href: "mailto:contact@ulmind.com", name: "Email" },
   ];
 
   const quickLinks = [
@@ -195,17 +195,27 @@ export const Footer = () => {
 
             <div className="flex gap-4">
               {socialLinks.map((social, i) => (
-                <motion.a
-                  key={i}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ scale: 1.15, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="w-10 h-10 bg-white/20 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl flex items-center justify-center text-zinc-800 dark:text-zinc-200 hover:bg-red-500 hover:text-white dark:hover:bg-red-500 dark:hover:text-white hover:border-transparent transition-all shadow-sm backdrop-blur-md"
-                >
-                  <social.icon className="w-4 h-4" />
-                </motion.a>
+                <div key={i} className="relative group/social">
+                  <motion.a
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ scale: 1.15, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="w-10 h-10 bg-white/20 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl flex items-center justify-center text-zinc-800 dark:text-zinc-200 hover:bg-red-500 hover:text-white dark:hover:bg-red-500 dark:hover:text-white hover:border-transparent transition-all shadow-sm backdrop-blur-md relative z-10"
+                  >
+                    <social.icon className="w-4 h-4" />
+                  </motion.a>
+                  
+                  {/* Premium Animated Tooltip */}
+                  <div className="absolute -top-11 left-1/2 -translate-x-1/2 scale-75 opacity-0 group-hover/social:scale-100 group-hover/social:opacity-100 group-hover/social:-translate-y-1 transition-all duration-300 pointer-events-none z-20 origin-bottom">
+                    <div className="bg-zinc-900/90 dark:bg-white/95 text-white dark:text-zinc-900 text-xs font-bold px-3 py-1.5 rounded-lg shadow-xl whitespace-nowrap backdrop-blur-md border border-white/10 dark:border-black/5 flex items-center justify-center">
+                      {social.name}
+                      {/* Triangle Pointer */}
+                      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-zinc-900/90 dark:bg-white/95 rotate-45 border-r border-b border-white/10 dark:border-black/5" />
+                    </div>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
