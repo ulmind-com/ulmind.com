@@ -376,14 +376,11 @@ const App = () => {
     
     // The Magic Fix: Using 'clip' instead of 'hidden'. 
     // This stops horizontal scroll BUT preserves position: sticky for your specific sections!
-    document.documentElement.style.overflowX = 'clip';
-    document.body.style.overflowX = 'clip';
+    // REMOVED: This causes severe scroll jank on iOS and mobile devices. overflow-x: hidden on body in CSS is enough.
 
     return () => {
       document.removeEventListener("contextmenu", handleContextMenu);
       document.removeEventListener("keydown", handleKeyDown);
-      document.documentElement.style.overflowX = '';
-      document.body.style.overflowX = '';
     };
   }, [trackUser]);
 
