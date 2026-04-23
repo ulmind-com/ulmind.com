@@ -189,7 +189,7 @@ export const Footer = () => {
             <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-6">
               Connect With Us
             </h3>
-            <p className="text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-10">
+            <p className="text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-16">
               Follow us for updates and insights.
             </p>
 
