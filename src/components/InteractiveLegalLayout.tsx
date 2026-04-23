@@ -128,7 +128,7 @@ export const InteractiveLegalLayout = ({
   icon: Icon, 
   children 
 }: { 
-  title: string, 
+  title: React.ReactNode, 
   date: string, 
   icon: any,
   children: React.ReactNode 
