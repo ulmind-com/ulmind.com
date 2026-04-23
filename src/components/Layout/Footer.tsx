@@ -98,7 +98,7 @@ export const Footer = () => {
                   rel="noopener noreferrer"
                   className="font-semibold leading-snug"
                 >
-                  Bankura, West Bengal, India
+                  Haldia, West Bengal, India
                 </a>
               </div>
 
