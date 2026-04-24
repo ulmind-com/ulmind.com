@@ -1,11 +1,8 @@
-import { motion, MotionValue } from "framer-motion";
-import { Star, Globe, X, Send } from "lucide-react";
+import { motion, MotionValue, AnimatePresence } from "framer-motion";
+import { Star, Globe, X, Send, CheckCircle2, AlertCircle } from "lucide-react";
 import handshakeImage from "@/assets/partnership-handshake.jpg";
 import { useState, useEffect } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
 
@@ -67,6 +64,8 @@ const TypewriterHeading = () => {
 
 const PartnershipSection = ({ opacity, scale }: PartnershipSectionProps) => {
   const [openForm, setOpenForm] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
   const { toast } = useToast();
 
   const [form, setForm] = useState({
@@ -87,13 +86,10 @@ const PartnershipSection = ({ opacity, scale }: PartnershipSectionProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitError(false);
 
     if (!captchaVerified) {
-      toast({
-        title: "Captcha required",
-        description: "Please verify that you are not a robot.",
-        variant: "destructive",
-      });
+      toast({ title: "Captcha required", description: "Please verify you are not a robot.", variant: "destructive" });
       return;
     }
 
@@ -104,27 +100,13 @@ const PartnershipSection = ({ opacity, scale }: PartnershipSectionProps) => {
     Object.entries(form).forEach(([k, v]) => data.append(k, v));
 
     try {
-      const res = await fetch(
-        "https://formsubmit.co/ulmindpvtltd@gmail.com",
-        { method: "POST", body: data }
-      );
-
+      const res = await fetch("https://formsubmit.co/ulmindpvtltd@gmail.com", { method: "POST", body: data });
       if (!res.ok) throw new Error();
-
-      toast({
-        title: "Request sent",
-        description: "Our team will contact you soon.",
-      });
-
-      setOpenForm(false);
+      setSubmitted(true);
       setCaptchaVerified(false);
       setForm({ name: "", email: "", phone: "", message: "" });
     } catch {
-      toast({
-        title: "Submission failed",
-        description: "Please try again later.",
-        variant: "destructive",
-      });
+      setSubmitError(true);
     }
   };
 
@@ -214,31 +196,305 @@ const PartnershipSection = ({ opacity, scale }: PartnershipSectionProps) => {
         </div>
       </div>
 
-      {/* Modal */}
+      {/* Premium Modal */}
       {openForm && (
-        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
-          <div className="bg-background rounded-lg w-full max-w-xl max-h-[90vh] overflow-y-auto p-6 relative text-foreground">
-            <button onClick={() => setOpenForm(false)} className="absolute top-4 right-4 text-foreground hover:opacity-70 transition-opacity">
-              <X />
-            </button>
+        <div className="fixed inset-0 z-[200] flex items-start justify-center p-4 overflow-y-auto"
+          style={{ background: 'radial-gradient(ellipse at center, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.95) 100%)', backdropFilter: 'blur(12px)', paddingTop: 'max(80px, env(safe-area-inset-top, 80px))' }}>
 
-            <h2 className="text-2xl font-bold mb-6">Join Partnership</h2>
+          {/* Backdrop click to close */}
+          <div className="absolute inset-0" onClick={() => { setOpenForm(false); setSubmitted(false); setSubmitError(false); }} />
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <Input name="name" placeholder="Full name" required value={form.name} onChange={handleChange} />
-              <Input name="email" type="email" placeholder="Email" required value={form.email} onChange={handleChange} />
-              <Input name="phone" placeholder="Phone" value={form.phone} onChange={handleChange} />
-              <Textarea name="message" rows={5} placeholder="Tell us about your partnership idea" required value={form.message} onChange={handleChange} />
+          <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto z-10"
+            style={{
+              background: 'var(--form-bg, linear-gradient(135deg, #0f0f0f 0%, #1a0000 50%, #0f0f0f 100%))',
+              borderRadius: '24px',
+              boxShadow: '0 0 0 1px rgba(239,68,68,0.3), 0 0 60px rgba(239,68,68,0.15), 0 32px 80px rgba(0,0,0,0.6)',
+              animation: 'formGlowPulse 3s ease-in-out infinite',
+            }}>
 
-              <ReCAPTCHA
-                sitekey="6Lc5pTgsAAAAAMCtIJaKj5iK79KYT6hSfwE4CMBk"
-                onChange={() => setCaptchaVerified(true)}
-              />
+            <style>{`
+              :root {
+                --form-bg: linear-gradient(135deg, #fff5f5 0%, #ffffff 50%, #fff5f5 100%);
+                --form-input-bg: rgba(255,255,255,0.9);
+                --form-input-border: rgba(239,68,68,0.25);
+                --form-input-text: #1a0000;
+                --form-label-color: #991b1b;
+                --form-divider: rgba(239,68,68,0.15);
+              }
+              .dark {
+                --form-bg: linear-gradient(135deg, #0f0f0f 0%, #1a0000 50%, #0f0f0f 100%);
+                --form-input-bg: rgba(255,255,255,0.04);
+                --form-input-border: rgba(239,68,68,0.2);
+                --form-input-text: #fff;
+                --form-label-color: rgba(255,255,255,0.5);
+                --form-divider: rgba(239,68,68,0.1);
+              }
+              @keyframes formGlowPulse {
+                0%, 100% { box-shadow: 0 0 0 1px rgba(239,68,68,0.3), 0 0 60px rgba(239,68,68,0.15), 0 32px 80px rgba(0,0,0,0.6); }
+                50% { box-shadow: 0 0 0 1px rgba(239,68,68,0.5), 0 0 90px rgba(239,68,68,0.25), 0 32px 80px rgba(0,0,0,0.6); }
+              }
+              .premium-input {
+                width: 100%;
+                padding: 14px 18px;
+                background: var(--form-input-bg);
+                border: 1.5px solid var(--form-input-border);
+                border-radius: 12px;
+                color: var(--form-input-text);
+                font-size: 14px;
+                font-family: inherit;
+                transition: all 0.25s ease;
+                outline: none;
+                resize: none;
+              }
+              .premium-input::placeholder { color: var(--form-label-color); font-size: 13px; }
+              .premium-input:focus {
+                border-color: rgba(239,68,68,0.7);
+                box-shadow: 0 0 0 3px rgba(239,68,68,0.12), 0 0 20px rgba(239,68,68,0.08);
+                background: var(--form-input-bg);
+              }
+              .premium-input:hover:not(:focus) {
+                border-color: rgba(239,68,68,0.4);
+              }
+            `}</style>
 
-              <Button type="submit" className="w-full">
-                Submit Request <Send className="ml-2 w-4 h-4" />
-              </Button>
-            </form>
+            {/* Red top accent bar */}
+            <div style={{
+              height: '4px',
+              borderRadius: '24px 24px 0 0',
+              background: 'linear-gradient(90deg, #dc2626, #ef4444, #f87171, #ef4444, #dc2626)',
+              backgroundSize: '200% 100%',
+              animation: 'shimmer 2.5s linear infinite',
+            }} />
+
+            <style>{`
+              @keyframes shimmer {
+                0% { background-position: 200% center; }
+                100% { background-position: -200% center; }
+              }
+            `}</style>
+
+            <div className="p-7 pb-8">
+
+              {/* ── SUCCESS BANNER ── */}
+              <AnimatePresence>
+                {submitted && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -16, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -10, scale: 0.96 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 24 }}
+                    style={{
+                      marginBottom: '20px',
+                      borderRadius: '16px',
+                      background: 'linear-gradient(135deg, rgba(220,38,38,0.12) 0%, rgba(239,68,68,0.08) 100%)',
+                      border: '1.5px solid rgba(239,68,68,0.35)',
+                      padding: '20px 22px',
+                      display: 'flex', alignItems: 'flex-start', gap: '14px',
+                      boxShadow: '0 0 30px rgba(239,68,68,0.12), 0 4px 20px rgba(0,0,0,0.1)',
+                    }}
+                  >
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.1, type: 'spring', stiffness: 400, damping: 18 }}
+                      style={{
+                        width: '42px', height: '42px', borderRadius: '50%', flexShrink: 0,
+                        background: 'linear-gradient(135deg, #dc2626, #ef4444)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        boxShadow: '0 4px 16px rgba(239,68,68,0.5)',
+                      }}
+                    >
+                      <CheckCircle2 size={22} style={{ color: '#fff' }} />
+                    </motion.div>
+                    <div style={{ flex: 1 }}>
+                      <p style={{ fontWeight: 800, fontSize: '16px', color: '#ef4444', marginBottom: '4px', letterSpacing: '-0.01em' }}>
+                        Successfully Submitted! 🎉
+                      </p>
+                      <p style={{ fontSize: '13px', color: 'var(--form-label-color)', lineHeight: 1.6 }}>
+                        We've received your partnership request. Our team will connect with you soon!
+                      </p>
+                      <motion.button
+                        onClick={() => { setOpenForm(false); setSubmitted(false); }}
+                        whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                        style={{
+                          marginTop: '12px', padding: '8px 18px', borderRadius: '8px', border: 'none',
+                          background: 'linear-gradient(135deg, #dc2626, #ef4444)',
+                          color: '#fff', fontWeight: 700, fontSize: '12px',
+                          letterSpacing: '0.05em', cursor: 'pointer',
+                          boxShadow: '0 2px 10px rgba(239,68,68,0.35)',
+                        }}
+                      >
+                        Close
+                      </motion.button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* ── ERROR BANNER ── */}
+              <AnimatePresence>
+                {submitError && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    style={{
+                      marginBottom: '20px', borderRadius: '12px',
+                      background: 'rgba(239,68,68,0.08)', border: '1.5px solid rgba(239,68,68,0.3)',
+                      padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '10px',
+                    }}
+                  >
+                    <AlertCircle size={18} style={{ color: '#ef4444', flexShrink: 0 }} />
+                    <p style={{ fontSize: '13px', color: '#ef4444', fontWeight: 600 }}>
+                      Submission failed. Please try again later.
+                    </p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Header */}
+              <div className="flex items-start justify-between mb-7">
+                <div>
+                  <div className="flex items-center gap-2.5 mb-1.5">
+                    <div style={{
+                      width: '36px', height: '36px', borderRadius: '10px',
+                      background: 'linear-gradient(135deg, #dc2626, #ef4444)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      boxShadow: '0 4px 16px rgba(239,68,68,0.4)',
+                    }}>
+                      <Send size={16} style={{ color: '#fff' }} />
+                    </div>
+                    <h2 style={{
+                      fontSize: '22px', fontWeight: 800, letterSpacing: '-0.02em',
+                      background: 'linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #f87171 100%)',
+                      WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+                    }}>Join Partnership</h2>
+                  </div>
+                  <p style={{ fontSize: '12px', color: 'var(--form-label-color)', letterSpacing: '0.08em', fontWeight: 500 }}>
+                    PARTNER APPLICATION FORM
+                  </p>
+                </div>
+                <button
+                  onClick={() => { setOpenForm(false); setSubmitted(false); setSubmitError(false); }}
+                  style={{
+                    width: '34px', height: '34px', borderRadius: '50%',
+                    background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    cursor: 'pointer', transition: 'all 0.2s ease', color: '#ef4444',
+                  }}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLButtonElement).style.background = 'rgba(239,68,68,0.2)';
+                    (e.currentTarget as HTMLButtonElement).style.transform = 'rotate(90deg)';
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLButtonElement).style.background = 'rgba(239,68,68,0.1)';
+                    (e.currentTarget as HTMLButtonElement).style.transform = 'rotate(0deg)';
+                  }}
+                >
+                  <X size={15} />
+                </button>
+              </div>
+
+              {/* Divider */}
+              <div style={{ height: '1px', background: 'var(--form-divider)', marginBottom: '24px' }} />
+
+              {/* Form — hide after success */}
+              {!submitted && <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', color: 'var(--form-label-color)', marginBottom: '6px', textTransform: 'uppercase' }}>Full Name *</label>
+                    <input
+                      className="premium-input"
+                      name="name"
+                      placeholder="John Doe"
+                      required
+                      value={form.name}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', color: 'var(--form-label-color)', marginBottom: '6px', textTransform: 'uppercase' }}>Phone</label>
+                    <input
+                      className="premium-input"
+                      name="phone"
+                      placeholder="+91 98765 43210"
+                      value={form.phone}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', color: 'var(--form-label-color)', marginBottom: '6px', textTransform: 'uppercase' }}>Email Address *</label>
+                  <input
+                    className="premium-input"
+                    name="email"
+                    type="email"
+                    placeholder="you@company.com"
+                    required
+                    value={form.email}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', color: 'var(--form-label-color)', marginBottom: '6px', textTransform: 'uppercase' }}>Partnership Idea *</label>
+                  <textarea
+                    className="premium-input"
+                    name="message"
+                    rows={4}
+                    placeholder="Tell us about your partnership vision..."
+                    required
+                    value={form.message}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                {/* reCAPTCHA */}
+                <div style={{
+                  borderRadius: '12px', overflow: 'hidden',
+                  border: '1.5px solid var(--form-input-border)',
+                  padding: '4px',
+                }}>
+                  <ReCAPTCHA
+                    sitekey="6Lc5pTgsAAAAAMCtIJaKj5iK79KYT6hSfwE4CMBk"
+                    onChange={() => setCaptchaVerified(true)}
+                  />
+                </div>
+
+                {/* Submit */}
+                <button
+                  type="submit"
+                  style={{
+                    width: '100%', padding: '15px 24px',
+                    borderRadius: '12px', border: 'none',
+                    background: 'linear-gradient(135deg, #b91c1c 0%, #dc2626 40%, #ef4444 70%, #dc2626 100%)',
+                    backgroundSize: '200% 100%',
+                    color: '#fff', fontWeight: 700, fontSize: '14px',
+                    letterSpacing: '0.06em', textTransform: 'uppercase',
+                    cursor: 'pointer', display: 'flex', alignItems: 'center',
+                    justifyContent: 'center', gap: '8px',
+                    boxShadow: '0 4px 24px rgba(239,68,68,0.45), 0 1px 0 rgba(255,255,255,0.1) inset',
+                    transition: 'all 0.3s ease',
+                  }}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLButtonElement).style.backgroundPosition = 'right center';
+                    (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 6px 32px rgba(239,68,68,0.65), 0 1px 0 rgba(255,255,255,0.15) inset';
+                    (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-1px)';
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLButtonElement).style.backgroundPosition = 'left center';
+                    (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 24px rgba(239,68,68,0.45), 0 1px 0 rgba(255,255,255,0.1) inset';
+                    (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(0)';
+                  }}
+                >
+                  <Send size={15} />
+                  Submit Request
+                </button>
+
+              </form>}
+            </div>
           </div>
         </div>
       )}
