@@ -1,5 +1,5 @@
 import React from 'react';
-import { Linkedin, Github, Twitter, Mail } from 'lucide-react';
+import { Linkedin, Twitter, Mail } from 'lucide-react';
 import './TeamCard.css';
 
 interface TeamCardProps {
@@ -39,11 +39,7 @@ export const TeamCard: React.FC<TeamCardProps> = ({ member }) => {
                   <Linkedin />
                 </a>
               )}
-              {member.social?.github && (
-                <a href={member.social.github} target="_blank" rel="noopener noreferrer">
-                  <Github />
-                </a>
-              )}
+
               {member.social?.twitter && member.social.twitter !== "#" && (
                 <a href={member.social.twitter} target="_blank" rel="noopener noreferrer">
                   <Twitter />
