@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Home, ArrowLeft } from 'lucide-react';
 import { CTASection } from '@/components/Sections/CTASection';
 import BlurBlob from "@/components/BlurBlob";
+import Lottie from 'lottie-react';
+import lottie404 from '/lottieflow-404-12-1-c81837-easey.json';
 
 export default function NotFound() {
   const navigate = useNavigate();
@@ -14,15 +16,21 @@ export default function NotFound() {
       <BlurBlob position={{ top: "50%", left: "80%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-fuchsia-300 dark:bg-fuchsia-600" opacityClass="opacity-40 dark:opacity-20" />
       <BlurBlob position={{ top: "90%", left: "20%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-yellow-200 dark:bg-yellow-600" opacityClass="opacity-40 dark:opacity-20" />
       
-      <div className="text-center max-w-md mx-auto z-10 flex-grow flex flex-col justify-center">
+      <div className="text-center max-w-2xl mx-auto z-10 flex-grow flex flex-col justify-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <div className="text-8xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-4">
-            404
+          {/* Lottie 404 Animation */}
+          <div className="w-full max-w-lg mx-auto mb-2">
+            <Lottie
+              animationData={lottie404}
+              loop={true}
+              autoplay={true}
+            />
           </div>
+
           <h1 className="text-2xl font-bold text-foreground mb-4">
             Page Not Found
           </h1>
