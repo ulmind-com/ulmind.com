@@ -1,29 +1,80 @@
 import { motion } from "framer-motion";
 import {
   Linkedin,
-  Twitter,
   Mail,
   Phone,
   MapPin,
   Instagram,
   Facebook,
 } from "lucide-react";
+import { useTheme } from "next-themes";
 // Link ta ekhane import kora holo
 import { useLocation, useNavigate, Link } from "react-router-dom";
+
+// Custom X (formerly Twitter) logo SVG
+const XIcon = ({ className }: { className?: string }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    className={className}
+    aria-hidden="true"
+  >
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.258 5.63 5.906-5.63Zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </svg>
+);
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
   const location = useLocation();
   const navigate = useNavigate();
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
 
   const isActive = (href: string) => location.pathname === href;
 
   const socialLinks = [
-    { icon: Instagram, href: "https://www.instagram.com/ulmind_official", name: "Instagram" },
-    { icon: Linkedin, href: "https://www.linkedin.com/company/ulmind", name: "LinkedIn" },
-    { icon: Twitter, href: "https://x.com/ULMINDOfficial", name: "Twitter" },
-    { icon: Facebook, href: "https://www.facebook.com/ulmind.official", name: "Facebook" },
-    { icon: Mail, href: "mailto:contact@ulmind.com", name: "Email" },
+    {
+      icon: Instagram,
+      href: "https://www.instagram.com/ulmind_official",
+      name: "Instagram",
+      // Instagram's iconic gradient: purple → pink → red → orange → yellow
+      gradient: "linear-gradient(135deg, #833AB4 0%, #C13584 25%, #E1306C 50%, #F56040 75%, #FFDC80 100%)",
+      hoverClass: "hover:border-transparent",
+      isGradient: true,
+    },
+    {
+      icon: Linkedin,
+      href: "https://www.linkedin.com/company/ulmind",
+      name: "LinkedIn",
+      color: "#0A66C2",
+      hoverClass: "hover:border-transparent",
+      isGradient: false,
+    },
+    {
+      icon: null, // custom X icon used separately
+      href: "https://x.com/ULMINDOfficial",
+      name: "Twitter",
+      color: "#000000", // fallback, overridden by theme
+      hoverClass: "hover:border-transparent",
+      isGradient: false,
+      isX: true,
+    },
+    {
+      icon: Facebook,
+      href: "https://www.facebook.com/ulmind.official",
+      name: "Facebook",
+      color: "#1877F2",
+      hoverClass: "hover:border-transparent",
+      isGradient: false,
+    },
+    {
+      icon: Mail,
+      href: "mailto:contact@ulmind.com",
+      name: "Email",
+      color: "#10B981",
+      hoverClass: "hover:border-transparent",
+      isGradient: false,
+    },
   ];
 
   const quickLinks = [
@@ -194,29 +245,65 @@ export const Footer = () => {
             </p>
 
             <div className="flex gap-4">
-              {socialLinks.map((social, i) => (
-                <div key={i} className="relative group/social">
-                  <motion.a
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.15, y: -2 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="w-10 h-10 bg-white/20 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl flex items-center justify-center text-zinc-800 dark:text-zinc-200 hover:bg-red-500 hover:text-white dark:hover:bg-red-500 dark:hover:text-white hover:border-transparent transition-all shadow-sm backdrop-blur-md relative z-10"
-                  >
-                    <social.icon className="w-4 h-4" />
-                  </motion.a>
-                  
-                  {/* Premium Animated Tooltip */}
-                  <div className="absolute -top-11 left-1/2 -translate-x-1/2 scale-75 opacity-0 group-hover/social:scale-100 group-hover/social:opacity-100 group-hover/social:-translate-y-1 transition-all duration-300 pointer-events-none z-20 origin-bottom">
-                    <div className="bg-red-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-[0_4px_20px_rgba(239,68,68,0.3)] whitespace-nowrap backdrop-blur-md border border-red-400/50 flex items-center justify-center">
-                      {social.name}
-                      {/* Triangle Pointer */}
-                      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-red-500 rotate-45 border-r border-b border-red-400/50" />
+              {socialLinks.map((social, i) => {
+                // X (Twitter) uses theme-aware colors instead of brand color
+                const xBgStyle = isDark
+                  ? { backgroundColor: "#ffffff" }
+                  : { backgroundColor: "#000000" };
+                const xTextColor = isDark ? "#000000" : "#ffffff";
+                const xTooltipTextClass = isDark ? "text-black" : "text-white";
+
+                const bgStyle = social.isX
+                  ? xBgStyle
+                  : social.isGradient
+                  ? { background: social.gradient }
+                  : { backgroundColor: social.color };
+
+                return (
+                  <div key={i} className="relative group/social">
+                    <motion.a
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={{ scale: 1.15, y: -2 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="w-10 h-10 bg-white/20 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl flex items-center justify-center text-zinc-800 dark:text-zinc-200 hover:border-transparent transition-all shadow-sm backdrop-blur-md relative z-10"
+                      onMouseEnter={(e) => {
+                        const el = e.currentTarget as HTMLElement;
+                        Object.assign(el.style, bgStyle);
+                        el.style.color = social.isX ? xTextColor : "#fff";
+                      }}
+                      onMouseLeave={(e) => {
+                        const el = e.currentTarget as HTMLElement;
+                        el.style.background = "";
+                        el.style.backgroundColor = "";
+                        el.style.color = "";
+                      }}
+                    >
+                      {social.isX ? (
+                        <XIcon className="w-4 h-4" />
+                      ) : (
+                        social.icon && <social.icon className="w-4 h-4" />
+                      )}
+                    </motion.a>
+
+                    {/* Premium Animated Brand-Color Tooltip */}
+                    <div className="absolute -top-11 left-1/2 -translate-x-1/2 scale-75 opacity-0 group-hover/social:scale-100 group-hover/social:opacity-100 group-hover/social:-translate-y-1 transition-all duration-300 pointer-events-none z-20 origin-bottom">
+                      <div
+                        className={`text-xs font-bold px-3 py-1.5 rounded-lg whitespace-nowrap backdrop-blur-md flex items-center justify-center shadow-lg ${social.isX ? xTooltipTextClass : "text-white"}`}
+                        style={bgStyle}
+                      >
+                        {social.name}
+                        {/* Triangle Pointer */}
+                        <div
+                          className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2.5 h-2.5 rotate-45"
+                          style={bgStyle}
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
