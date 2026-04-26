@@ -24,6 +24,7 @@ import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useRef, useState } from 'react';
 import { MacbookScrollSection } from './MacbookScrollSection';
 import BlurBlob from "@/components/BlurBlob";
+import Lottie from 'lottie-react';
 
 // Combined Animated component for seamless sliding of videos AND orbiting icons
 const AnimatedHeroVisuals = () => {
@@ -243,6 +244,23 @@ export const HeroSection = () => {
   // a forced layout on every pointer event which tanks scroll FPS.
   // Replaced with a static CSS perspective tilt on the ring only.
 
+  const [scrollAnimData, setScrollAnimData] = useState<object | null>(null);
+
+  useEffect(() => {
+    fetch('/lottieflow-scroll-down-01-ed0844-easey.json')
+      .then((r) => r.json())
+      .then((d: any) => {
+        const stripped = {
+          ...d,
+          layers: (d.layers ?? []).filter(
+            (l: any) => l.ty !== 1 && !/^bg$/i.test(l.nm ?? '') && !/^background$/i.test(l.nm ?? '')
+          ),
+        };
+        setScrollAnimData(stripped);
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <section
       id="home"
@@ -327,47 +345,43 @@ export const HeroSection = () => {
                 transition={{ delay: 1.2, duration: 0.8 }}
                 className="hidden sm:flex flex-col items-center gap-1 ml-auto"
               >
-                <div className="relative w-6 h-10 rounded-full border-2 border-foreground/35 dark:border-white/35 flex items-start justify-center pt-1.5">
-                  <motion.div
-                    animate={{ y: [0, 14, 0], opacity: [1, 0, 1] }}
-                    transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
-                    className="w-1 h-2 rounded-full bg-foreground/55 dark:bg-white/55"
-                  />
+                <div className="relative flex items-center justify-center">
+                  {scrollAnimData ? (
+                    <Lottie
+                      animationData={scrollAnimData}
+                      loop
+                      autoplay
+                      style={{ width: 36, height: 50 }}
+                    />
+                  ) : (
+                    <div className="w-6 h-10" />
+                  )}
                 </div>
-                <span className="text-[10px] font-medium tracking-widest uppercase text-foreground/35 dark:text-white/35 select-none">
+                <span className="text-[10px] font-medium tracking-widest uppercase select-none" style={{ color: '#ed0844' }}>
                   Scroll
                 </span>
               </motion.div>
             </div>
 
-            {/* Mobile Only: Premium Scroll Indicator */}
-            <motion.div
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.4, duration: 0.8 }}
-              className="flex sm:hidden flex-col items-center gap-3 mt-10 w-full"
-            >
-              {/* Outer glow ring */}
-              <div className="relative flex items-center justify-center">
-                <motion.div
-                  animate={{ scale: [1, 1.4, 1], opacity: [0.4, 0, 0.4] }}
-                  transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-                  className="absolute w-14 h-14 rounded-full border border-violet-400/40 dark:border-violet-400/30"
-                />
-                <motion.div
-                  animate={{ scale: [1, 1.25, 1], opacity: [0.3, 0, 0.3] }}
-                  transition={{ repeat: Infinity, duration: 2, ease: "easeInOut", delay: 0.3 }}
-                  className="absolute w-10 h-10 rounded-full border border-violet-400/50 dark:border-violet-400/40"
-                />
-                {/* Mouse body */}
-                <div className="relative w-7 h-12 rounded-full border-2 border-foreground/50 dark:border-white/50 flex items-start justify-center pt-2 bg-foreground/5 dark:bg-white/5 backdrop-blur-sm z-10">
-                  <motion.div
-                    animate={{ y: [0, 18, 0], opacity: [1, 0, 1] }}
-                    transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
-                    className="w-1.5 h-2.5 rounded-full bg-violet-500 dark:bg-violet-400 shadow-[0_0_6px_2px_rgba(139,92,246,0.6)]"
-                  />
+              {/* Mobile Only: Premium Scroll Indicator */}
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.4, duration: 0.8 }}
+                className="flex sm:hidden flex-col items-center gap-3 mt-10 w-full"
+              >
+                <div className="relative flex items-center justify-center">
+                  {scrollAnimData ? (
+                    <Lottie
+                      animationData={scrollAnimData}
+                      loop
+                      autoplay
+                      style={{ width: 40, height: 60 }}
+                    />
+                  ) : (
+                    <div className="w-7 h-12" />
+                  )}
                 </div>
-              </div>
               {/* Chevrons */}
               <div className="flex flex-col items-center -gap-1">
                 {[0, 0.2, 0.4].map((delay, i) => (
@@ -376,13 +390,13 @@ export const HeroSection = () => {
                     animate={{ opacity: [0.2, 1, 0.2], y: [0, 4, 0] }}
                     transition={{ repeat: Infinity, duration: 1.2, delay, ease: "easeInOut" }}
                   >
-                    <svg width="14" height="8" viewBox="0 0 14 8" fill="none" className="text-foreground/40 dark:text-white/40">
+                    <svg width="14" height="8" viewBox="0 0 14 8" fill="none" style={{ color: '#ed0844' }}>
                       <path d="M1 1L7 7L13 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </motion.div>
                 ))}
               </div>
-              <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-foreground/40 dark:text-white/40 select-none">
+              <span className="text-[11px] font-semibold tracking-[0.2em] uppercase select-none" style={{ color: '#ed0844' }}>
                 Scroll Down
               </span>
             </motion.div>
