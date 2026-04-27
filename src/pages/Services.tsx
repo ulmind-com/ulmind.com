@@ -1,5 +1,6 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from "framer-motion";
+import Lottie from "lottie-react";
 import { useInView } from "react-intersection-observer";
 import { useNavigate } from "react-router-dom";
 import {
@@ -86,7 +87,7 @@ const services = [
 ];
 
 // ── 3D tilt card (same technique as ServicesSection) ──────────────────────
-const ServiceCard = ({ service, index }: { service: typeof services[0]; index: number }) => {
+const ServiceCard = ({ service, index, arrowAnimData }: { service: typeof services[0]; index: number; arrowAnimData?: object | null }) => {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
   const cardRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -182,10 +183,15 @@ const ServiceCard = ({ service, index }: { service: typeof services[0]; index: n
 
             <button
               onClick={() => navigate(`/services/${service.slug}`)}
-              className={`flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-xs uppercase tracking-widest text-white bg-gradient-to-r ${service.gradient} opacity-90 hover:opacity-100 hover:scale-[1.02] transition-all duration-300 shadow-md`}
+              className={`flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-xs uppercase tracking-widest text-white bg-gradient-to-r ${service.gradient} opacity-90 hover:opacity-100 hover:scale-[1.02] transition-all duration-300 shadow-md group/btn`}
               style={{ boxShadow: `0 4px 20px ${service.glow}` }}
             >
-              Explore Service <ChevronRight className="w-4 h-4" />
+              Explore Service 
+              {arrowAnimData ? (
+                <Lottie animationData={arrowAnimData} loop autoplay className="w-5 h-5 transition-transform duration-200 group-hover/btn:translate-x-1" />
+              ) : (
+                <ChevronRight className="w-4 h-4" />
+              )}
             </button>
           </div>
         </ShineBorder>
@@ -206,6 +212,22 @@ const stats = [
 export default function ServicesPage() {
   const navigate = useNavigate();
   const [heroRef, heroInView] = useInView({ triggerOnce: true, threshold: 0.1 });
+  const [arrowAnimData, setArrowAnimData] = useState<object | null>(null);
+
+  useEffect(() => {
+    fetch('/Jason/lottieflow-arrow-08-2-ffffff-easey.json')
+      .then((r) => r.json())
+      .then((d: any) => {
+        const stripped = {
+          ...d,
+          layers: (d.layers ?? []).filter(
+            (l: any) => l.ty !== 1 && !/^bg$/i.test(l.nm ?? '') && !/^background$/i.test(l.nm ?? '')
+          ),
+        };
+        setArrowAnimData(stripped);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#07070e] overflow-x-hidden">
@@ -327,7 +349,7 @@ export default function ServicesPage() {
           {/* Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
             {services.map((s, i) => (
-              <ServiceCard key={s.slug} service={s} index={i} />
+              <ServiceCard key={s.slug} service={s} index={i} arrowAnimData={arrowAnimData} />
             ))}
           </div>
         </div>
@@ -385,9 +407,16 @@ export default function ServicesPage() {
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => navigate("/contact")}
-              className="flex items-center gap-2 bg-white text-rose-600 font-black px-10 py-4 rounded-2xl shadow-2xl hover:shadow-white/20 transition-all text-sm uppercase tracking-widest"
+              className="flex items-center gap-2 bg-white text-rose-600 font-black px-10 py-4 rounded-2xl shadow-2xl hover:shadow-white/20 transition-all text-sm uppercase tracking-widest group/btn"
             >
-              Start Your Project <ArrowRight className="w-5 h-5" />
+              Start Your Project 
+              {arrowAnimData ? (
+                <div className="bg-rose-600 rounded-full p-0.5 flex items-center justify-center transition-transform group-hover/btn:translate-x-1">
+                  <Lottie animationData={arrowAnimData} loop autoplay className="w-4 h-4" />
+                </div>
+              ) : (
+                <ArrowRight className="w-5 h-5 transition-transform group-hover/btn:translate-x-1" />
+              )}
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.05, y: -2 }}

@@ -1,5 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from "framer-motion";
+import Lottie from "lottie-react";
 import { useInView } from "react-intersection-observer";
 import {
   Code,
@@ -32,7 +33,7 @@ const services = [
   { icon: Share2, title: "Social Media Management", slug: "social-media-management", description: "Grow your brand's online presence with data-driven social strategies, engaging content, and performance-focused campaigns across all major platforms.", features: ["Content Strategy", "Ad Campaigns", "Analytics & Reporting", "Community Management"] },
 ];
 
-const ServiceCard = ({ service, index, inView }) => {
+const ServiceCard = ({ service, index, inView, arrowAnimData }) => {
   const cardRef = useRef(null);
   const navigate = useNavigate();
   const Icon = service.icon;
@@ -125,10 +126,15 @@ const ServiceCard = ({ service, index, inView }) => {
 
             <Button
               variant="outline"
-              className="w-full h-12 border-black/10 dark:border-white/20 hover:border-rose-600 dark:hover:border-red-600 hover:bg-rose-600 dark:hover:bg-red-600 hover:text-white transition-all duration-300 rounded-xl font-black text-xs uppercase tracking-widest flex-shrink-0"
+              className="w-full h-12 border-black/10 dark:border-white/20 hover:border-rose-600 dark:hover:border-red-600 hover:bg-rose-600 dark:hover:bg-red-600 hover:text-white transition-all duration-300 rounded-xl font-black text-xs uppercase tracking-widest flex-shrink-0 group/btn"
               onClick={() => navigate(`/services/${service.slug}`)}
             >
-              Learn More <ArrowRight className="ml-2 w-4 h-4" />
+              Learn More 
+              {arrowAnimData ? (
+                <Lottie animationData={arrowAnimData} loop autoplay className="ml-2 w-5 h-5 transition-transform duration-200 group-hover/btn:translate-x-1" />
+              ) : (
+                <ArrowRight className="ml-2 w-4 h-4" />
+              )}
             </Button>
           </div>
         </ShineBorder>
@@ -140,6 +146,22 @@ const ServiceCard = ({ service, index, inView }) => {
 export const ServicesSection = () => {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
   const navigate = useNavigate();
+  const [arrowAnimData, setArrowAnimData] = useState<object | null>(null);
+
+  useEffect(() => {
+    fetch('/Jason/lottieflow-arrow-08-2-ffffff-easey.json')
+      .then((r) => r.json())
+      .then((d: any) => {
+        const stripped = {
+          ...d,
+          layers: (d.layers ?? []).filter(
+            (l: any) => l.ty !== 1 && !/^bg$/i.test(l.nm ?? '') && !/^background$/i.test(l.nm ?? '')
+          ),
+        };
+        setArrowAnimData(stripped);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <section ref={ref} className="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden transition-colors duration-300">
@@ -156,7 +178,7 @@ export const ServicesSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {services.slice(0, 6).map((s, i) => (
-            <ServiceCard key={i} service={s} index={i} inView={inView} />
+            <ServiceCard key={i} service={s} index={i} inView={inView} arrowAnimData={arrowAnimData} />
           ))}
         </div>
 
@@ -167,14 +189,24 @@ export const ServicesSection = () => {
             className="h-14 px-10 rounded-full font-black text-lg border-2 border-rose-500/40 dark:border-red-500/40 text-rose-600 dark:text-red-400 hover:bg-rose-50 dark:hover:bg-red-950/40 hover:border-rose-600 dark:hover:border-red-500 transition-all duration-300 hover:scale-105 uppercase tracking-widest group"
             onClick={() => navigate("/services")}
           >
-            See More Our Services <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            See More Our Services 
+            {arrowAnimData ? (
+              <Lottie animationData={arrowAnimData} loop autoplay className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" />
+            ) : (
+              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            )}
           </Button>
           <Button
             size="lg"
             className="h-14 px-10 bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700 text-white rounded-full font-black text-lg shadow-[0_0_20px_rgba(225,29,72,0.4)] hover:shadow-[0_0_30px_rgba(225,29,72,0.6)] border border-red-500/30 transition-all duration-300 hover:scale-105 uppercase tracking-widest group"
             onClick={() => navigate("/contact")}
           >
-            Start Your Project <ArrowRight className="ml-2 w-6 h-6 group-hover:translate-x-1 transition-transform" />
+            Start Your Project 
+            {arrowAnimData ? (
+              <Lottie animationData={arrowAnimData} loop autoplay className="ml-2 w-6 h-6 transition-transform group-hover:translate-x-1" />
+            ) : (
+              <ArrowRight className="ml-2 w-6 h-6 group-hover:translate-x-1 transition-transform" />
+            )}
           </Button>
         </div>
       </div>

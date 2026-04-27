@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, Phone, MapPin, Send, Star, CheckCircle2, XCircle, Sparkles, ArrowRight, Facebook, Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
 import BlurBlob from "@/components/BlurBlob";
+import Lottie from "lottie-react";
 
 // ─────────────────────────────────────────────
 // Ultra-Premium Toast Component v2
@@ -289,6 +290,83 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { trackUser } = useFingerprint(undefined, undefined);
   const [toastData, setToastData] = useState<{ message: string; subMessage?: string; footer?: string; type: "success" | "error" } | null>(null);
+  const [locationAnimData, setLocationAnimData] = useState<object | null>(null);
+  const [mailAnimData, setMailAnimData] = useState<object | null>(null);
+  const [callAnimData, setCallAnimData] = useState<object | null>(null);
+
+  useEffect(() => {
+    fetch('/Jason/Call%20ringing%20animation.json')
+      .then((r) => r.json())
+      .then((d: any) => {
+        const newColor = [0.0627, 0.7255, 0.5059, 1]; // Emerald 500
+        const recolor = (obj: any) => {
+          if (!obj || typeof obj !== 'object') return;
+          if (Array.isArray(obj)) {
+            obj.forEach(recolor);
+            return;
+          }
+          if (obj.ty === 'fl' || obj.ty === 'st') {
+            if (obj.c && Array.isArray(obj.c.k) && (obj.c.a === 0 || obj.c.a === undefined)) {
+              if (obj.c.k.length === 4) {
+                const [r, g, b] = obj.c.k;
+                const isGreyscale = Math.max(r, g, b) - Math.min(r, g, b) < 0.05;
+                if (!isGreyscale) {
+                  obj.c.k = newColor;
+                }
+              }
+            }
+          } else if (obj.ty === 'gf' || obj.ty === 'gs') {
+            obj.ty = obj.ty === 'gf' ? 'fl' : 'st';
+            obj.c = { a: 0, k: newColor };
+            delete obj.g;
+            delete obj.s;
+            delete obj.e;
+            delete obj.t;
+          }
+          Object.values(obj).forEach(recolor);
+        };
+        recolor(d);
+
+        const stripped = {
+          ...d,
+          layers: (d.layers ?? []).filter(
+            (l: any) => l.ty !== 1 && !/^bg$/i.test(l.nm ?? '') && !/^background$/i.test(l.nm ?? '')
+          ),
+        };
+        setCallAnimData(stripped);
+      })
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    fetch('/Jason/Email%20successfully%20sent.json')
+      .then((r) => r.json())
+      .then((d: any) => {
+        const stripped = {
+          ...d,
+          layers: (d.layers ?? []).filter(
+            (l: any) => l.ty !== 1 && !/^bg$/i.test(l.nm ?? '') && !/^background$/i.test(l.nm ?? '')
+          ),
+        };
+        setMailAnimData(stripped);
+      })
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    fetch('/lottieflow-ecommerce-14-16-f50847-easey.json')
+      .then((r) => r.json())
+      .then((d: any) => {
+        const stripped = {
+          ...d,
+          layers: (d.layers ?? []).filter(
+            (l: any) => l.ty !== 1 && !/^bg$/i.test(l.nm ?? '') && !/^background$/i.test(l.nm ?? '')
+          ),
+        };
+        setLocationAnimData(stripped);
+      })
+      .catch(() => {});
+  }, []);
 
   const showToast = (message: string, subMessage: string | undefined, type: "success" | "error", footer?: string) => {
     setToastData({ message, subMessage, type, footer });
@@ -545,7 +623,15 @@ const Contact = () => {
                     rel="noopener noreferrer"
                     className={`flex items-center gap-2 px-3.5 py-2 rounded-full border ${c.borderColor} bg-white/5 backdrop-blur-md text-xs font-semibold text-white/80 hover:text-white transition-all hover:bg-white/10`}
                   >
-                    <c.icon className={`w-3.5 h-3.5 ${c.iconColor}`} />
+                    {c.title === "Visit Us" && locationAnimData ? (
+                      <Lottie animationData={locationAnimData} loop autoplay className="w-5 h-5 drop-shadow-sm" />
+                    ) : c.title === "Email Us" && mailAnimData ? (
+                      <Lottie animationData={mailAnimData} loop autoplay className="w-6 h-6 drop-shadow-sm" />
+                    ) : c.title === "Call Us" && callAnimData ? (
+                      <Lottie animationData={callAnimData} loop autoplay className="w-5 h-5 drop-shadow-sm scale-110" />
+                    ) : (
+                      <c.icon className={`w-3.5 h-3.5 ${c.iconColor}`} />
+                    )}
                     {c.value}
                   </a>
                 ))}
@@ -583,7 +669,11 @@ const Contact = () => {
                 className="absolute -left-4 top-1/2 -translate-y-1/2 bg-[#222a36]/90 backdrop-blur-md p-3 md:p-4 rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.4)] border border-white/10 hidden md:flex items-center justify-center z-20 group hover:scale-110 transition-transform"
               >
                 <div className="w-8 h-8 rounded-full border-2 border-emerald-500 flex items-center justify-center group-hover:bg-emerald-500/10 transition-colors">
-                  <Phone className="w-5 h-5 text-emerald-500" />
+                  {callAnimData ? (
+                    <Lottie animationData={callAnimData} loop autoplay className="w-5 h-5 scale-110" />
+                  ) : (
+                    <Phone className="w-5 h-5 text-emerald-500" />
+                  )}
                 </div>
               </motion.div>
             </motion.div>
@@ -988,7 +1078,15 @@ const Contact = () => {
                     <div className={`absolute inset-0 bg-gradient-to-br ${info.color} opacity-0 group-hover:opacity-100 transition-opacity duration-400 pointer-events-none`} />
 
                     <div className={`w-12 h-12 sm:w-14 sm:h-14 shrink-0 bg-gradient-to-br from-white/90 to-white/20 dark:from-white/10 dark:to-white/5 backdrop-blur-md border border-white/50 dark:border-white/10 rounded-xl flex items-center justify-center shadow-lg ${info.glowColor} group-hover:scale-110 transition-transform duration-300`}>
-                      <info.icon className={`w-5 h-5 sm:w-6 sm:h-6 ${info.iconColor} drop-shadow-sm`} />
+                      {info.title === "Visit Us" && locationAnimData ? (
+                        <Lottie animationData={locationAnimData} loop autoplay className="w-8 h-8 sm:w-10 sm:h-10 drop-shadow-sm" />
+                      ) : info.title === "Email Us" && mailAnimData ? (
+                        <Lottie animationData={mailAnimData} loop autoplay className="w-11 h-11 sm:w-14 sm:h-14 drop-shadow-sm scale-110" />
+                      ) : info.title === "Call Us" && callAnimData ? (
+                        <Lottie animationData={callAnimData} loop autoplay className="w-8 h-8 sm:w-10 sm:h-10 drop-shadow-sm scale-125" />
+                      ) : (
+                        <info.icon className={`w-5 h-5 sm:w-6 sm:h-6 ${info.iconColor} drop-shadow-sm`} />
+                      )}
                     </div>
 
                     <div className="relative min-w-0">

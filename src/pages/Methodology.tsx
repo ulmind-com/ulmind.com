@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
+import Lottie from "lottie-react";
 import {
   CheckCircle,
   ArrowRight,
@@ -223,6 +224,22 @@ const signatureBadges = [
 
 /* ─── Main Component ────────────────── */
 export default function Methodology() {
+  const [arrowAnimData, setArrowAnimData] = useState<object | null>(null);
+
+  useEffect(() => {
+    fetch('/Jason/lottieflow-arrow-08-2-ffffff-easey.json')
+      .then((r) => r.json())
+      .then((d: any) => {
+        const stripped = {
+          ...d,
+          layers: (d.layers ?? []).filter(
+            (l: any) => l.ty !== 1 && !/^bg$/i.test(l.nm ?? '') && !/^background$/i.test(l.nm ?? '')
+          ),
+        };
+        setArrowAnimData(stripped);
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     document.title = "Methodology | ULMiND";
@@ -932,9 +949,14 @@ export default function Methodology() {
                     href="/contact"
                     whileHover={{ scale: 1.04 }}
                     whileTap={{ scale: 0.97 }}
-                    className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-gradient-to-r from-red-600 via-rose-500 to-red-500 text-white font-black text-sm uppercase tracking-widest shadow-xl shadow-red-600/30"
+                    className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-gradient-to-r from-red-600 via-rose-500 to-red-500 text-white font-black text-sm uppercase tracking-widest shadow-xl shadow-red-600/30 group/btn"
                   >
-                    Start Your Project <ArrowRight className="w-4 h-4" />
+                    Start Your Project 
+                    {arrowAnimData ? (
+                      <Lottie animationData={arrowAnimData} loop autoplay className="w-5 h-5 transition-transform group-hover/btn:translate-x-1" />
+                    ) : (
+                      <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+                    )}
                   </motion.a>
                 </motion.div>
               </div>

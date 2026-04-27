@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Lottie from "lottie-react";
 import {
   MapPin,
   Clock,
@@ -191,6 +192,22 @@ const perks = [
 const Career = () => {
   const [selectedJob, setSelectedJob] =
     useState<(typeof jobOpenings)[0] | null>(null);
+  const [arrowAnimData, setArrowAnimData] = useState<object | null>(null);
+
+  useEffect(() => {
+    fetch('/Jason/lottieflow-arrow-08-2-ffffff-easey.json')
+      .then((r) => r.json())
+      .then((d: any) => {
+        const stripped = {
+          ...d,
+          layers: (d.layers ?? []).filter(
+            (l: any) => l.ty !== 1 && !/^bg$/i.test(l.nm ?? '') && !/^background$/i.test(l.nm ?? '')
+          ),
+        };
+        setArrowAnimData(stripped);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
@@ -647,7 +664,11 @@ const Career = () => {
                           className={`group/btn relative inline-flex items-center justify-center px-7 py-3 text-sm font-bold text-white transition-all duration-300 bg-gradient-to-r ${colors.btnGrad} rounded-full hover:scale-105 active:scale-95 ${colors.btnShadow} hover:shadow-lg`}
                         >
                           Apply Now
-                          <ArrowRight className="w-4 h-4 ml-2 transition-transform duration-200 group-hover/btn:translate-x-1" />
+                          {arrowAnimData ? (
+                            <Lottie animationData={arrowAnimData} loop autoplay className="w-5 h-5 ml-2 transition-transform duration-200 group-hover/btn:translate-x-1" />
+                          ) : (
+                            <ArrowRight className="w-4 h-4 ml-2 transition-transform duration-200 group-hover/btn:translate-x-1" />
+                          )}
                         </button>
                       </div>
                     </div>
