@@ -293,6 +293,22 @@ const Contact = () => {
   const [locationAnimData, setLocationAnimData] = useState<object | null>(null);
   const [mailAnimData, setMailAnimData] = useState<object | null>(null);
   const [callAnimData, setCallAnimData] = useState<object | null>(null);
+  const [starAnimData, setStarAnimData] = useState<object | null>(null);
+
+  useEffect(() => {
+    fetch('/Jason/Star.json')
+      .then((r) => r.json())
+      .then((d: any) => {
+        const stripped = {
+          ...d,
+          layers: (d.layers ?? []).filter(
+            (l: any) => l.ty !== 1 && !/^bg$/i.test(l.nm ?? '') && !/^background$/i.test(l.nm ?? '')
+          ),
+        };
+        setStarAnimData(stripped);
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     fetch('/Jason/Call%20ringing%20animation.json')
@@ -1117,7 +1133,11 @@ const Contact = () => {
                 <div className="relative p-5 sm:p-7 rounded-[calc(1rem-1px)] bg-gradient-to-br from-white/10 to-transparent backdrop-blur-xl border border-white/20 flex flex-col gap-3">
                   <div className="flex items-start gap-3">
                     <div className="w-10 h-10 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center shrink-0">
-                      <Star className="w-5 h-5 text-amber-300 fill-amber-300" />
+                      {starAnimData ? (
+                        <Lottie animationData={starAnimData} loop autoplay className="w-10 h-10" />
+                      ) : (
+                        <Star className="w-5 h-5 text-amber-300 fill-amber-300" />
+                      )}
                     </div>
                     <div>
                       <h3 className="text-lg sm:text-xl font-black text-white drop-shadow-md tracking-tight leading-tight">Focus on Growth</h3>
@@ -1135,7 +1155,11 @@ const Contact = () => {
                         ))}
                       </div>
                       <div className="flex items-center gap-1">
-                        <Star className="w-3 h-3 text-amber-300 fill-amber-300" />
+                        {starAnimData ? (
+                          <Lottie animationData={starAnimData} loop autoplay className="w-5 h-5" />
+                        ) : (
+                          <Star className="w-3 h-3 text-amber-300 fill-amber-300" />
+                        )}
                         <span className="text-xs font-black text-white">4.9</span>
                       </div>
                     </div>
