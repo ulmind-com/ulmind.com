@@ -170,9 +170,10 @@ interface CounterProps {
   value: string;
   label: string;
   icon?: React.ElementType; // Fixed TS 'any' type to prevent Vercel build errors
+  lottieData?: object | null;
 }
 
-const Counter = ({ value, label, icon: Icon }: CounterProps) => {
+const Counter = ({ value, label, icon: Icon, lottieData }: CounterProps) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.5 });
 
@@ -209,13 +210,17 @@ const Counter = ({ value, label, icon: Icon }: CounterProps) => {
       className="bg-card border border-border/50 shadow-xl shadow-black/5 dark:shadow-black/20 rounded-[2rem] p-8 flex flex-col items-center justify-center gap-4 relative overflow-hidden group"
     >
       <div
-        className="w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+        className="w-20 h-20 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
         style={{
           background: "linear-gradient(135deg, rgba(225,29,72,0.15) 0%, rgba(159,18,57,0.15) 100%)",
           boxShadow: "0 0 18px 2px rgba(225,29,72,0.2)",
         }}
       >
-        {Icon && <Icon className="w-8 h-8" style={{ color: "#e11d48" }} />}
+        {lottieData ? (
+          <Lottie animationData={lottieData} loop autoplay className="w-16 h-16" />
+        ) : (
+          Icon && <Icon className="w-8 h-8" style={{ color: "#e11d48" }} />
+        )}
       </div>
       <div className="text-center">
         <div className="text-4xl font-extrabold text-foreground mb-1">
@@ -232,12 +237,18 @@ const Counter = ({ value, label, icon: Icon }: CounterProps) => {
 export const HeroSection = () => {
   const navigate = useNavigate();
 
+  // Lottie animation states for stat cards
+  const [trophyAnimData, setTrophyAnimData] = useState<object | null>(null);
+  const [successAnimData, setSuccessAnimData] = useState<object | null>(null);
+  const [growthAnimData, setGrowthAnimData] = useState<object | null>(null);
+  const [settingAnimData, setSettingAnimData] = useState<object | null>(null);
+
   // Your stats data matched with icons
   const stats = [
-    { number: '3', label: 'Years Experience', icon: Trophy },
-    { number: '7+', label: 'Completed Projects', icon: Target },
-    { number: '7+', label: 'Clients Worldwide', icon: BarChart3 },
-    { number: '24/7', label: 'Support', icon: Settings },
+    { number: '3', label: 'Years Experience', icon: Trophy, lottieData: trophyAnimData },
+    { number: '7+', label: 'Completed Projects', icon: Target, lottieData: successAnimData },
+    { number: '7+', label: 'Clients Worldwide', icon: BarChart3, lottieData: growthAnimData },
+    { number: '24/7', label: 'Support', icon: Settings, lottieData: settingAnimData },
   ];
 
   // Mouse parallax removed — mousemove listener on a large section causes
@@ -260,6 +271,40 @@ export const HeroSection = () => {
         setArrowAnimData(stripped);
       })
       .catch(() => {});
+
+    // Fetch and recolor stat-card animations to brand red #f50847
+    const fetchAndRecolor = (path: string, setter: React.Dispatch<React.SetStateAction<object | null>>) => {
+      fetch(path)
+        .then((r) => r.json())
+        .then((d: any) => {
+          const newColor = [0.96078, 0.03137, 0.27843, 1];
+          const recolor = (obj: any) => {
+            if (!obj || typeof obj !== 'object') return;
+            if (Array.isArray(obj)) { obj.forEach(recolor); return; }
+            if (obj.ty === 'fl' || obj.ty === 'st') {
+              if (obj.c && Array.isArray(obj.c.k) && (obj.c.a === 0 || obj.c.a === undefined) && obj.c.k.length === 4) {
+                const [r, g, b] = obj.c.k;
+                const isGreyscale = Math.max(r, g, b) - Math.min(r, g, b) < 0.05;
+                if (!isGreyscale) obj.c.k = newColor;
+              }
+            }
+            Object.values(obj).forEach(recolor);
+          };
+          recolor(d);
+          const stripped = {
+            ...d,
+            layers: (d.layers ?? []).filter(
+              (l: any) => l.ty !== 1 && !/^bg$/i.test(l.nm ?? '') && !/^background$/i.test(l.nm ?? '')
+            ),
+          };
+          setter(stripped);
+        })
+        .catch(() => {});
+    };
+    fetchAndRecolor('/Jason/Trophy.json', setTrophyAnimData);
+    fetchAndRecolor('/Jason/Success.json', setSuccessAnimData);
+    fetchAndRecolor('/Jason/Growth%20Chart.json', setGrowthAnimData);
+    fetchAndRecolor('/Jason/Green%20Setting%20Wheel.json', setSettingAnimData);
   }, []);
 
   useEffect(() => {
@@ -461,6 +506,7 @@ export const HeroSection = () => {
                 value={stat.number}
                 label={stat.label}
                 icon={stat.icon}
+                lottieData={stat.lottieData}
               />
             ))}
           </div>

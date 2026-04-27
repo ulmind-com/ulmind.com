@@ -193,6 +193,49 @@ const Career = () => {
   const [selectedJob, setSelectedJob] =
     useState<(typeof jobOpenings)[0] | null>(null);
   const [arrowAnimData, setArrowAnimData] = useState<object | null>(null);
+  const [globeAnimData, setGlobeAnimData] = useState<object | null>(null);
+  const [peopleAnimData, setPeopleAnimData] = useState<object | null>(null);
+  const [thunderAnimData, setThunderAnimData] = useState<object | null>(null);
+  const [securityAnimData, setSecurityAnimData] = useState<object | null>(null);
+
+  const fetchAndRecolor = (path: string, setter: React.Dispatch<React.SetStateAction<object | null>>, forceAll = false) => {
+    fetch(path)
+      .then((r) => r.json())
+      .then((d: any) => {
+        const newColor = [0.96078, 0.03137, 0.27843, 1]; // #f50847
+        const recolor = (obj: any) => {
+          if (!obj || typeof obj !== 'object') return;
+          if (Array.isArray(obj)) { obj.forEach(recolor); return; }
+          if (obj.ty === 'fl' || obj.ty === 'st') {
+            if (obj.c && Array.isArray(obj.c.k) && (obj.c.a === 0 || obj.c.a === undefined)) {
+              if (obj.c.k.length === 4) {
+                const [r, g, b] = obj.c.k;
+                let shouldRecolor = false;
+                if (forceAll) {
+                  // forceAll: only recolor FILLS (not strokes) to preserve globe shape/borders
+                  const isNearBlack = Math.max(r, g, b) < 0.15;
+                  shouldRecolor = obj.ty === 'fl' && !isNearBlack;
+                } else {
+                  const isGreyscale = Math.max(r, g, b) - Math.min(r, g, b) < 0.05;
+                  shouldRecolor = !isGreyscale;
+                }
+                if (shouldRecolor) obj.c.k = newColor;
+              }
+            }
+          }
+          Object.values(obj).forEach(recolor);
+        };
+        recolor(d);
+        const stripped = {
+          ...d,
+          layers: (d.layers ?? []).filter(
+            (l: any) => l.ty !== 1 && !/^bg$/i.test(l.nm ?? '') && !/^background$/i.test(l.nm ?? '')
+          ),
+        };
+        setter(stripped);
+      })
+      .catch(() => {});
+  };
 
   useEffect(() => {
     fetch('/Jason/lottieflow-arrow-08-2-ffffff-easey.json')
@@ -207,6 +250,22 @@ const Career = () => {
         setArrowAnimData(stripped);
       })
       .catch(() => {});
+    // Globe.json: #f50847 is baked directly into the JSON file — load with plain strip only
+    fetch('/Jason/Globe.json')
+      .then((r) => r.json())
+      .then((d: any) => {
+        const stripped = {
+          ...d,
+          layers: (d.layers ?? []).filter(
+            (l: any) => l.ty !== 1 && !/^bg$/i.test(l.nm ?? '') && !/^background$/i.test(l.nm ?? '')
+          ),
+        };
+        setGlobeAnimData(stripped);
+      })
+      .catch(() => {});
+    fetchAndRecolor('/Jason/people.json', setPeopleAnimData);
+    fetchAndRecolor('/Jason/thunddder.json', setThunderAnimData);
+    fetchAndRecolor('/Jason/Security%20status%20-%20Safe.json', setSecurityAnimData);
   }, []);
 
   return (
@@ -497,7 +556,17 @@ const Career = () => {
               >
                 <div className="career-glass-highlight" />
                 <div className="w-12 h-12 mx-auto rounded-2xl bg-gradient-to-br from-[#ff5a5f]/15 to-pink-500/10 dark:from-[#ff5a5f]/20 dark:to-pink-600/10 flex items-center justify-center mb-3 border border-[#ff5a5f]/15 dark:border-[#ff5a5f]/20">
-                  <perk.icon className="w-6 h-6 text-[#ff5a5f]" />
+                  {perk.title === "100% Remote" && globeAnimData ? (
+                    <Lottie animationData={globeAnimData} loop autoplay className="w-20 h-20" />
+                  ) : perk.title === "Great Team" && peopleAnimData ? (
+                    <Lottie animationData={peopleAnimData} loop autoplay className="w-14 h-14" />
+                  ) : perk.title === "Fast Growth" && thunderAnimData ? (
+                    <Lottie animationData={thunderAnimData} loop autoplay className="w-14 h-14" />
+                  ) : perk.title === "Job Security" && securityAnimData ? (
+                    <Lottie animationData={securityAnimData} loop autoplay className="w-9 h-9" />
+                  ) : (
+                    <perk.icon className="w-6 h-6 text-[#ff5a5f]" />
+                  )}
                 </div>
                 <h4 className="text-sm font-bold text-slate-800 dark:text-white mb-1">
                   {perk.title}
