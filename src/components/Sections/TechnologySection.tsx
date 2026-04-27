@@ -1,13 +1,31 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { useNavigate } from "react-router-dom";
 import BlurBlob from "@/components/BlurBlob";
 import { technologies } from "@/data/technologies";
+import Lottie from "lottie-react";
 
 export const TechnologySection = () => {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.05 });
   const navigate = useNavigate();
   const displayTechnologies = technologies.slice(0, 18);
+  const [arrowAnimData, setArrowAnimData] = useState<object | null>(null);
+
+  useEffect(() => {
+    fetch('/Jason/lottieflow-arrow-08-2-ffffff-easey.json')
+      .then((r) => r.json())
+      .then((d: any) => {
+        const stripped = {
+          ...d,
+          layers: (d.layers ?? []).filter(
+            (l: any) => l.ty !== 1 && !/^bg$/i.test(l.nm ?? '') && !/^background$/i.test(l.nm ?? '')
+          ),
+        };
+        setArrowAnimData(stripped);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <section ref={ref} className="py-20 bg-secondary/30 relative overflow-hidden">
@@ -157,12 +175,16 @@ export const TechnologySection = () => {
             className="group relative inline-flex items-center justify-center px-8 py-3.5 text-base font-bold text-white transition-all duration-300 bg-gradient-to-r from-rose-600 to-red-600 border border-red-500/30 rounded-full hover:from-rose-700 hover:to-red-700 focus:outline-none shadow-[0_0_20px_rgba(225,29,72,0.4)] hover:shadow-[0_0_30px_rgba(225,29,72,0.6)] hover:scale-105"
           >
             Explore All Technologies
-            <svg
-              className="w-5 h-5 ml-2 -mr-1 transition-transform duration-200 group-hover:translate-x-1"
-              xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
+            {arrowAnimData ? (
+              <Lottie animationData={arrowAnimData} loop autoplay className="w-5 h-5 ml-2 -mr-1 transition-transform duration-200 group-hover:translate-x-1" />
+            ) : (
+              <svg
+                className="w-5 h-5 ml-2 -mr-1 transition-transform duration-200 group-hover:translate-x-1"
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            )}
           </button>
         </motion.div>
       </div>

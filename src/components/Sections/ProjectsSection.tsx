@@ -1,5 +1,7 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import Lottie from 'lottie-react';
 import { Button } from '@/components/ui/button';
 import { ExternalLink, Github, ArrowRight } from 'lucide-react';
 import { ShineBorder } from '@/components/ui/shine-border';
@@ -97,6 +99,22 @@ export const ProjectsSection = () => {
     triggerOnce: true,
     threshold: 0.1,
   });
+  const [arrowAnimData, setArrowAnimData] = useState<object | null>(null);
+
+  useEffect(() => {
+    fetch('/Jason/lottieflow-arrow-08-2-ffffff-easey.json')
+      .then((r) => r.json())
+      .then((d: any) => {
+        const stripped = {
+          ...d,
+          layers: (d.layers ?? []).filter(
+            (l: any) => l.ty !== 1 && !/^bg$/i.test(l.nm ?? '') && !/^background$/i.test(l.nm ?? '')
+          ),
+        };
+        setArrowAnimData(stripped);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <section id="projects" ref={ref} className="py-20 bg-secondary/30">
@@ -225,7 +243,11 @@ export const ProjectsSection = () => {
               className="bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700 text-white rounded-full px-8 py-6 text-base font-bold shadow-[0_0_20px_rgba(225,29,72,0.4)] hover:shadow-[0_0_30px_rgba(225,29,72,0.6)] border border-red-500/30 transition-all hover:scale-105 group"
             >
               Start Your Project
-              <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              {arrowAnimData ? (
+                <Lottie animationData={arrowAnimData} loop autoplay className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" />
+              ) : (
+                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              )}
             </Button>
           </div>
         </motion.div>

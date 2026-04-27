@@ -154,9 +154,11 @@ export const Lid = ({
           }}
           className="absolute inset-0 flex items-center justify-center rounded-lg bg-[#010101]"
         >
-          <span className="text-white">
-            <AceternityLogo />
-          </span>
+          <img 
+            src="/ULmindLogo.png" 
+            alt="ULmind Logo" 
+            className="h-12 w-auto object-contain opacity-90" 
+          />
         </div>
       </div>
       <motion.div
