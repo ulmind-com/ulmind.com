@@ -9,6 +9,7 @@ import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { ShineBorder } from "@/components/ui/shine-border";
 import { OfferPopup } from "@/components/OfferBanner";
+import { industries } from "@/components/Sections/IndustriesSection";
 
 const serviceItems = [
   { name: "Web Development",           icon: Code2,     desc: "React, Next.js & Node.js apps",        color: "#FF4D4D", href: "/services/web-development" },
@@ -205,6 +206,161 @@ const ServicesDropdown = ({ onNavigate }: { onNavigate: (href: string) => void }
   );
 };
 
+// ─── Desktop Industries Mega-Dropdown ──────────────────────────────────────────
+const IndustriesDropdown = ({ onNavigate }: { onNavigate: (href: string) => void }) => {
+  const [open, setOpen] = useState(false);
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const [isNavigating, setIsNavigating] = useState(false);
+  const timeoutRef    = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const fallbackRef   = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (timeoutRef.current)  clearTimeout(timeoutRef.current);
+    if (fallbackRef.current) clearTimeout(fallbackRef.current);
+
+    setOpen(false);
+    setIsNavigating(true);
+    fallbackRef.current = setTimeout(() => setIsNavigating(false), 3000);
+  }, [location.pathname]);
+
+  const openMenu = () => {
+    if (isNavigating) return;
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setOpen(true);
+  };
+
+  const closeMenu = () => {
+    if (fallbackRef.current) clearTimeout(fallbackRef.current);
+    setIsNavigating(false);
+    timeoutRef.current = setTimeout(() => setOpen(false), 120);
+  };
+
+  const handleIndustryClick = (href: string) => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setOpen(false);
+    setHoveredIdx(null);
+    setIsNavigating(true);
+    onNavigate(href);
+  };
+
+  const topIndustries = industries.slice(0, 12);
+
+  return (
+    <div
+      className="relative"
+      onMouseEnter={openMenu}
+      onMouseLeave={closeMenu}
+    >
+      <button
+        id="nav-industries-trigger"
+        aria-haspopup="true"
+        aria-expanded={open}
+        className={`group relative flex items-center gap-1 font-medium transition-colors duration-300 ease-in-out ${
+          open ? "text-red-500" : "text-foreground hover:text-red-500"
+        }`}
+      >
+        Industries
+        <motion.span
+          animate={{ rotate: open ? 180 : 0 }}
+          transition={{ duration: 0.25, ease: "easeInOut" }}
+          className="inline-flex"
+        >
+          <ChevronDown className="h-3.5 w-3.5 opacity-70" />
+        </motion.span>
+        <span
+          className={`absolute left-0 -bottom-1.5 h-[2px] w-full bg-red-500 origin-left transition-transform duration-300 ease-in-out ${
+            open ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+          }`}
+        />
+      </button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            id="nav-industries-dropdown"
+            role="menu"
+            initial={{ opacity: 0, y: 12, x: "-50%", scale: 0.97 }}
+            animate={{ opacity: 1, y: 0,  x: "-50%", scale: 1 }}
+            exit={{   opacity: 0, y: 8,   x: "-50%", scale: 0.97 }}
+            transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
+            className="absolute top-full left-1/2 mt-4 z-[999] w-[580px]"
+            onMouseEnter={openMenu}
+            onMouseLeave={closeMenu}
+          >
+            <div className="relative rounded-2xl overflow-hidden border border-white/20 dark:border-white/10 shadow-[0_24px_64px_rgba(0,0,0,0.28)] backdrop-blur-2xl bg-white dark:bg-zinc-950">
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-red-500/60 to-transparent" />
+
+              <div className="px-5 pt-4 pb-3 border-b border-black/5 dark:border-white/8">
+                <p className="text-[11px] font-semibold uppercase tracking-widest text-red-500/80">Sectors We Transform</p>
+                <p className="text-[13px] text-foreground/60 dark:text-white/50 mt-0.5">Click to explore each industry</p>
+              </div>
+
+              <div className="p-3 grid grid-cols-2 gap-1.5">
+                {topIndustries.map((ind, idx) => {
+                  const Icon = ind.icon;
+                  const isHovered = hoveredIdx === idx;
+                  return (
+                    <motion.button
+                      key={ind.title}
+                      role="menuitem"
+                      onClick={() => handleIndustryClick(`/industries/${ind.slug}`)}
+                      onMouseEnter={() => setHoveredIdx(idx)}
+                      onMouseLeave={() => setHoveredIdx(null)}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      transition={{ duration: 0.15 }}
+                      className="group flex items-start gap-3 p-3 rounded-xl text-left transition-all duration-200 relative overflow-hidden
+                        hover:bg-black/5 dark:hover:bg-white/6 border border-transparent hover:border-black/8 dark:hover:border-white/10"
+                    >
+                      {isHovered && (
+                        <motion.div
+                          layoutId="ind-glow"
+                          className="absolute inset-0 rounded-xl opacity-10 pointer-events-none"
+                          style={{ background: ind.accent }}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 0.12 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                        />
+                      )}
+                      <div
+                        className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center"
+                        style={{ background: `${ind.accent}20`, boxShadow: isHovered ? `0 0 12px ${ind.accent}50` : "none", transition: "box-shadow 0.2s" }}
+                      >
+                        <Icon className="w-4 h-4" style={{ color: ind.accent }} />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-[13px] font-semibold text-foreground dark:text-white/90 group-hover:text-red-500 transition-colors duration-200 leading-tight">
+                          {ind.title}
+                        </p>
+                        <p className="text-[11px] text-foreground/55 dark:text-white/45 mt-0.5 leading-relaxed truncate">
+                          {ind.tagline}
+                        </p>
+                      </div>
+                    </motion.button>
+                  );
+                })}
+              </div>
+
+              <div className="px-5 py-3 border-t border-black/5 dark:border-white/8 flex items-center justify-between">
+                <p className="text-[12px] text-foreground/50 dark:text-white/40">Discover solutions for your sector</p>
+                <button
+                  onClick={() => handleIndustryClick("/industries")}
+                  className="text-[12px] font-semibold text-red-500 hover:text-red-400 transition-colors duration-200 flex items-center gap-1"
+                >
+                  See more our Industries →
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
 
 // ─── Main Navbar ──────────────────────────────────────────────────────────────
 export const Navbar = () => {
@@ -212,6 +368,7 @@ export const Navbar = () => {
   const [scrolled, setScrolled]               = useState(false);
   const [isScrollingDown, setIsScrollingDown] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const [mobileIndustriesOpen, setMobileIndustriesOpen] = useState(false);
 
   const navigate  = useNavigate();
   const location  = useLocation();
@@ -247,6 +404,7 @@ export const Navbar = () => {
   useEffect(() => {
     setIsOpen(false);
     setMobileServicesOpen(false);
+    setMobileIndustriesOpen(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [location.pathname]);
 
@@ -333,6 +491,9 @@ export const Navbar = () => {
 
                   {/* ── Services Dropdown ── */}
                   <ServicesDropdown onNavigate={navigate} />
+
+                  {/* ── Industries Dropdown ── */}
+                  <IndustriesDropdown onNavigate={navigate} />
 
                   {/* Rest of nav items */}
                   {navItems.slice(2).map((item) => {
@@ -479,6 +640,73 @@ export const Navbar = () => {
                               </button>
                             );
                           })}
+                        </div>
+                  </div>
+                </div>
+
+                {/* ── Mobile Industries Accordion ── */}
+                <div>
+                  <button
+                    id="mobile-nav-industries"
+                    onClick={() => setMobileIndustriesOpen(!mobileIndustriesOpen)}
+                    className="group relative w-full text-left py-3 px-3 rounded-xl text-[15px] font-[450] tracking-wide transition-all duration-200 ease-out flex items-center justify-between text-foreground/80 hover:text-foreground hover:bg-foreground/8 dark:text-white/85 dark:hover:text-white dark:hover:bg-white/8"
+                    style={{ fontVariationSettings: "'wght' 450", WebkitFontSmoothing: "antialiased" }}
+                  >
+                    <div className="flex items-center gap-2 pl-2">
+                      <span className={`absolute left-0 top-1/2 -translate-y-1/2 w-[3px] rounded-full transition-all duration-200 ${
+                        mobileIndustriesOpen ? "h-5 bg-red-500" : "h-0 bg-red-500 group-hover:h-4"
+                      }`} />
+                      <span className={mobileIndustriesOpen ? "text-red-500" : ""}>Industries</span>
+                    </div>
+                    <span
+                      className={`mr-1 inline-flex transition-transform duration-250 ${mobileIndustriesOpen ? "rotate-180" : "rotate-0"}`}
+                    >
+                      <ChevronDown className={`h-4 w-4 ${mobileIndustriesOpen ? "text-red-500" : "text-foreground/50 dark:text-white/40"}`} />
+                    </span>
+                  </button>
+
+                  <div
+                    className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                      mobileIndustriesOpen ? "max-h-[1200px] opacity-100" : "max-h-0 opacity-0"
+                    }`}
+                  >
+                        <div className="ml-3 mt-1 mb-2 grid grid-cols-1 gap-1 border-l-2 border-red-500/20 pl-3">
+                          {industries.slice(0, 12).map((ind) => {
+                            const Icon = ind.icon;
+                            return (
+                              <button
+                                key={ind.title}
+                                onClick={() => { navigate(`/industries/${ind.slug}`); setIsOpen(false); setMobileIndustriesOpen(false); }}
+                                className="group flex items-center gap-3 py-2.5 px-2 rounded-xl text-left transition-all duration-200 hover:bg-red-500/8 dark:hover:bg-white/6"
+                              >
+                                <div
+                                  className="flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center"
+                                  style={{ background: `${ind.accent}22` }}
+                                >
+                                  <Icon className="w-3.5 h-3.5" style={{ color: ind.accent }} />
+                                </div>
+                                <div>
+                                  <p className="text-[13px] font-medium text-foreground/85 dark:text-white/80 group-hover:text-red-500 transition-colors duration-200 leading-tight">
+                                    {ind.title}
+                                  </p>
+                                  <p className="text-[11px] text-foreground/50 dark:text-white/40 leading-relaxed truncate max-w-[200px]">
+                                    {ind.tagline}
+                                  </p>
+                                </div>
+                              </button>
+                            );
+                          })}
+                          <button
+                            onClick={() => { navigate("/industries"); setIsOpen(false); setMobileIndustriesOpen(false); }}
+                            className="group flex items-center gap-3 py-2.5 px-2 rounded-xl text-left transition-all duration-200 hover:bg-red-500/8 dark:hover:bg-white/6"
+                          >
+                            <div className="flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center bg-red-500/10">
+                              <span className="text-red-500 text-[10px] font-bold">ALL</span>
+                            </div>
+                            <p className="text-[13px] font-semibold text-red-500 transition-colors duration-200">
+                              See more our Industries →
+                            </p>
+                          </button>
                         </div>
                   </div>
                 </div>
