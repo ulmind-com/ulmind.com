@@ -4,6 +4,7 @@ import { useScroll, useTransform, useSpring } from "framer-motion";
 import { HeroSection } from "@/components/Sections/HeroSection";
 import { TechnologySection } from "@/components/Sections/TechnologySection";
 import { ServicesSection } from "@/components/Sections/ServicesSection";
+import { IndustriesSection } from "@/components/Sections/IndustriesSection";
 import { AboutPreviewSection } from "@/components/Sections/AboutPreviewSection";
 import { CTASection } from "@/components/Sections/CTASection";
 import { TestimonialsSection } from "@/components/Sections/TestimonialsSection";
@@ -46,6 +47,7 @@ const Index = () => {
         <HeroSection />
         <TechnologySection />
         <ServicesSection />
+        <IndustriesSection />
         <AboutPreviewSection />
 
         {/* --- STACKING ZONE START --- */}
