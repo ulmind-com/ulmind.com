@@ -82,9 +82,6 @@ function ProjectCard({ project, index }: { project: any; index: number }) {
                 alt={project.title}
                 className="w-full h-56 object-cover opacity-95 group-hover:scale-105 transition-transform duration-500"
               />
-              <Badge className="absolute top-4 left-4 bg-rose-600/10 dark:bg-red-600/20 text-rose-600 dark:text-red-500 border-rose-600/20 dark:border-red-600/30 backdrop-blur-md">
-                {project.category}
-              </Badge>
             </div>
             <div className="p-6 flex-grow flex flex-col">
               <h3 className="text-xl font-bold mb-3 text-zinc-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-red-500 transition-colors flex-shrink-0">
@@ -137,6 +134,8 @@ const ALL_PROJECTS = [
   { id: 5, type: "web", title: "Investment & Financial Consulting Website", description: "A professional consulting website built to establish trust and convert visitors into leads.", image: "/Smart_invest.png", technologies: ["React", "Tailwind CSS", "Form Integration"], category: "FinTech", timeline: "3 days", teamSize: "2 developers", demoUrl: "https://www.smartinvestsolutions.in", githubUrl: "#" },
   { id: 6, type: "web", title: "Online Food Ordering Platform with Admin Panel", description: "A high-performance food ordering platform featuring a seamless customer experience and a robust Admin Panel for real-time order tracking and inventory management.", image: "/zomato_app.png", technologies: ["TypeScript", "Tailwind CSS", "Node.js", "Express", "MongoDB"], category: "E-commerce / FoodTech", timeline: "3 days", teamSize: "2 developers", demoUrl: "https://food-delivery-frontend-ten-gold.vercel.app/", githubUrl: "#" },
   { id: 7, type: "web", title: "Portfolio Website for Creative Professionals", description: "A high-performance portfolio website designed for creative professionals to showcase their work and attract clients.", image: "/portfolio.png", technologies: ["TypeScript", "Tailwind CSS", "React", "Vercel"], category: "Web Development", timeline: "2 days", teamSize: "1 developer", demoUrl: "https://www.arnabsenapati.in", githubUrl: "#" },
+  { id: 8, type: "web", title: "Consultant & Recruitment Platform", description: "Full spectrum of thoughtful researched-based innovative solutions to help organizations and institutions to improve productivity & growth innovative business solutions.", image: "/TIIS.png", technologies: ["TypeScript", "CSS", "JavaScript"], category: "Consulting & Recruitment", timeline: "10 days", teamSize: "3 developers", demoUrl: "https://www.tiis.co.in/", githubUrl: "#" },
+  { id: 9, type: "app", title: "Jharkhand Updates Mobile App", description: "A scalable digital news mobile application delivering real-time regional updates.", image: "/jharkhand updates mobile app.png", technologies: ["React Native"], category: "App Development", timeline: "15 days", teamSize: "2 developers", demoUrl: "https://play.google.com/store/apps/details?id=com.jharkhand.app", githubUrl: "#" },
 ];
 
 export default function Projects() {
@@ -234,17 +233,16 @@ export default function Projects() {
               id="filter-web"
               onClick={() => setActiveFilter("web")}
               className={`relative z-10 flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 select-none w-full sm:w-auto ${activeFilter === "web"
-                  ? "bg-gradient-to-br from-[#ff5a5f] to-[#c0392b] text-white shadow-[0_4px_20px_rgba(255,90,95,0.4)]"
-                  : "text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white"
+                ? "bg-gradient-to-br from-[#ff5a5f] to-[#c0392b] text-white shadow-[0_4px_20px_rgba(255,90,95,0.4)]"
+                : "text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white"
                 }`}
             >
               <Globe className="w-4 h-4" />
               <span>Web Development</span>
-              <span className={`inline-flex items-center justify-center min-w-[20px] h-5 rounded-full text-[10px] font-bold px-1 ${
-                activeFilter === "web"
-                  ? "bg-white/25 text-white"
-                  : "bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-zinc-500"
-              }`}>
+              <span className={`inline-flex items-center justify-center min-w-[20px] h-5 rounded-full text-[10px] font-bold px-1 ${activeFilter === "web"
+                ? "bg-white/25 text-white"
+                : "bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-zinc-500"
+                }`}>
                 {webCount}
               </span>
             </button>
@@ -253,17 +251,16 @@ export default function Projects() {
               id="filter-app"
               onClick={() => setActiveFilter("app")}
               className={`relative z-10 flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 select-none w-full sm:w-auto ${activeFilter === "app"
-                  ? "bg-gradient-to-br from-[#ff5a5f] to-[#c0392b] text-white shadow-[0_4px_20px_rgba(255,90,95,0.4)]"
-                  : "text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white"
+                ? "bg-gradient-to-br from-[#ff5a5f] to-[#c0392b] text-white shadow-[0_4px_20px_rgba(255,90,95,0.4)]"
+                : "text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white"
                 }`}
             >
               <Smartphone className="w-4 h-4" />
               <span>App Development</span>
-              <span className={`inline-flex items-center justify-center min-w-[20px] h-5 rounded-full text-[10px] font-bold px-1 ${
-                activeFilter === "app"
-                  ? "bg-white/25 text-white"
-                  : "bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-zinc-500"
-              }`}>
+              <span className={`inline-flex items-center justify-center min-w-[20px] h-5 rounded-full text-[10px] font-bold px-1 ${activeFilter === "app"
+                ? "bg-white/25 text-white"
+                : "bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-zinc-500"
+                }`}>
                 {appCount}
               </span>
             </button>
