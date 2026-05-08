@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Mail, Phone, MapPin, Send, Star, CheckCircle2, XCircle, Sparkles, ArrowRight, Facebook, Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
 import BlurBlob from "@/components/BlurBlob";
 import Lottie from "lottie-react";
+import { industries as ALL_INDUSTRIES } from "@/components/Sections/IndustriesSection";
 
 // ─────────────────────────────────────────────
 // Ultra-Premium Toast Component v2
@@ -272,7 +273,8 @@ interface ContactFormData {
   email: string;
   company: string;
   phone: string;
-  projectType: string;
+  projectTypes: string[];
+  industries: string[];
   budget: string;
   currency: "USD" | "INR";
   timeline: string;
@@ -288,6 +290,7 @@ const Contact = () => {
   const [captchaVerified, setCaptchaVerified] = useState(false);
   const [currency, setCurrency] = useState<"USD" | "INR">("USD");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showAllIndustries, setShowAllIndustries] = useState(false);
   const { trackUser } = useFingerprint(undefined, undefined);
   const [toastData, setToastData] = useState<{ message: string; subMessage?: string; footer?: string; type: "success" | "error" } | null>(null);
   const [locationAnimData, setLocationAnimData] = useState<object | null>(null);
@@ -395,7 +398,8 @@ const Contact = () => {
     email: "",
     company: "",
     phone: "",
-    projectType: "",
+    projectTypes: [],
+    industries: [],
     budget: "",
     currency: "USD",
     timeline: "",
@@ -405,7 +409,7 @@ const Contact = () => {
 
   // Dynamic Budget Options
   const getBudgetOptions = () => {
-    const isCreative = ["Content Writing", "Graphics Design"].includes(formData.projectType);
+    const isCreative = formData.projectTypes.some(pt => ["Content Writing", "Graphics Design"].includes(pt));
     if (isCreative) {
       return currency === "USD"
         ? [
@@ -450,8 +454,22 @@ const Contact = () => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleProjectTypeChange = (value: string) => {
-    setFormData((prev) => ({ ...prev, projectType: value, technologies: [], budget: "" }));
+  const toggleIndustry = (title: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      industries: prev.industries.includes(title)
+        ? prev.industries.filter((t) => t !== title)
+        : [...prev.industries, title],
+    }));
+  };
+
+  const toggleProjectType = (type: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      projectTypes: prev.projectTypes.includes(type)
+        ? prev.projectTypes.filter((t) => t !== type)
+        : [...prev.projectTypes, type],
+    }));
   };
 
   const toggleTechnology = (tech: string) => {
@@ -493,6 +511,11 @@ const Contact = () => {
 
 
 
+    if (formData.projectTypes.length === 0) {
+      showToast("Missing Field", "Please select at least one Project Type.", "error");
+      return;
+    }
+
     setIsSubmitting(true);
 
     const formDataToSend = new FormData();
@@ -503,7 +526,8 @@ const Contact = () => {
     formDataToSend.append("Email", formData.email);
     formDataToSend.append("Company / Organization", formData.company);
     formDataToSend.append("Phone", formData.phone);
-    formDataToSend.append("Project Type", formData.projectType);
+    formDataToSend.append("Industries", formData.industries.length > 0 ? formData.industries.join(", ") : "N/A");
+    formDataToSend.append("Project Type", formData.projectTypes.join(", "));
     formDataToSend.append("Currency", formData.currency);
     formDataToSend.append("Budget", formData.budget);
     formDataToSend.append("Timeline", formData.timeline);
@@ -531,7 +555,8 @@ const Contact = () => {
           email: "",
           company: "",
           phone: "",
-          projectType: "",
+          projectTypes: [],
+          industries: [],
           budget: "",
           currency: "USD",
           timeline: "",
@@ -780,35 +805,134 @@ const Contact = () => {
                         </div>
                       </div>
 
-                      {/* Project Type */}
-                      <div className="space-y-1.5">
-                        <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Project Type</label>
-                        <div className="relative">
-                          <select
-                            required
-                            value={formData.projectType}
-                            onChange={(e) => handleProjectTypeChange(e.target.value)}
-                            className={selectCls}
-                          >
-                            <option value="">Select project type</option>
-                            <option value="Web Application">Web Application</option>
-                            <option value="Mobile App">Mobile App</option>
-                            <option value="E-commerce">E-commerce</option>
-                            <option value="SaaS">SaaS</option>
-                            <option value="Consulting">Consulting</option>
-                            <option value="Graphics Design">Graphics Design</option>
-                            <option value="Content Writing">Content Writing</option>
-                            <option value="Social Media Management">Social Media Management</option>
-                          </select>
-                          <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 dark:text-slate-500">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="6 9 12 15 18 9" /></svg>
-                          </div>
+                      {/* Select Your Industry */}
+                      <div className="space-y-3.5 bg-white/40 dark:bg-black/20 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-white/60 dark:border-white/8 shadow-sm">
+                        <div className="flex items-center justify-between">
+                          <label className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+                            Select Your Industry
+                          </label>
+                          <span className="text-[9px] font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                            Select multiple
+                          </span>
+                        </div>
+                        <AnimatePresence>
+                          <motion.div layout className="flex flex-wrap gap-2">
+                            {(showAllIndustries ? ALL_INDUSTRIES : ALL_INDUSTRIES.slice(0, 12)).map((industry, index) => {
+                              const isSelected = formData.industries.includes(industry.title);
+                              
+                              const premiumColors = [
+                                "bg-cyan-500 text-white border-cyan-400 shadow-[0_0_14px_rgba(6,182,212,0.45)]",
+                                "bg-violet-500 text-white border-violet-400 shadow-[0_0_14px_rgba(139,92,246,0.45)]",
+                                "bg-emerald-500 text-white border-emerald-400 shadow-[0_0_14px_rgba(16,185,129,0.45)]",
+                                "bg-blue-500 text-white border-blue-400 shadow-[0_0_14px_rgba(59,130,246,0.45)]",
+                                "bg-amber-500 text-white border-amber-400 shadow-[0_0_14px_rgba(245,158,11,0.45)]",
+                                "bg-fuchsia-500 text-white border-fuchsia-400 shadow-[0_0_14px_rgba(217,70,239,0.45)]",
+                                "bg-orange-500 text-white border-orange-400 shadow-[0_0_14px_rgba(249,115,22,0.45)]",
+                                "bg-rose-500 text-white border-rose-400 shadow-[0_0_14px_rgba(244,63,94,0.45)]",
+                                "bg-indigo-500 text-white border-indigo-400 shadow-[0_0_14px_rgba(99,102,241,0.45)]",
+                                "bg-teal-500 text-white border-teal-400 shadow-[0_0_14px_rgba(20,184,166,0.45)]",
+                                "bg-pink-500 text-white border-pink-400 shadow-[0_0_14px_rgba(236,72,153,0.45)]",
+                                "bg-sky-500 text-white border-sky-400 shadow-[0_0_14px_rgba(14,165,233,0.45)]",
+                              ];
+                              
+                              const unselectedIconColors = [
+                                "text-cyan-500 dark:text-cyan-400",
+                                "text-violet-500 dark:text-violet-400",
+                                "text-emerald-500 dark:text-emerald-400",
+                                "text-blue-500 dark:text-blue-400",
+                                "text-amber-500 dark:text-amber-400",
+                                "text-fuchsia-500 dark:text-fuchsia-400",
+                                "text-orange-500 dark:text-orange-400",
+                                "text-rose-500 dark:text-rose-400",
+                                "text-indigo-500 dark:text-indigo-400",
+                                "text-teal-500 dark:text-teal-400",
+                                "text-pink-500 dark:text-pink-400",
+                                "text-sky-500 dark:text-sky-400",
+                              ];
+                              
+                              const activeCls = premiumColors[index % premiumColors.length];
+                              const iconColor = isSelected ? "text-white" : unselectedIconColors[index % unselectedIconColors.length];
+
+                              return (
+                                <motion.button
+                                  layout
+                                  initial={{ opacity: 0, scale: 0.8 }}
+                                  animate={{ opacity: 1, scale: 1 }}
+                                  exit={{ opacity: 0, scale: 0.8 }}
+                                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                                  key={industry.slug}
+                                  type="button"
+                                  onClick={() => toggleIndustry(industry.title)}
+                                  className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-xl border transition-all duration-250 touch-manipulation ${
+                                    isSelected
+                                      ? activeCls
+                                      : "bg-white/80 dark:bg-black/40 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-white/10 active:scale-95 hover:border-slate-300 dark:hover:border-white/30 shadow-sm"
+                                  }`}
+                                >
+                                  <industry.icon className={`w-3.5 h-3.5 ${iconColor}`} />
+                                  {industry.title}
+                                </motion.button>
+                              );
+                            })}
+                            
+                            {/* See More Button */}
+                            {!showAllIndustries && ALL_INDUSTRIES.length > 12 && (
+                              <motion.button
+                                layout
+                                type="button"
+                                onClick={() => setShowAllIndustries(true)}
+                                className="flex items-center gap-1 px-3 py-1.5 text-xs font-bold rounded-xl border border-dashed border-rose-300 dark:border-rose-500/30 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-colors"
+                              >
+                                + {ALL_INDUSTRIES.length - 12} More
+                              </motion.button>
+                            )}
+                          </motion.div>
+                        </AnimatePresence>
+                      </div>
+
+                      {/* Project Types */}
+                      <div className="space-y-3.5 bg-white/40 dark:bg-black/20 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-white/60 dark:border-white/8 shadow-sm">
+                        <div className="flex items-center justify-between">
+                          <label className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+                            Project Type
+                          </label>
+                          <span className="text-[9px] font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                            Select multiple
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {[
+                            { name: "Web Application", cls: "bg-cyan-500 text-white border-cyan-400 shadow-[0_0_14px_rgba(6,182,212,0.45)]" },
+                            { name: "Mobile App", cls: "bg-violet-500 text-white border-violet-400 shadow-[0_0_14px_rgba(139,92,246,0.45)]" },
+                            { name: "E-commerce", cls: "bg-emerald-500 text-white border-emerald-400 shadow-[0_0_14px_rgba(16,185,129,0.45)]" },
+                            { name: "SaaS", cls: "bg-blue-500 text-white border-blue-400 shadow-[0_0_14px_rgba(59,130,246,0.45)]" },
+                            { name: "Consulting", cls: "bg-amber-500 text-white border-amber-400 shadow-[0_0_14px_rgba(245,158,11,0.45)]" },
+                            { name: "Graphics Design", cls: "bg-fuchsia-500 text-white border-fuchsia-400 shadow-[0_0_14px_rgba(217,70,239,0.45)]" },
+                            { name: "Content Writing", cls: "bg-orange-500 text-white border-orange-400 shadow-[0_0_14px_rgba(249,115,22,0.45)]" },
+                            { name: "Social Media Management", cls: "bg-rose-500 text-white border-rose-400 shadow-[0_0_14px_rgba(244,63,94,0.45)]" },
+                          ].map(({ name, cls }) => {
+                            const isSelected = formData.projectTypes.includes(name);
+                            return (
+                              <button
+                                key={name}
+                                type="button"
+                                onClick={() => toggleProjectType(name)}
+                                className={`px-3 py-1.5 text-xs font-bold rounded-xl border transition-all duration-250 touch-manipulation ${
+                                  isSelected
+                                    ? cls
+                                    : "bg-white/80 dark:bg-black/40 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-white/10 active:scale-95 hover:border-slate-300 dark:hover:border-white/30 shadow-sm"
+                                }`}
+                              >
+                                {name}
+                              </button>
+                            );
+                          })}
                         </div>
                       </div>
 
                       {/* Dynamic Tech Stack / Platform Selection */}
                       <AnimatePresence>
-                        {formData.projectType === "Social Media Management" && (
+                        {formData.projectTypes.includes("Social Media Management") && (
                           <motion.div
                             key="social-platforms"
                             initial={{ opacity: 0, height: 0 }}
@@ -863,7 +987,7 @@ const Contact = () => {
                       </AnimatePresence>
 
                       <AnimatePresence>
-                        {techRequiredTypes.includes(formData.projectType) && (
+                        {formData.projectTypes.some(pt => techRequiredTypes.includes(pt)) && (
                           <motion.div
                             key="tech-stack"
                             initial={{ opacity: 0, height: 0 }}
@@ -883,10 +1007,15 @@ const Contact = () => {
                               </div>
 
                               <div className="flex flex-col gap-4">
-                                {Object.entries(
-                                  formData.projectType === "Mobile App" ? techCategories.app : techCategories.web
-                                ).map(([category, options]) => {
-                                  const selectedOption = options.find((opt) => formData.technologies.includes(opt));
+                                {Object.entries({
+                                  Frontend: Array.from(new Set([
+                                    ...(formData.projectTypes.some(pt => ["Web Application", "E-commerce", "SaaS"].includes(pt)) ? techCategories.web.Frontend : []),
+                                    ...(formData.projectTypes.includes("Mobile App") ? techCategories.app.Frontend : [])
+                                  ])),
+                                  Backend: techCategories.web.Backend,
+                                  Database: techCategories.web.Database,
+                                  Cloud: techCategories.web.Cloud,
+                                }).map(([category, options]) => {
                                   const categoryColors: Record<string, string> = {
                                     Frontend: "bg-cyan-500 text-white border-cyan-400 shadow-[0_0_14px_rgba(6,182,212,0.45)]",
                                     Backend: "bg-violet-500 text-white border-violet-400 shadow-[0_0_14px_rgba(139,92,246,0.45)]",
@@ -900,7 +1029,6 @@ const Contact = () => {
                                       <div className="flex flex-wrap gap-2 min-h-[34px]">
                                         <AnimatePresence mode="popLayout">
                                           {options.map((tech) => {
-                                            if (selectedOption && selectedOption !== tech) return null;
                                             return (
                                               <motion.button
                                                 layout
