@@ -12,6 +12,8 @@ import {
   Globe,
   Zap,
   Shield,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import { CTASection } from "@/components/Sections/CTASection";
 import BlurBlob from "@/components/BlurBlob";
@@ -28,10 +30,24 @@ const jobOpenings = [
     department: "Backend Development",
     location: "Remote",
     type: "Full-time",
-    experience: "1+ years",
+    experience: "2+ years",
     skills: ["Java", "Spring Boot", "Microservices", "SQL", "REST API"],
-    description:
-      "We're looking for a Java developer to build scalable backend services.",
+    description: "We're looking for a Java developer to build scalable backend services.",
+    fullDescription: "At ULMIND, our Java Developers form the core of our technical backend team. You will be responsible for defining, designing, and implementing high-availability, mission-critical microservices and backend systems. Your day-to-day will involve collaborating with cross-functional engineering teams, architecting scalable data pipelines, optimizing database performance, and writing clean, scalable Java code. If you are passionate about building robust, secure, and fast backend services that power modern web applications, this role is for you.",
+    requirements: [
+      "2+ years of proven hands-on experience in Software Development and specifically Java (Java 11+ preferred).",
+      "Deep expertise in the Spring ecosystem (Spring Boot, Spring MVC, Spring Security, Spring Data).",
+      "Strong understanding of Object-Oriented Programming (OOP) concepts, Design Patterns, and clean architecture.",
+      "Experience in designing, building, and consuming RESTful APIs and building robust microservices.",
+      "Solid understanding of relational databases (MySQL, PostgreSQL) and NoSQL databases (MongoDB, Redis).",
+      "Proficiency with version control (Git) and CI/CD pipelines (Jenkins, GitHub Actions, Docker).",
+      "Experience with testing frameworks (JUnit, Mockito) to ensure code reliability.",
+      "Excellent analytical, problem-solving, and cross-team communication skills."
+    ],
+    degrees: [
+      "B.Tech / B.E. / M.Tech in Computer Science, Information Technology, or a related technical field.",
+      "Relevant certifications in Java Development (e.g., Oracle Certified Professional) or Cloud platforms (AWS/Azure) are a strong plus."
+    ],
     accent: "cyan",
   },
   {
@@ -40,10 +56,24 @@ const jobOpenings = [
     department: "Engineering",
     location: "Remote",
     type: "Full-time",
-    experience: "2+ years",
-    skills: ["React", "Node.js", "MongoDB", "REST API", "Git"],
-    description:
-      "Work across frontend and backend to build complete, scalable web applications.",
+    experience: "3+ years",
+    skills: ["React", "Node.js", "MongoDB", "TypeScript", "Git"],
+    description: "Work across frontend and backend to build complete, scalable web applications.",
+    fullDescription: "As a Full Stack Developer at ULMIND, you will play a critical role in bringing our innovative web applications to life. You will be responsible for the entire software development lifecycle—from conceptualizing and designing responsive user interfaces to architecting robust, scalable backend services. You'll work in an agile environment alongside UI/UX designers, product managers, and fellow engineers to deliver seamless, high-performance digital experiences. We value developers who are product-minded and care deeply about the end-user experience.",
+    requirements: [
+      "3+ years of professional experience as a Full Stack Developer or in a similar comprehensive engineering role.",
+      "Expertise in modern frontend frameworks and libraries, specifically React.js, Next.js, and state management.",
+      "Strong proficiency in backend development using Node.js, Express.js, and designing RESTful or GraphQL APIs.",
+      "Deep understanding of web fundamentals: HTML5, modern CSS (Tailwind CSS), and JavaScript/TypeScript.",
+      "Extensive experience with both relational (PostgreSQL, MySQL) and NoSQL (MongoDB) databases.",
+      "Familiarity with containerization (Docker), cloud deployment architectures, and modern CI/CD practices.",
+      "Experience in writing clean, well-tested code using Jest, Cypress, or similar testing frameworks.",
+      "Ability to troubleshoot, debug, and optimize performance across the entire web stack."
+    ],
+    degrees: [
+      "B.Sc / B.Tech in Computer Science, Engineering, or a highly relevant quantitative field.",
+      "Demonstrable portfolio of complex full-stack web applications deployed to production."
+    ],
     accent: "violet",
   },
   {
@@ -54,8 +84,22 @@ const jobOpenings = [
     type: "Full-time",
     experience: "2+ years",
     skills: ["React Native", "Flutter", "Android", "iOS"],
-    description:
-      "Build high-quality mobile applications for Android and iOS platforms.",
+    description: "Build high-quality mobile applications for Android and iOS platforms.",
+    fullDescription: "We are seeking a passionate Mobile App Developer to lead the development of ULMIND's next-generation mobile applications. In this role, you will be responsible for creating high-quality, pixel-perfect, and highly performant mobile experiences for both iOS and Android platforms. You will work closely with our design and product teams to translate beautiful UI/UX designs into functional, smooth, and interactive applications. Your work will directly impact how our users interact with our digital products on the go.",
+    requirements: [
+      "2+ years of professional experience in mobile app development with a strong portfolio of apps published on the App Store and Google Play.",
+      "Exceptional proficiency in cross-platform development frameworks, primarily React Native or Flutter.",
+      "Strong understanding of mobile UI design principles, human interface guidelines, and material design.",
+      "Experience integrating with RESTful APIs, third-party libraries, Firebase, and payment gateways.",
+      "Proficient in state management solutions (Redux, MobX, Provider, or Riverpod).",
+      "Knowledge of native build tools (XCode, Android Studio) and the ability to write native bridging code.",
+      "Experience with offline storage, threading, and performance tuning for mobile environments.",
+      "Familiarity with mobile CI/CD pipelines (Fastlane, Bitrise, or GitHub Actions)."
+    ],
+    degrees: [
+      "Bachelor's degree in Computer Science, Software Engineering, or equivalent practical experience.",
+      "Specialized certifications in mobile development (React Native/Flutter) are a bonus."
+    ],
     accent: "emerald",
   },
   {
@@ -64,10 +108,24 @@ const jobOpenings = [
     department: "Design",
     location: "Remote",
     type: "Part-time / Full-time",
-    experience: "1+ years",
+    experience: "2+ years",
     skills: ["Photoshop", "Illustrator", "Figma", "Brand Design"],
-    description:
-      "Create visually appealing designs for web, social media, and branding.",
+    description: "Create visually appealing designs for web, social media, and branding.",
+    fullDescription: "As a Graphics Designer at ULMIND, your creativity and visual flair will directly shape our brand's identity and user perception. You will conceptualize and create stunning visual assets across a wide range of mediums—from digital marketing campaigns, social media content, and website illustrations to brand collateral and UI mockups. We are looking for an imaginative designer who possesses a keen eye for aesthetics, typography, and color theory, and who can translate abstract concepts into compelling visual stories.",
+    requirements: [
+      "2+ years of proven professional experience as a Graphic Designer, Visual Designer, or Brand Designer.",
+      "A strong, diverse portfolio showcasing a wide range of design projects (branding, digital, print, and social media).",
+      "Expert-level proficiency in industry-standard design tools including Adobe Creative Suite (Photoshop, Illustrator) and Figma.",
+      "Deep understanding of visual hierarchy, layout principles, typography, and color psychology.",
+      "Experience in creating assets for modern digital platforms with a strong grasp of required specifications.",
+      "Basic understanding of UI/UX principles and the ability to collaborate effectively with frontend developers.",
+      "Excellent time management skills with the ability to handle multiple creative projects simultaneously.",
+      "Strong communication skills to articulate design decisions and receive constructive feedback gracefully."
+    ],
+    degrees: [
+      "B.F.A / B.Des in Graphic Design, Visual Arts, Fine Arts, or a related creative discipline.",
+      "A comprehensive digital portfolio link must be provided alongside your application."
+    ],
     accent: "rose",
   },
   {
@@ -76,10 +134,24 @@ const jobOpenings = [
     department: "Media & Content",
     location: "Remote",
     type: "Part-time / Contract",
-    experience: "1+ years",
+    experience: "2+ years",
     skills: ["Premiere Pro", "After Effects", "Motion Graphics"],
-    description:
-      "Edit promotional videos, reels, and digital marketing content.",
+    description: "Edit promotional videos, reels, and digital marketing content.",
+    fullDescription: "ULMIND is looking for a talented and creative Video Editor to produce engaging, high-quality video content that resonates with our audience. You will be responsible for assembling recorded footage, applying cinematic edits, adding motion graphics, and finalizing audio to create compelling promotional videos, social media reels, and corporate presentations. The ideal candidate has a strong storytelling instinct, impeccable timing, and a deep understanding of how to capture and retain viewer attention in the fast-paced digital landscape.",
+    requirements: [
+      "2+ years of professional experience as a Video Editor, Content Creator, or Motion Graphics Artist.",
+      "A standout showreel/portfolio demonstrating exceptional video editing, pacing, and storytelling abilities.",
+      "Advanced proficiency with industry-standard editing software, particularly Adobe Premiere Pro and After Effects.",
+      "Strong skills in color grading, audio mixing, and sound design to ensure broadcast-quality output.",
+      "Experience in creating dynamic motion graphics, lower thirds, and animated typography.",
+      "In-depth knowledge of current video trends across platforms like YouTube, Instagram Reels, and TikTok.",
+      "Solid understanding of various video formats, codecs, and optimal export settings for different platforms.",
+      "Ability to work efficiently under tight deadlines while maintaining a high standard of creative quality."
+    ],
+    degrees: [
+      "Bachelor's degree in Film Studies, Cinematography, Media Production, or a related field.",
+      "Demonstrable practical experience and a strong portfolio often outweigh formal educational requirements."
+    ],
     accent: "amber",
   },
 ];
@@ -192,6 +264,8 @@ const perks = [
 const Career = () => {
   const [selectedJob, setSelectedJob] =
     useState<(typeof jobOpenings)[0] | null>(null);
+  const [selectedJobDetails, setSelectedJobDetails] =
+    useState<(typeof jobOpenings)[0] | null>(null);
   const [arrowAnimData, setArrowAnimData] = useState<object | null>(null);
   const [globeAnimData, setGlobeAnimData] = useState<object | null>(null);
   const [peopleAnimData, setPeopleAnimData] = useState<object | null>(null);
@@ -288,41 +362,41 @@ const Career = () => {
             background 0.25s ease,
             border-color 0.25s ease;
         }
-        /* IDLE: NO backdrop-filter — this is the scroll-lag killer */
+        /* IDLE: Strong liquid glassmorphism */
         :root .career-glass-card {
-          background: rgba(255,255,255,0.75);
-          border: 1px solid rgba(255,255,255,0.80);
-          box-shadow:
-            0 2px 16px rgba(0,0,0,0.06),
-            inset 0 1px 0 rgba(255,255,255,0.95);
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 100%);
+          border: 1px solid rgba(255, 255, 255, 0.4);
+          box-shadow: 
+            0 8px 32px 0 rgba(31, 38, 135, 0.07),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6);
+          backdrop-filter: blur(24px) saturate(180%);
+          -webkit-backdrop-filter: blur(24px) saturate(180%);
         }
         .dark .career-glass-card {
-          background: rgba(20,28,40,0.80);
-          border: 1px solid rgba(255,255,255,0.09);
-          box-shadow:
-            0 2px 20px rgba(0,0,0,0.28),
-            inset 0 1px 0 rgba(255,255,255,0.06);
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.01) 100%);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 
+            0 8px 32px 0 rgba(0, 0, 0, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(24px) saturate(180%);
+          -webkit-backdrop-filter: blur(24px) saturate(180%);
         }
-        /* HOVER: blur activates only on hover */
+        /* HOVER: Enhance the effect */
         :root .career-glass-card:hover {
-          transform: translateZ(0) translateY(-3px);
-          background: rgba(255,255,255,0.88);
-          border-color: rgba(255,255,255,0.95);
-          box-shadow:
-            0 12px 40px rgba(0,0,0,0.09),
-            inset 0 1px 0 rgba(255,255,255,1);
-          backdrop-filter: blur(20px) saturate(180%);
-          -webkit-backdrop-filter: blur(20px) saturate(180%);
+          transform: translateZ(0) translateY(-4px);
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.15) 100%);
+          border-color: rgba(255, 255, 255, 0.6);
+          box-shadow: 
+            0 12px 40px rgba(31, 38, 135, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.8);
         }
         .dark .career-glass-card:hover {
-          transform: translateZ(0) translateY(-3px);
-          background: rgba(255,255,255,0.08);
-          border-color: rgba(255,255,255,0.15);
-          box-shadow:
-            0 12px 40px rgba(0,0,0,0.40),
-            inset 0 1px 0 rgba(255,255,255,0.10);
-          backdrop-filter: blur(20px) saturate(160%);
-          -webkit-backdrop-filter: blur(20px) saturate(160%);
+          transform: translateZ(0) translateY(-4px);
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.02) 100%);
+          border-color: rgba(255, 255, 255, 0.15);
+          box-shadow: 
+            0 12px 40px rgba(0, 0, 0, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
         .career-glass-highlight {
           position: absolute;
@@ -666,7 +740,7 @@ const Career = () => {
                   />
 
                   <div className="relative z-10 p-5 sm:p-7">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
+                    <div className="flex flex-col md:flex-row md:items-start justify-between gap-5">
                       {/* Left content */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-3 mb-3">
@@ -696,7 +770,13 @@ const Career = () => {
                         </div>
 
                         <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4 max-w-xl">
-                          {job.description}
+                          {job.description}{" "}
+                          <button
+                            onClick={() => setSelectedJobDetails(job)}
+                            className={`inline-flex items-center text-xs font-bold ${colors.skillText} hover:opacity-80 transition-opacity`}
+                          >
+                            See More
+                          </button>
                         </p>
 
                         {/* Meta info */}
@@ -727,7 +807,7 @@ const Career = () => {
                       </div>
 
                       {/* Apply button */}
-                      <div className="shrink-0">
+                      <div className="shrink-0 flex flex-col justify-start md:items-end mt-4 md:mt-0">
                         <button
                           onClick={() => setSelectedJob(job)}
                           className={`group/btn relative inline-flex items-center justify-center px-7 py-3 text-sm font-bold text-white transition-all duration-300 bg-gradient-to-r ${colors.btnGrad} rounded-full hover:scale-105 active:scale-95 ${colors.btnShadow} hover:shadow-lg`}
@@ -748,6 +828,113 @@ const Career = () => {
           </div>
         </div>
       </section>
+
+      {/* ═══════════════════════════════════════════
+          JOB DETAILS MODAL
+          ═══════════════════════════════════════════ */}
+      <AnimatePresence>
+        {selectedJobDetails && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 dark:bg-black/80 backdrop-blur-md p-4 sm:p-6" onClick={() => setSelectedJobDetails(null)}>
+            <motion.div
+              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.95 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-2xl bg-white dark:bg-[#0f141e] rounded-3xl shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden flex flex-col max-h-[85vh]"
+            >
+              {/* Header */}
+              <div className="shrink-0 p-6 sm:p-8 border-b border-slate-100 dark:border-white/5 relative overflow-hidden">
+                <div className={`absolute inset-0 opacity-10 dark:opacity-5 bg-gradient-to-br ${accentMap[selectedJobDetails.accent].iconBg}`} />
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedJobDetails(null);
+                  }}
+                  className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-slate-100 dark:bg-white/10 flex items-center justify-center text-slate-500 hover:text-slate-800 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-white/20 transition-all active:scale-95"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+                <div className="relative z-10 pr-8">
+                  <div className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wide border mb-3 ${accentMap[selectedJobDetails.accent].badge}`}>
+                    <div className={`w-1.5 h-1.5 rounded-full ${accentMap[selectedJobDetails.accent].badgeDot}`} />
+                    {selectedJobDetails.department}
+                  </div>
+                  <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-800 dark:text-white tracking-tight mb-2">
+                    {selectedJobDetails.title}
+                  </h3>
+                  <div className="flex flex-wrap gap-4 text-sm font-medium text-slate-500 dark:text-slate-400">
+                    <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4" /> {selectedJobDetails.location}</span>
+                    <span className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> {selectedJobDetails.type}</span>
+                    <span className="flex items-center gap-1.5"><Briefcase className="w-4 h-4" /> {selectedJobDetails.experience}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Scrollable Content */}
+              <div className="flex-1 overflow-y-auto p-6 sm:p-8 custom-scrollbar">
+                <div className="space-y-8">
+                  <div>
+                    <h4 className="text-lg font-bold text-slate-800 dark:text-white mb-3 flex items-center gap-2">
+                      <Sparkles className="w-5 h-5 text-[#ff5a5f]" /> About the Role
+                    </h4>
+                    <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                      {selectedJobDetails.fullDescription}
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4 className="text-lg font-bold text-slate-800 dark:text-white mb-3 flex items-center gap-2">
+                      <CheckCircle2 className="w-5 h-5 text-emerald-500" /> Requirements
+                    </h4>
+                    <ul className="space-y-2.5 text-sm text-slate-600 dark:text-slate-300">
+                      {selectedJobDetails.requirements.map((req, i) => (
+                        <li key={i} className="flex items-start gap-2.5">
+                          <div className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-600 mt-1.5 shrink-0" />
+                          <span className="leading-relaxed">{req}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h4 className="text-lg font-bold text-slate-800 dark:text-white mb-3 flex items-center gap-2">
+                      <Zap className="w-5 h-5 text-amber-500" /> Qualifications / Degree
+                    </h4>
+                    <ul className="space-y-2.5 text-sm text-slate-600 dark:text-slate-300">
+                      {selectedJobDetails.degrees.map((deg, i) => (
+                        <li key={i} className="flex items-start gap-2.5">
+                          <div className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-600 mt-1.5 shrink-0" />
+                          <span className="leading-relaxed">{deg}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer CTA */}
+              <div className="shrink-0 p-5 sm:p-6 border-t border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-white/[0.02]">
+                <button
+                  onClick={() => {
+                    const job = selectedJobDetails;
+                    setSelectedJobDetails(null);
+                    setTimeout(() => setSelectedJob(job), 150); // slight delay for smooth transition
+                  }}
+                  className={`w-full group/btn relative flex items-center justify-center px-8 py-3.5 text-base font-bold text-white transition-all duration-300 bg-gradient-to-r ${accentMap[selectedJobDetails.accent].btnGrad} rounded-xl hover:scale-[1.02] active:scale-[0.98] ${accentMap[selectedJobDetails.accent].btnShadow} hover:shadow-xl`}
+                >
+                  Apply Now for this Position
+                  {arrowAnimData ? (
+                    <Lottie animationData={arrowAnimData} loop autoplay className="w-5 h-5 ml-2 transition-transform duration-200 group-hover/btn:translate-x-1" />
+                  ) : (
+                    <ArrowRight className="w-5 h-5 ml-2 transition-transform duration-200 group-hover/btn:translate-x-1" />
+                  )}
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* ═══════════════════════════════════════════
           APPLICATION MODAL — Glassmorphism
