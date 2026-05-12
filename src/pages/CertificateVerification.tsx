@@ -220,7 +220,7 @@ const CertificateVerification = () => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest mb-1">Certificate ID</p>
-                        <p className="text-base sm:text-xl font-bold text-slate-900 dark:text-white break-all">{result.id}</p>
+                        <p className="text-sm sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight whitespace-nowrap overflow-hidden text-ellipsis">{result.id}</p>
                       </div>
                     </div>
 
@@ -230,7 +230,7 @@ const CertificateVerification = () => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest mb-1">Student Name</p>
-                        <p className="text-base sm:text-xl font-bold text-slate-900 dark:text-white truncate">{result.name}</p>
+                        <p className="text-base sm:text-xl font-bold text-slate-900 dark:text-white break-words">{result.name}</p>
                       </div>
                     </div>
 
@@ -240,7 +240,7 @@ const CertificateVerification = () => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest mb-1">Status</p>
-                        <p className="text-base sm:text-xl font-bold text-emerald-600 dark:text-emerald-400">{result.status}</p>
+                        <p className="text-base sm:text-xl font-bold text-emerald-600 dark:text-emerald-400 break-words">{result.status}</p>
                       </div>
                     </div>
                   </div>
