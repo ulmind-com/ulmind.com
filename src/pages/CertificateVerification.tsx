@@ -3,17 +3,26 @@ import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, Search, ShieldCheck, XCircle, Award, User, Hash } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 
-const VALID_CERTIFICATE = {
-  id: "ULM-2026-001",
-  name: "Buddhadeb Giri",
-  status: "Successfully Verified by ULMIND",
+type Certificate = { id: string; name: string; status: string };
+
+const CERTIFICATES: Record<string, Certificate> = {
+  "ULM-2026-001": {
+    id: "ULM-2026-001",
+    name: "Buddhadeb Giri",
+    status: "Successfully Verified by ULMIND",
+  },
+  "ULM-2026-002": {
+    id: "ULM-2026-002",
+    name: "Arnab Senapati",
+    status: "Successfully Verified by ULMIND",
+  },
 };
 
 const CertificateVerification = () => {
   const [searchParams] = useSearchParams();
   const [query, setQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
-  const [result, setResult] = useState<typeof VALID_CERTIFICATE | null | "invalid">(null);
+  const [result, setResult] = useState<Certificate | null | "invalid">(null);
 
   useEffect(() => {
     const idFromUrl = searchParams.get("id");
@@ -30,13 +39,14 @@ const CertificateVerification = () => {
     setResult(null);
 
     setTimeout(() => {
-      if (searchId.trim().toUpperCase() === VALID_CERTIFICATE.id) {
-        setResult(VALID_CERTIFICATE);
+      const found = CERTIFICATES[searchId.trim().toUpperCase()];
+      if (found) {
+        setResult(found);
       } else {
         setResult("invalid");
       }
       setIsSearching(false);
-    }, 1500); // simulate network request for premium feel
+    }, 1500);
   };
 
   return (
@@ -159,33 +169,33 @@ const CertificateVerification = () => {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div className="bg-slate-50 dark:bg-[#121E28] border border-slate-100 dark:border-white/5 rounded-2xl p-6 flex items-center gap-5 hover:border-blue-200 dark:hover:border-blue-500/30 transition-colors">
-                      <div className="p-4 bg-blue-100 dark:bg-blue-900/30 rounded-2xl text-blue-600 dark:text-blue-400">
-                        <Hash size={28} />
+                    <div className="bg-slate-50 dark:bg-[#121E28] border border-slate-100 dark:border-white/5 rounded-2xl p-4 sm:p-6 flex items-center gap-4 hover:border-blue-200 dark:hover:border-blue-500/30 transition-colors">
+                      <div className="flex-shrink-0 p-3 sm:p-4 bg-blue-100 dark:bg-blue-900/30 rounded-2xl text-blue-600 dark:text-blue-400">
+                        <Hash size={22} />
                       </div>
-                      <div>
+                      <div className="flex-1 min-w-0">
                         <p className="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest mb-1">Certificate ID</p>
-                        <p className="text-xl font-bold text-slate-900 dark:text-white">{result.id}</p>
+                        <p className="text-base sm:text-xl font-bold text-slate-900 dark:text-white break-all">{result.id}</p>
                       </div>
                     </div>
 
-                    <div className="bg-slate-50 dark:bg-[#121E28] border border-slate-100 dark:border-white/5 rounded-2xl p-6 flex items-center gap-5 hover:border-indigo-200 dark:hover:border-indigo-500/30 transition-colors">
-                      <div className="p-4 bg-indigo-100 dark:bg-indigo-900/30 rounded-2xl text-indigo-600 dark:text-indigo-400">
-                        <User size={28} />
+                    <div className="bg-slate-50 dark:bg-[#121E28] border border-slate-100 dark:border-white/5 rounded-2xl p-4 sm:p-6 flex items-center gap-4 hover:border-indigo-200 dark:hover:border-indigo-500/30 transition-colors">
+                      <div className="flex-shrink-0 p-3 sm:p-4 bg-indigo-100 dark:bg-indigo-900/30 rounded-2xl text-indigo-600 dark:text-indigo-400">
+                        <User size={22} />
                       </div>
-                      <div>
+                      <div className="flex-1 min-w-0">
                         <p className="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest mb-1">Student Name</p>
-                        <p className="text-xl font-bold text-slate-900 dark:text-white">{result.name}</p>
+                        <p className="text-base sm:text-xl font-bold text-slate-900 dark:text-white truncate">{result.name}</p>
                       </div>
                     </div>
 
-                    <div className="md:col-span-2 bg-slate-50 dark:bg-[#121E28] border border-slate-100 dark:border-white/5 rounded-2xl p-6 flex items-center gap-5 hover:border-emerald-200 dark:hover:border-emerald-500/30 transition-colors">
-                      <div className="p-4 bg-emerald-100 dark:bg-emerald-900/30 rounded-2xl text-emerald-600 dark:text-emerald-400">
-                        <Award size={28} />
+                    <div className="md:col-span-2 bg-slate-50 dark:bg-[#121E28] border border-slate-100 dark:border-white/5 rounded-2xl p-4 sm:p-6 flex items-center gap-4 hover:border-emerald-200 dark:hover:border-emerald-500/30 transition-colors">
+                      <div className="flex-shrink-0 p-3 sm:p-4 bg-emerald-100 dark:bg-emerald-900/30 rounded-2xl text-emerald-600 dark:text-emerald-400">
+                        <Award size={22} />
                       </div>
-                      <div>
+                      <div className="flex-1 min-w-0">
                         <p className="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest mb-1">Status</p>
-                        <p className="text-xl font-bold text-emerald-600 dark:text-emerald-400">{result.status}</p>
+                        <p className="text-base sm:text-xl font-bold text-emerald-600 dark:text-emerald-400">{result.status}</p>
                       </div>
                     </div>
                   </div>
