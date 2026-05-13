@@ -91,6 +91,11 @@ const CERTIFICATES: Record<string, Certificate> = {
     name: "Subham Biswas",
     status: "Successfully Verified by ULMIND",
   },
+  "ULM-2026-018": {
+    id: "ULM-2026-018",
+    name: "Shivam Verma",
+    status: "Successfully Verified by ULMIND",
+  },
 };
 
 const CertificateVerification = () => {
