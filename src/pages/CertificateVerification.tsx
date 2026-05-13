@@ -76,6 +76,21 @@ const CERTIFICATES: Record<string, Certificate> = {
     name: "RATNADIP SHIT",
     status: "Successfully Verified by ULMIND",
   },
+  "ULM-2026-015": {
+    id: "ULM-2026-015",
+    name: "Partha Dhara",
+    status: "Successfully Verified by ULMIND",
+  },
+  "ULM-2026-016": {
+    id: "ULM-2026-016",
+    name: "Md Tousif Zzaman",
+    status: "Successfully Verified by ULMIND",
+  },
+  "ULM-2026-017": {
+    id: "ULM-2026-017",
+    name: "Subham Biswas",
+    status: "Successfully Verified by ULMIND",
+  },
 };
 
 const CertificateVerification = () => {
