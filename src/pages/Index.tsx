@@ -11,6 +11,7 @@ import { TestimonialsSection } from "@/components/Sections/TestimonialsSection";
 import { NewsletterSection } from "@/components/Sections/NewsletterSection";
 import PartnershipSection from "@/components/Sections/PartnershipSection";
 import BrandIntroSection from "@/components/Sections/BrandIntroSection";
+import TurnpikeAnalystSection from "@/components/Sections/TurnpikeAnalystSection";
 import { GlobeSection } from "@/components/Sections/GlobeSection";
 
 const Index = () => {
@@ -30,14 +31,26 @@ const Index = () => {
 
   const section1Opacity = useTransform(
     smoothProgress,
-    [0, 0.4],
+    [0, 0.33],
     [1, 0]
   );
 
   const section1Scale = useTransform(
     smoothProgress,
-    [0, 0.5],
-    [1, 0.95]
+    [0, 0.33],
+    [1, 0.9]
+  );
+
+  const section2Opacity = useTransform(
+    smoothProgress,
+    [0.33, 0.66],
+    [1, 0]
+  );
+
+  const section2Scale = useTransform(
+    smoothProgress,
+    [0.33, 0.66],
+    [1, 0.9]
   );
 
   /* ===== PAGE ===== */
@@ -51,7 +64,7 @@ const Index = () => {
         <AboutPreviewSection />
 
         {/* --- STACKING ZONE START --- */}
-        <div ref={containerRef} className="relative h-[200vh]">
+        <div ref={containerRef} className="relative h-[300vh]">
 
           {/* Partnership Card */}
           <div className="sticky top-0 h-screen w-full flex items-center justify-center">
@@ -61,7 +74,15 @@ const Index = () => {
             />
           </div>
 
-          {/* Brand Intro Card */}
+          {/* Turnpike Analyst Card */}
+          <div className="sticky top-0 h-screen w-full flex items-center justify-center">
+            <TurnpikeAnalystSection 
+              opacity={section2Opacity}
+              scale={section2Scale}
+            />
+          </div>
+
+          {/* Brand Intro Card (Jharkhand Updates) */}
           <div className="sticky top-0 h-screen w-full flex items-center justify-center">
             <BrandIntroSection />
           </div>
