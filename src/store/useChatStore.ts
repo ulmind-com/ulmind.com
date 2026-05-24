@@ -35,7 +35,7 @@ export const useChatStore = create<ChatState>()(
           timestamp: Date.now()
         }
       ],
-      isOpen: true,
+      isOpen: false,
       isTyping: false,
       addMessage: (msg) => set((state) => ({
         messages: [
