@@ -140,6 +140,7 @@ const PageviewTracker = () => {
 
 import { Phone, Video, MoreVertical, Send } from "lucide-react";
 import Lottie from "lottie-react";
+import { ChatWidget } from "@/components/chat/ChatWidget";
 
 /* ===========================
    WhatsApp Floating Widget
@@ -505,6 +506,7 @@ const App = () => {
               </Suspense>
             </RouteTransitionLoader>
 
+            <ChatWidget />
             <WhatsAppFloat />
             <CookieConsent />
           </BrowserRouter>
