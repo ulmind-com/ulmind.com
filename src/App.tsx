@@ -50,6 +50,7 @@ const AdminVisitorsPage = lazy(() => import("./admin/pages/VisitorsPage"));
 const AdminSettingsPage = lazy(() => import("./admin/pages/SettingsPage"));
 const AdminTeamPage = lazy(() => import("./admin/pages/TeamPage"));
 const AdminOffersPage = lazy(() => import("./admin/pages/OffersPage"));
+const AdminDatabasePage = lazy(() => import("./admin/pages/DatabasePage"));
 import { AuthProvider } from "./admin/context/auth-context";
 import AdminLayout from "./admin/components/AdminLayout";
 import ProtectedRoute from "./admin/components/ProtectedRoute";
@@ -498,6 +499,7 @@ const App = () => {
                     <Route path="visitors" element={<AdminVisitorsPage />} />
                     <Route path="team" element={<AdminTeamPage />} />
                     <Route path="offers" element={<AdminOffersPage />} />
+                    <Route path="database" element={<AdminDatabasePage />} />
                     <Route path="settings" element={<AdminSettingsPage />} />
                   </Route>
 

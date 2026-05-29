@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle, Search, ShieldCheck, XCircle, Award, User, Hash } from "lucide-react";
+import { CheckCircle, Search, ShieldCheck, XCircle, Award, User, Hash, Calendar } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 
-type Certificate = { id: string; name: string; status: string };
+type Certificate = { id: string; name: string; status: string; duration?: string };
 
 const CERTIFICATES: Record<string, Certificate> = {
   "ULM-2026-001": {
@@ -105,6 +105,12 @@ const CERTIFICATES: Record<string, Certificate> = {
     id: "ULM-2026-020",
     name: "Shreya Jana",
     status: "Successfully Verified by ULMIND",
+  },
+  "ULM-2026-021": {
+    id: "ULM-2026-021",
+    name: "Kumar Divyam",
+    status: "Successfully Verified by ULMIND",
+    duration: "Successfully Completed certified from 15th March 2026 to 15th April 2026",
   },
 };
 
@@ -288,6 +294,18 @@ const CertificateVerification = () => {
                         <p className="text-base sm:text-xl font-bold text-emerald-600 dark:text-emerald-400 break-words">{result.status}</p>
                       </div>
                     </div>
+
+                    {result.duration && (
+                      <div className="md:col-span-2 bg-slate-50 dark:bg-[#121E28] border border-slate-100 dark:border-white/5 rounded-2xl p-4 sm:p-6 flex items-center gap-4 hover:border-purple-200 dark:hover:border-purple-500/30 transition-colors">
+                        <div className="flex-shrink-0 p-3 sm:p-4 bg-purple-100 dark:bg-purple-900/30 rounded-2xl text-purple-600 dark:text-purple-400">
+                          <Calendar size={22} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest mb-1">Duration & Certification</p>
+                          <p className="text-base sm:text-lg font-bold text-purple-600 dark:text-purple-400 break-words leading-relaxed">{result.duration}</p>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                 </div>

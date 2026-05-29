@@ -4,11 +4,13 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X } from 'lucide-react';
 import Lottie from 'lottie-react';
+import { useLocation } from 'react-router-dom';
 import { useChatStore } from '@/store/useChatStore';
 import { ChatWindow } from './ChatWindow';
 import { cn } from '@/lib/utils';
 
 export function ChatWidget() {
+  const location = useLocation();
   const { isOpen, setIsOpen } = useChatStore();
   const [robotAnimData, setRobotAnimData] = useState<object | null>(null);
 
@@ -18,6 +20,8 @@ export function ChatWidget() {
       .then(data => setRobotAnimData(data))
       .catch(err => console.error("Error loading Lottie", err));
   }, []);
+
+  if (location.pathname.startsWith("/admin")) return null;
 
   return (
     <div className={cn("fixed right-4 sm:right-6 z-[10000] flex flex-col items-center transition-all duration-300", isOpen ? "bottom-4 sm:bottom-6" : "bottom-[168px]")}>
