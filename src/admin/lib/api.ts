@@ -333,3 +333,72 @@ export const deleteOfferAPI = async (id: string) => {
   if (!res.ok) throw new Error("Failed to delete offer");
   return res.json();
 };
+
+
+// ═══════════════════════════════════════════════════════════════
+//  FORGOT PASSWORD — OTP FLOW
+// ═══════════════════════════════════════════════════════════════
+
+export const forgotPasswordAPI = async (email: string) => {
+  const res = await fetch(`${BASE_URL}/auth/forgot-password`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+    mode: "cors",
+    credentials: "omit",
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const msg =
+      typeof data.detail === "string"
+        ? data.detail
+        : Array.isArray(data.detail)
+        ? data.detail.map((e: any) => e.msg).join(", ")
+        : "Failed to send OTP";
+    throw new Error(msg);
+  }
+  return data;
+};
+
+export const verifyOTPAPI = async (email: string, otp: string) => {
+  const res = await fetch(`${BASE_URL}/auth/verify-reset-otp`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, otp }),
+    mode: "cors",
+    credentials: "omit",
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const msg =
+      typeof data.detail === "string"
+        ? data.detail
+        : Array.isArray(data.detail)
+        ? data.detail.map((e: any) => e.msg).join(", ")
+        : "Invalid OTP";
+    throw new Error(msg);
+  }
+  return data as { success: boolean; reset_token: string };
+};
+
+export const resetPasswordAPI = async (reset_token: string, new_password: string) => {
+  const res = await fetch(`${BASE_URL}/auth/reset-password`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ reset_token, new_password }),
+    mode: "cors",
+    credentials: "omit",
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const msg =
+      typeof data.detail === "string"
+        ? data.detail
+        : Array.isArray(data.detail)
+        ? data.detail.map((e: any) => e.msg).join(", ")
+        : "Password reset failed";
+    throw new Error(msg);
+  }
+  return data as { success: boolean; message: string };
+};
+

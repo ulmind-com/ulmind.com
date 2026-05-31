@@ -44,6 +44,7 @@ const CertificateVerification = lazy(() => import("./pages/CertificateVerificati
 
 // ─── Admin Panel (isolated route tree) ───────────────────────
 const AdminLoginPage = lazy(() => import("./admin/pages/LoginPage"));
+const AdminForgotPasswordPage = lazy(() => import("./admin/pages/ForgotPasswordPage"));
 const AdminDashboardPage = lazy(() => import("./admin/pages/DashboardPage"));
 const AdminAnalyticsPage = lazy(() => import("./admin/pages/AnalyticsPage"));
 const AdminVisitorsPage = lazy(() => import("./admin/pages/VisitorsPage"));
@@ -485,6 +486,11 @@ const App = () => {
                   <Route path="/admin/login" element={
                     <AuthProvider>
                       <AdminLoginPage />
+                    </AuthProvider>
+                  } />
+                  <Route path="/admin/forgot-password" element={
+                    <AuthProvider>
+                      <AdminForgotPasswordPage />
                     </AuthProvider>
                   } />
                   <Route path="/admin" element={
