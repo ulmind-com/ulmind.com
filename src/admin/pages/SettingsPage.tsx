@@ -32,11 +32,13 @@ import {
   deleteProfilePhotoAPI,
   updateProfileAPI
 } from "../lib/api";
+import { useAdminAction } from "../context/AdminActionContext";
 
 type Tab = "profile" | "security";
 
 const SettingsPage: React.FC = () => {
   const { user, refreshUser } = useAuth();
+  const { triggerActionAnimation } = useAdminAction();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [activeTab, setActiveTab] = useState<Tab>("profile");
@@ -103,6 +105,7 @@ const SettingsPage: React.FC = () => {
       await refreshUser();
       setProfileSuccess("Profile updated successfully!");
       setTimeout(() => setProfileSuccess(""), 3000);
+      triggerActionAnimation();
     } catch (err: any) {
       setProfileError(err.message || "Failed to update profile");
     } finally {
@@ -142,6 +145,7 @@ const SettingsPage: React.FC = () => {
       await refreshUser();
       setPhotoSuccess("Profile photo updated!");
       setTimeout(() => setPhotoSuccess(""), 3000);
+      triggerActionAnimation();
     } catch (err: any) {
       setPhotoError(err.message || "Failed to upload photo");
     } finally {
@@ -162,6 +166,7 @@ const SettingsPage: React.FC = () => {
       await refreshUser();
       setPhotoSuccess("Profile photo removed!");
       setTimeout(() => setPhotoSuccess(""), 3000);
+      triggerActionAnimation('delete');
     } catch (err: any) {
       setPhotoError(err.message || "Failed to delete photo");
     } finally {
@@ -200,6 +205,7 @@ const SettingsPage: React.FC = () => {
       setNewPassword("");
       setConfirmPassword("");
       setTimeout(() => setPasswordSuccess(""), 3000);
+      triggerActionAnimation();
     } catch (err: any) {
       setPasswordError(err.message || "Failed to change password");
     } finally {
@@ -287,8 +293,9 @@ const SettingsPage: React.FC = () => {
                       height: 110,
                       borderRadius: "50%",
                       objectFit: "cover",
-                      border: "3px solid var(--admin-bg)",
-                      boxShadow: "0 0 0 3px var(--admin-accent), 0 10px 30px rgba(124,58,237,0.3)",
+                      border: "4px solid rgba(255,255,255,0.1)",
+                      boxShadow: "0 0 0 3px var(--admin-accent), 0 10px 30px rgba(239,68,68,0.3)",
+                      zIndex: 1
                     }}
                   />
                 ) : (
@@ -297,7 +304,7 @@ const SettingsPage: React.FC = () => {
                       width: 110,
                       height: 110,
                       borderRadius: "50%",
-                      background: "linear-gradient(135deg, #7c3aed, #e11d48)",
+                      background: "linear-gradient(135deg, #ef4444, #dc2626)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",

@@ -6,7 +6,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/auth-context";
-import { Shield, Eye, EyeOff, ArrowRight, Loader2 } from "lucide-react";
+import { Shield, Eye, EyeOff, ArrowRight, Loader2, Mail, Lock } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import "../admin.css";
 
 const LoginPage: React.FC = () => {
@@ -16,6 +17,7 @@ const LoginPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [mounted, setMounted] = useState(false);
+  const [focusedField, setFocusedField] = useState<"email" | "password" | null>(null);
 
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
@@ -63,36 +65,38 @@ const LoginPage: React.FC = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "#0a0e1a",
+        background: "#030712", // Very dark sleek bg
         position: "relative",
         overflow: "hidden",
       }}
     >
       {/* Animated background orbs */}
-      <div
+      <motion.div
+        animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         style={{
           position: "absolute",
-          top: "20%",
-          left: "30%",
-          width: 400,
-          height: 400,
+          top: "10%",
+          left: "20%",
+          width: 500,
+          height: 500,
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%)",
-          filter: "blur(60px)",
-          animation: "adminPulseGlow 4s ease-in-out infinite",
+          background: "radial-gradient(circle, rgba(239, 68, 68, 1) 0%, transparent 70%)",
+          filter: "blur(100px)",
         }}
       />
-      <div
+      <motion.div
+        animate={{ scale: [1, 1.3, 1], opacity: [0.1, 0.2, 0.1] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
         style={{
           position: "absolute",
-          bottom: "20%",
-          right: "25%",
-          width: 350,
-          height: 350,
+          bottom: "10%",
+          right: "15%",
+          width: 600,
+          height: 600,
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(225,29,72,0.12) 0%, transparent 70%)",
-          filter: "blur(60px)",
-          animation: "adminPulseGlow 5s ease-in-out infinite 1s",
+          background: "radial-gradient(circle, rgba(220, 38, 38, 1) 0%, transparent 70%)",
+          filter: "blur(120px)",
         }}
       />
 
@@ -102,163 +106,152 @@ const LoginPage: React.FC = () => {
           position: "absolute",
           inset: 0,
           backgroundImage: `
-            linear-gradient(rgba(124,58,237,0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(124,58,237,0.03) 1px, transparent 1px)
+            linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px)
           `,
-          backgroundSize: "40px 40px",
+          backgroundSize: "60px 60px",
+          maskImage: "radial-gradient(ellipse at center, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 80%)",
+          WebkitMaskImage: "radial-gradient(ellipse at center, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 80%)"
         }}
       />
 
       {/* Login Card */}
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: 30, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.6, type: "spring", bounce: 0.4 }}
         style={{
           position: "relative",
           width: "100%",
-          maxWidth: 420,
+          maxWidth: 440,
           padding: "0 20px",
-          opacity: mounted ? 1 : 0,
-          transform: mounted ? "translateY(0)" : "translateY(20px)",
-          transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
+          zIndex: 10
         }}
       >
         <div
           style={{
-            background: "rgba(17, 24, 39, 0.7)",
-            border: "1px solid rgba(30, 41, 59, 0.8)",
-            borderRadius: 24,
-            padding: "40px 36px",
+            background: "rgba(15, 23, 42, 0.4)",
+            backdropFilter: "blur(40px)",
+            WebkitBackdropFilter: "blur(40px)",
+            border: "1px solid rgba(255, 255, 255, 0.08)",
+            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.1)",
+            borderRadius: 32,
+            padding: "48px 40px",
             position: "relative",
             overflow: "hidden",
           }}
         >
-          {/* Top gradient line */}
+          {/* Top glowing accent line */}
           <div
             style={{
-              position: "absolute",
-              top: 0,
-              left: "10%",
-              right: "10%",
-              height: 2,
-              background: "linear-gradient(90deg, transparent, #7c3aed, #e11d48, transparent)",
-              borderRadius: "0 0 2px 2px",
+              position: "absolute", top: 0, left: 0, right: 0, height: 2, 
+              background: "linear-gradient(90deg, transparent, #ef4444, #dc2626, transparent)",
             }}
           />
 
           {/* Logo */}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              marginBottom: 32,
-            }}
-          >
-            <div
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: 40 }}>
+            <motion.div
+              whileHover={{ scale: 1.05, rotate: 5 }}
               style={{
-                width: 56,
-                height: 56,
-                borderRadius: 16,
-                background: "linear-gradient(135deg, #7c3aed, #e11d48)",
+                width: 68,
+                height: 68,
+                borderRadius: 20,
+                background: "linear-gradient(135deg, #ef4444, #991b1b)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                marginBottom: 16,
-                boxShadow: "0 8px 30px rgba(124,58,237,0.3)",
+                marginBottom: 20,
+                boxShadow: "0 10px 30px rgba(239, 68, 68, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3)",
+                position: "relative"
               }}
             >
-              <Shield size={28} color="#fff" />
-            </div>
-            <h1
-              style={{
-                fontSize: 22,
-                fontWeight: 700,
-                color: "#f1f5f9",
-                marginBottom: 4,
-                fontFamily: "'Inter', sans-serif",
-              }}
-            >
+              <div style={{ position: "absolute", inset: 0, borderRadius: 20, border: "1px solid rgba(255,255,255,0.2)" }} />
+              <Shield size={34} color="#fff" strokeWidth={1.5} />
+            </motion.div>
+            <h1 style={{ fontSize: 26, fontWeight: 800, color: "#fff", marginBottom: 6, fontFamily: "'Inter', sans-serif", letterSpacing: "-0.03em" }}>
               Admin Panel
             </h1>
-            <p
-              style={{
-                fontSize: 13,
-                color: "#64748b",
-                fontFamily: "'Inter', sans-serif",
-              }}
-            >
-              Sign in to access the dashboard
+            <p style={{ fontSize: 14, color: "#94a3b8", fontWeight: 500 }}>
+              Secure system access
             </p>
           </div>
 
           {/* Error */}
-          {error && (
-            <div
-              style={{
-                background: "rgba(225, 29, 72, 0.1)",
-                border: "1px solid rgba(225, 29, 72, 0.3)",
-                borderRadius: 12,
-                padding: "10px 14px",
-                marginBottom: 20,
-                fontSize: 13,
-                color: "#f87171",
-                textAlign: "center",
-                animation: "adminFadeIn 0.3s ease",
-              }}
-            >
-              {error}
-            </div>
-          )}
+          <AnimatePresence>
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                style={{
+                  background: "rgba(225, 29, 72, 0.1)",
+                  border: "1px solid rgba(225, 29, 72, 0.3)",
+                  borderRadius: 14,
+                  padding: "12px 16px",
+                  marginBottom: 24,
+                  fontSize: 13,
+                  fontWeight: 600,
+                  color: "#fca5a5",
+                  textAlign: "center",
+                }}
+              >
+                {error}
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             <div>
-              <label
-                style={{
-                  fontSize: 12,
-                  fontWeight: 600,
-                  color: "#94a3b8",
-                  display: "block",
-                  marginBottom: 6,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.05em",
-                }}
-              >
-                Email
+              <label style={{ fontSize: 11, fontWeight: 700, color: "#94a3b8", display: "block", marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.1em" }}>
+                Email Address
               </label>
-              <input
-                type="email"
-                className="admin-input"
-                placeholder="admin@ulmind.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                autoComplete="email"
-                autoFocus
-              />
+              <div style={{ position: "relative" }}>
+                <Mail size={18} color={focusedField === "email" ? "#f87171" : "#64748b"} style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", transition: "color 0.3s" }} />
+                <input
+                  type="email"
+                  placeholder="admin@ulmind.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  onFocus={() => setFocusedField("email")}
+                  onBlur={() => setFocusedField(null)}
+                  autoComplete="email"
+                  autoFocus
+                  style={{ 
+                    width: "100%", paddingLeft: 46, paddingRight: 16, height: 52, 
+                    background: "rgba(0,0,0,0.3)", 
+                    border: focusedField === "email" ? "1px solid rgba(239, 68, 68, 0.5)" : "1px solid rgba(255,255,255,0.06)", 
+                    borderRadius: 16, color: "#fff", fontSize: 15,
+                    outline: "none", transition: "all 0.3s",
+                    boxShadow: focusedField === "email" ? "0 0 0 3px rgba(239, 68, 68, 0.1)" : "none"
+                  }}
+                />
+              </div>
             </div>
 
             <div>
-              <label
-                style={{
-                  fontSize: 12,
-                  fontWeight: 600,
-                  color: "#94a3b8",
-                  display: "block",
-                  marginBottom: 6,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.05em",
-                }}
-              >
+              <label style={{ fontSize: 11, fontWeight: 700, color: "#94a3b8", display: "block", marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.1em" }}>
                 Password
               </label>
               <div style={{ position: "relative" }}>
+                <Lock size={18} color={focusedField === "password" ? "#f87171" : "#64748b"} style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", transition: "color 0.3s" }} />
                 <input
                   type={showPassword ? "text" : "password"}
-                  className="admin-input"
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  onFocus={() => setFocusedField("password")}
+                  onBlur={() => setFocusedField(null)}
                   autoComplete="current-password"
-                  style={{ paddingRight: 44 }}
+                  style={{ 
+                    width: "100%", paddingLeft: 46, paddingRight: 46, height: 52, 
+                    background: "rgba(0,0,0,0.3)", 
+                    border: focusedField === "password" ? "1px solid rgba(239, 68, 68, 0.5)" : "1px solid rgba(255,255,255,0.06)", 
+                    borderRadius: 16, color: "#fff", fontSize: 15,
+                    outline: "none", transition: "all 0.3s",
+                    boxShadow: focusedField === "password" ? "0 0 0 3px rgba(239, 68, 68, 0.1)" : "none"
+                  }}
                 />
                 <button
                   type="button"
@@ -270,9 +263,10 @@ const LoginPage: React.FC = () => {
                     transform: "translateY(-50%)",
                     background: "none",
                     border: "none",
-                    color: "#64748b",
+                    color: showPassword ? "#f87171" : "#64748b",
                     cursor: "pointer",
                     padding: 4,
+                    transition: "color 0.3s"
                   }}
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -280,27 +274,36 @@ const LoginPage: React.FC = () => {
               </div>
             </div>
 
-            <button
+            <motion.button
+              whileHover={{ scale: 1.02, boxShadow: "0 15px 35px rgba(239, 68, 68, 0.4)" }}
+              whileTap={{ scale: 0.98 }}
               type="submit"
-              className="admin-btn admin-btn-primary"
               disabled={loading}
               style={{
-                marginTop: 8,
-                height: 48,
-                fontSize: 15,
+                marginTop: 16,
+                height: 52,
+                width: "100%",
+                fontSize: 16,
                 fontWeight: 700,
-                letterSpacing: "0.02em",
+                letterSpacing: "0.03em",
+                background: "linear-gradient(135deg, #ef4444, #dc2626)",
+                color: "white",
+                border: "1px solid rgba(255,255,255,0.1)",
+                borderRadius: 16,
+                cursor: loading ? "not-allowed" : "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 10,
+                boxShadow: "0 8px 25px rgba(239, 68, 68, 0.3)",
+                transition: "all 0.2s",
+                opacity: loading ? 0.7 : 1
               }}
             >
-              {loading ? (
-                <Loader2 size={20} className="animate-spin" />
-              ) : (
-                <>
-                  Sign In
-                  <ArrowRight size={18} />
-                </>
+              {loading ? <Loader2 size={22} className="animate-spin" /> : (
+                <>Sign In <ArrowRight size={18} /></>
               )}
-            </button>
+            </motion.button>
           </form>
 
           {/* Footer */}
@@ -309,18 +312,19 @@ const LoginPage: React.FC = () => {
               textAlign: "center",
               fontSize: 11,
               color: "#475569",
-              marginTop: 24,
+              marginTop: 32,
               textTransform: "uppercase",
-              letterSpacing: "0.1em",
+              letterSpacing: "0.15em",
               fontWeight: 600,
             }}
           >
             ULMiND Internal Dashboard
           </p>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
 
 export default LoginPage;
+
