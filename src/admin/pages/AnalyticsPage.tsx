@@ -7,7 +7,8 @@ import React, { useState, useEffect, useMemo } from "react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, PieChart, Pie
 } from "recharts";
-import { Users, TrendingUp, Clock, RefreshCcw, Mail, Eye, Hash, AlertCircle } from "lucide-react";
+import { Users, TrendingUp, Clock, RefreshCcw, Mail, Eye, Hash, AlertCircle, Activity } from "lucide-react";
+import { motion } from "framer-motion";
 import KpiCard from "../components/KpiCard";
 import { getTrackingData, getAnalyticsReport, type AnalyticsReport } from "../lib/api";
 
@@ -185,16 +186,58 @@ const AnalyticsPage: React.FC = () => {
   }
 
   return (
-    <div>
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      style={{ paddingBottom: 40 }}
+    >
       {/* ─── NEW OP VISITOR INTELLIGENCE SECTION ─── */}
-      <div style={{ marginBottom: 32 }}>
-        <h2 style={{ fontSize: 26, fontWeight: 800, color: "var(--admin-text)", fontFamily: "'Inter', sans-serif", display: "flex", alignItems: "center", gap: 10 }}>
-          <BarChart size={28} color="#3b82f6" /> Visitor Intelligence
-        </h2>
-        <p style={{ fontSize: 14, color: "var(--admin-text-dim)", marginTop: 6 }}>
-          Complete visitor intelligence — real-time data dynamically aggregated from core tracking endpoints.
-        </p>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32 }}>
+        <div>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <h2 style={{ fontSize: 28, fontWeight: 800, color: "#ffffff", fontFamily: "'Inter', sans-serif", letterSpacing: "-0.02em", display: "flex", alignItems: "center", gap: 10 }}>
+              <BarChart size={28} color="#3b82f6" /> Visitor Intelligence
+            </h2>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(59, 130, 246, 0.1)", border: "1px solid rgba(59, 130, 246, 0.2)", padding: "4px 10px", borderRadius: 20 }}>
+              <motion.div 
+                animate={{ opacity: [1, 0.3, 1] }} 
+                transition={{ duration: 2, repeat: Infinity }}
+                style={{ width: 6, height: 6, borderRadius: "50%", background: "#3b82f6", boxShadow: "0 0 8px #3b82f6" }}
+              />
+              <span style={{ fontSize: 11, fontWeight: 600, color: "#3b82f6", textTransform: "uppercase", letterSpacing: "0.05em" }}>Telemetry Active</span>
+            </div>
+          </div>
+          <p style={{ fontSize: 14, color: "#94a3b8", marginTop: 6 }}>
+            Complete visitor intelligence — real-time data dynamically aggregated from core tracking endpoints.
+          </p>
+        </div>
       </div>
+
+      <motion.div 
+        initial="hidden"
+        animate="visible"
+        variants={{
+          visible: { transition: { staggerChildren: 0.05 } }
+        }}
+        style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 16, marginBottom: 24 }}
+      >
+        <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} whileHover={{ scale: 1.02, translateY: -4 }}>
+          <KpiCardMini label="Total Tracked" value={stats?.total || 0} icon={<Users size={20} color="#3b82f6" />} delay={0} />
+        </motion.div>
+        <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} whileHover={{ scale: 1.02, translateY: -4 }}>
+          <KpiCardMini label="Today" value={stats?.today || 0} icon={<TrendingUp size={20} color="#10b981" />} delay={0} />
+        </motion.div>
+        <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} whileHover={{ scale: 1.02, translateY: -4 }}>
+          <KpiCardMini label="Last 7 Days" value={stats?.last7Days || 0} icon={<Clock size={20} color="#f59e0b" />} delay={0} />
+        </motion.div>
+        <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} whileHover={{ scale: 1.02, translateY: -4 }}>
+          <KpiCardMini label="Returning IPs" value={stats?.returning || 0} icon={<RefreshCcw size={20} color="#8b5cf6" />} delay={0} />
+        </motion.div>
+        <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} whileHover={{ scale: 1.02, translateY: -4 }}>
+          <KpiCardMini label="Contacts Linked" value={stats?.contacts || 0} icon={<Mail size={20} color="#0ea5e9" />} delay={0} />
+        </motion.div>
+      </motion.div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 16, marginBottom: 24 }}>
         <KpiCardMini label="Total Tracked" value={stats?.total || 0} icon={<Users size={20} color="#3b82f6" />} delay={0} />
@@ -204,9 +247,14 @@ const AnalyticsPage: React.FC = () => {
         <KpiCardMini label="Contacts Linked" value={stats?.contacts || 0} icon={<Mail size={20} color="#0ea5e9" />} delay={200} />
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: 20, marginBottom: 48 }}>
-        <div className="admin-card" style={{ padding: "24px", minHeight: 320 }}>
-          <h4 style={{ fontSize: 15, fontWeight: 700, color: "var(--admin-text)", marginBottom: 20 }}>Daily Visitors (7 Days)</h4>
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        style={{ display: "grid", gridTemplateColumns: "repeat(12, 1fr)", gap: 20, marginBottom: 48 }}
+      >
+        <div className="admin-card" style={{ gridColumn: "span 6", padding: "24px", minHeight: 320, background: "rgba(20, 20, 22, 0.7)", backdropFilter: "blur(20px)", border: "1px solid rgba(255, 255, 255, 0.05)", borderRadius: 20 }}>
+          <h4 style={{ fontSize: 15, fontWeight: 700, color: "#ffffff", marginBottom: 20 }}>Daily Visitors (7 Days)</h4>
           <ResponsiveContainer width="100%" height={240}>
             <BarChart data={stats?.dailyVisitors} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
               <XAxis dataKey="label" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} dy={10} />
@@ -218,80 +266,92 @@ const AnalyticsPage: React.FC = () => {
           </ResponsiveContainer>
         </div>
 
-        <div className="admin-card" style={{ padding: "24px", minHeight: 320 }}>
-          <h4 style={{ fontSize: 15, fontWeight: 700, color: "var(--admin-text)", marginBottom: 20 }}>Devices Ratio</h4>
-          <div style={{ display: "flex", alignItems: "center", height: 240 }}>
-            <ResponsiveContainer width="60%" height="100%">
+        <div className="admin-card" style={{ gridColumn: "span 3", padding: "24px", minHeight: 320, background: "rgba(20, 20, 22, 0.7)", backdropFilter: "blur(20px)", border: "1px solid rgba(255, 255, 255, 0.05)", borderRadius: 20 }}>
+          <h4 style={{ fontSize: 15, fontWeight: 700, color: "#ffffff", marginBottom: 20 }}>Devices Ratio</h4>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", height: 240, gap: 16 }}>
+            <ResponsiveContainer width="100%" height={160}>
               <PieChart>
-                <Pie data={stats?.devices} cx="50%" cy="50%" innerRadius={60} outerRadius={85} paddingAngle={5} dataKey="value" stroke="none">
+                <Pie data={stats?.devices} cx="50%" cy="50%" innerRadius={50} outerRadius={70} paddingAngle={5} dataKey="value" stroke="none" cornerRadius={6}>
                   {(stats?.devices || []).map((entry, index) => <Cell key={`cell-${index}`} fill={entry.color} />)}
                 </Pie>
                 <Tooltip content={<CustomTooltip />} />
               </PieChart>
             </ResponsiveContainer>
-            <div style={{ width: "40%", display: "flex", flexDirection: "column", gap: 12, justifyContent: "center" }}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center" }}>
               {(stats?.devices || []).map(entry => (
-                <div key={entry.name} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <div style={{ width: 12, height: 12, borderRadius: "50%", background: entry.color }} />
-                  <span style={{ color: "var(--admin-text)", fontSize: 13, fontWeight: 600 }}>{entry.name}</span>
-                  <span style={{ color: "var(--admin-text-dim)", fontSize: 13, marginLeft: "auto" }}>{entry.value}</span>
+                <div key={entry.name} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <div style={{ width: 8, height: 8, borderRadius: "50%", background: entry.color }} />
+                  <span style={{ color: "#94a3b8", fontSize: 12 }}>{entry.name}</span>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        <div className="admin-card" style={{ padding: "24px", minHeight: 320 }}>
-          <h4 style={{ fontSize: 15, fontWeight: 700, color: "var(--admin-text)", marginBottom: 20 }}>Cookie Consent</h4>
-          <div style={{ display: "flex", alignItems: "center", height: 240 }}>
-            <ResponsiveContainer width="60%" height="100%">
+        <div className="admin-card" style={{ gridColumn: "span 3", padding: "24px", minHeight: 320, background: "rgba(20, 20, 22, 0.7)", backdropFilter: "blur(20px)", border: "1px solid rgba(255, 255, 255, 0.05)", borderRadius: 20 }}>
+          <h4 style={{ fontSize: 15, fontWeight: 700, color: "#ffffff", marginBottom: 20 }}>Cookie Consent</h4>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", height: 240, gap: 16 }}>
+            <ResponsiveContainer width="100%" height={160}>
               <PieChart>
-                <Pie data={stats?.consent} cx="50%" cy="50%" innerRadius={60} outerRadius={85} paddingAngle={5} dataKey="value" stroke="none">
+                <Pie data={stats?.consent} cx="50%" cy="50%" innerRadius={50} outerRadius={70} paddingAngle={5} dataKey="value" stroke="none" cornerRadius={6}>
                   {(stats?.consent || []).map((entry, index) => <Cell key={`cell-${index}`} fill={entry.color} />)}
                 </Pie>
                 <Tooltip content={<CustomTooltip />} />
               </PieChart>
             </ResponsiveContainer>
-            <div style={{ width: "40%", display: "flex", flexDirection: "column", gap: 12, justifyContent: "center" }}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center" }}>
               {(stats?.consent || []).map(entry => (
-                <div key={entry.name} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <div style={{ width: 12, height: 12, borderRadius: "50%", background: entry.color }} />
-                  <span style={{ color: "var(--admin-text)", fontSize: 13, fontWeight: 600 }}>{entry.name}</span>
-                  <span style={{ color: "var(--admin-text-dim)", fontSize: 13, marginLeft: "auto" }}>{entry.value}</span>
+                <div key={entry.name} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <div style={{ width: 8, height: 8, borderRadius: "50%", background: entry.color }} />
+                  <span style={{ color: "#94a3b8", fontSize: 12 }}>{entry.name}</span>
                 </div>
               ))}
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       <hr style={{ border: 0, borderBottom: "1px solid rgba(255,255,255,0.05)", margin: "0 0 40px 0" }} />
 
       {/* ─── OLD PAGEVIEW PERFORMANCE SECTION ─── */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28, flexWrap: "wrap", gap: 16 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 28, flexWrap: "wrap", gap: 16 }}>
         <div>
-          <h2 style={{ fontSize: 24, fontWeight: 700, color: "var(--admin-text)", fontFamily: "'Inter', sans-serif" }}>
+          <h2 style={{ fontSize: 24, fontWeight: 800, color: "#ffffff", fontFamily: "'Inter', sans-serif" }}>
             Page Performance
           </h2>
-          <p style={{ fontSize: 13, color: "var(--admin-text-dim)", marginTop: 4 }}>
-            Detailed breakdown of page views & time spent • Period: <strong style={{ color: "var(--admin-accent)" }}>{pageReport?.period || period}</strong>
+          <p style={{ fontSize: 13, color: "#94a3b8", marginTop: 4 }}>
+            Detailed breakdown of page views & time spent • Period: <strong style={{ color: "#3b82f6" }}>{pageReport?.period || period}</strong>
           </p>
         </div>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <Hash size={14} style={{ color: "var(--admin-text-dim)" }} />
+          <div style={{ display: "flex", alignItems: "center", gap: 8, background: "rgba(255, 255, 255, 0.03)", padding: "4px 8px", borderRadius: 12, border: "1px solid rgba(255, 255, 255, 0.05)" }}>
+            <Hash size={14} style={{ color: "#94a3b8" }} />
             <select
               value={limit}
               onChange={(e) => setLimit(Number(e.target.value))}
-              className="admin-input"
-              style={{ width: 70, padding: "8px 10px", fontSize: 13 }}
+              style={{ background: "transparent", border: "none", color: "#fff", outline: "none", fontSize: 13, cursor: "pointer" }}
             >
-              {[5, 10, 20, 30, 50].map((n) => <option key={n} value={n}>{n}</option>)}
+              {[5, 10, 20, 30, 50].map((n) => <option key={n} value={n} style={{ background: "#1e293b" }}>{n}</option>)}
             </select>
           </div>
-          <div className="admin-tabs">
+          <div style={{ display: "flex", background: "rgba(255, 255, 255, 0.03)", padding: 4, borderRadius: 12, border: "1px solid rgba(255, 255, 255, 0.05)" }}>
             {["7d", "30d", "all"].map((p) => (
-              <button key={p} className={`admin-tab ${period === p ? "active" : ""}`} onClick={() => setPeriod(p)}>
+              <button
+                key={p}
+                style={{
+                  background: period === p ? "rgba(255, 255, 255, 0.1)" : "transparent",
+                  color: period === p ? "#ffffff" : "#94a3b8",
+                  border: "none",
+                  padding: "6px 16px",
+                  borderRadius: 8,
+                  fontSize: 13,
+                  fontWeight: period === p ? 600 : 500,
+                  cursor: "pointer",
+                  transition: "all 0.2s",
+                  boxShadow: period === p ? "0 2px 8px rgba(0,0,0,0.2)" : "none"
+                }}
+                onClick={() => setPeriod(p)}
+              >
                 {p === "all" ? "All Time" : p}
               </button>
             ))}
@@ -305,87 +365,103 @@ const AnalyticsPage: React.FC = () => {
         <KpiCard label="Avg Time (Top Page)" value={pageReport?.top_pages_by_time_spent?.[0]?.avg_time_seconds ? formatTime(pageReport.top_pages_by_time_spent[0].avg_time_seconds) : "N/A"} icon={<Clock size={22} color="#fff" />} gradient="linear-gradient(135deg, #f59e0b, #d97706)" delay={200} format="text" />
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))", gap: 20, marginBottom: 32 }}>
+      <motion.div 
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
+        style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))", gap: 20, marginBottom: 32 }}
+      >
         {visitChartData.length > 0 && (
-          <div className="admin-card" style={{ padding: "20px 16px" }}>
-            <h4 style={{ fontSize: 14, fontWeight: 600, color: "var(--admin-text)", marginBottom: 16, paddingLeft: 8 }}>📊 Top Pages by Visits</h4>
+          <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="admin-card" style={{ padding: "24px", background: "rgba(20, 20, 22, 0.7)", backdropFilter: "blur(20px)", border: "1px solid rgba(255, 255, 255, 0.05)", borderRadius: 20 }}>
+            <h4 style={{ fontSize: 15, fontWeight: 700, color: "#ffffff", marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
+              <Eye size={16} color="#7c3aed" /> Top Pages by Visits
+            </h4>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={visitChartData} layout="vertical" margin={{ left: 60 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(30,41,59,0.5)" horizontal={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.03)" horizontal={false} />
                 <XAxis type="number" stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} />
                 <YAxis dataKey="name" type="category" stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} width={80} />
-                <Tooltip content={<CustomTooltip />} />
+                <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.02)' }} />
                 <Bar dataKey="visits" name="Visits" radius={[0, 6, 6, 0]} maxBarSize={24}>
-                  {visitChartData.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} fillOpacity={0.85} />)}
+                  {visitChartData.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} fillOpacity={0.9} />)}
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
-          </div>
+          </motion.div>
         )}
 
         {timeChartData.length > 0 && (
-          <div className="admin-card" style={{ padding: "20px 16px" }}>
-            <h4 style={{ fontSize: 14, fontWeight: 600, color: "var(--admin-text)", marginBottom: 16, paddingLeft: 8 }}>⏱️ Top Pages by Time Spent</h4>
+          <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="admin-card" style={{ padding: "24px", background: "rgba(20, 20, 22, 0.7)", backdropFilter: "blur(20px)", border: "1px solid rgba(255, 255, 255, 0.05)", borderRadius: 20 }}>
+            <h4 style={{ fontSize: 15, fontWeight: 700, color: "#ffffff", marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
+              <Clock size={16} color="#e11d48" /> Top Pages by Time Spent
+            </h4>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={timeChartData} layout="vertical" margin={{ left: 60 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(30,41,59,0.5)" horizontal={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.03)" horizontal={false} />
                 <XAxis type="number" stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} />
                 <YAxis dataKey="name" type="category" stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} width={80} />
-                <Tooltip content={<CustomTooltip />} />
-                <Bar dataKey="total" name="Total (s)" fill="#e11d48" radius={[0, 6, 6, 0]} maxBarSize={24} fillOpacity={0.8} />
-                <Bar dataKey="avg" name="Avg (s)" fill="#10b981" radius={[0, 6, 6, 0]} maxBarSize={24} fillOpacity={0.8} />
+                <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.02)' }} />
+                <Bar dataKey="total" name="Total (s)" fill="#e11d48" radius={[0, 6, 6, 0]} maxBarSize={16} fillOpacity={0.9} />
+                <Bar dataKey="avg" name="Avg (s)" fill="#10b981" radius={[0, 6, 6, 0]} maxBarSize={16} fillOpacity={0.9} />
               </BarChart>
             </ResponsiveContainer>
-          </div>
+          </motion.div>
         )}
-      </div>
+      </motion.div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))", gap: 20 }}>
-        <div className="admin-card" style={{ padding: 0, overflow: "hidden" }}>
-          <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--admin-border)" }}><h4 style={{ fontSize: 14, fontWeight: 600, color: "var(--admin-text)" }}>Top Pages by Visits</h4></div>
-          <div style={{ maxHeight: 400, overflowY: "auto" }}>
-            <table className="admin-table">
-              <thead><tr><th>#</th><th>Page</th><th>Visits</th><th>Sessions</th></tr></thead>
+      <motion.div 
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
+        style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))", gap: 20 }}
+      >
+        <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="admin-card" style={{ padding: 0, overflow: "hidden", background: "rgba(20, 20, 22, 0.7)", backdropFilter: "blur(20px)", border: "1px solid rgba(255, 255, 255, 0.05)", borderRadius: 20 }}>
+          <div style={{ padding: "20px 24px", borderBottom: "1px solid rgba(255,255,255,0.05)", background: "rgba(255,255,255,0.02)" }}><h4 style={{ fontSize: 15, fontWeight: 700, color: "#ffffff", display: "flex", alignItems: "center", gap: 8 }}><Eye size={16} color="#3b82f6" /> Top Pages Data</h4></div>
+          <div style={{ maxHeight: 400, overflowY: "auto", padding: "0 8px" }}>
+            <table className="admin-table" style={{ width: "100%", borderCollapse: "collapse", marginTop: 8 }}>
+              <thead><tr><th style={{ color: "#64748b" }}>#</th><th style={{ color: "#64748b" }}>Page</th><th style={{ color: "#64748b" }}>Visits</th><th style={{ color: "#64748b" }}>Sessions</th></tr></thead>
               <tbody>
                 {(pageReport?.top_pages_by_visits || []).map((row, i) => (
-                  <tr key={i}>
-                    <td style={{ fontWeight: 700, color: "var(--admin-accent)" }}>{i + 1}</td>
-                    <td style={{ fontWeight: 500, color: "var(--admin-text)" }}>{row.page || "/"}</td>
-                    <td>{row.visits.toLocaleString()}</td>
-                    <td>{row.unique_sessions.toLocaleString()}</td>
+                  <tr key={i} style={{ borderBottom: "1px solid rgba(255,255,255,0.02)", transition: "background 0.2s" }} className="hover:bg-white/[0.02]">
+                    <td style={{ fontWeight: 700, color: "#3b82f6", padding: "16px 12px" }}>{i + 1}</td>
+                    <td style={{ fontWeight: 500, color: "#e2e8f0", padding: "16px 12px" }}>{row.page || "/"}</td>
+                    <td style={{ color: "#94a3b8", padding: "16px 12px" }}>{row.visits.toLocaleString()}</td>
+                    <td style={{ color: "#94a3b8", padding: "16px 12px" }}>{row.unique_sessions.toLocaleString()}</td>
                   </tr>
                 ))}
                 {(!pageReport?.top_pages_by_visits || pageReport.top_pages_by_visits.length === 0) && (
-                  <tr><td colSpan={4} style={{ textAlign: "center", padding: 32, color: "var(--admin-text-dim)" }}>No data available for this period</td></tr>
+                  <tr><td colSpan={4} style={{ textAlign: "center", padding: 32, color: "#64748b" }}>No data available for this period</td></tr>
                 )}
               </tbody>
             </table>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="admin-card" style={{ padding: 0, overflow: "hidden" }}>
-          <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--admin-border)" }}><h4 style={{ fontSize: 14, fontWeight: 600, color: "var(--admin-text)" }}>Top Pages by Time Spent</h4></div>
-          <div style={{ maxHeight: 400, overflowY: "auto" }}>
-            <table className="admin-table">
-              <thead><tr><th>#</th><th>Page</th><th>Total Time</th><th>Avg Time</th></tr></thead>
+        <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="admin-card" style={{ padding: 0, overflow: "hidden", background: "rgba(20, 20, 22, 0.7)", backdropFilter: "blur(20px)", border: "1px solid rgba(255, 255, 255, 0.05)", borderRadius: 20 }}>
+          <div style={{ padding: "20px 24px", borderBottom: "1px solid rgba(255,255,255,0.05)", background: "rgba(255,255,255,0.02)" }}><h4 style={{ fontSize: 15, fontWeight: 700, color: "#ffffff", display: "flex", alignItems: "center", gap: 8 }}><Clock size={16} color="#e11d48" /> Time Spent Data</h4></div>
+          <div style={{ maxHeight: 400, overflowY: "auto", padding: "0 8px" }}>
+            <table className="admin-table" style={{ width: "100%", borderCollapse: "collapse", marginTop: 8 }}>
+              <thead><tr><th style={{ color: "#64748b" }}>#</th><th style={{ color: "#64748b" }}>Page</th><th style={{ color: "#64748b" }}>Total Time</th><th style={{ color: "#64748b" }}>Avg Time</th></tr></thead>
               <tbody>
                 {(pageReport?.top_pages_by_time_spent || []).map((row, i) => (
-                  <tr key={i}>
-                    <td style={{ fontWeight: 700, color: "var(--admin-accent)" }}>{i + 1}</td>
-                    <td style={{ fontWeight: 500, color: "var(--admin-text)" }}>{row.page || "/"}</td>
-                    <td>{formatTime(row.total_time_seconds)}</td>
-                    <td>{formatTime(row.avg_time_seconds)}</td>
+                  <tr key={i} style={{ borderBottom: "1px solid rgba(255,255,255,0.02)", transition: "background 0.2s" }} className="hover:bg-white/[0.02]">
+                    <td style={{ fontWeight: 700, color: "#e11d48", padding: "16px 12px" }}>{i + 1}</td>
+                    <td style={{ fontWeight: 500, color: "#e2e8f0", padding: "16px 12px" }}>{row.page || "/"}</td>
+                    <td style={{ color: "#94a3b8", padding: "16px 12px" }}>{formatTime(row.total_time_seconds)}</td>
+                    <td style={{ color: "#94a3b8", padding: "16px 12px" }}>{formatTime(row.avg_time_seconds)}</td>
                   </tr>
                 ))}
                 {(!pageReport?.top_pages_by_time_spent || pageReport.top_pages_by_time_spent.length === 0) && (
-                  <tr><td colSpan={4} style={{ textAlign: "center", padding: 32, color: "var(--admin-text-dim)" }}>No data available for this period</td></tr>
+                  <tr><td colSpan={4} style={{ textAlign: "center", padding: 32, color: "#64748b" }}>No data available for this period</td></tr>
                 )}
               </tbody>
             </table>
           </div>
-        </div>
-      </div>
-    </div>
+        </motion.div>
+      </motion.div>
+    </motion.div>
   );
 };
 

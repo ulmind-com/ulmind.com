@@ -2,19 +2,26 @@ import React from 'react';
 import { FunctionSquare } from 'lucide-react';
 
 interface FormulaBarProps {
-  selectedCell: { rowId: str | null, colId: str | null } | null;
-  cellValue: str;
+  selectedCell: { rowId: string | null, colId: string | null } | null;
+  cellValue: string;
   onCellValueChange: (val: string) => void;
+  onSaveValue: (val: string) => void;
 }
 
-export function FormulaBar({ selectedCell, cellValue, onCellValueChange }: FormulaBarProps) {
+export function FormulaBar({ selectedCell, cellValue, onCellValueChange, onSaveValue }: FormulaBarProps) {
   
   // Calculate a generic cell address (e.g., A1, B2) just for UI visual if needed, 
   // or just show the active field name.
   const address = selectedCell?.colId ? selectedCell.colId.toUpperCase() : '';
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      onSaveValue(cellValue);
+    }
+  };
+
   return (
-    <div className="flex h-8 w-full shrink-0 items-center border-b border-[#333333] bg-[#0A0A0A] text-sm text-[#EAEAEA] font-sans">
+    <div className="flex h-8 w-full shrink-0 items-center border-b border-[#333333] bg-[#0A0A0A] text-sm text-[#EAEAEA] font-sans no-print">
       
       {/* Address Box */}
       <div className="flex h-full w-12 shrink-0 items-center justify-center border-r border-[#333333] bg-[#1A1A1A] text-[11px] font-semibold text-[#888888]">
@@ -31,6 +38,8 @@ export function FormulaBar({ selectedCell, cellValue, onCellValueChange }: Formu
         type="text"
         value={cellValue}
         onChange={(e) => onCellValueChange(e.target.value)}
+        onBlur={() => onSaveValue(cellValue)}
+        onKeyDown={handleKeyDown}
         disabled={!selectedCell?.colId}
         className="h-full flex-1 bg-transparent px-2 text-[13px] text-[#EAEAEA] outline-none disabled:opacity-50"
         placeholder={selectedCell?.colId ? "Enter value or formula..." : ""}

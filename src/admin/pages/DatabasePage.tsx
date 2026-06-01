@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { 
   Plus, Search, Bell, Settings, Star, Clock, UserPlus, FileSpreadsheet, 
-  ChevronDown, Filter, Columns, Hash, Zap, Sparkles, Folder, Command 
+  ChevronDown, Filter, Columns, Hash, Zap, Sparkles, Folder, Command, Trash2
 } from "lucide-react";
 import { SpreadsheetGrid, SpreadsheetGridHandle } from "../components/spreadsheet/SpreadsheetGrid";
 import { SpreadsheetToolbar } from "../components/spreadsheet/SpreadsheetToolbar";
+import { SpreadsheetMenuBar } from "../components/spreadsheet/SpreadsheetMenuBar";
 import { FormulaBar } from "../components/spreadsheet/FormulaBar";
 import { AiSidebar } from "../components/spreadsheet/AiSidebar";
+import { DataValidationModal } from "../components/spreadsheet/DataValidationModal";
+import { SpreadsheetPrintModal } from "../components/spreadsheet/SpreadsheetPrintModal";
 import { motion, AnimatePresence } from "framer-motion";
 import * as XLSX from 'xlsx';
-import { useRef } from 'react';
 
 export default function DatabasePage() {
   const [sheets, setSheets] = useState<any[]>([]);
@@ -24,10 +26,13 @@ export default function DatabasePage() {
   const [showAi, setShowAi] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isImporting, setIsImporting] = useState(false);
+  const [showValidationModal, setShowValidationModal] = useState(false);
+  const [showPrintModal, setShowPrintModal] = useState(false);
+  const [paintFormatCopiedStyles, setPaintFormatCopiedStyles] = useState<any | null>(null);
 
   const fetchSheets = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:5000/api/v1/sheets/");
+      const res = await fetch("http://localhost:8000/api/v1/sheets/");
       if (res.ok) {
         const data = await res.json();
         setSheets(data);
@@ -49,7 +54,7 @@ export default function DatabasePage() {
   const handleCreateSheet = async () => {
     if (!newSheetName) return;
     try {
-      const res = await fetch("http://127.0.0.1:5000/api/v1/sheets/", {
+      const res = await fetch("http://localhost:8000/api/v1/sheets/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: newSheetName, description: "", columns: [] }),
@@ -63,6 +68,25 @@ export default function DatabasePage() {
       }
     } catch (error) {
       console.error("Failed to create sheet:", error);
+    }
+  };
+
+  const handleDeleteSheet = async (e: React.MouseEvent, sheetId: string) => {
+    e.stopPropagation();
+    if (!window.confirm("Are you sure you want to delete this sheet? This action cannot be undone.")) return;
+    try {
+      const res = await fetch(`http://localhost:8000/api/v1/sheets/${sheetId}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        const remainingSheets = sheets.filter(s => s._id !== sheetId);
+        setSheets(remainingSheets);
+        if (activeSheet?._id === sheetId) {
+          setActiveSheet(remainingSheets.length > 0 ? remainingSheets[0] : null);
+        }
+      }
+    } catch (error) {
+      console.error("Failed to delete sheet:", error);
     }
   };
 
@@ -89,22 +113,47 @@ export default function DatabasePage() {
         }
         ws['!ref'] = XLSX.utils.encode_range({s: {c:0, r:0}, e: {c:max_c, r:max_r}});
         
-        const data = XLSX.utils.sheet_to_json(ws, { header: 1 }) as any[][];
+        const data = XLSX.utils.sheet_to_json(ws, { header: 1, raw: false }) as any[][];
 
         if (data.length > 0) {
-          // Find the true header row (the one with the most columns, within the first 30 rows)
-          let headerRowIndex = 0;
-          let maxCols = 0;
+          // Find the true header row using the most common column count (mode) to avoid side-tables breaking detection
+          const colCounts: number[] = [];
           for (let i = 0; i < Math.min(30, data.length); i++) {
-            const rowCols = (data[i] || []).filter(c => {
+            const count = (data[i] || []).filter(c => {
               if (c === undefined || c === null) return false;
               if (typeof c === 'string' && c.replace(/\s+/g, '') === '') return false;
               return true;
             }).length;
-            if (rowCols > maxCols) {
-              maxCols = rowCols;
-              headerRowIndex = i;
+            colCounts.push(count);
+          }
+
+          const countsMap = new Map<number, number>();
+          colCounts.forEach(c => {
+            if (c > 1) { // Ignore single-column rows like main titles
+              countsMap.set(c, (countsMap.get(c) || 0) + 1);
             }
+          });
+
+          let mode = 0;
+          let maxFreq = 0;
+          countsMap.forEach((freq, count) => {
+            if (freq > maxFreq || (freq === maxFreq && count > mode)) {
+              maxFreq = freq;
+              mode = count;
+            }
+          });
+
+          let headerRowIndex = 0;
+          if (mode > 0) {
+            headerRowIndex = colCounts.findIndex(c => c >= mode);
+          } else {
+            let maxCols = 0;
+            colCounts.forEach((c, i) => {
+              if (c > maxCols) {
+                maxCols = c;
+                headerRowIndex = i;
+              }
+            });
           }
 
           const rawHeaders = data[headerRowIndex] || [];
@@ -138,7 +187,7 @@ export default function DatabasePage() {
           }));
 
           // 1. Create Sheet
-          const sheetRes = await fetch("http://127.0.0.1:5000/api/v1/sheets/", {
+          const sheetRes = await fetch("http://localhost:8000/api/v1/sheets/", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ name: file.name.replace(/\.[^/.]+$/, ""), columns }),
@@ -168,7 +217,7 @@ export default function DatabasePage() {
 
             // 3. Bulk Insert
             if (rowsData.length > 0) {
-              await fetch(`http://127.0.0.1:5000/api/v1/sheets/${newSheet._id}/rows/bulk`, {
+              await fetch(`http://localhost:8000/api/v1/sheets/${newSheet._id}/rows/bulk`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(rowsData),
@@ -188,6 +237,77 @@ export default function DatabasePage() {
       }
     };
     reader.readAsBinaryString(file);
+  };
+
+  const handleMenuAction = async (action: string, payload?: any) => {
+    switch (action) {
+      case 'file_new':
+        setShowCreate(true);
+        break;
+      case 'file_download':
+        gridRef.current?.exportToCsv();
+        break;
+      case 'edit_undo':
+        gridRef.current?.undo();
+        break;
+      case 'edit_redo':
+        gridRef.current?.redo();
+        break;
+      case 'edit_copy':
+        gridRef.current?.copy();
+        break;
+      case 'edit_paste':
+        gridRef.current?.paste();
+        break;
+      case 'view_fullscreen':
+        if (!document.fullscreenElement) {
+          document.getElementById('spreadsheet-canvas')?.requestFullscreen().catch(err => console.error(err));
+        } else {
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+          }
+        }
+        break;
+      case 'format_clear':
+        gridRef.current?.applyFormat('bold', false);
+        gridRef.current?.applyFormat('italic', false);
+        gridRef.current?.applyFormat('strikethrough', false);
+        gridRef.current?.applyFormat('color', null);
+        gridRef.current?.applyFormat('backgroundColor', null);
+        setActiveFormats({});
+        break;
+      case 'data_create_filter':
+        gridRef.current?.toggleFilter();
+        break;
+      case 'data_protect':
+        gridRef.current?.protectRange();
+        break;
+      case 'data_sort_sheet_asc':
+        gridRef.current?.sortSheet('asc');
+        break;
+      case 'data_sort_sheet_desc':
+        gridRef.current?.sortSheet('desc');
+        break;
+      case 'data_validation':
+        setShowValidationModal(true);
+        break;
+      case 'file_print':
+        setShowPrintModal(true);
+        break;
+      case 'edit_cut':
+        gridRef.current?.performAction('cut');
+        break;
+      case 'data_analyse':
+      case 'data_split':
+      case 'tools_spelling':
+      case 'tools_accessibility':
+        alert(`The ${action} feature is an advanced pro feature and will be available in future updates!`);
+        break;
+      default:
+        // Pass unhandled actions to the grid's performAction handler
+        gridRef.current?.performAction(action);
+        break;
+    }
   };
 
   return (
@@ -236,14 +356,23 @@ export default function DatabasePage() {
                 <button
                   key={`fav-${sheet._id}`}
                   onClick={() => setActiveSheet(sheet)}
-                  className={`group flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium transition-all ${
+                  className={`group flex w-full items-center justify-between gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium transition-all ${
                     activeSheet?._id === sheet._id
                       ? "bg-indigo-500/10 text-indigo-400"
                       : "text-white/60 hover:bg-white/5 hover:text-white"
                   }`}
                 >
-                  <Star size={14} className={activeSheet?._id === sheet._id ? "fill-indigo-400" : ""} />
-                  <span className="truncate">{sheet.name}</span>
+                  <div className="flex items-center gap-2.5 overflow-hidden">
+                    <Star size={14} className={activeSheet?._id === sheet._id ? "fill-indigo-400" : ""} />
+                    <span className="truncate">{sheet.name}</span>
+                  </div>
+                  <div 
+                    className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center"
+                    onClick={(e) => handleDeleteSheet(e, sheet._id)}
+                    title="Delete Sheet"
+                  >
+                    <Trash2 size={13} className="text-white/40 hover:text-red-400 transition-colors" />
+                  </div>
                 </button>
               ))}
             </div>
@@ -280,6 +409,13 @@ export default function DatabasePage() {
                       <FileSpreadsheet size={14} className={activeSheet?._id === sheet._id ? "text-indigo-400" : "text-white/30"} />
                       <span className="truncate">{sheet.name}</span>
                     </div>
+                    <div 
+                      className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center"
+                      onClick={(e) => handleDeleteSheet(e, sheet._id)}
+                      title="Delete Sheet"
+                    >
+                      <Trash2 size={13} className="text-white/40 hover:text-red-400 transition-colors" />
+                    </div>
                   </button>
                 ))
               )}
@@ -305,7 +441,7 @@ export default function DatabasePage() {
         
         {/* TOPBAR */}
         {activeSheet && (
-          <div className="flex h-14 shrink-0 items-center justify-between border-b border-white/[0.08] px-5 bg-[#0A0A0A]/80 backdrop-blur-md z-10">
+          <div className="flex h-14 shrink-0 items-center justify-between px-5 bg-[#0A0A0A] z-10 pt-2">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2 text-[15px] font-semibold text-white">
                 <FileSpreadsheet size={16} className="text-indigo-400" />
@@ -355,15 +491,40 @@ export default function DatabasePage() {
         )}
 
         {/* SPREADSHEET CANVAS */}
-        <div className="flex-1 flex flex-col overflow-hidden relative">
+        <div id="spreadsheet-canvas" className="flex-1 flex flex-col overflow-hidden relative bg-[#0A0A0A]">
           {activeSheet ? (
             <>
+              <SpreadsheetMenuBar onAction={handleMenuAction} />
               <SpreadsheetToolbar 
                 activeFormats={activeFormats} 
                 selectedCell={selectedCell} 
                 onFormatChange={(f, v) => {
-                  setActiveFormats({...activeFormats, [f]: v});
-                  gridRef.current?.applyFormat(f, v);
+                  if (f === 'action') {
+                    if (v === 'paint_format' && selectedCell) {
+                      setPaintFormatCopiedStyles(selectedCell.styles || {});
+                      alert('Paint format copied! Click another cell to apply.');
+                    } else if (v === 'print') {
+                      setShowPrintModal(true);
+                    } else if (v === 'insert_comment') {
+                      alert('Insert Comment (Coming Soon)');
+                    } else if (v === 'insert_link') {
+                      alert('Insert Link (Coming Soon)');
+                    } else if (v === 'create_filter') {
+                      gridRef.current?.toggleFilter();
+                    } else {
+                      gridRef.current?.performAction(v);
+                    }
+                  } else if (f === 'merge') {
+                    gridRef.current?.applyFormat('merge', v);
+                  } else if (f === 'function') {
+                    gridRef.current?.insertFunction(v);
+                  } else if (f === 'zoom') {
+                    gridRef.current?.setZoom(v);
+                    setActiveFormats({...activeFormats, zoom: v});
+                  } else {
+                    setActiveFormats({...activeFormats, [f]: v});
+                    gridRef.current?.applyFormat(f, v);
+                  }
                 }} 
               />
               <FormulaBar 
@@ -371,16 +532,44 @@ export default function DatabasePage() {
                 cellValue={selectedCell?.value || ""}
                 onCellValueChange={(val) => {
                   setSelectedCell(prev => prev ? {...prev, value: val} : null);
-                  // Optional: trigger grid update logic if we want real-time formula bar typing to update grid
+                }}
+                onSaveValue={(val) => {
+                  if (selectedCell?.rowId && selectedCell?.colId) {
+                    gridRef.current?.updateCellValue(selectedCell.rowId, selectedCell.colId, val);
+                  }
                 }}
               />
               <SpreadsheetGrid 
                 ref={gridRef}
                 key={activeSheet._id} 
                 sheet={activeSheet} 
+                onSheetUpdate={(updatedSheet: any) => {
+                  setActiveSheet(updatedSheet);
+                  setSheets(sheets.map(s => s._id === updatedSheet._id ? updatedSheet : s));
+                }}
                 onCellSelect={(cell) => {
                   setSelectedCell(cell);
                   setActiveFormats(cell.styles || {});
+                  if (paintFormatCopiedStyles) {
+                     // Apply all copied styles
+                     Object.entries(paintFormatCopiedStyles).forEach(([key, value]) => {
+                         gridRef.current?.applyFormat(key, value);
+                     });
+                     setPaintFormatCopiedStyles(null);
+                  }
+                }}
+              />
+              
+              <SpreadsheetPrintModal
+                isOpen={showPrintModal}
+                onClose={() => setShowPrintModal(false)}
+                onPrint={(settings) => {
+                  setShowPrintModal(false);
+                  if (gridRef.current && (gridRef.current as any).performPrint) {
+                    (gridRef.current as any).performPrint(settings);
+                  } else {
+                    gridRef.current?.performAction('print');
+                  }
                 }}
               />
             </>
@@ -476,15 +665,24 @@ export default function DatabasePage() {
                 </button>
                 <button
                   onClick={handleCreateSheet}
-                  className="rounded-lg bg-white px-5 py-2 text-[13px] font-bold text-black hover:bg-gray-200 transition-all shadow-[0_2px_15px_rgba(255,255,255,0.1)]"
+                  className="rounded-lg bg-indigo-500 px-5 py-2 text-[13px] font-bold text-white hover:bg-indigo-600 transition-all shadow-[0_2px_15px_rgba(99,102,241,0.2)]"
                 >
-                  Create
+                  Create Sheet
                 </button>
               </div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      <DataValidationModal 
+        isOpen={showValidationModal} 
+        onClose={() => setShowValidationModal(false)}
+        selectedRange={selectedCell?.colId ? `Column ${selectedCell.colId.toUpperCase()}` : ''}
+        onApply={(validation) => {
+           gridRef.current?.applyDataValidation(validation);
+        }}
+      />
     </div>
   );
 }

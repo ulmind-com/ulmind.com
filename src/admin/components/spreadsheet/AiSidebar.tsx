@@ -32,7 +32,7 @@ export function AiSidebar({ isOpen, onClose, sheetId }: AiSidebarProps) {
     setIsLoading(true);
 
     try {
-      const res = await fetch(`http://127.0.0.1:5000/api/v1/ai/${sheetId}/query`, {
+      const res = await fetch(`http://localhost:8000/api/v1/ai/${sheetId}/query`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: userMsg })

@@ -28,6 +28,7 @@ import {
   Smartphone,
   Monitor,
 } from "lucide-react";
+import { motion } from "framer-motion";
 import KpiCard from "../components/KpiCard";
 import { getKpiStats, getChartStats } from "../lib/api";
 
@@ -202,49 +203,89 @@ const DashboardPage: React.FC = () => {
   }
 
   return (
-    <div>
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      style={{ paddingBottom: 40 }}
+    >
       {/* Header */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 28 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32 }}>
         <div>
-          <h2 style={{ fontSize: 24, fontWeight: 700, color: "var(--admin-text)", fontFamily: "'Inter', sans-serif" }}>
-            Dashboard
-          </h2>
-          <p style={{ fontSize: 13, color: "var(--admin-text-dim)", marginTop: 4 }}>
-            Real-time overview of your website performance
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <h2 style={{ fontSize: 28, fontWeight: 700, color: "#ffffff", fontFamily: "'Inter', sans-serif", letterSpacing: "-0.02em" }}>
+              Dashboard
+            </h2>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(16, 185, 129, 0.1)", border: "1px solid rgba(16, 185, 129, 0.2)", padding: "4px 10px", borderRadius: 20 }}>
+              <motion.div 
+                animate={{ opacity: [1, 0.3, 1] }} 
+                transition={{ duration: 2, repeat: Infinity }}
+                style={{ width: 6, height: 6, borderRadius: "50%", background: "#10b981", boxShadow: "0 0 8px #10b981" }}
+              />
+              <span style={{ fontSize: 11, fontWeight: 600, color: "#10b981", textTransform: "uppercase", letterSpacing: "0.05em" }}>Live</span>
+            </div>
+          </div>
+          <p style={{ fontSize: 14, color: "#94a3b8", marginTop: 6 }}>
+            Real-time overview of your website performance & analytics.
           </p>
         </div>
       </div>
 
-      {/* KPI Cards */}
-      <div
+      {/* KPI Cards (Staggered Grid) */}
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={{
+          visible: { transition: { staggerChildren: 0.05 } }
+        }}
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
           gap: 20,
-          marginBottom: 32,
+          marginBottom: 40,
         }}
       >
         {kpiCards.map((card, i) => (
-          <KpiCard
+          <motion.div 
             key={card.key}
-            label={card.label}
-            value={card.value}
-            icon={card.icon}
-            gradient={card.gradient}
-            format={card.format}
-            delay={i * 100}
-          />
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0 }
+            }}
+            whileHover={{ scale: 1.02, translateY: -4 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          >
+            <KpiCard
+              label={card.label}
+              value={card.value}
+              icon={card.icon}
+              gradient={card.gradient}
+              format={card.format}
+              delay={0} // handeled by motion parent
+            />
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
-      {/* Chart Period Toggle */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-        <h3 style={{ fontSize: 18, fontWeight: 600, color: "var(--admin-text)" }}>Analytics Charts</h3>
-        <div className="admin-tabs">
-          {["monthly", "weekly", "daily"].map((p) => (
+      {/* Chart Period Toggle (Pill style) */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+        <h3 style={{ fontSize: 20, fontWeight: 600, color: "#ffffff", letterSpacing: "-0.01em" }}>Analytics Overview</h3>
+        <div style={{ display: "flex", background: "rgba(255, 255, 255, 0.03)", padding: 4, borderRadius: 12, border: "1px solid rgba(255, 255, 255, 0.05)" }}>
+          {["daily", "weekly", "monthly"].map((p) => (
             <button
               key={p}
-              className={`admin-tab ${chartPeriod === p ? "active" : ""}`}
+              style={{
+                background: chartPeriod === p ? "rgba(255, 255, 255, 0.1)" : "transparent",
+                color: chartPeriod === p ? "#ffffff" : "#94a3b8",
+                border: "none",
+                padding: "6px 16px",
+                borderRadius: 8,
+                fontSize: 13,
+                fontWeight: chartPeriod === p ? 600 : 500,
+                cursor: "pointer",
+                transition: "all 0.2s",
+                boxShadow: chartPeriod === p ? "0 2px 8px rgba(0,0,0,0.2)" : "none"
+              }}
               onClick={() => setChartPeriod(p)}
             >
               {p.charAt(0).toUpperCase() + p.slice(1)}
@@ -253,28 +294,31 @@ const DashboardPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Charts Grid */}
-      <div
+      {/* Bento Grid Charts */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))",
-          gap: 20,
-          marginBottom: 24,
+          gridTemplateColumns: "repeat(12, 1fr)",
+          gridAutoRows: "minmax(320px, auto)",
+          gap: 24,
         }}
       >
-        {/* Area Chart */}
+        {/* Main Area Chart (Span 8 cols) */}
         {chartSeries.lineData.length > 0 && (
-          <div className="admin-card" style={{ padding: "20px 16px" }}>
-            <h4 style={{ fontSize: 14, fontWeight: 600, color: "var(--admin-text)", marginBottom: 16, paddingLeft: 8 }}>
-              Traffic Overview
+          <div className="admin-card" style={{ gridColumn: "span 8", padding: "24px", background: "rgba(20, 20, 22, 0.7)", backdropFilter: "blur(20px)", border: "1px solid rgba(255, 255, 255, 0.05)", borderRadius: 20 }}>
+            <h4 style={{ fontSize: 15, fontWeight: 600, color: "#ffffff", marginBottom: 24, display: "flex", alignItems: "center", gap: 8 }}>
+              <Activity size={16} color="#7c3aed" /> Traffic Overview
             </h4>
             <ResponsiveContainer width="100%" height={280}>
-              <AreaChart data={chartSeries.lineData}>
+              <AreaChart data={chartSeries.lineData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <ChartGradients />
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(30,41,59,0.5)" />
-                <XAxis dataKey="name" stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} />
-                <YAxis stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} />
-                <Tooltip content={<CustomTooltip />} />
+                <CartesianGrid strokeDasharray="4 4" stroke="rgba(255,255,255,0.03)" vertical={false} />
+                <XAxis dataKey="name" stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} dy={10} />
+                <YAxis stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} dx={-10} />
+                <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'rgba(255,255,255,0.1)', strokeWidth: 1, strokeDasharray: '4 4' }} />
                 {Object.keys(chartSeries.lineData[0] || {})
                   .filter((k) => k !== "name" && k !== "date" && k !== "label")
                   .slice(0, 3)
@@ -287,9 +331,10 @@ const DashboardPage: React.FC = () => {
                         type="monotone"
                         dataKey={key}
                         stroke={colors[i]}
-                        strokeWidth={2}
+                        strokeWidth={3}
                         fill={fills[i]}
                         name={key.replace(/_/g, " ")}
+                        activeDot={{ r: 6, strokeWidth: 0, fill: colors[i] }}
                       />
                     );
                   })}
@@ -298,21 +343,58 @@ const DashboardPage: React.FC = () => {
           </div>
         )}
 
-        {/* Bar Chart */}
-        {chartSeries.barData.length > 0 && (
-          <div className="admin-card" style={{ padding: "20px 16px" }}>
-            <h4 style={{ fontSize: 14, fontWeight: 600, color: "var(--admin-text)", marginBottom: 16, paddingLeft: 8 }}>
-              Statistics Breakdown
+        {/* Pie Chart (Span 4 cols) */}
+        {chartSeries.pieData.length > 0 && (
+          <div className="admin-card" style={{ gridColumn: "span 4", padding: "24px", background: "rgba(20, 20, 22, 0.7)", backdropFilter: "blur(20px)", border: "1px solid rgba(255, 255, 255, 0.05)", borderRadius: 20, display: "flex", flexDirection: "column" }}>
+            <h4 style={{ fontSize: 15, fontWeight: 600, color: "#ffffff", marginBottom: 8, display: "flex", alignItems: "center", gap: 8 }}>
+              <Globe size={16} color="#0ea5e9" /> Distribution
             </h4>
-            <ResponsiveContainer width="100%" height={280}>
-              <BarChart data={chartSeries.barData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(30,41,59,0.5)" />
-                <XAxis dataKey="name" stroke="#64748b" fontSize={10} tickLine={false} axisLine={false} angle={-20} textAnchor="end" height={50} />
-                <YAxis stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} />
-                <Tooltip content={<CustomTooltip />} />
-                <Bar dataKey="value" name="Value" radius={[6, 6, 0, 0]} maxBarSize={40}>
+            <div style={{ flex: 1, position: "relative" }}>
+              <ResponsiveContainer width="100%" height="100%" minHeight={200}>
+                <PieChart>
+                  <Pie
+                    data={chartSeries.pieData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={70}
+                    outerRadius={95}
+                    paddingAngle={6}
+                    dataKey="value"
+                    nameKey="name"
+                    stroke="none"
+                    cornerRadius={8}
+                  >
+                    {chartSeries.pieData.map((_: any, i: number) => (
+                      <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip content={<CustomTooltip />} />
+                </PieChart>
+              </ResponsiveContainer>
+              <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", textAlign: "center" }}>
+                 <span style={{ fontSize: 24, fontWeight: 700, color: "#fff" }}>{chartSeries.pieData.length}</span>
+                 <br />
+                 <span style={{ fontSize: 10, color: "#94a3b8", textTransform: "uppercase" }}>Sources</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Bar Chart (Span 12 cols, full width bento) */}
+        {chartSeries.barData.length > 0 && (
+          <div className="admin-card" style={{ gridColumn: "span 12", padding: "24px", background: "rgba(20, 20, 22, 0.7)", backdropFilter: "blur(20px)", border: "1px solid rgba(255, 255, 255, 0.05)", borderRadius: 20 }}>
+            <h4 style={{ fontSize: 15, fontWeight: 600, color: "#ffffff", marginBottom: 24, display: "flex", alignItems: "center", gap: 8 }}>
+              <Monitor size={16} color="#10b981" /> Statistics Breakdown
+            </h4>
+            <ResponsiveContainer width="100%" height={240}>
+              <BarChart data={chartSeries.barData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="4 4" stroke="rgba(255,255,255,0.03)" vertical={false} />
+                <XAxis dataKey="name" stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} dy={10} />
+                <YAxis stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} dx={-10} />
+                <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.02)' }} />
+                <Bar dataKey="value" name="Value" radius={[6, 6, 0, 0]} maxBarSize={48}>
                   {chartSeries.barData.map((_: any, i: number) => (
-                    <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} fillOpacity={0.85} />
+                    <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} fillOpacity={0.9} />
                   ))}
                 </Bar>
               </BarChart>
@@ -379,8 +461,8 @@ const DashboardPage: React.FC = () => {
             </pre>
           </div>
         )}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

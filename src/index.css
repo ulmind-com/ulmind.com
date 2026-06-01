@@ -244,9 +244,102 @@
 }
 
 /* =========================
+   PRINT STYLES
+   ========================= */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  #spreadsheet-canvas, 
+  #spreadsheet-canvas * {
+    visibility: visible;
+  }
+  
+  @page {
+    size: landscape;
+    margin: 0.5cm;
+  }
+
+  #spreadsheet-canvas {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    z-index: 99999 !important;
+    background: #FFFFFF !important;
+    overflow: visible !important;
+  }
+  
+  #spreadsheet-canvas *,
+  .ulmind-sheets-theme-wrapper,
+  .ag-root-wrapper,
+  .ag-root-wrapper-body,
+  .ag-root {
+    overflow: visible !important;
+  }
+  
+  .no-print,
+  .spreadsheet-menubar,
+  .spreadsheet-toolbar,
+  .formula-bar {
+    display: none !important;
+  }
+  
+  .ulmind-sheets-theme-wrapper {
+    transform: none !important;
+    width: 100% !important;
+    height: auto !important;
+    position: relative !important;
+  }
+  
+  /* Force Light Theme for Printing to save ink and make text visible */
+  .ulmind-sheets-theme {
+    --ag-background-color: #FFFFFF !important;
+    --ag-header-background-color: #F3F4F6 !important;
+    --ag-odd-row-background-color: #FFFFFF !important;
+    --ag-border-color: #E5E7EB !important;
+    --ag-row-border-color: #E5E7EB !important;
+    --ag-data-color: #000000 !important;
+    --ag-header-foreground-color: #374151 !important;
+  }
+
+  .ag-theme-quartz-dark {
+    color: #000000 !important;
+    background: #FFFFFF !important;
+  }
+}
+
+/* =========================
    UTILITIES & ANIMATIONS
    ========================= */
 @layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    height: 4px;
+    width: 4px;
+  }
+  .no-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .no-scrollbar::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 4px;
+  }
+  .no-scrollbar:hover::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  .no-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+  }
+  .no-scrollbar:hover {
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  }
+
   .tracking-premium {
     letter-spacing: 0.2em;
   }
