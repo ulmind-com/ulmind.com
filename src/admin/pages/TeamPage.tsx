@@ -7,6 +7,7 @@ import React, { useState, useEffect } from "react";
 import {
   ShieldCheck, Plus, X, Loader2, Edit2, Trash2, Mail, User, Shield, KeyRound, Briefcase
 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   AdminUser,
   listTeamAPI,
@@ -147,14 +148,19 @@ const TeamPage: React.FC = () => {
   };
 
   return (
-    <div style={{ position: "relative", minHeight: "100%" }}>
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      style={{ position: "relative", minHeight: "100%", paddingBottom: 40 }}
+    >
       {/* Header */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32 }}>
         <div>
-          <h2 style={{ fontSize: 26, fontWeight: 700, color: "var(--admin-text)", fontFamily: "'Inter', sans-serif" }}>
+          <h2 style={{ fontSize: 28, fontWeight: 800, color: "#ffffff", fontFamily: "'Inter', sans-serif", letterSpacing: "-0.02em" }}>
             Team Management
           </h2>
-          <p style={{ fontSize: 14, color: "var(--admin-text-dim)", marginTop: 6 }}>
+          <p style={{ fontSize: 14, color: "#94a3b8", marginTop: 6 }}>
             Add and manage internal staff access
           </p>
         </div>
@@ -177,11 +183,17 @@ const TeamPage: React.FC = () => {
           {error}
         </div>
       ) : (
-        <div className="admin-card" style={{ padding: 0, overflow: "hidden" }}>
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="admin-card" 
+          style={{ padding: 0, overflow: "hidden", background: "rgba(20, 20, 22, 0.7)", backdropFilter: "blur(20px)", border: "1px solid rgba(255, 255, 255, 0.05)", borderRadius: 20 }}
+        >
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
               <thead>
-                <tr style={{ background: "rgba(255,255,255,0.03)", borderBottom: "1px solid var(--admin-border)", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--admin-text-dim)" }}>
+                <tr style={{ background: "rgba(255,255,255,0.02)", borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.05em", color: "#94a3b8" }}>
                   <th style={{ padding: "16px 24px", fontWeight: 600 }}>Member</th>
                   <th style={{ padding: "16px 24px", fontWeight: 600 }}>Position</th>
                   <th style={{ padding: "16px 24px", fontWeight: 600 }}>Role</th>
@@ -189,9 +201,18 @@ const TeamPage: React.FC = () => {
                   <th style={{ padding: "16px 24px", fontWeight: 600, textAlign: "right" }}>Actions</th>
                 </tr>
               </thead>
-              <tbody>
+              <motion.tbody
+                initial="hidden"
+                animate="visible"
+                variants={{ visible: { transition: { staggerChildren: 0.05 } } }}
+              >
                 {team.map((member) => (
-                  <tr key={member._id} style={{ borderBottom: "1px solid var(--admin-border)", transition: "background 0.2s" }} className="hover:bg-white/5">
+                  <motion.tr 
+                    variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}
+                    key={member._id} 
+                    style={{ borderBottom: "1px solid rgba(255,255,255,0.02)", transition: "background 0.2s" }} 
+                    className="hover:bg-white/[0.02]"
+                  >
                     
                     <td style={{ padding: "16px 24px" }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
@@ -220,7 +241,9 @@ const TeamPage: React.FC = () => {
                       <span style={{ 
                         fontSize: 12, padding: "4px 10px", borderRadius: 20, fontWeight: 600, textTransform: "capitalize",
                         background: member.role === "admin" ? "rgba(124, 58, 237, 0.15)" : "rgba(56, 189, 248, 0.15)",
-                        color: member.role === "admin" ? "#a78bfa" : "#7dd3fc"
+                        color: member.role === "admin" ? "#a78bfa" : "#38bdf8",
+                        border: `1px solid ${member.role === "admin" ? "rgba(124, 58, 237, 0.3)" : "rgba(56, 189, 248, 0.3)"}`,
+                        boxShadow: `0 0 10px ${member.role === "admin" ? "rgba(124, 58, 237, 0.2)" : "rgba(56, 189, 248, 0.2)"}`
                       }}>
                         <ShieldCheck size={12} style={{ display: "inline", marginRight: 4, marginBottom: 2 }} />
                         {member.role}
@@ -228,7 +251,7 @@ const TeamPage: React.FC = () => {
                     </td>
 
                     <td style={{ padding: "16px 24px" }}>
-                      <span className={`admin-badge ${member.status === "Active" ? "admin-badge-success" : "admin-badge-warning"}`}>
+                      <span className={`admin-badge ${member.status === "Active" ? "admin-badge-success" : "admin-badge-warning"}`} style={{ boxShadow: member.status === "Active" ? "0 0 10px rgba(16, 185, 129, 0.2)" : "0 0 10px rgba(245, 158, 11, 0.2)" }}>
                         {member.status}
                       </span>
                     </td>
@@ -255,33 +278,38 @@ const TeamPage: React.FC = () => {
                       </div>
                     </td>
 
-                  </tr>
+                  </motion.tr>
                 ))}
-              </tbody>
+              </motion.tbody>
             </table>
           </div>
-        </div>
+        </motion.div>
       )}
 
 
       {/* ── Sliding Side Panel Overlay ── */}
-      {panelMode && (
-        <>
-          <div 
-            onClick={closePanel}
-            style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)", zIndex: 100, animation: "fadeIn 0.2s ease" }}
-            className="animate-in fade-in duration-200"
-          />
-          
-          <div 
-            style={{ 
-              position: "fixed", top: 0, right: 0, bottom: 0, width: "100%", maxWidth: 500, 
-              background: "var(--admin-bg-card)", borderLeft: "1px solid var(--admin-border)", 
-              zIndex: 101, boxShadow: "-10px 0 40px rgba(0,0,0,0.3)", display: "flex", flexDirection: "column",
-              animation: "slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)"
-            }}
-            className="animate-in slide-in-from-right duration-300"
-          >
+      <AnimatePresence>
+        {panelMode && (
+          <>
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={closePanel}
+              style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)", backdropFilter: "blur(6px)", zIndex: 100 }}
+            />
+            
+            <motion.div 
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              style={{ 
+                position: "fixed", top: 0, right: 0, bottom: 0, width: "100%", maxWidth: 500, 
+                background: "rgba(20, 20, 22, 0.95)", backdropFilter: "blur(40px)", borderLeft: "1px solid rgba(255, 255, 255, 0.1)", 
+                zIndex: 101, boxShadow: "-20px 0 60px rgba(0,0,0,0.5)", display: "flex", flexDirection: "column"
+              }}
+            >
             {/* Panel Header */}
             <div style={{ padding: "24px 32px", borderBottom: "1px solid var(--admin-border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <h3 style={{ fontSize: 20, fontWeight: 600, color: "var(--admin-text)" }}>
@@ -311,9 +339,9 @@ const TeamPage: React.FC = () => {
                   <label style={{ fontSize: 12, fontWeight: 600, color: "#94a3b8", display: "block", marginBottom: 8, textTransform: "uppercase" }}>Email Address *</label>
                   <div style={inputStyle}>
                     <Mail size={16} style={iconAdornment} />
-                    <input type="email" required className="admin-input" placeholder="user@ulmind.com" value={email} onChange={e => setEmail(e.target.value)} style={{ paddingLeft: 42 }} disabled={panelMode === "edit"} />
+                    <input type="email" required className="admin-input" placeholder="user@ulmind.com" value={email} onChange={e => setEmail(e.target.value)} style={{ paddingLeft: 42, background: "rgba(0,0,0,0.2)", border: "1px solid rgba(255,255,255,0.1)" }} disabled={panelMode === "edit"} />
                   </div>
-                  {panelMode === "edit" && <p style={{ fontSize: 11, color: "var(--admin-text-muted)", marginTop: 4 }}>Email cannot be changed after creation.</p>}
+                  {panelMode === "edit" && <p style={{ fontSize: 11, color: "#64748b", marginTop: 4 }}>Email cannot be changed after creation.</p>}
                 </div>
 
                 {/* Full Name */}
@@ -321,7 +349,7 @@ const TeamPage: React.FC = () => {
                   <label style={{ fontSize: 12, fontWeight: 600, color: "#94a3b8", display: "block", marginBottom: 8, textTransform: "uppercase" }}>Full Name</label>
                   <div style={inputStyle}>
                     <User size={16} style={iconAdornment} />
-                    <input type="text" className="admin-input" placeholder="John Doe" value={fullName} onChange={e => setFullName(e.target.value)} style={{ paddingLeft: 42 }} />
+                    <input type="text" className="admin-input" placeholder="John Doe" value={fullName} onChange={e => setFullName(e.target.value)} style={{ paddingLeft: 42, background: "rgba(0,0,0,0.2)", border: "1px solid rgba(255,255,255,0.1)" }} />
                   </div>
                 </div>
 
@@ -330,7 +358,7 @@ const TeamPage: React.FC = () => {
                   <label style={{ fontSize: 12, fontWeight: 600, color: "#94a3b8", display: "block", marginBottom: 8, textTransform: "uppercase" }}>Internal Position</label>
                   <div style={inputStyle}>
                     <Briefcase size={16} style={iconAdornment} />
-                    <input type="text" className="admin-input" placeholder="e.g. Content Writer" value={position} onChange={e => setPosition(e.target.value)} style={{ paddingLeft: 42 }} />
+                    <input type="text" className="admin-input" placeholder="e.g. Content Writer" value={position} onChange={e => setPosition(e.target.value)} style={{ paddingLeft: 42, background: "rgba(0,0,0,0.2)", border: "1px solid rgba(255,255,255,0.1)" }} />
                   </div>
                 </div>
 
@@ -339,14 +367,14 @@ const TeamPage: React.FC = () => {
                   <label style={{ fontSize: 12, fontWeight: 600, color: "#94a3b8", display: "block", marginBottom: 8, textTransform: "uppercase" }}>Access Role</label>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                     
-                    <button type="button" onClick={() => setRole("editor")} style={{ padding: "12px", borderRadius: 12, border: role === "editor" ? "2px solid #38bdf8" : "2px solid var(--admin-border)", background: role === "editor" ? "rgba(56,189,248,0.1)" : "rgba(255,255,255,0.02)", textAlign: "left", cursor: "pointer", transition: "all 0.2s" }}>
-                      <div style={{ fontWeight: 600, color: role === "editor" ? "#38bdf8" : "var(--admin-text)", fontSize: 14 }}>Editor</div>
-                      <div style={{ fontSize: 11, color: "var(--admin-text-muted)", marginTop: 4 }}>Can edit articles & meta.</div>
+                    <button type="button" onClick={() => setRole("editor")} style={{ padding: "12px", borderRadius: 12, border: role === "editor" ? "1px solid rgba(56, 189, 248, 0.5)" : "1px solid rgba(255,255,255,0.1)", background: role === "editor" ? "rgba(56,189,248,0.1)" : "rgba(0,0,0,0.2)", textAlign: "left", cursor: "pointer", transition: "all 0.2s", boxShadow: role === "editor" ? "0 0 15px rgba(56, 189, 248, 0.15)" : "none" }}>
+                      <div style={{ fontWeight: 600, color: role === "editor" ? "#38bdf8" : "#e2e8f0", fontSize: 14 }}>Editor</div>
+                      <div style={{ fontSize: 11, color: "#64748b", marginTop: 4 }}>Can edit articles & meta.</div>
                     </button>
 
-                    <button type="button" onClick={() => setRole("admin")} style={{ padding: "12px", borderRadius: 12, border: role === "admin" ? "2px solid #a78bfa" : "2px solid var(--admin-border)", background: role === "admin" ? "rgba(167,139,250,0.1)" : "rgba(255,255,255,0.02)", textAlign: "left", cursor: "pointer", transition: "all 0.2s" }}>
-                      <div style={{ fontWeight: 600, color: role === "admin" ? "#a78bfa" : "var(--admin-text)", fontSize: 14 }}>Admin</div>
-                      <div style={{ fontSize: 11, color: "var(--admin-text-muted)", marginTop: 4 }}>Full system access.</div>
+                    <button type="button" onClick={() => setRole("admin")} style={{ padding: "12px", borderRadius: 12, border: role === "admin" ? "1px solid rgba(167, 139, 250, 0.5)" : "1px solid rgba(255,255,255,0.1)", background: role === "admin" ? "rgba(167,139,250,0.1)" : "rgba(0,0,0,0.2)", textAlign: "left", cursor: "pointer", transition: "all 0.2s", boxShadow: role === "admin" ? "0 0 15px rgba(167, 139, 250, 0.15)" : "none" }}>
+                      <div style={{ fontWeight: 600, color: role === "admin" ? "#a78bfa" : "#e2e8f0", fontSize: 14 }}>Admin</div>
+                      <div style={{ fontSize: 11, color: "#64748b", marginTop: 4 }}>Full system access.</div>
                     </button>
                     
                   </div>
@@ -358,9 +386,9 @@ const TeamPage: React.FC = () => {
                     <label style={{ fontSize: 12, fontWeight: 600, color: "#94a3b8", display: "block", marginBottom: 8, textTransform: "uppercase" }}>Temporary Password *</label>
                     <div style={inputStyle}>
                       <KeyRound size={16} style={iconAdornment} />
-                      <input type="text" required minLength={6} className="admin-input" placeholder="Provides temporary access" value={initialPassword} onChange={e => setInitialPassword(e.target.value)} style={{ paddingLeft: 42 }} />
+                      <input type="text" required minLength={6} className="admin-input" placeholder="Provides temporary access" value={initialPassword} onChange={e => setInitialPassword(e.target.value)} style={{ paddingLeft: 42, background: "rgba(0,0,0,0.2)", border: "1px solid rgba(255,255,255,0.1)" }} />
                     </div>
-                    <p style={{ fontSize: 11, color: "var(--admin-text-muted)", marginTop: 6 }}>The user will be forced to change this upon their first login.</p>
+                    <p style={{ fontSize: 11, color: "#64748b", marginTop: 6 }}>The user will be forced to change this upon their first login.</p>
                   </div>
                 )}
 
@@ -368,7 +396,7 @@ const TeamPage: React.FC = () => {
                 {panelMode === "edit" && (
                   <div>
                     <label style={{ fontSize: 12, fontWeight: 600, color: "#94a3b8", display: "block", marginBottom: 8, textTransform: "uppercase" }}>Account Status</label>
-                    <select className="admin-input" value={status} onChange={e => setStatus(e.target.value)} style={{ cursor: "pointer", WebkitAppearance: "menulist" }}>
+                    <select className="admin-input" value={status} onChange={e => setStatus(e.target.value)} style={{ cursor: "pointer", WebkitAppearance: "menulist", background: "rgba(0,0,0,0.2)", border: "1px solid rgba(255,255,255,0.1)" }}>
                       <option value="Active">Active (Permitted)</option>
                       <option value="Revoked">Revoked (Blocked)</option>
                     </select>
@@ -379,7 +407,7 @@ const TeamPage: React.FC = () => {
             </div>
 
             {/* Panel Footer */}
-            <div style={{ padding: "24px 32px", borderTop: "1px solid var(--admin-border)", background: "rgba(0,0,0,0.2)", display: "flex", justifyContent: "flex-end", gap: 12 }}>
+            <div style={{ padding: "24px 32px", borderTop: "1px solid rgba(255, 255, 255, 0.05)", background: "rgba(0,0,0,0.2)", display: "flex", justifyContent: "flex-end", gap: 12 }}>
               <button type="button" onClick={closePanel} className="admin-btn admin-btn-ghost" disabled={formLoading}>
                 Cancel
               </button>
@@ -388,22 +416,11 @@ const TeamPage: React.FC = () => {
               </button>
             </div>
             
-          </div>
+          </motion.div>
         </>
       )}
-
-      {/* Global Style overrides for sliding panel */}
-      <style>{`
-        @keyframes slideIn {
-          from { transform: translateX(100%); }
-          to { transform: translateX(0); }
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-      `}</style>
-    </div>
+      </AnimatePresence>
+    </motion.div>
   );
 }
 
