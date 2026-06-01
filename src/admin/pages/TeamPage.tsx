@@ -202,92 +202,128 @@ const TeamPage: React.FC = () => {
             <motion.div
               key={member._id}
               variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-              whileHover={{ y: -4, boxShadow: "0 12px 40px rgba(0,0,0,0.4)", borderColor: "rgba(255,255,255,0.15)" }}
+              whileHover={{ 
+                y: -6, 
+                boxShadow: "0 20px 40px rgba(0,0,0,0.6), 0 0 30px rgba(225, 29, 72, 0.15)", 
+                borderColor: "rgba(225, 29, 72, 0.4)",
+                background: "rgba(25, 20, 22, 0.85)"
+              }}
               className="admin-card"
               style={{
                 position: "relative",
-                padding: 24,
+                padding: 28,
                 display: "flex",
                 flexDirection: "column",
-                gap: 16,
-                background: "rgba(20, 20, 22, 0.6)",
-                backdropFilter: "blur(20px)",
-                border: "1px solid rgba(255, 255, 255, 0.05)",
-                borderRadius: 20,
-                overflow: "hidden"
+                gap: 20,
+                background: "rgba(20, 18, 20, 0.7)",
+                backdropFilter: "blur(24px)",
+                border: "1px solid rgba(225, 29, 72, 0.15)",
+                borderRadius: 24,
+                overflow: "hidden",
+                transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)"
               }}
             >
-              {/* Background Glow */}
+              {/* Premium Background Glow */}
               <div style={{
                 position: "absolute",
-                top: -30,
-                right: -30,
+                top: -50,
+                right: -50,
+                width: 200,
+                height: 200,
+                borderRadius: "50%",
+                background: "linear-gradient(135deg, #e11d48, #9f1239)",
+                opacity: member.role === "admin" ? 0.25 : 0.15,
+                filter: "blur(60px)",
+                pointerEvents: "none",
+                transition: "all 0.3s ease"
+              }} className="glow-effect" />
+
+              <div style={{
+                position: "absolute",
+                bottom: -50,
+                left: -30,
                 width: 150,
                 height: 150,
                 borderRadius: "50%",
-                background: member.role === "admin" ? "linear-gradient(135deg, #ef4444, #dc2626)" : "linear-gradient(135deg, #0ea5e9, #3b82f6)",
-                opacity: 0.15,
-                filter: "blur(40px)",
+                background: "linear-gradient(135deg, #f43f5e, #be123c)",
+                opacity: 0.1,
+                filter: "blur(50px)",
                 pointerEvents: "none"
               }} />
 
-              {/* Top Section: Avatar & Info */}
-              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", zIndex: 1 }}>
-                <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
-                  <div style={{ position: "relative" }}>
-                    {/* Avatar */}
-                    {member.profile_photo?.url ? (
-                      <img src={member.profile_photo.url} alt={member.email} style={{ width: 56, height: 56, borderRadius: "50%", objectFit: "cover", border: "2px solid rgba(255,255,255,0.1)", boxShadow: "0 4px 15px rgba(0,0,0,0.3)" }} />
-                    ) : (
-                      <div style={{ width: 56, height: 56, borderRadius: "50%", background: member.role === "admin" ? "linear-gradient(135deg, #ef4444, #dc2626)" : "linear-gradient(135deg, #0ea5e9, #3b82f6)", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontSize: 22, fontWeight: 700, boxShadow: "0 4px 15px rgba(0,0,0,0.3)" }}>
+              {/* Top Section: Avatar & Role Badge */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", zIndex: 1 }}>
+                <div style={{ position: "relative", flexShrink: 0 }}>
+                  {/* Avatar */}
+                  {member.profile_photo?.url ? (
+                    <div style={{ position: "relative", width: 64, height: 64 }}>
+                      <div style={{ position: "absolute", inset: -3, background: "linear-gradient(135deg, #f43f5e, #9f1239)", borderRadius: "50%", zIndex: 0, opacity: 0.8, filter: "blur(4px)" }} />
+                      <img src={member.profile_photo.url} alt={member.email} style={{ width: 64, height: 64, borderRadius: "50%", objectFit: "cover", position: "relative", zIndex: 1, border: "2px solid #2a1b1f" }} />
+                    </div>
+                  ) : (
+                    <div style={{ position: "relative", width: 64, height: 64 }}>
+                      <div style={{ position: "absolute", inset: -3, background: "linear-gradient(135deg, #f43f5e, #9f1239)", borderRadius: "50%", zIndex: 0, opacity: 0.8, filter: "blur(4px)" }} />
+                      <div style={{ width: 64, height: 64, borderRadius: "50%", background: "linear-gradient(135deg, #be123c, #881337)", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontSize: 24, fontWeight: 800, position: "relative", zIndex: 1, border: "2px solid #2a1b1f", textShadow: "0 2px 10px rgba(0,0,0,0.5)" }}>
                         {member.email.charAt(0).toUpperCase()}
                       </div>
-                    )}
-                    {/* Status Dot */}
-                    <div style={{
-                      position: "absolute",
-                      bottom: 0,
-                      right: 0,
-                      width: 14,
-                      height: 14,
-                      borderRadius: "50%",
-                      background: member.status === "Active" ? "#10b981" : "#f59e0b",
-                      border: "3px solid #141416",
-                      boxShadow: `0 0 10px ${member.status === "Active" ? "#10b981" : "#f59e0b"}`
-                    }} title={member.status} />
-                  </div>
-                  
-                  <div style={{ minWidth: 0, maxWidth: 140 }}>
-                    <h3 style={{ fontSize: 16, fontWeight: 700, color: "#fff", display: "flex", alignItems: "center", gap: 8, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                      {member.full_name || "—"}
-                    </h3>
-                    <p style={{ fontSize: 13, color: "var(--admin-text-muted)", marginTop: 4, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{member.email}</p>
-                    {member._id === currentUser?._id && <span style={{ display: "inline-block", marginTop: 6, fontSize: 9, padding: "2px 6px", background: "rgba(255,255,255,0.1)", borderRadius: 12, color: "var(--admin-text)", fontWeight: 800 }}>YOU</span>}
-                  </div>
+                    </div>
+                  )}
+                  {/* Status Dot */}
+                  <div style={{
+                    position: "absolute",
+                    bottom: 2,
+                    right: 2,
+                    width: 16,
+                    height: 16,
+                    borderRadius: "50%",
+                    background: member.status === "Active" ? "#10b981" : "#f43f5e",
+                    border: "3px solid #2a1b1f",
+                    boxShadow: `0 0 12px ${member.status === "Active" ? "rgba(16,185,129,0.6)" : "rgba(244,63,94,0.6)"}`,
+                    zIndex: 2
+                  }} title={member.status} />
                 </div>
                 
-                {/* Role Badge inside card top right */}
-                <div style={{ padding: "6px 12px", borderRadius: 10, background: member.role === "admin" ? "rgba(239, 68, 68, 0.15)" : "rgba(56, 189, 248, 0.15)", border: `1px solid ${member.role === "admin" ? "rgba(239, 68, 68, 0.3)" : "rgba(56, 189, 248, 0.3)"}`, display: "flex", alignItems: "center", gap: 6, flexShrink: 0, boxShadow: `0 0 15px ${member.role === "admin" ? "rgba(239, 68, 68, 0.1)" : "rgba(56, 189, 248, 0.1)"}` }}>
-                  <ShieldCheck size={14} color={member.role === "admin" ? "#f87171" : "#38bdf8"} />
-                  <span style={{ fontSize: 11, fontWeight: 700, color: member.role === "admin" ? "#f87171" : "#38bdf8", textTransform: "uppercase", letterSpacing: "0.05em" }}>{member.role}</span>
+                {/* Role Badge top right */}
+                <div style={{ 
+                  padding: "6px 12px", 
+                  borderRadius: 12, 
+                  background: member.role === "admin" ? "rgba(225, 29, 72, 0.15)" : "rgba(255, 255, 255, 0.05)", 
+                  border: `1px solid ${member.role === "admin" ? "rgba(225, 29, 72, 0.4)" : "rgba(255, 255, 255, 0.15)"}`, 
+                  display: "flex", 
+                  alignItems: "center", 
+                  gap: 6, 
+                  flexShrink: 0, 
+                  boxShadow: member.role === "admin" ? "0 4px 15px rgba(225, 29, 72, 0.15)" : "none" 
+                }}>
+                  <ShieldCheck size={14} color={member.role === "admin" ? "#fb7185" : "#e2e8f0"} />
+                  <span style={{ fontSize: 11, fontWeight: 800, color: member.role === "admin" ? "#fb7185" : "#e2e8f0", textTransform: "uppercase", letterSpacing: "0.08em" }}>{member.role}</span>
                 </div>
               </div>
 
-              <div style={{ height: 1, background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)", margin: "4px 0" }} />
+              {/* Name & Email Info (Full Width) */}
+              <div style={{ minWidth: 0, width: "100%", zIndex: 1, marginTop: -8 }}>
+                <h3 style={{ fontSize: 20, fontWeight: 800, color: "#fff", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", letterSpacing: "-0.01em", marginBottom: 4 }}>
+                  {member.full_name || "—"}
+                </h3>
+                <p style={{ fontSize: 14, color: "#cbd5e1", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", fontWeight: 500 }}>{member.email}</p>
+                {member._id === currentUser?._id && <span style={{ display: "inline-block", marginTop: 12, fontSize: 10, padding: "3px 8px", background: "rgba(225, 29, 72, 0.2)", border: "1px solid rgba(225, 29, 72, 0.4)", borderRadius: 12, color: "#fda4af", fontWeight: 800, letterSpacing: "0.05em" }}>YOU</span>}
+              </div>
+
+              <div style={{ height: 1, background: "linear-gradient(90deg, transparent, rgba(225,29,72,0.3), transparent)", margin: "4px 0", opacity: 0.5 }} />
 
               {/* Bottom Section: Details & Actions */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", zIndex: 1 }}>
                 <div>
-                  <p style={{ fontSize: 11, color: "var(--admin-text-dim)", textTransform: "uppercase", fontWeight: 700, letterSpacing: "0.05em" }}>Position</p>
-                  <p style={{ fontSize: 14, color: "#e2e8f0", fontWeight: 500, marginTop: 4 }}>{member.position || "Staff"}</p>
+                  <p style={{ fontSize: 11, color: "#94a3b8", textTransform: "uppercase", fontWeight: 700, letterSpacing: "0.08em" }}>Position</p>
+                  <p style={{ fontSize: 15, color: "#f8fafc", fontWeight: 600, marginTop: 4 }}>{member.position || "Staff Member"}</p>
                 </div>
                 
-                <div style={{ display: "flex", gap: 8 }}>
-                  <button onClick={() => openEditPanel(member)} className="admin-btn-ghost" style={{ width: 36, height: 36, padding: 0, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s" }} onMouseEnter={e => e.currentTarget.style.background="rgba(255,255,255,0.1)"} onMouseLeave={e => e.currentTarget.style.background="transparent"} title="Edit">
-                    <Edit2 size={16} />
+                <div style={{ display: "flex", gap: 10 }}>
+                  <button onClick={() => openEditPanel(member)} className="admin-btn-ghost" style={{ width: 40, height: 40, padding: 0, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s", color: "#e2e8f0" }} onMouseEnter={e => { e.currentTarget.style.background="rgba(255,255,255,0.1)"; e.currentTarget.style.color="#fff"; }} onMouseLeave={e => { e.currentTarget.style.background="transparent"; e.currentTarget.style.color="#e2e8f0"; }} title="Edit">
+                    <Edit2 size={18} />
                   </button>
-                  <button onClick={() => handleDelete(member._id, member.full_name || member.email)} style={{ width: 36, height: 36, padding: 0, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", color: "#f87171", border: "1px solid rgba(225,29,72,0.2)", background: "rgba(225,29,72,0.05)", transition: "all 0.2s", opacity: member._id === currentUser?._id ? 0.3 : 1, cursor: member._id === currentUser?._id ? "not-allowed" : "pointer" }} title="Delete" disabled={member._id === currentUser?._id} onMouseEnter={e => e.currentTarget.style.background="rgba(225,29,72,0.15)"} onMouseLeave={e => e.currentTarget.style.background="rgba(225,29,72,0.05)"}>
-                    <Trash2 size={16} />
+                  <button onClick={() => handleDelete(member._id, member.full_name || member.email)} style={{ width: 40, height: 40, padding: 0, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", color: "#fda4af", border: "1px solid rgba(225,29,72,0.3)", background: "rgba(225,29,72,0.1)", transition: "all 0.2s", opacity: member._id === currentUser?._id ? 0.3 : 1, cursor: member._id === currentUser?._id ? "not-allowed" : "pointer" }} title="Delete" disabled={member._id === currentUser?._id} onMouseEnter={e => { if(member._id !== currentUser?._id) e.currentTarget.style.background="rgba(225,29,72,0.25)"; }} onMouseLeave={e => { if(member._id !== currentUser?._id) e.currentTarget.style.background="rgba(225,29,72,0.1)"; }}>
+                    <Trash2 size={18} />
                   </button>
                 </div>
               </div>
