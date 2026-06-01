@@ -51,8 +51,8 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 const ChartGradients = () => (
   <defs>
     <linearGradient id="gradientViolet" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stopColor="#7c3aed" stopOpacity={0.4} />
-      <stop offset="100%" stopColor="#7c3aed" stopOpacity={0.02} />
+      <stop offset="0%" stopColor="#ef4444" stopOpacity={0.4} />
+      <stop offset="100%" stopColor="#ef4444" stopOpacity={0.02} />
     </linearGradient>
     <linearGradient id="gradientRose" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stopColor="#e11d48" stopOpacity={0.3} />
@@ -70,7 +70,7 @@ const ChartGradients = () => (
 );
 
 /* ── PIE Chart Colors ─────────────────────────────────────── */
-const PIE_COLORS = ["#7c3aed", "#e11d48", "#10b981", "#f59e0b", "#0ea5e9", "#8b5cf6", "#f43f5e", "#06b6d4"];
+const PIE_COLORS = ["#ef4444", "#e11d48", "#10b981", "#f59e0b", "#0ea5e9", "#f87171", "#f43f5e", "#06b6d4"];
 
 const DashboardPage: React.FC = () => {
   const [kpiData, setKpiData] = useState<any>(null);
@@ -104,12 +104,12 @@ const DashboardPage: React.FC = () => {
     if (!kpiData) return [];
 
     const iconMap: Record<string, { icon: React.ReactNode; gradient: string }> = {
-      total_visitors: { icon: <Users size={22} color="#fff" />, gradient: "linear-gradient(135deg, #7c3aed, #6d28d9)" },
+      total_visitors: { icon: <Users size={22} color="#fff" />, gradient: "linear-gradient(135deg, #ef4444, #dc2626)" },
       total_pageviews: { icon: <Eye size={22} color="#fff" />, gradient: "linear-gradient(135deg, #e11d48, #be123c)" },
       unique_sessions: { icon: <MousePointerClick size={22} color="#fff" />, gradient: "linear-gradient(135deg, #0ea5e9, #0284c7)" },
       avg_time_spent: { icon: <Clock size={22} color="#fff" />, gradient: "linear-gradient(135deg, #f59e0b, #d97706)" },
       total_tracking: { icon: <Activity size={22} color="#fff" />, gradient: "linear-gradient(135deg, #10b981, #059669)" },
-      countries: { icon: <Globe size={22} color="#fff" />, gradient: "linear-gradient(135deg, #8b5cf6, #7c3aed)" },
+      countries: { icon: <Globe size={22} color="#fff" />, gradient: "linear-gradient(135deg, #f87171, #ef4444)" },
       desktop_users: { icon: <Monitor size={22} color="#fff" />, gradient: "linear-gradient(135deg, #06b6d4, #0891b2)" },
       mobile_users: { icon: <Smartphone size={22} color="#fff" />, gradient: "linear-gradient(135deg, #f43f5e, #e11d48)" },
     };
@@ -119,7 +119,7 @@ const DashboardPage: React.FC = () => {
       return Object.entries(kpiData).map(([key, value]) => {
         const mapped = iconMap[key] || {
           icon: <Activity size={22} color="#fff" />,
-          gradient: "linear-gradient(135deg, #7c3aed, #6d28d9)",
+          gradient: "linear-gradient(135deg, #ef4444, #dc2626)",
         };
         return {
           key,
@@ -146,6 +146,13 @@ const DashboardPage: React.FC = () => {
     if (Array.isArray(chartData)) {
       lineData = chartData;
       barData = chartData;
+      if (chartData.length > 0) {
+        const numKeys = Object.keys(chartData[0]).filter(k => typeof chartData[0][k] === 'number');
+        if (numKeys.length > 0) {
+          const mainKey = numKeys[0];
+          pieData = chartData.map(d => ({ name: d.name || d.date || 'Unknown', value: d[mainKey] }));
+        }
+      }
     } else if (typeof chartData === "object") {
       // Check for common chart data keys
       if (chartData.line_chart || chartData.timeseries || chartData.data) {
@@ -310,7 +317,7 @@ const DashboardPage: React.FC = () => {
         {chartSeries.lineData.length > 0 && (
           <div className="admin-card" style={{ gridColumn: "span 8", padding: "24px", background: "rgba(20, 20, 22, 0.7)", backdropFilter: "blur(20px)", border: "1px solid rgba(255, 255, 255, 0.05)", borderRadius: 20 }}>
             <h4 style={{ fontSize: 15, fontWeight: 600, color: "#ffffff", marginBottom: 24, display: "flex", alignItems: "center", gap: 8 }}>
-              <Activity size={16} color="#7c3aed" /> Traffic Overview
+              <Activity size={16} color="#ef4444" /> Traffic Overview
             </h4>
             <ResponsiveContainer width="100%" height={280}>
               <AreaChart data={chartSeries.lineData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
@@ -323,7 +330,7 @@ const DashboardPage: React.FC = () => {
                   .filter((k) => k !== "name" && k !== "date" && k !== "label")
                   .slice(0, 3)
                   .map((key, i) => {
-                    const colors = ["#7c3aed", "#e11d48", "#10b981"];
+                    const colors = ["#ef4444", "#e11d48", "#10b981"];
                     const fills = ["url(#gradientViolet)", "url(#gradientRose)", "url(#gradientEmerald)"];
                     return (
                       <Area
@@ -371,11 +378,20 @@ const DashboardPage: React.FC = () => {
                   <Tooltip content={<CustomTooltip />} />
                 </PieChart>
               </ResponsiveContainer>
-              <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", textAlign: "center" }}>
+              <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", textAlign: "center", pointerEvents: "none" }}>
                  <span style={{ fontSize: 24, fontWeight: 700, color: "#fff" }}>{chartSeries.pieData.length}</span>
                  <br />
-                 <span style={{ fontSize: 10, color: "#94a3b8", textTransform: "uppercase" }}>Sources</span>
+                 <span style={{ fontSize: 10, color: "#94a3b8", textTransform: "uppercase" }}>Data</span>
               </div>
+            </div>
+            {/* Legend */}
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center", marginTop: 8 }}>
+              {chartSeries.pieData.map((entry: any, i: number) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "#94a3b8" }}>
+                  <div style={{ width: 8, height: 8, borderRadius: "50%", background: PIE_COLORS[i % PIE_COLORS.length] }} />
+                  {entry.name}
+                </div>
+              ))}
             </div>
           </div>
         )}
@@ -392,53 +408,18 @@ const DashboardPage: React.FC = () => {
                 <XAxis dataKey="name" stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} dy={10} />
                 <YAxis stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} dx={-10} />
                 <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.02)' }} />
-                <Bar dataKey="value" name="Value" radius={[6, 6, 0, 0]} maxBarSize={48}>
-                  {chartSeries.barData.map((_: any, i: number) => (
-                    <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} fillOpacity={0.9} />
+                {Object.keys(chartSeries.barData[0] || {})
+                  .filter((k) => k !== "name" && k !== "date" && k !== "label")
+                  .slice(0, 3)
+                  .map((key, i) => (
+                    <Bar key={key} dataKey={key} name={key.replace(/_/g, " ")} radius={[6, 6, 0, 0]} maxBarSize={48} fill={PIE_COLORS[i % PIE_COLORS.length]} fillOpacity={0.9} />
                   ))}
-                </Bar>
               </BarChart>
             </ResponsiveContainer>
           </div>
         )}
 
-        {/* Pie Chart */}
-        {chartSeries.pieData.length > 0 && (
-          <div className="admin-card" style={{ padding: "20px 16px" }}>
-            <h4 style={{ fontSize: 14, fontWeight: 600, color: "var(--admin-text)", marginBottom: 16, paddingLeft: 8 }}>
-              Distribution
-            </h4>
-            <ResponsiveContainer width="100%" height={280}>
-              <PieChart>
-                <Pie
-                  data={chartSeries.pieData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={100}
-                  paddingAngle={4}
-                  dataKey="value"
-                  nameKey="name"
-                  stroke="none"
-                >
-                  {chartSeries.pieData.map((_: any, i: number) => (
-                    <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip content={<CustomTooltip />} />
-              </PieChart>
-            </ResponsiveContainer>
-            {/* Legend */}
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center", marginTop: 8 }}>
-              {chartSeries.pieData.map((entry: any, i: number) => (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "#94a3b8" }}>
-                  <div style={{ width: 8, height: 8, borderRadius: "50%", background: PIE_COLORS[i % PIE_COLORS.length] }} />
-                  {entry.name}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+
 
         {/* Fallback: If no chart data at all, show raw JSON card */}
         {chartSeries.lineData.length === 0 && chartSeries.barData.length === 0 && chartSeries.pieData.length === 0 && chartData && (

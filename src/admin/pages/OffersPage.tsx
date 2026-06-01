@@ -16,6 +16,7 @@ import {
   updateOfferImageAPI,
   deleteOfferAPI
 } from "../lib/api";
+import { useAdminAction } from "../context/AdminActionContext";
 
 type PanelMode = "add" | "edit" | null;
 
@@ -48,6 +49,7 @@ const getOfferStatus = (offer: Offer): { label: string; color: string; bg: strin
 };
 
 const OffersPage: React.FC = () => {
+  const { triggerActionAnimation } = useAdminAction();
   const [offers, setOffers] = useState<Offer[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -145,6 +147,7 @@ const OffersPage: React.FC = () => {
       }
       await fetchOffers();
       closePanel();
+      triggerActionAnimation();
     } catch (err: any) {
       setFormError(err.message || "Save failed");
     } finally {
@@ -159,6 +162,7 @@ const OffersPage: React.FC = () => {
       await deleteOfferAPI(deleteTarget._id);
       setDeleteTarget(null);
       await fetchOffers();
+      triggerActionAnimation('delete');
     } catch (err: any) {
       setError(err.message || "Delete failed");
     } finally {
@@ -170,6 +174,7 @@ const OffersPage: React.FC = () => {
     try {
       await updateOfferAPI(offer._id, { is_active: !offer.is_active });
       await fetchOffers();
+      triggerActionAnimation();
     } catch (err: any) {
       alert(err.message || "Toggle failed");
     }

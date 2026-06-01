@@ -16,11 +16,13 @@ import {
   deleteTeamMemberAPI
 } from "../lib/api";
 import { useAuth } from "../context/auth-context";
+import { useAdminAction } from "../context/AdminActionContext";
 
 type PanelMode = "add" | "edit" | null;
 
 const TeamPage: React.FC = () => {
   const { user: currentUser } = useAuth();
+  const { triggerActionAnimation } = useAdminAction();
   
   // Data State
   const [team, setTeam] = useState<AdminUser[]>([]);
@@ -113,6 +115,7 @@ const TeamPage: React.FC = () => {
       }
       await fetchTeam();
       closePanel();
+      triggerActionAnimation();
     } catch (err: any) {
       setFormError(err.message || "Action failed");
     } finally {
@@ -130,6 +133,7 @@ const TeamPage: React.FC = () => {
     try {
       await deleteTeamMemberAPI(id);
       await fetchTeam();
+      triggerActionAnimation('delete');
     } catch (err: any) {
       alert(err.message || "Failed to delete user");
     }
@@ -183,106 +187,113 @@ const TeamPage: React.FC = () => {
           {error}
         </div>
       ) : (
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="admin-card" 
-          style={{ padding: 0, overflow: "hidden", background: "rgba(20, 20, 22, 0.7)", backdropFilter: "blur(20px)", border: "1px solid rgba(255, 255, 255, 0.05)", borderRadius: 20 }}
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={{ visible: { transition: { staggerChildren: 0.05 } } }}
+          style={{ 
+            display: "grid", 
+            gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", 
+            gap: 24,
+            padding: "4px" // prevent box-shadow clipping
+          }}
         >
-          <div style={{ overflowX: "auto" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
-              <thead>
-                <tr style={{ background: "rgba(255,255,255,0.02)", borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.05em", color: "#94a3b8" }}>
-                  <th style={{ padding: "16px 24px", fontWeight: 600 }}>Member</th>
-                  <th style={{ padding: "16px 24px", fontWeight: 600 }}>Position</th>
-                  <th style={{ padding: "16px 24px", fontWeight: 600 }}>Role</th>
-                  <th style={{ padding: "16px 24px", fontWeight: 600 }}>Status</th>
-                  <th style={{ padding: "16px 24px", fontWeight: 600, textAlign: "right" }}>Actions</th>
-                </tr>
-              </thead>
-              <motion.tbody
-                initial="hidden"
-                animate="visible"
-                variants={{ visible: { transition: { staggerChildren: 0.05 } } }}
-              >
-                {team.map((member) => (
-                  <motion.tr 
-                    variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}
-                    key={member._id} 
-                    style={{ borderBottom: "1px solid rgba(255,255,255,0.02)", transition: "background 0.2s" }} 
-                    className="hover:bg-white/[0.02]"
-                  >
-                    
-                    <td style={{ padding: "16px 24px" }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                        {member.profile_photo?.url ? (
-                          <img src={member.profile_photo.url} alt={member.email} style={{ width: 44, height: 44, borderRadius: "50%", objectFit: "cover", border: "2px solid rgba(255,255,255,0.1)" }} />
-                        ) : (
-                          <div style={{ width: 44, height: 44, borderRadius: "50%", background: "linear-gradient(135deg, #3b82f6, #8b5cf6)", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontSize: 18, fontWeight: 600 }}>
-                            {member.email.charAt(0).toUpperCase()}
-                          </div>
-                        )}
-                        <div>
-                          <div style={{ fontSize: 14, fontWeight: 600, color: "var(--admin-text)" }}>
-                            {member.full_name || "—"}
-                            {member._id === currentUser?._id && <span style={{ marginLeft: 8, fontSize: 10, padding: "2px 6px", background: "rgba(255,255,255,0.1)", borderRadius: 4, color: "var(--admin-text-dim)" }}>YOU</span>}
-                          </div>
-                          <div style={{ fontSize: 12, color: "var(--admin-text-muted)", marginTop: 2 }}>{member.email}</div>
-                        </div>
+          {team.map((member) => (
+            <motion.div
+              key={member._id}
+              variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+              whileHover={{ y: -4, boxShadow: "0 12px 40px rgba(0,0,0,0.4)", borderColor: "rgba(255,255,255,0.15)" }}
+              className="admin-card"
+              style={{
+                position: "relative",
+                padding: 24,
+                display: "flex",
+                flexDirection: "column",
+                gap: 16,
+                background: "rgba(20, 20, 22, 0.6)",
+                backdropFilter: "blur(20px)",
+                border: "1px solid rgba(255, 255, 255, 0.05)",
+                borderRadius: 20,
+                overflow: "hidden"
+              }}
+            >
+              {/* Background Glow */}
+              <div style={{
+                position: "absolute",
+                top: -30,
+                right: -30,
+                width: 150,
+                height: 150,
+                borderRadius: "50%",
+                background: member.role === "admin" ? "linear-gradient(135deg, #ef4444, #dc2626)" : "linear-gradient(135deg, #0ea5e9, #3b82f6)",
+                opacity: 0.15,
+                filter: "blur(40px)",
+                pointerEvents: "none"
+              }} />
+
+              {/* Top Section: Avatar & Info */}
+              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", zIndex: 1 }}>
+                <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
+                  <div style={{ position: "relative" }}>
+                    {/* Avatar */}
+                    {member.profile_photo?.url ? (
+                      <img src={member.profile_photo.url} alt={member.email} style={{ width: 56, height: 56, borderRadius: "50%", objectFit: "cover", border: "2px solid rgba(255,255,255,0.1)", boxShadow: "0 4px 15px rgba(0,0,0,0.3)" }} />
+                    ) : (
+                      <div style={{ width: 56, height: 56, borderRadius: "50%", background: member.role === "admin" ? "linear-gradient(135deg, #ef4444, #dc2626)" : "linear-gradient(135deg, #0ea5e9, #3b82f6)", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontSize: 22, fontWeight: 700, boxShadow: "0 4px 15px rgba(0,0,0,0.3)" }}>
+                        {member.email.charAt(0).toUpperCase()}
                       </div>
-                    </td>
+                    )}
+                    {/* Status Dot */}
+                    <div style={{
+                      position: "absolute",
+                      bottom: 0,
+                      right: 0,
+                      width: 14,
+                      height: 14,
+                      borderRadius: "50%",
+                      background: member.status === "Active" ? "#10b981" : "#f59e0b",
+                      border: "3px solid #141416",
+                      boxShadow: `0 0 10px ${member.status === "Active" ? "#10b981" : "#f59e0b"}`
+                    }} title={member.status} />
+                  </div>
+                  
+                  <div style={{ minWidth: 0, maxWidth: 140 }}>
+                    <h3 style={{ fontSize: 16, fontWeight: 700, color: "#fff", display: "flex", alignItems: "center", gap: 8, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                      {member.full_name || "—"}
+                    </h3>
+                    <p style={{ fontSize: 13, color: "var(--admin-text-muted)", marginTop: 4, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{member.email}</p>
+                    {member._id === currentUser?._id && <span style={{ display: "inline-block", marginTop: 6, fontSize: 9, padding: "2px 6px", background: "rgba(255,255,255,0.1)", borderRadius: 12, color: "var(--admin-text)", fontWeight: 800 }}>YOU</span>}
+                  </div>
+                </div>
+                
+                {/* Role Badge inside card top right */}
+                <div style={{ padding: "6px 12px", borderRadius: 10, background: member.role === "admin" ? "rgba(239, 68, 68, 0.15)" : "rgba(56, 189, 248, 0.15)", border: `1px solid ${member.role === "admin" ? "rgba(239, 68, 68, 0.3)" : "rgba(56, 189, 248, 0.3)"}`, display: "flex", alignItems: "center", gap: 6, flexShrink: 0, boxShadow: `0 0 15px ${member.role === "admin" ? "rgba(239, 68, 68, 0.1)" : "rgba(56, 189, 248, 0.1)"}` }}>
+                  <ShieldCheck size={14} color={member.role === "admin" ? "#f87171" : "#38bdf8"} />
+                  <span style={{ fontSize: 11, fontWeight: 700, color: member.role === "admin" ? "#f87171" : "#38bdf8", textTransform: "uppercase", letterSpacing: "0.05em" }}>{member.role}</span>
+                </div>
+              </div>
 
-                    <td style={{ padding: "16px 24px", fontSize: 13, color: "var(--admin-text-dim)" }}>
-                      {member.position || "—"}
-                    </td>
+              <div style={{ height: 1, background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)", margin: "4px 0" }} />
 
-                    <td style={{ padding: "16px 24px" }}>
-                      <span style={{ 
-                        fontSize: 12, padding: "4px 10px", borderRadius: 20, fontWeight: 600, textTransform: "capitalize",
-                        background: member.role === "admin" ? "rgba(124, 58, 237, 0.15)" : "rgba(56, 189, 248, 0.15)",
-                        color: member.role === "admin" ? "#a78bfa" : "#38bdf8",
-                        border: `1px solid ${member.role === "admin" ? "rgba(124, 58, 237, 0.3)" : "rgba(56, 189, 248, 0.3)"}`,
-                        boxShadow: `0 0 10px ${member.role === "admin" ? "rgba(124, 58, 237, 0.2)" : "rgba(56, 189, 248, 0.2)"}`
-                      }}>
-                        <ShieldCheck size={12} style={{ display: "inline", marginRight: 4, marginBottom: 2 }} />
-                        {member.role}
-                      </span>
-                    </td>
+              {/* Bottom Section: Details & Actions */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", zIndex: 1 }}>
+                <div>
+                  <p style={{ fontSize: 11, color: "var(--admin-text-dim)", textTransform: "uppercase", fontWeight: 700, letterSpacing: "0.05em" }}>Position</p>
+                  <p style={{ fontSize: 14, color: "#e2e8f0", fontWeight: 500, marginTop: 4 }}>{member.position || "Staff"}</p>
+                </div>
+                
+                <div style={{ display: "flex", gap: 8 }}>
+                  <button onClick={() => openEditPanel(member)} className="admin-btn-ghost" style={{ width: 36, height: 36, padding: 0, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s" }} onMouseEnter={e => e.currentTarget.style.background="rgba(255,255,255,0.1)"} onMouseLeave={e => e.currentTarget.style.background="transparent"} title="Edit">
+                    <Edit2 size={16} />
+                  </button>
+                  <button onClick={() => handleDelete(member._id, member.full_name || member.email)} style={{ width: 36, height: 36, padding: 0, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", color: "#f87171", border: "1px solid rgba(225,29,72,0.2)", background: "rgba(225,29,72,0.05)", transition: "all 0.2s", opacity: member._id === currentUser?._id ? 0.3 : 1, cursor: member._id === currentUser?._id ? "not-allowed" : "pointer" }} title="Delete" disabled={member._id === currentUser?._id} onMouseEnter={e => e.currentTarget.style.background="rgba(225,29,72,0.15)"} onMouseLeave={e => e.currentTarget.style.background="rgba(225,29,72,0.05)"}>
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              </div>
 
-                    <td style={{ padding: "16px 24px" }}>
-                      <span className={`admin-badge ${member.status === "Active" ? "admin-badge-success" : "admin-badge-warning"}`} style={{ boxShadow: member.status === "Active" ? "0 0 10px rgba(16, 185, 129, 0.2)" : "0 0 10px rgba(245, 158, 11, 0.2)" }}>
-                        {member.status}
-                      </span>
-                    </td>
-
-                    <td style={{ padding: "16px 24px", textAlign: "right" }}>
-                      <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
-                        <button 
-                          onClick={() => openEditPanel(member)}
-                          style={{ background: "rgba(255,255,255,0.05)", border: "none", width: 32, height: 32, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "var(--admin-text-dim)", transition: "all 0.2s" }}
-                          className="hover:bg-white/10 hover:text-white"
-                          title="Edit"
-                        >
-                          <Edit2 size={14} />
-                        </button>
-                        <button 
-                          onClick={() => handleDelete(member._id, member.full_name || member.email)}
-                          style={{ background: "rgba(225,29,72,0.1)", border: "none", width: 32, height: 32, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#f87171", transition: "all 0.2s" }}
-                          className="hover:opacity-80"
-                          title="Delete"
-                          disabled={member._id === currentUser?._id}
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </div>
-                    </td>
-
-                  </motion.tr>
-                ))}
-              </motion.tbody>
-            </table>
-          </div>
+            </motion.div>
+          ))}
         </motion.div>
       )}
 
@@ -372,8 +383,8 @@ const TeamPage: React.FC = () => {
                       <div style={{ fontSize: 11, color: "#64748b", marginTop: 4 }}>Can edit articles & meta.</div>
                     </button>
 
-                    <button type="button" onClick={() => setRole("admin")} style={{ padding: "12px", borderRadius: 12, border: role === "admin" ? "1px solid rgba(167, 139, 250, 0.5)" : "1px solid rgba(255,255,255,0.1)", background: role === "admin" ? "rgba(167,139,250,0.1)" : "rgba(0,0,0,0.2)", textAlign: "left", cursor: "pointer", transition: "all 0.2s", boxShadow: role === "admin" ? "0 0 15px rgba(167, 139, 250, 0.15)" : "none" }}>
-                      <div style={{ fontWeight: 600, color: role === "admin" ? "#a78bfa" : "#e2e8f0", fontSize: 14 }}>Admin</div>
+                    <button type="button" onClick={() => setRole("admin")} style={{ padding: "12px", borderRadius: 12, border: role === "admin" ? "1px solid rgba(248, 113, 113, 0.5)" : "1px solid rgba(255,255,255,0.1)", background: role === "admin" ? "rgba(248,113,113,0.1)" : "rgba(0,0,0,0.2)", textAlign: "left", cursor: "pointer", transition: "all 0.2s", boxShadow: role === "admin" ? "0 0 15px rgba(248, 113, 113, 0.15)" : "none" }}>
+                      <div style={{ fontWeight: 600, color: role === "admin" ? "#f87171" : "#e2e8f0", fontSize: 14 }}>Admin</div>
                       <div style={{ fontSize: 11, color: "#64748b", marginTop: 4 }}>Full system access.</div>
                     </button>
                     

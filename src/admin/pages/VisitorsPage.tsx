@@ -27,7 +27,7 @@ const DeviceIcon = ({ platform }: { platform?: string }) => {
     return <Smartphone size={16} color="#f59e0b" />;
   if (p.includes("ipad") || p.includes("tablet"))
     return <Tablet size={16} color="#0ea5e9" />;
-  return <Monitor size={16} color="#7c3aed" />;
+  return <Monitor size={16} color="#ef4444" />;
 };
 
 /* ── Consent Badge ────────────────────────────────────────── */

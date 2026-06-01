@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 import KpiCard from "../components/KpiCard";
 import { getTrackingData, getAnalyticsReport, type AnalyticsReport } from "../lib/api";
 
-const CHART_COLORS = ["#7c3aed", "#8b5cf6", "#a78bfa", "#c4b5fd", "#ddd6fe", "#7c3aed", "#6d28d9", "#5b21b6"];
+const CHART_COLORS = ["#ef4444", "#f87171", "#fca5a5", "#fecaca", "#fee2e2", "#ef4444", "#dc2626", "#b91c1c"];
 
 const formatTime = (seconds: number): string => {
   if (seconds < 60) return `${Math.round(seconds)}s`;
@@ -232,7 +232,7 @@ const AnalyticsPage: React.FC = () => {
           <KpiCardMini label="Last 7 Days" value={stats?.last7Days || 0} icon={<Clock size={20} color="#f59e0b" />} delay={0} />
         </motion.div>
         <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} whileHover={{ scale: 1.02, translateY: -4 }}>
-          <KpiCardMini label="Returning IPs" value={stats?.returning || 0} icon={<RefreshCcw size={20} color="#8b5cf6" />} delay={0} />
+          <KpiCardMini label="Returning IPs" value={stats?.returning || 0} icon={<RefreshCcw size={20} color="#f87171" />} delay={0} />
         </motion.div>
         <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} whileHover={{ scale: 1.02, translateY: -4 }}>
           <KpiCardMini label="Contacts Linked" value={stats?.contacts || 0} icon={<Mail size={20} color="#0ea5e9" />} delay={0} />
@@ -243,7 +243,7 @@ const AnalyticsPage: React.FC = () => {
         <KpiCardMini label="Total Tracked" value={stats?.total || 0} icon={<Users size={20} color="#3b82f6" />} delay={0} />
         <KpiCardMini label="Today" value={stats?.today || 0} icon={<TrendingUp size={20} color="#10b981" />} delay={50} />
         <KpiCardMini label="Last 7 Days" value={stats?.last7Days || 0} icon={<Clock size={20} color="#f59e0b" />} delay={100} />
-        <KpiCardMini label="Returning IPs" value={stats?.returning || 0} icon={<RefreshCcw size={20} color="#8b5cf6" />} delay={150} />
+        <KpiCardMini label="Returning IPs" value={stats?.returning || 0} icon={<RefreshCcw size={20} color="#f87171" />} delay={150} />
         <KpiCardMini label="Contacts Linked" value={stats?.contacts || 0} icon={<Mail size={20} color="#0ea5e9" />} delay={200} />
       </div>
 
@@ -360,7 +360,7 @@ const AnalyticsPage: React.FC = () => {
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 20, marginBottom: 32 }}>
-        <KpiCard label="Total Pageviews" value={pageReport?.total_pageviews || 0} icon={<Eye size={22} color="#fff" />} gradient="linear-gradient(135deg, #7c3aed, #6d28d9)" delay={0} />
+        <KpiCard label="Total Pageviews" value={pageReport?.total_pageviews || 0} icon={<Eye size={22} color="#fff" />} gradient="linear-gradient(135deg, #ef4444, #dc2626)" delay={0} />
         <KpiCard label="Top Pages Tracked" value={pageReport?.top_pages_by_visits?.length || 0} icon={<TrendingUp size={22} color="#fff" />} gradient="linear-gradient(135deg, #e11d48, #be123c)" delay={100} />
         <KpiCard label="Avg Time (Top Page)" value={pageReport?.top_pages_by_time_spent?.[0]?.avg_time_seconds ? formatTime(pageReport.top_pages_by_time_spent[0].avg_time_seconds) : "N/A"} icon={<Clock size={22} color="#fff" />} gradient="linear-gradient(135deg, #f59e0b, #d97706)" delay={200} format="text" />
       </div>
@@ -375,7 +375,7 @@ const AnalyticsPage: React.FC = () => {
         {visitChartData.length > 0 && (
           <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="admin-card" style={{ padding: "24px", background: "rgba(20, 20, 22, 0.7)", backdropFilter: "blur(20px)", border: "1px solid rgba(255, 255, 255, 0.05)", borderRadius: 20 }}>
             <h4 style={{ fontSize: 15, fontWeight: 700, color: "#ffffff", marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
-              <Eye size={16} color="#7c3aed" /> Top Pages by Visits
+              <Eye size={16} color="#ef4444" /> Top Pages by Visits
             </h4>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={visitChartData} layout="vertical" margin={{ left: 60 }}>

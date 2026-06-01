@@ -76,14 +76,14 @@ const KpiCard: React.FC<KpiCardProps> = ({
       <div
         style={{
           position: "absolute",
-          top: -30,
-          right: -30,
-          width: 100,
-          height: 100,
+          top: -40,
+          right: -40,
+          width: 120,
+          height: 120,
           borderRadius: "50%",
           background: gradient,
-          opacity: 0.06,
-          filter: "blur(30px)",
+          opacity: 0.15,
+          filter: "blur(40px)",
         }}
       />
 

@@ -12,8 +12,10 @@ import { DataValidationModal } from "../components/spreadsheet/DataValidationMod
 import { SpreadsheetPrintModal } from "../components/spreadsheet/SpreadsheetPrintModal";
 import { motion, AnimatePresence } from "framer-motion";
 import * as XLSX from 'xlsx';
+import { useAdminAction } from "../context/AdminActionContext";
 
 export default function DatabasePage() {
+  const { triggerActionAnimation } = useAdminAction();
   const [sheets, setSheets] = useState<any[]>([]);
   const [activeSheet, setActiveSheet] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
@@ -65,6 +67,7 @@ export default function DatabasePage() {
         setActiveSheet(data);
         setNewSheetName("");
         setShowCreate(false);
+        triggerActionAnimation();
       }
     } catch (error) {
       console.error("Failed to create sheet:", error);
@@ -84,6 +87,7 @@ export default function DatabasePage() {
         if (activeSheet?._id === sheetId) {
           setActiveSheet(remainingSheets.length > 0 ? remainingSheets[0] : null);
         }
+        triggerActionAnimation('delete');
       }
     } catch (error) {
       console.error("Failed to delete sheet:", error);
@@ -227,6 +231,7 @@ export default function DatabasePage() {
             // Reload sheets
             await fetchSheets();
             setActiveSheet(newSheet);
+            triggerActionAnimation();
           }
         }
       } catch (error) {
