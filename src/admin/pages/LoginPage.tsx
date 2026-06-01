@@ -304,6 +304,27 @@ const LoginPage: React.FC = () => {
                 <>Sign In <ArrowRight size={18} /></>
               )}
             </motion.button>
+
+            {/* Forgot Password */}
+            <button
+              type="button"
+              onClick={() => navigate("/admin/forgot-password")}
+              style={{
+                background: "none",
+                border: "none",
+                color: "#64748b",
+                fontSize: 13,
+                cursor: "pointer",
+                textAlign: "center",
+                padding: "4px 0",
+                fontFamily: "'Inter', sans-serif",
+                transition: "color 0.2s",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#ef4444")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "#64748b")}
+            >
+              Forgot Password?
+            </button>
           </form>
 
           {/* Footer */}
