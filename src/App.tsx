@@ -50,6 +50,7 @@ const AdminAnalyticsPage = lazy(() => import("./admin/pages/AnalyticsPage"));
 const AdminVisitorsPage = lazy(() => import("./admin/pages/VisitorsPage"));
 const AdminSettingsPage = lazy(() => import("./admin/pages/SettingsPage"));
 const AdminTeamPage = lazy(() => import("./admin/pages/TeamPage"));
+const AdminActivityTrackerPage = lazy(() => import("./admin/pages/ActivityTrackerPage"));
 const AdminOffersPage = lazy(() => import("./admin/pages/OffersPage"));
 const AdminDatabasePage = lazy(() => import("./admin/pages/DatabasePage"));
 import { AuthProvider } from "./admin/context/auth-context";
@@ -504,6 +505,7 @@ const App = () => {
                     <Route path="analytics" element={<AdminAnalyticsPage />} />
                     <Route path="visitors" element={<AdminVisitorsPage />} />
                     <Route path="team" element={<AdminTeamPage />} />
+                    <Route path="activity" element={<AdminActivityTrackerPage />} />
                     <Route path="offers" element={<AdminOffersPage />} />
                     <Route path="database" element={<AdminDatabasePage />} />
                     <Route path="settings" element={<AdminSettingsPage />} />

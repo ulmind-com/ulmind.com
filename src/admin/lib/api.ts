@@ -3,12 +3,20 @@
    Centralised fetch wrapper with JWT auto-attach & 401 handling
    ────────────────────────────────────────────────────────────── */
 
-const BASE_URL = "https://ulmind-backend.onrender.com/api/v1";
+// Use Vite proxy in development to avoid CORS and network blocking issues on the network
+export const getBaseUrl = () => import.meta.env.DEV ? "/api/v1" : "https://ulmind-backend.onrender.com/api/v1";
+export const getWsBaseUrl = () => import.meta.env.DEV ? `ws://${window.location.host}/ws` : "wss://ulmind-backend.onrender.com/ws";
+
+const BASE_URL = getBaseUrl();
 
 // ─── Token helpers ────────────────────────────────────────────
 export const getToken = (): string | null => localStorage.getItem("ulmind_admin_token");
 export const setToken = (token: string) => localStorage.setItem("ulmind_admin_token", token);
 export const clearToken = () => localStorage.removeItem("ulmind_admin_token");
+
+export const getSessionId = (): string | null => localStorage.getItem("ulmind_admin_session");
+export const setSessionId = (id: string) => localStorage.setItem("ulmind_admin_session", id);
+export const clearSessionId = () => localStorage.removeItem("ulmind_admin_session");
 
 // ─── Auth-aware fetch ─────────────────────────────────────────
 export const authFetch = async (
@@ -39,6 +47,7 @@ export const authFetch = async (
   // Auto-logout on 401
   if (res.status === 401) {
     clearToken();
+    clearSessionId();
     window.location.href = "/admin/login";
     throw new Error("Session expired");
   }
@@ -111,6 +120,15 @@ export const loginAPI = async (payload: LoginPayload) => {
     }
     throw new Error(errMsg);
   }
+  return res.json();
+};
+
+export const logoutAPI = async (session_id: string) => {
+  const res = await authFetch("/auth/logout", {
+    method: "POST",
+    body: JSON.stringify({ session_id }),
+  });
+  if (!res.ok) throw new Error("Logout failed");
   return res.json();
 };
 
@@ -209,6 +227,21 @@ export const getAnalyticsReport = async (
 export const getTrackingData = async (limit: number = 100, skip: number = 0) => {
   const res = await authFetch(`/track/?limit=${limit}&skip=${skip}`);
   if (!res.ok) throw new Error("Failed to fetch tracking data");
+  return res.json();
+};
+
+export const heartbeatAPI = async (session_id: string) => {
+  const res = await authFetch("/activity/heartbeat", {
+    method: "POST",
+    body: JSON.stringify({ session_id }),
+  });
+  if (!res.ok) throw new Error("Heartbeat failed");
+  return res.json();
+};
+
+export const getSessionsAPI = async () => {
+  const res = await authFetch("/activity/sessions");
+  if (!res.ok) throw new Error("Failed to fetch sessions");
   return res.json();
 };
 

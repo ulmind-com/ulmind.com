@@ -78,7 +78,7 @@ const TeamPage: React.FC = () => {
     setSelectedMember(member);
     setFullName(member.full_name || "");
     setEmail(member.email || "");
-    setRole(member.role || "editor");
+    setRole(member.role?.toLowerCase() || "editor");
     setStatus(member.status || "Active");
     setInitialPassword(""); // Password cannot be viewed, only changed (or omitted on edit)
     setPosition(member.position || "");
@@ -232,7 +232,7 @@ const TeamPage: React.FC = () => {
                 height: 200,
                 borderRadius: "50%",
                 background: "linear-gradient(135deg, #e11d48, #9f1239)",
-                opacity: member.role === "admin" ? 0.25 : 0.15,
+                opacity: member.role?.toLowerCase() === "admin" || member.role?.toLowerCase() === "super_admin" ? 0.25 : 0.15,
                 filter: "blur(60px)",
                 pointerEvents: "none",
                 transition: "all 0.3s ease"
@@ -287,16 +287,16 @@ const TeamPage: React.FC = () => {
                 <div style={{ 
                   padding: "6px 12px", 
                   borderRadius: 12, 
-                  background: member.role === "admin" ? "rgba(225, 29, 72, 0.15)" : "rgba(255, 255, 255, 0.05)", 
-                  border: `1px solid ${member.role === "admin" ? "rgba(225, 29, 72, 0.4)" : "rgba(255, 255, 255, 0.15)"}`, 
+                  background: member.role?.toLowerCase() === "super_admin" ? "rgba(16, 185, 129, 0.15)" : member.role?.toLowerCase() === "admin" ? "rgba(225, 29, 72, 0.15)" : "rgba(255, 255, 255, 0.05)", 
+                  border: `1px solid ${member.role?.toLowerCase() === "super_admin" ? "rgba(16, 185, 129, 0.4)" : member.role?.toLowerCase() === "admin" ? "rgba(225, 29, 72, 0.4)" : "rgba(255, 255, 255, 0.15)"}`, 
                   display: "flex", 
                   alignItems: "center", 
                   gap: 6, 
                   flexShrink: 0, 
-                  boxShadow: member.role === "admin" ? "0 4px 15px rgba(225, 29, 72, 0.15)" : "none" 
+                  boxShadow: member.role?.toLowerCase() === "super_admin" ? "0 4px 15px rgba(16, 185, 129, 0.15)" : member.role?.toLowerCase() === "admin" ? "0 4px 15px rgba(225, 29, 72, 0.15)" : "none" 
                 }}>
-                  <ShieldCheck size={14} color={member.role === "admin" ? "#fb7185" : "#e2e8f0"} />
-                  <span style={{ fontSize: 11, fontWeight: 800, color: member.role === "admin" ? "#fb7185" : "#e2e8f0", textTransform: "uppercase", letterSpacing: "0.08em" }}>{member.role}</span>
+                  <ShieldCheck size={14} color={member.role?.toLowerCase() === "super_admin" ? "#34d399" : member.role?.toLowerCase() === "admin" ? "#fb7185" : "#e2e8f0"} />
+                  <span style={{ fontSize: 11, fontWeight: 800, color: member.role?.toLowerCase() === "super_admin" ? "#34d399" : member.role?.toLowerCase() === "admin" ? "#fb7185" : "#e2e8f0", textTransform: "uppercase", letterSpacing: "0.08em" }}>{member.role?.toUpperCase() || "EDITOR"}</span>
                 </div>
               </div>
 
@@ -412,7 +412,7 @@ const TeamPage: React.FC = () => {
                 {/* Role */}
                 <div>
                   <label style={{ fontSize: 12, fontWeight: 600, color: "#94a3b8", display: "block", marginBottom: 8, textTransform: "uppercase" }}>Access Role</label>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
                     
                     <button type="button" onClick={() => setRole("editor")} style={{ padding: "12px", borderRadius: 12, border: role === "editor" ? "1px solid rgba(56, 189, 248, 0.5)" : "1px solid rgba(255,255,255,0.1)", background: role === "editor" ? "rgba(56,189,248,0.1)" : "rgba(0,0,0,0.2)", textAlign: "left", cursor: "pointer", transition: "all 0.2s", boxShadow: role === "editor" ? "0 0 15px rgba(56, 189, 248, 0.15)" : "none" }}>
                       <div style={{ fontWeight: 600, color: role === "editor" ? "#38bdf8" : "#e2e8f0", fontSize: 14 }}>Editor</div>
@@ -422,6 +422,11 @@ const TeamPage: React.FC = () => {
                     <button type="button" onClick={() => setRole("admin")} style={{ padding: "12px", borderRadius: 12, border: role === "admin" ? "1px solid rgba(248, 113, 113, 0.5)" : "1px solid rgba(255,255,255,0.1)", background: role === "admin" ? "rgba(248,113,113,0.1)" : "rgba(0,0,0,0.2)", textAlign: "left", cursor: "pointer", transition: "all 0.2s", boxShadow: role === "admin" ? "0 0 15px rgba(248, 113, 113, 0.15)" : "none" }}>
                       <div style={{ fontWeight: 600, color: role === "admin" ? "#f87171" : "#e2e8f0", fontSize: 14 }}>Admin</div>
                       <div style={{ fontSize: 11, color: "#64748b", marginTop: 4 }}>Full system access.</div>
+                    </button>
+
+                    <button type="button" onClick={() => setRole("super_admin")} style={{ padding: "12px", borderRadius: 12, border: role === "super_admin" ? "1px solid rgba(16, 185, 129, 0.5)" : "1px solid rgba(255,255,255,0.1)", background: role === "super_admin" ? "rgba(16, 185, 129, 0.1)" : "rgba(0,0,0,0.2)", textAlign: "left", cursor: "pointer", transition: "all 0.2s", boxShadow: role === "super_admin" ? "0 0 15px rgba(16, 185, 129, 0.15)" : "none" }}>
+                      <div style={{ fontWeight: 600, color: role === "super_admin" ? "#34d399" : "#e2e8f0", fontSize: 14 }}>Super Admin</div>
+                      <div style={{ fontSize: 11, color: "#64748b", marginTop: 4 }}>Founders only. Can track activity.</div>
                     </button>
                     
                   </div>

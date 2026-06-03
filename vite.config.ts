@@ -8,6 +8,17 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    // ─── PROXY TO BACKEND ──────────────────────────────────────────
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:8000',
+        changeOrigin: true,
+      },
+      '/ws': {
+        target: 'ws://127.0.0.1:8000',
+        ws: true,
+      }
+    },
     // ─── SMOOTH DEV EXPERIENCE ─────────────────────────────────────
     // HMR overlay disabled — keeps UI clean, errors go to console only
     hmr: {

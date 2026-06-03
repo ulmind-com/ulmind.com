@@ -19,6 +19,7 @@ import {
   Tag,
   ChevronRight,
   Database,
+  Activity,
 } from "lucide-react";
 import "../admin.css";
 
@@ -27,6 +28,7 @@ const navItems = [
   { path: "/admin/analytics", label: "Analytics", icon: BarChart3, end: false },
   { path: "/admin/visitors", label: "Visitors", icon: Users, end: false },
   { path: "/admin/team", label: "Team", icon: ShieldCheck, end: false },
+  { path: "/admin/activity", label: "Activity Tracker", icon: Activity, end: false },
   { path: "/admin/offers", label: "Offers", icon: Tag, end: false },
   { path: "/admin/database", label: "Database", icon: Database, end: false },
   { path: "/admin/settings", label: "Settings", icon: Settings, end: false },
@@ -76,24 +78,27 @@ const AdminLayout: React.FC = () => {
 
           {/* Navigation */}
           <nav className="admin-nav">
-            {navItems.map((item) => (
-              <NavLink
-                key={item.path}
-                to={item.path}
-                end={item.end}
-                className={({ isActive }) =>
-                  `admin-nav-item ${isActive ? "active" : ""}`
-                }
-                onClick={() => setSidebarOpen(false)}
-              >
-                <item.icon />
-                <span>{item.label}</span>
-                <ChevronRight
-                  size={14}
-                  style={{ marginLeft: "auto", opacity: 0.3 }}
-                />
-              </NavLink>
-            ))}
+            {navItems.map((item) => {
+              if (item.path === "/admin/activity" && user?.role?.toLowerCase() !== "super_admin") return null;
+              return (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  end={item.end}
+                  className={({ isActive }) =>
+                    `admin-nav-item ${isActive ? "active" : ""}`
+                  }
+                  onClick={() => setSidebarOpen(false)}
+                >
+                  <item.icon />
+                  <span>{item.label}</span>
+                  <ChevronRight
+                    size={14}
+                    style={{ marginLeft: "auto", opacity: 0.3 }}
+                  />
+                </NavLink>
+              );
+            })}
           </nav>
 
           {/* Sidebar Footer — User */}

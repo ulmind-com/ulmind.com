@@ -7,6 +7,7 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { Settings, Plus, RotateCw, CheckCircle2, Columns, Minus } from 'lucide-react';
 import { AddColumnModal } from './AddColumnModal';
+import { getBaseUrl, getWsBaseUrl } from '../../lib/api';
 
 // Suppress AG Grid Enterprise License console errors
 const originalConsoleError = console.error;
@@ -57,7 +58,7 @@ export const SpreadsheetGrid = forwardRef<SpreadsheetGridHandle, SpreadsheetGrid
   useEffect(() => {
     if (!sheet?._id) return;
     
-    const ws = new WebSocket(`ws://localhost:8000/ws/${sheet._id}`);
+    const ws = new WebSocket(`${getWsBaseUrl()}/${sheet._id}`);
     wsRef.current = ws;
 
     ws.onmessage = (event) => {
@@ -164,7 +165,7 @@ export const SpreadsheetGrid = forwardRef<SpreadsheetGridHandle, SpreadsheetGrid
 
   const fetchRows = async () => {
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/sheets/${sheet._id}/rows`);
+      const res = await fetch(`${getBaseUrl()}/sheets/${sheet._id}/rows`);
       if (res.ok) {
         const data = await res.json();
         const flatData = data.map((d: any) => ({ ...d.data, _rowId: d._id, _styles: d.styles || {} }));
@@ -303,7 +304,7 @@ export const SpreadsheetGrid = forwardRef<SpreadsheetGridHandle, SpreadsheetGrid
     try {
       if (rowId) {
         // Send update via REST
-        await fetch(`http://localhost:8000/api/v1/sheets/${sheet._id}/rows/${rowId}`, {
+        await fetch(`${getBaseUrl()}/sheets/${sheet._id}/rows/${rowId}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ data: newData, styles: styles }),
@@ -359,7 +360,7 @@ export const SpreadsheetGrid = forwardRef<SpreadsheetGridHandle, SpreadsheetGrid
       if (updated) {
         setIsSaving(true);
         try {
-          const res = await fetch(`http://localhost:8000/api/v1/sheets/${sheet._id}/columns`, {
+          const res = await fetch(`${getBaseUrl()}/sheets/${sheet._id}/columns`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(updatedColumns),
@@ -450,7 +451,7 @@ export const SpreadsheetGrid = forwardRef<SpreadsheetGridHandle, SpreadsheetGrid
 
         try {
           // 3. Save to backend
-          fetch(`http://localhost:8000/api/v1/sheets/${sheet._id}/rows/${rowId}`, {
+          fetch(`${getBaseUrl()}/sheets/${sheet._id}/rows/${rowId}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ data: newData, styles: currentStyles }),
@@ -639,7 +640,7 @@ export const SpreadsheetGrid = forwardRef<SpreadsheetGridHandle, SpreadsheetGrid
           if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
              wsRef.current.send(JSON.stringify({ type: 'style_update', rowId: rowNode.data._rowId, styles: currentStyles }));
           }
-          await fetch(`http://localhost:8000/api/v1/sheets/${sheet._id}/rows/${rowNode.data._rowId}`, {
+          await fetch(`${getBaseUrl()}/sheets/${sheet._id}/rows/${rowNode.data._rowId}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ styles: currentStyles })
@@ -726,7 +727,7 @@ export const SpreadsheetGrid = forwardRef<SpreadsheetGridHandle, SpreadsheetGrid
         if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
             wsRef.current.send(JSON.stringify({ type: 'style_update', rowId: rowNode.data._rowId, styles: currentStyles }));
         }
-        await fetch(`http://localhost:8000/api/v1/sheets/${sheet._id}/rows/${rowNode.data._rowId}`, {
+        await fetch(`${getBaseUrl()}/sheets/${sheet._id}/rows/${rowNode.data._rowId}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ styles: currentStyles })
@@ -753,7 +754,7 @@ export const SpreadsheetGrid = forwardRef<SpreadsheetGridHandle, SpreadsheetGrid
     setIsSaving(true);
     try {
       const emptyData: Record<string, string> = {};
-      const res = await fetch(`http://localhost:8000/api/v1/sheets/${sheet._id}/rows`, {
+      const res = await fetch(`${getBaseUrl()}/sheets/${sheet._id}/rows`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ data: emptyData }),
@@ -774,7 +775,7 @@ export const SpreadsheetGrid = forwardRef<SpreadsheetGridHandle, SpreadsheetGrid
     try {
       const updatedColumns = [...(sheet.columns || []), newCol];
       
-      const res = await fetch(`http://localhost:8000/api/v1/sheets/${sheet._id}/columns`, {
+      const res = await fetch(`${getBaseUrl()}/sheets/${sheet._id}/columns`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedColumns),

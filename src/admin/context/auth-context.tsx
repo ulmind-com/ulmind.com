@@ -10,6 +10,11 @@ import {
   setToken,
   getToken,
   clearToken,
+  getSessionId,
+  setSessionId,
+  clearSessionId,
+  logoutAPI,
+  heartbeatAPI,
   type AdminUser,
   type LoginPayload,
 } from "../lib/api";
@@ -66,6 +71,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     refreshUser();
   }, [refreshUser]);
 
+  // Heartbeat mechanism
+  useEffect(() => {
+    let interval: ReturnType<typeof setInterval>;
+    if (isAuthenticated) {
+      const sessionId = getSessionId();
+      if (sessionId) {
+        // Send immediate heartbeat on mount/auth
+        heartbeatAPI(sessionId).catch(() => {});
+        // Then every 30 seconds
+        interval = setInterval(() => {
+          heartbeatAPI(sessionId).catch(() => {});
+        }, 30000);
+      }
+    }
+    return () => clearInterval(interval);
+  }, [isAuthenticated]);
+
+  // Before unload beacon
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      const sessionId = getSessionId();
+      if (sessionId) {
+        // Use sendBeacon or standard fetch keepalive if possible
+        navigator.sendBeacon(`https://ulmind-backend.onrender.com/api/v1/auth/logout`, JSON.stringify({ session_id: sessionId }));
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, []);
+
   const login = async (payload: LoginPayload) => {
     const data = await loginAPI(payload);
     // Backend may return token in different shapes — handle both
@@ -74,8 +109,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setToken(jwt);
       setTokenState(jwt);
     } else if (jwt.access_token) {
-      setToken(jwt.access_token);
       setTokenState(jwt.access_token);
+    }
+    
+    if (data.session_id) {
+      setSessionId(data.session_id);
     }
 
     // Fetch user profile after login
@@ -85,8 +123,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return { mustChangePassword: me.must_change_password };
   };
 
-  const logout = () => {
+  const logout = async () => {
+    const sessionId = getSessionId();
+    if (sessionId) {
+      try {
+        await logoutAPI(sessionId);
+      } catch (err) {
+        console.error(err);
+      }
+    }
     clearToken();
+    clearSessionId();
     setUser(null);
     setTokenState(null);
   };

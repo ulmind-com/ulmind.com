@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, X, Send, Loader2, Bot, User } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import { getBaseUrl } from "../../lib/api";
 
 interface AiSidebarProps {
   isOpen: boolean;
@@ -32,7 +33,7 @@ export function AiSidebar({ isOpen, onClose, sheetId }: AiSidebarProps) {
     setIsLoading(true);
 
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/ai/${sheetId}/query`, {
+      const res = await fetch(`${getBaseUrl()}/ai/${sheetId}/query`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: userMsg })

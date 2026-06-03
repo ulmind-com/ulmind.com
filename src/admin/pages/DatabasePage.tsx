@@ -13,6 +13,7 @@ import { SpreadsheetPrintModal } from "../components/spreadsheet/SpreadsheetPrin
 import { motion, AnimatePresence } from "framer-motion";
 import * as XLSX from 'xlsx';
 import { useAdminAction } from "../context/AdminActionContext";
+import { getBaseUrl } from "../lib/api";
 
 export default function DatabasePage() {
   const { triggerActionAnimation } = useAdminAction();
@@ -34,7 +35,7 @@ export default function DatabasePage() {
 
   const fetchSheets = async () => {
     try {
-      const res = await fetch("http://localhost:8000/api/v1/sheets/");
+      const res = await fetch(`${getBaseUrl()}/sheets/`);
       if (res.ok) {
         const data = await res.json();
         setSheets(data);
@@ -56,7 +57,7 @@ export default function DatabasePage() {
   const handleCreateSheet = async () => {
     if (!newSheetName) return;
     try {
-      const res = await fetch("http://localhost:8000/api/v1/sheets/", {
+      const res = await fetch(`${getBaseUrl()}/sheets/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: newSheetName, description: "", columns: [] }),
@@ -78,7 +79,7 @@ export default function DatabasePage() {
     e.stopPropagation();
     if (!window.confirm("Are you sure you want to delete this sheet? This action cannot be undone.")) return;
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/sheets/${sheetId}`, {
+      const res = await fetch(`${getBaseUrl()}/sheets/${sheetId}`, {
         method: "DELETE",
       });
       if (res.ok) {
@@ -191,7 +192,7 @@ export default function DatabasePage() {
           }));
 
           // 1. Create Sheet
-          const sheetRes = await fetch("http://localhost:8000/api/v1/sheets/", {
+          const sheetRes = await fetch(`${getBaseUrl()}/sheets/`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ name: file.name.replace(/\.[^/.]+$/, ""), columns }),
@@ -221,7 +222,7 @@ export default function DatabasePage() {
 
             // 3. Bulk Insert
             if (rowsData.length > 0) {
-              await fetch(`http://localhost:8000/api/v1/sheets/${newSheet._id}/rows/bulk`, {
+              await fetch(`${getBaseUrl()}/sheets/${newSheet._id}/rows/bulk`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(rowsData),
