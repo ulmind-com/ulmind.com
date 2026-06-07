@@ -111,9 +111,9 @@ const ForgotPasswordPage: React.FC = () => {
   const [emailLoading, setEmailLoading] = useState(false);
   const [emailError, setEmailError] = useState("");
 
-  // ── OTP step ─────────────────────────────────────────────────
-  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-  const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
+  // ── OTP step (single hidden input pattern) ────────────────────
+  const [otpValue, setOtpValue] = useState("");
+  const otpInputRef = useRef<HTMLInputElement>(null);
   const [otpLoading, setOtpLoading] = useState(false);
   const [otpError, setOtpError] = useState("");
   const [resetToken, setResetToken] = useState("");
@@ -154,7 +154,10 @@ const ForgotPasswordPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (step === "otp") startTimer();
+    if (step === "otp") {
+      startTimer();
+      setTimeout(() => otpInputRef.current?.focus(), 100);
+    }
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [step, startTimer]);
 
@@ -164,39 +167,11 @@ const ForgotPasswordPage: React.FC = () => {
     return `${m}:${s}`;
   };
 
-  // ── OTP input handlers ────────────────────────────────────────
-  const handleOtpChange = useCallback((index: number, value: string) => {
-    if (!/^\d*$/.test(value)) return;
-    setOtp((prev) => {
-      const updated = [...prev];
-      updated[index] = value.slice(-1);
-      return updated;
-    });
-    if (value && index < 5) {
-      // Use setTimeout to ensure the state update completes first
-      setTimeout(() => otpRefs.current[index + 1]?.focus(), 0);
-    }
-  }, []);
-
-  const handleOtpKeyDown = useCallback((index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Backspace") {
-      setOtp((prev) => {
-        if (!prev[index] && index > 0) {
-          setTimeout(() => otpRefs.current[index - 1]?.focus(), 0);
-        }
-        return prev;
-      });
-    }
-  }, []);
-
-  const handleOtpPaste = useCallback((e: React.ClipboardEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
-    if (pasted.length === 6) {
-      setOtp(pasted.split(""));
-      setTimeout(() => otpRefs.current[5]?.focus(), 0);
-    }
-  }, []);
+  // ── OTP single-input handler ──────────────────────────────────
+  const handleOtpInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value.replace(/\D/g, "").slice(0, 6);
+    setOtpValue(val);
+  };
 
   // ── Step 1: Send OTP ──────────────────────────────────────────
   const handleSendOtp = async (e: React.FormEvent) => {
@@ -221,7 +196,7 @@ const ForgotPasswordPage: React.FC = () => {
     setOtpError("");
     try {
       await forgotPasswordAPI(email.trim());
-      setOtp(["", "", "", "", "", ""]);
+      setOtpValue("");
       setResendCooldown(true);
       startTimer();
       setTimeout(() => setResendCooldown(false), 2000);
@@ -235,7 +210,6 @@ const ForgotPasswordPage: React.FC = () => {
   // ── Step 2: Verify OTP ────────────────────────────────────────
   const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
-    const otpValue = otp.join("");
     if (otpValue.length !== 6) { setOtpError("Please enter the complete 6-digit OTP"); return; }
     setOtpLoading(true);
     setOtpError("");
@@ -435,40 +409,62 @@ const ForgotPasswordPage: React.FC = () => {
             <form onSubmit={handleVerifyOtp} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
               {otpError && <ErrorBox msg={otpError} />}
 
-              {/* OTP digit boxes */}
+              {/* OTP: single hidden input + visual display boxes */}
               <div>
                 <Label>Enter 6-Digit OTP</Label>
-                <div style={{ display: "flex", gap: 8, justifyContent: "space-between" }}>
-                  {otp.map((digit, i) => (
-                    <input
-                      key={`otp-box-${i}`}
-                      ref={(el) => { otpRefs.current[i] = el; }}
-                      type="text"
-                      inputMode="numeric"
-                      maxLength={1}
-                      value={digit}
-                      onChange={(e) => handleOtpChange(i, e.target.value)}
-                      onKeyDown={(e) => handleOtpKeyDown(i, e)}
-                      onPaste={i === 0 ? handleOtpPaste : undefined}
-                      autoFocus={i === 0}
+                <div
+                  style={{ display: "flex", gap: 8, justifyContent: "space-between", position: "relative", cursor: "text" }}
+                  onClick={() => otpInputRef.current?.focus()}
+                >
+                  {/* Hidden real input that captures all keystrokes */}
+                  <input
+                    ref={otpInputRef}
+                    type="text"
+                    inputMode="numeric"
+                    autoComplete="one-time-code"
+                    value={otpValue}
+                    onChange={handleOtpInput}
+                    maxLength={6}
+                    autoFocus
+                    style={{
+                      position: "absolute",
+                      opacity: 0,
+                      width: "100%",
+                      height: "100%",
+                      top: 0,
+                      left: 0,
+                      zIndex: 1,
+                      caretColor: "transparent",
+                      fontSize: 22,
+                      border: "none",
+                      outline: "none",
+                      background: "transparent",
+                    }}
+                  />
+                  {/* 6 visual display boxes */}
+                  {[0, 1, 2, 3, 4, 5].map((i) => (
+                    <div
+                      key={`otp-display-${i}`}
                       style={{
                         width: 48,
                         height: 56,
-                        textAlign: "center" as const,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
                         fontSize: 22,
                         fontWeight: 700,
                         background: "#111827",
-                        border: `2px solid ${digit ? "#7c3aed" : "#1e293b"}`,
+                        border: `2px solid ${otpValue[i] ? "#7c3aed" : i === otpValue.length ? "#0ea5e9" : "#1e293b"}`,
                         borderRadius: 12,
                         color: "#f1f5f9",
-                        outline: "none",
                         transition: "border-color 0.2s",
                         fontFamily: "monospace",
                         flex: 1,
-                        caretColor: "#7c3aed",
+                        userSelect: "none",
                       }}
-                      className="otp-digit-input"
-                    />
+                    >
+                      {otpValue[i] || ""}
+                    </div>
                   ))}
                 </div>
               </div>
@@ -505,14 +501,14 @@ const ForgotPasswordPage: React.FC = () => {
               <button
                 type="submit"
                 className="admin-btn admin-btn-primary"
-                disabled={otpLoading || otp.join("").length !== 6}
+                disabled={otpLoading || otpValue.length !== 6}
                 style={{ height: 48, fontSize: 15, fontWeight: 700 }}
               >
                 {otpLoading ? <Loader2 size={20} className="animate-spin" /> : <>Verify OTP <ArrowRight size={18} /></>}
               </button>
               <button
                 type="button"
-                onClick={() => { setStep("email"); setOtp(["", "", "", "", "", ""]); setOtpError(""); }}
+                onClick={() => { setStep("email"); setOtpValue(""); setOtpError(""); }}
                 style={{
                   background: "none", border: "none", color: "#64748b",
                   fontSize: 13, cursor: "pointer", display: "flex",
