@@ -52,6 +52,50 @@ function getPasswordStrength(pw: string): StrengthResult {
 // ── OTP_DURATION (seconds) ───────────────────────────────────────
 const OTP_DURATION = 10 * 60; // 10 minutes
 
+// ── Small helpers (outside component — stable references) ────────
+function Label({ children }: { children: React.ReactNode }) {
+  return (
+    <label style={{
+      fontSize: 12, fontWeight: 600, color: "#94a3b8",
+      display: "block", marginBottom: 6,
+      textTransform: "uppercase", letterSpacing: "0.05em",
+    }}>
+      {children}
+    </label>
+  );
+}
+
+function ErrorBox({ msg }: { msg: string }) {
+  return (
+    <div style={{
+      background: "rgba(225,29,72,0.1)",
+      border: "1px solid rgba(225,29,72,0.3)",
+      borderRadius: 12, padding: "10px 14px",
+      fontSize: 13, color: "#f87171",
+      textAlign: "center", animation: "adminFadeIn 0.3s ease",
+    }}>
+      {msg}
+    </div>
+  );
+}
+
+function EyeToggle({ show, onToggle }: { show: boolean; onToggle: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      style={{
+        position: "absolute", right: 12, top: "50%",
+        transform: "translateY(-50%)",
+        background: "none", border: "none",
+        color: "#64748b", cursor: "pointer", padding: 4,
+      }}
+    >
+      {show ? <EyeOff size={18} /> : <Eye size={18} />}
+    </button>
+  );
+}
+
 // ════════════════════════════════════════════════════════════════
 //  Component
 // ════════════════════════════════════════════════════════════════
@@ -121,28 +165,38 @@ const ForgotPasswordPage: React.FC = () => {
   };
 
   // ── OTP input handlers ────────────────────────────────────────
-  const handleOtpChange = (index: number, value: string) => {
+  const handleOtpChange = useCallback((index: number, value: string) => {
     if (!/^\d*$/.test(value)) return;
-    const updated = [...otp];
-    updated[index] = value.slice(-1);
-    setOtp(updated);
-    if (value && index < 5) otpRefs.current[index + 1]?.focus();
-  };
-
-  const handleOtpKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Backspace" && !otp[index] && index > 0) {
-      otpRefs.current[index - 1]?.focus();
+    setOtp((prev) => {
+      const updated = [...prev];
+      updated[index] = value.slice(-1);
+      return updated;
+    });
+    if (value && index < 5) {
+      // Use setTimeout to ensure the state update completes first
+      setTimeout(() => otpRefs.current[index + 1]?.focus(), 0);
     }
-  };
+  }, []);
 
-  const handleOtpPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+  const handleOtpKeyDown = useCallback((index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Backspace") {
+      setOtp((prev) => {
+        if (!prev[index] && index > 0) {
+          setTimeout(() => otpRefs.current[index - 1]?.focus(), 0);
+        }
+        return prev;
+      });
+    }
+  }, []);
+
+  const handleOtpPaste = useCallback((e: React.ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
     const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
     if (pasted.length === 6) {
       setOtp(pasted.split(""));
-      otpRefs.current[5]?.focus();
+      setTimeout(() => otpRefs.current[5]?.focus(), 0);
     }
-  };
+  }, []);
 
   // ── Step 1: Send OTP ──────────────────────────────────────────
   const handleSendOtp = async (e: React.FormEvent) => {
@@ -219,329 +273,16 @@ const ForgotPasswordPage: React.FC = () => {
     }
   };
 
-  // ── Shared layout ─────────────────────────────────────────────
-  const cardContent = () => {
-    if (step === "email") return <EmailStep />;
-    if (step === "otp") return <OtpStep />;
-    return <PasswordStep />;
-  };
-
-  // ── Background orbs (same as LoginPage) ──────────────────────
+  // ── Step metadata ──────────────────────────────────────────────
   const stepMeta = {
     email:    { icon: <Mail size={26} color="#fff" />,       title: "Forgot Password",   sub: "Enter your email to receive an OTP" },
     otp:      { icon: <KeyRound size={26} color="#fff" />,   title: "Verify OTP",        sub: `Code sent to ${email}` },
     password: { icon: <Lock size={26} color="#fff" />,        title: "New Password",      sub: "Set your new admin password" },
   };
 
-  // ── Sub-components ────────────────────────────────────────────
-  function EmailStep() {
-    return (
-      <form onSubmit={handleSendOtp} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-        {emailError && <ErrorBox msg={emailError} />}
-        <div>
-          <Label>Email Address</Label>
-          <input
-            type="email"
-            className="admin-input"
-            placeholder="admin@ulmind.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            autoFocus
-            autoComplete="email"
-          />
-        </div>
-        <button
-          type="submit"
-          className="admin-btn admin-btn-primary"
-          disabled={emailLoading}
-          style={{ marginTop: 8, height: 48, fontSize: 15, fontWeight: 700 }}
-        >
-          {emailLoading ? <Loader2 size={20} className="animate-spin" /> : <><Send16 /> Send OTP</>}
-        </button>
-        <BackToLogin />
-      </form>
-    );
-  }
-
-  function OtpStep() {
-    return (
-      <form onSubmit={handleVerifyOtp} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-        {otpError && <ErrorBox msg={otpError} />}
-
-        {/* OTP digit boxes */}
-        <div>
-          <Label>Enter 6-Digit OTP</Label>
-          <div style={{ display: "flex", gap: 8, justifyContent: "space-between" }}>
-            {otp.map((digit, i) => (
-              <input
-                key={i}
-                ref={(el) => { otpRefs.current[i] = el; }}
-                type="text"
-                inputMode="numeric"
-                maxLength={1}
-                value={digit}
-                onChange={(e) => handleOtpChange(i, e.target.value)}
-                onKeyDown={(e) => handleOtpKeyDown(i, e)}
-                onPaste={i === 0 ? handleOtpPaste : undefined}
-                style={{
-                  width: 48,
-                  height: 56,
-                  textAlign: "center",
-                  fontSize: 22,
-                  fontWeight: 700,
-                  background: "#111827",
-                  border: `2px solid ${digit ? "#7c3aed" : "#1e293b"}`,
-                  borderRadius: 12,
-                  color: "#f1f5f9",
-                  outline: "none",
-                  transition: "border-color 0.2s",
-                  fontFamily: "monospace",
-                  flex: 1,
-                }}
-                className="otp-digit-input"
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Timer + Resend */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <span style={{
-            fontSize: 13, color: timeLeft > 0 ? "#0ea5e9" : "#64748b",
-            fontWeight: 600, fontFamily: "monospace",
-          }}>
-            {timeLeft > 0 ? `⏱ ${formatTime(timeLeft)}` : "OTP expired"}
-          </span>
-          <button
-            type="button"
-            onClick={handleResend}
-            disabled={timeLeft > 0 || resendLoading}
-            style={{
-              display: "flex", alignItems: "center", gap: 6,
-              background: "none", border: "none",
-              color: timeLeft > 0 ? "#334155" : "#7c3aed",
-              cursor: timeLeft > 0 ? "not-allowed" : "pointer",
-              fontSize: 13, fontWeight: 600,
-              padding: "4px 8px", borderRadius: 8,
-              transition: "all 0.2s",
-            }}
-          >
-            {resendLoading
-              ? <Loader2 size={14} className="animate-spin" />
-              : <RefreshCw size={14} />}
-            {resendCooldown ? "OTP Resent!" : "Resend OTP"}
-          </button>
-        </div>
-
-        <button
-          type="submit"
-          className="admin-btn admin-btn-primary"
-          disabled={otpLoading || otp.join("").length !== 6}
-          style={{ height: 48, fontSize: 15, fontWeight: 700 }}
-        >
-          {otpLoading ? <Loader2 size={20} className="animate-spin" /> : <>Verify OTP <ArrowRight size={18} /></>}
-        </button>
-        <button
-          type="button"
-          onClick={() => { setStep("email"); setOtp(["", "", "", "", "", ""]); setOtpError(""); }}
-          style={{
-            background: "none", border: "none", color: "#64748b",
-            fontSize: 13, cursor: "pointer", display: "flex",
-            alignItems: "center", gap: 6, justifyContent: "center",
-          }}
-        >
-          <ArrowLeft size={14} /> Change email
-        </button>
-      </form>
-    );
-  }
-
-  function PasswordStep() {
-    if (pwSuccess) {
-      return (
-        <div style={{ textAlign: "center", padding: "16px 0" }}>
-          <div style={{
-            width: 64, height: 64, borderRadius: "50%",
-            background: "rgba(16,185,129,0.15)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            margin: "0 auto 16px",
-          }}>
-            <CheckCircle2 size={36} color="#10b981" />
-          </div>
-          <h3 style={{ color: "#f1f5f9", fontSize: 18, fontWeight: 700, marginBottom: 8 }}>
-            Password Updated!
-          </h3>
-          <p style={{ color: "#64748b", fontSize: 13 }}>
-            Redirecting you to login…
-          </p>
-        </div>
-      );
-    }
-
-    return (
-      <form onSubmit={handleResetPassword} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-        {pwError && <ErrorBox msg={pwError} />}
-
-        {/* New Password */}
-        <div>
-          <Label>New Password</Label>
-          <div style={{ position: "relative" }}>
-            <input
-              type={showNewPw ? "text" : "password"}
-              className="admin-input"
-              placeholder="Create a strong password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              autoFocus
-              style={{ paddingRight: 44 }}
-            />
-            <EyeToggle show={showNewPw} onToggle={() => setShowNewPw(!showNewPw)} />
-          </div>
-
-          {/* Strength bar */}
-          {newPassword && (
-            <div style={{ marginTop: 8 }}>
-              <div style={{
-                display: "flex", gap: 4, marginBottom: 4,
-              }}>
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <div key={i} style={{
-                    flex: 1, height: 4, borderRadius: 2,
-                    background: i <= strength.score ? strength.color : "#1e293b",
-                    transition: "background 0.3s",
-                  }} />
-                ))}
-              </div>
-              <span style={{ fontSize: 11, color: strength.color, fontWeight: 600 }}>
-                {strength.label}
-              </span>
-            </div>
-          )}
-        </div>
-
-        {/* Confirm Password */}
-        <div>
-          <Label>Confirm Password</Label>
-          <div style={{ position: "relative" }}>
-            <input
-              type={showConfirmPw ? "text" : "password"}
-              className="admin-input"
-              placeholder="Repeat your password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              style={{
-                paddingRight: 44,
-                borderColor: confirmPassword && confirmPassword !== newPassword ? "#e11d48" : undefined,
-              }}
-            />
-            <EyeToggle show={showConfirmPw} onToggle={() => setShowConfirmPw(!showConfirmPw)} />
-          </div>
-          {confirmPassword && confirmPassword !== newPassword && (
-            <p style={{ color: "#f87171", fontSize: 12, marginTop: 4 }}>Passwords do not match</p>
-          )}
-        </div>
-
-        {/* Policy hints */}
-        <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 4 }}>
-          {[
-            { ok: newPassword.length >= 8,       text: "At least 8 characters" },
-            { ok: /[A-Z]/.test(newPassword),       text: "Uppercase letter" },
-            { ok: /[a-z]/.test(newPassword),       text: "Lowercase letter" },
-            { ok: /\d/.test(newPassword),          text: "Number" },
-            { ok: /[!@#$%^&*(),.?":{}|<>]/.test(newPassword), text: "Special character" },
-          ].map((rule) => (
-            <li key={rule.text} style={{
-              fontSize: 12, display: "flex", alignItems: "center", gap: 6,
-              color: rule.ok ? "#10b981" : "#475569",
-              transition: "color 0.2s",
-            }}>
-              <ShieldCheck size={12} color={rule.ok ? "#10b981" : "#475569"} />
-              {rule.text}
-            </li>
-          ))}
-        </ul>
-
-        <button
-          type="submit"
-          className="admin-btn admin-btn-primary"
-          disabled={pwLoading}
-          style={{ marginTop: 8, height: 48, fontSize: 15, fontWeight: 700 }}
-        >
-          {pwLoading ? <Loader2 size={20} className="animate-spin" /> : <>Update Password <ArrowRight size={18} /></>}
-        </button>
-      </form>
-    );
-  }
-
-  // ── Small helpers ─────────────────────────────────────────────
-  function Label({ children }: { children: React.ReactNode }) {
-    return (
-      <label style={{
-        fontSize: 12, fontWeight: 600, color: "#94a3b8",
-        display: "block", marginBottom: 6,
-        textTransform: "uppercase", letterSpacing: "0.05em",
-      }}>
-        {children}
-      </label>
-    );
-  }
-
-  function ErrorBox({ msg }: { msg: string }) {
-    return (
-      <div style={{
-        background: "rgba(225,29,72,0.1)",
-        border: "1px solid rgba(225,29,72,0.3)",
-        borderRadius: 12, padding: "10px 14px",
-        fontSize: 13, color: "#f87171",
-        textAlign: "center", animation: "adminFadeIn 0.3s ease",
-      }}>
-        {msg}
-      </div>
-    );
-  }
-
-  function BackToLogin() {
-    return (
-      <button
-        type="button"
-        onClick={() => navigate("/admin/login")}
-        style={{
-          background: "none", border: "none",
-          color: "#64748b", fontSize: 13,
-          cursor: "pointer", display: "flex",
-          alignItems: "center", gap: 6, justifyContent: "center",
-          marginTop: 4,
-        }}
-      >
-        <ArrowLeft size={14} /> Back to Login
-      </button>
-    );
-  }
-
-  function EyeToggle({ show, onToggle }: { show: boolean; onToggle: () => void }) {
-    return (
-      <button
-        type="button"
-        onClick={onToggle}
-        style={{
-          position: "absolute", right: 12, top: "50%",
-          transform: "translateY(-50%)",
-          background: "none", border: "none",
-          color: "#64748b", cursor: "pointer", padding: 4,
-        }}
-      >
-        {show ? <EyeOff size={18} /> : <Eye size={18} />}
-      </button>
-    );
-  }
-
-  function Send16() {
-    return <ArrowRight size={18} />;
-  }
-
-  // ── Render ────────────────────────────────────────────────────
   const meta = stepMeta[step];
 
+  // ── Render ────────────────────────────────────────────────────
   return (
     <div
       className="admin-root"
@@ -649,8 +390,255 @@ const ForgotPasswordPage: React.FC = () => {
             </p>
           </div>
 
-          {/* Step content */}
-          {cardContent()}
+          {/* ═══════════════ STEP: EMAIL ═══════════════ */}
+          {step === "email" && (
+            <form onSubmit={handleSendOtp} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              {emailError && <ErrorBox msg={emailError} />}
+              <div>
+                <Label>Email Address</Label>
+                <input
+                  type="email"
+                  className="admin-input"
+                  placeholder="admin@ulmind.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  autoFocus
+                  autoComplete="email"
+                />
+              </div>
+              <button
+                type="submit"
+                className="admin-btn admin-btn-primary"
+                disabled={emailLoading}
+                style={{ marginTop: 8, height: 48, fontSize: 15, fontWeight: 700 }}
+              >
+                {emailLoading ? <Loader2 size={20} className="animate-spin" /> : <><ArrowRight size={18} /> Send OTP</>}
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate("/admin/login")}
+                style={{
+                  background: "none", border: "none",
+                  color: "#64748b", fontSize: 13,
+                  cursor: "pointer", display: "flex",
+                  alignItems: "center", gap: 6, justifyContent: "center",
+                  marginTop: 4,
+                }}
+              >
+                <ArrowLeft size={14} /> Back to Login
+              </button>
+            </form>
+          )}
+
+          {/* ═══════════════ STEP: OTP ═══════════════ */}
+          {step === "otp" && (
+            <form onSubmit={handleVerifyOtp} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+              {otpError && <ErrorBox msg={otpError} />}
+
+              {/* OTP digit boxes */}
+              <div>
+                <Label>Enter 6-Digit OTP</Label>
+                <div style={{ display: "flex", gap: 8, justifyContent: "space-between" }}>
+                  {otp.map((digit, i) => (
+                    <input
+                      key={`otp-box-${i}`}
+                      ref={(el) => { otpRefs.current[i] = el; }}
+                      type="text"
+                      inputMode="numeric"
+                      maxLength={1}
+                      value={digit}
+                      onChange={(e) => handleOtpChange(i, e.target.value)}
+                      onKeyDown={(e) => handleOtpKeyDown(i, e)}
+                      onPaste={i === 0 ? handleOtpPaste : undefined}
+                      autoFocus={i === 0}
+                      style={{
+                        width: 48,
+                        height: 56,
+                        textAlign: "center" as const,
+                        fontSize: 22,
+                        fontWeight: 700,
+                        background: "#111827",
+                        border: `2px solid ${digit ? "#7c3aed" : "#1e293b"}`,
+                        borderRadius: 12,
+                        color: "#f1f5f9",
+                        outline: "none",
+                        transition: "border-color 0.2s",
+                        fontFamily: "monospace",
+                        flex: 1,
+                        caretColor: "#7c3aed",
+                      }}
+                      className="otp-digit-input"
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Timer + Resend */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <span style={{
+                  fontSize: 13, color: timeLeft > 0 ? "#0ea5e9" : "#64748b",
+                  fontWeight: 600, fontFamily: "monospace",
+                }}>
+                  {timeLeft > 0 ? `⏱ ${formatTime(timeLeft)}` : "OTP expired"}
+                </span>
+                <button
+                  type="button"
+                  onClick={handleResend}
+                  disabled={timeLeft > 0 || resendLoading}
+                  style={{
+                    display: "flex", alignItems: "center", gap: 6,
+                    background: "none", border: "none",
+                    color: timeLeft > 0 ? "#334155" : "#7c3aed",
+                    cursor: timeLeft > 0 ? "not-allowed" : "pointer",
+                    fontSize: 13, fontWeight: 600,
+                    padding: "4px 8px", borderRadius: 8,
+                    transition: "all 0.2s",
+                  }}
+                >
+                  {resendLoading
+                    ? <Loader2 size={14} className="animate-spin" />
+                    : <RefreshCw size={14} />}
+                  {resendCooldown ? "OTP Resent!" : "Resend OTP"}
+                </button>
+              </div>
+
+              <button
+                type="submit"
+                className="admin-btn admin-btn-primary"
+                disabled={otpLoading || otp.join("").length !== 6}
+                style={{ height: 48, fontSize: 15, fontWeight: 700 }}
+              >
+                {otpLoading ? <Loader2 size={20} className="animate-spin" /> : <>Verify OTP <ArrowRight size={18} /></>}
+              </button>
+              <button
+                type="button"
+                onClick={() => { setStep("email"); setOtp(["", "", "", "", "", ""]); setOtpError(""); }}
+                style={{
+                  background: "none", border: "none", color: "#64748b",
+                  fontSize: 13, cursor: "pointer", display: "flex",
+                  alignItems: "center", gap: 6, justifyContent: "center",
+                }}
+              >
+                <ArrowLeft size={14} /> Change email
+              </button>
+            </form>
+          )}
+
+          {/* ═══════════════ STEP: PASSWORD ═══════════════ */}
+          {step === "password" && (
+            <>
+              {pwSuccess ? (
+                <div style={{ textAlign: "center", padding: "16px 0" }}>
+                  <div style={{
+                    width: 64, height: 64, borderRadius: "50%",
+                    background: "rgba(16,185,129,0.15)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    margin: "0 auto 16px",
+                  }}>
+                    <CheckCircle2 size={36} color="#10b981" />
+                  </div>
+                  <h3 style={{ color: "#f1f5f9", fontSize: 18, fontWeight: 700, marginBottom: 8 }}>
+                    Password Updated!
+                  </h3>
+                  <p style={{ color: "#64748b", fontSize: 13 }}>
+                    Redirecting you to login…
+                  </p>
+                </div>
+              ) : (
+                <form onSubmit={handleResetPassword} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                  {pwError && <ErrorBox msg={pwError} />}
+
+                  {/* New Password */}
+                  <div>
+                    <Label>New Password</Label>
+                    <div style={{ position: "relative" }}>
+                      <input
+                        type={showNewPw ? "text" : "password"}
+                        className="admin-input"
+                        placeholder="Create a strong password"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        autoFocus
+                        style={{ paddingRight: 44 }}
+                      />
+                      <EyeToggle show={showNewPw} onToggle={() => setShowNewPw(!showNewPw)} />
+                    </div>
+
+                    {/* Strength bar */}
+                    {newPassword && (
+                      <div style={{ marginTop: 8 }}>
+                        <div style={{
+                          display: "flex", gap: 4, marginBottom: 4,
+                        }}>
+                          {[1, 2, 3, 4, 5].map((i) => (
+                            <div key={i} style={{
+                              flex: 1, height: 4, borderRadius: 2,
+                              background: i <= strength.score ? strength.color : "#1e293b",
+                              transition: "background 0.3s",
+                            }} />
+                          ))}
+                        </div>
+                        <span style={{ fontSize: 11, color: strength.color, fontWeight: 600 }}>
+                          {strength.label}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Confirm Password */}
+                  <div>
+                    <Label>Confirm Password</Label>
+                    <div style={{ position: "relative" }}>
+                      <input
+                        type={showConfirmPw ? "text" : "password"}
+                        className="admin-input"
+                        placeholder="Repeat your password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        style={{
+                          paddingRight: 44,
+                          borderColor: confirmPassword && confirmPassword !== newPassword ? "#e11d48" : undefined,
+                        }}
+                      />
+                      <EyeToggle show={showConfirmPw} onToggle={() => setShowConfirmPw(!showConfirmPw)} />
+                    </div>
+                    {confirmPassword && confirmPassword !== newPassword && (
+                      <p style={{ color: "#f87171", fontSize: 12, marginTop: 4 }}>Passwords do not match</p>
+                    )}
+                  </div>
+
+                  {/* Policy hints */}
+                  <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 4 }}>
+                    {[
+                      { ok: newPassword.length >= 8,       text: "At least 8 characters" },
+                      { ok: /[A-Z]/.test(newPassword),       text: "Uppercase letter" },
+                      { ok: /[a-z]/.test(newPassword),       text: "Lowercase letter" },
+                      { ok: /\d/.test(newPassword),          text: "Number" },
+                      { ok: /[!@#$%^&*(),.?":{}|<>]/.test(newPassword), text: "Special character" },
+                    ].map((rule) => (
+                      <li key={rule.text} style={{
+                        fontSize: 12, display: "flex", alignItems: "center", gap: 6,
+                        color: rule.ok ? "#10b981" : "#475569",
+                        transition: "color 0.2s",
+                      }}>
+                        <ShieldCheck size={12} color={rule.ok ? "#10b981" : "#475569"} />
+                        {rule.text}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <button
+                    type="submit"
+                    className="admin-btn admin-btn-primary"
+                    disabled={pwLoading}
+                    style={{ marginTop: 8, height: 48, fontSize: 15, fontWeight: 700 }}
+                  >
+                    {pwLoading ? <Loader2 size={20} className="animate-spin" /> : <>Update Password <ArrowRight size={18} /></>}
+                  </button>
+                </form>
+              )}
+            </>
+          )}
 
           {/* Footer */}
           <p style={{
