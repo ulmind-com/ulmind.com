@@ -13,10 +13,12 @@ import { SpreadsheetPrintModal } from "../components/spreadsheet/SpreadsheetPrin
 import { motion, AnimatePresence } from "framer-motion";
 import * as XLSX from 'xlsx';
 import { useAdminAction } from "../context/AdminActionContext";
-import { getBaseUrl } from "../lib/api";
+import { getBaseUrl, createDeleteRequestAPI } from "../lib/api";
+import { useAuth } from "../context/auth-context";
 
 export default function DatabasePage() {
   const { triggerActionAnimation } = useAdminAction();
+  const { user: currentUser } = useAuth();
   const [sheets, setSheets] = useState<any[]>([]);
   const [activeSheet, setActiveSheet] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
@@ -77,10 +79,32 @@ export default function DatabasePage() {
 
   const handleDeleteSheet = async (e: React.MouseEvent, sheetId: string) => {
     e.stopPropagation();
+    
+    const isSuperAdmin = currentUser?.role?.toLowerCase() === "super_admin";
+    const sheetToDelete = sheets.find(s => s._id === sheetId);
+    
+    if (!isSuperAdmin) {
+      if (!window.confirm(`You don't have permission to delete. Send a deletion request for sheet "${sheetToDelete?.name || sheetId}" to the Super Admin?`)) return;
+      try {
+        await createDeleteRequestAPI({
+          item_type: "Spreadsheet",
+          item_description: sheetToDelete?.name || sheetId,
+          endpoint: `/sheets/${sheetId}`
+        });
+        alert("Deletion request sent successfully to Super Admin.");
+      } catch (error: any) {
+        alert(error.message || "Failed to send deletion request");
+      }
+      return;
+    }
+    
     if (!window.confirm("Are you sure you want to delete this sheet? This action cannot be undone.")) return;
     try {
       const res = await fetch(`${getBaseUrl()}/sheets/${sheetId}`, {
         method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("ulmind_admin_token")}`
+        }
       });
       if (res.ok) {
         const remainingSheets = sheets.filter(s => s._id !== sheetId);
@@ -89,6 +113,8 @@ export default function DatabasePage() {
           setActiveSheet(remainingSheets.length > 0 ? remainingSheets[0] : null);
         }
         triggerActionAnimation('delete');
+      } else {
+        alert("Failed to delete sheet. Are you a super admin?");
       }
     } catch (error) {
       console.error("Failed to delete sheet:", error);
@@ -195,7 +221,7 @@ export default function DatabasePage() {
           const sheetRes = await fetch(`${getBaseUrl()}/sheets/`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name: file.name.replace(/\.[^/.]+$/, ""), columns }),
+            body: JSON.stringify({ name: file.name.replace(/\.[^/.]+₹/, ""), columns }),
           });
           
           if (sheetRes.ok) {

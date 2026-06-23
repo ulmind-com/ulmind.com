@@ -18,6 +18,32 @@ interface Session {
   duration_minutes: number;
 }
 
+const formatIST = (iso: string | null) => {
+  if (!iso) return "—";
+  const d = new Date(iso.endsWith("Z") ? iso : iso + "Z");
+  return new Intl.DateTimeFormat("en-IN", {
+    dateStyle: "medium", timeStyle: "medium",
+    timeZone: "Asia/Kolkata"
+  }).format(d);
+};
+
+const LiveTimer: React.FC<{ loginTime: string }> = ({ loginTime }) => {
+  const [duration, setDuration] = useState("0.00");
+  
+  useEffect(() => {
+    const update = () => {
+      const login = new Date(loginTime.endsWith("Z") ? loginTime : loginTime + "Z");
+      const diffMinutes = Math.max(0, (Date.now() - login.getTime()) / 60000);
+      setDuration(diffMinutes.toFixed(2));
+    };
+    update();
+    const interval = setInterval(update, 1000);
+    return () => clearInterval(interval);
+  }, [loginTime]);
+
+  return <>{duration} min</>;
+};
+
 const ActivityTrackerPage: React.FC = () => {
   const { user } = useAuth();
   const [sessions, setSessions] = useState<Session[]>([]);
@@ -136,10 +162,10 @@ const ActivityTrackerPage: React.FC = () => {
                     
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#10b981", fontSize: 13, fontWeight: 600 }}>
-                        <Clock size={14} /> {session.duration_minutes} min
+                        <Clock size={14} /> <LiveTimer loginTime={session.login_time} />
                       </div>
                       <div style={{ fontSize: 11, color: "#64748b" }}>
-                        Logged in: {new Date(session.login_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        Logged in: {formatIST(session.login_time)}
                       </div>
                     </div>
                   </motion.div>
@@ -183,10 +209,10 @@ const ActivityTrackerPage: React.FC = () => {
                         </div>
                       </td>
                       <td style={{ padding: "16px 20px", fontSize: 14, color: "#cbd5e1" }}>
-                        {new Date(session.login_time).toLocaleString()}
+                        {formatIST(session.login_time)}
                       </td>
                       <td style={{ padding: "16px 20px", fontSize: 14, color: "#cbd5e1" }}>
-                        {session.logout_time ? new Date(session.logout_time).toLocaleString() : "—"}
+                        {formatIST(session.logout_time)}
                       </td>
                       <td style={{ padding: "16px 20px", fontSize: 14, fontWeight: 600, color: "#f8fafc", textAlign: "right" }}>
                         {session.duration_minutes} min

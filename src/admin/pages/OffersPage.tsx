@@ -14,9 +14,11 @@ import {
   createOfferAPI,
   updateOfferAPI,
   updateOfferImageAPI,
-  deleteOfferAPI
+  deleteOfferAPI,
+  createDeleteRequestAPI
 } from "../lib/api";
 import { useAdminAction } from "../context/AdminActionContext";
+import { useAuth } from "../context/auth-context";
 
 type PanelMode = "add" | "edit" | null;
 
@@ -50,6 +52,7 @@ const getOfferStatus = (offer: Offer): { label: string; color: string; bg: strin
 
 const OffersPage: React.FC = () => {
   const { triggerActionAnimation } = useAdminAction();
+  const { user: currentUser } = useAuth();
   const [offers, setOffers] = useState<Offer[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -158,6 +161,26 @@ const OffersPage: React.FC = () => {
   const handleDelete = async () => {
     if (!deleteTarget) return;
     setDeleting(true);
+    
+    const isSuperAdmin = currentUser?.role?.toLowerCase() === "super_admin";
+    
+    if (!isSuperAdmin) {
+       try {
+         await createDeleteRequestAPI({
+           item_type: "Offer",
+           item_description: deleteTarget.title || "Untitled Offer",
+           endpoint: `/offers/${deleteTarget._id}`
+         });
+         alert("Deletion request sent successfully to Super Admin.");
+         setDeleteTarget(null);
+       } catch (err: any) {
+         setError(err.message || "Failed to send deletion request");
+       } finally {
+         setDeleting(false);
+       }
+       return;
+    }
+    
     try {
       await deleteOfferAPI(deleteTarget._id);
       setDeleteTarget(null);
@@ -481,9 +504,14 @@ const OffersPage: React.FC = () => {
             <div style={{ width: 56, height: 56, borderRadius: "50%", background: "rgba(239,68,68,0.12)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
               <Trash2 size={24} color="#f87171" />
             </div>
-            <h3 style={{ fontSize: 18, fontWeight: 600, color: "var(--admin-text)", marginBottom: 8 }}>Delete Offer?</h3>
+            <h3 style={{ fontSize: 18, fontWeight: 600, color: "var(--admin-text)", marginBottom: 8 }}>
+              {currentUser?.role?.toLowerCase() === "super_admin" ? "Delete Offer?" : "Request Deletion?"}
+            </h3>
             <p style={{ fontSize: 13, color: "var(--admin-text-dim)", lineHeight: 1.6, marginBottom: 28 }}>
-              <strong style={{ color: "var(--admin-text)" }}>"{deleteTarget.title}"</strong> permanently delete hobe. Eta undo kora jabe na.
+              <strong style={{ color: "var(--admin-text)" }}>"{deleteTarget.title}"</strong> 
+              {currentUser?.role?.toLowerCase() === "super_admin" 
+                ? " permanently delete hobe. Eta undo kora jabe na." 
+                : " delete korar jonne Super Admin er permission lagbe. Request pathate chan?"}
             </p>
             <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
               <button
@@ -504,7 +532,7 @@ const OffersPage: React.FC = () => {
                 }}
               >
                 {deleting ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={14} />}
-                {deleting ? "Deleting..." : "Delete"}
+                {deleting ? "Processing..." : (currentUser?.role?.toLowerCase() === "super_admin" ? "Delete" : "Request Delete")}
               </button>
             </div>
           </div>

@@ -50,9 +50,53 @@ const AdminAnalyticsPage = lazy(() => import("./admin/pages/AnalyticsPage"));
 const AdminVisitorsPage = lazy(() => import("./admin/pages/VisitorsPage"));
 const AdminSettingsPage = lazy(() => import("./admin/pages/SettingsPage"));
 const AdminTeamPage = lazy(() => import("./admin/pages/TeamPage"));
+const TeamDashboardPage = lazy(() => import("./admin/pages/team/TeamDashboard"));
+const EmployeeDirectoryPage = lazy(() => import("./admin/pages/team/EmployeeDirectory"));
+const TeamAttendancePage = lazy(() => import("./admin/pages/team/TeamAttendance"));
+const TeamWorkLogsPage = lazy(() => import("./admin/pages/team/TeamWorkLogs"));
+const TeamPerformancePage = lazy(() => import("./admin/pages/team/TeamPerformance"));
+const TeamLeaderDashboardPage = lazy(() => import("./admin/pages/team/TeamLeaderDashboard"));
+const RolesPermissionsPage = lazy(() => import("./admin/pages/team/RolesPermissions"));
+const LeaveManagementPage = lazy(() => import("./admin/pages/team/LeaveManagement"));
+const PayrollOverviewPage = lazy(() => import("./admin/pages/team/PayrollOverview"));
+const TeamAnalyticsPage = lazy(() => import("./admin/pages/team/TeamAnalytics"));
 const AdminActivityTrackerPage = lazy(() => import("./admin/pages/ActivityTrackerPage"));
 const AdminOffersPage = lazy(() => import("./admin/pages/OffersPage"));
 const AdminDatabasePage = lazy(() => import("./admin/pages/DatabasePage"));
+const AdminCRMPage = lazy(() => import("./admin/pages/CRMPage"));
+const CRMDashboardPage = lazy(() => import("./admin/pages/crm/CRMDashboard"));
+const CRMDirectoryPage = lazy(() => import("./admin/pages/crm/DirectoryPage"));
+const CRMClientProfilePage = lazy(() => import("./admin/pages/crm/ClientProfile"));
+const CRMActivitiesPage = lazy(() => import("./admin/pages/crm/ActivitiesPage"));
+const CRMMeetingsPage = lazy(() => import("./admin/pages/crm/MeetingsPage"));
+const CRMContractsPage = lazy(() => import("./admin/pages/crm/ContractsPage"));
+const DeleteRequestsPage = lazy(() => import("./admin/pages/DeleteRequestsPage"));
+const CRMDocumentsPage = lazy(() => import("./admin/pages/crm/DocumentsPage"));
+const CRMPipelinePage = lazy(() => import("./admin/pages/crm/PipelinePage"));
+const AdminFinancePage = lazy(() => import("./admin/pages/FinancePage"));
+const AdminProjectPage = lazy(() => import("./admin/pages/ProjectPage"));
+const FinDashboardPage = lazy(() => import("./admin/pages/finance/FinDashboard"));
+const FinInvoicesPage = lazy(() => import("./admin/pages/finance/FinInvoices"));
+const FinPaymentsPage = lazy(() => import("./admin/pages/finance/FinPayments"));
+const FinExpensesPage = lazy(() => import("./admin/pages/finance/FinExpenses"));
+const FinProfitLossPage = lazy(() => import("./admin/pages/finance/FinProfitLoss"));
+const FinRevenuePage = lazy(() => import("./admin/pages/finance/FinRevenue"));
+const FinOutstandingPage = lazy(() => import("./admin/pages/finance/FinOutstanding"));
+const FinReportsPage = lazy(() => import("./admin/pages/finance/FinReports"));
+const PMDashboardPage = lazy(() => import("./admin/pages/projects/PMDashboard"));
+const PMProjectDirectory = lazy(() => import("./admin/pages/projects/ProjectDirectory"));
+const PMProjectProfile = lazy(() => import("./admin/pages/projects/ProjectProfile"));
+const PMKanbanPage = lazy(() => import("./admin/pages/projects/PMKanban"));
+const PMTimelinePage = lazy(() => import("./admin/pages/projects/PMTimeline"));
+const PMTasksPage = lazy(() => import("./admin/pages/projects/PMTasks"));
+const PMMilestonesPage = lazy(() => import("./admin/pages/projects/PMMilestones"));
+const PMFilesPage = lazy(() => import("./admin/pages/projects/PMFiles"));
+const PMFeedbackPage = lazy(() => import("./admin/pages/projects/PMFeedback"));
+const PMTimeTrackingPage = lazy(() => import("./admin/pages/projects/PMTimeTracking"));
+const PMBudgetPage = lazy(() => import("./admin/pages/projects/PMBudget"));
+const AdminNotificationDashboard = lazy(() => import("./admin/pages/NotificationDashboardPage"));
+const AdminAuditLogs = lazy(() => import("./admin/pages/AuditLogsPage"));
+const AdminActivityFeed = lazy(() => import("./admin/pages/ActivityFeedPage"));
 import { AuthProvider } from "./admin/context/auth-context";
 import AdminLayout from "./admin/components/AdminLayout";
 import ProtectedRoute from "./admin/components/ProtectedRoute";
@@ -503,12 +547,69 @@ const App = () => {
                   }>
                     <Route index element={<AdminDashboardPage />} />
                     <Route path="analytics" element={<AdminAnalyticsPage />} />
+                    <Route path="crm" element={<AdminCRMPage />}>
+                      <Route index element={<CRMDashboardPage />} />
+                      <Route path="dashboard" element={<CRMDashboardPage />} />
+                      <Route path="clients" element={<CRMDirectoryPage />} />
+                      <Route path="clients/:id" element={<CRMClientProfilePage />} />
+                      <Route path="activities" element={<CRMActivitiesPage />} />
+                      <Route path="meetings" element={<CRMMeetingsPage />} />
+                      <Route path="contracts" element={<CRMContractsPage />} />
+                      {/* Reuse Finance pages for CRM Context where possible or build CRM specific wrappers */}
+                      <Route path="invoices" element={<AdminFinancePage />} />
+                      <Route path="payments" element={<AdminFinancePage />} />
+                      <Route path="documents" element={<CRMDocumentsPage />} />
+                      <Route path="pipeline" element={<CRMPipelinePage />} />
+                      {/* Legacy lead details fallback */}
+                      <Route path="lead/:id" element={<CRMClientProfilePage />} />
+                    </Route>
+                    <Route path="finance" element={<AdminFinancePage />}>
+                      <Route index element={<FinDashboardPage />} />
+                      <Route path="dashboard" element={<FinDashboardPage />} />
+                      <Route path="invoices" element={<FinInvoicesPage />} />
+                      <Route path="payments" element={<FinPaymentsPage />} />
+                      <Route path="expenses" element={<FinExpensesPage />} />
+                      <Route path="profit-loss" element={<FinProfitLossPage />} />
+                      <Route path="revenue" element={<FinRevenuePage />} />
+                      <Route path="outstanding" element={<FinOutstandingPage />} />
+                      <Route path="reports" element={<FinReportsPage />} />
+                    </Route>
+                    <Route path="projects" element={<AdminProjectPage />}>
+                      <Route index element={<PMDashboardPage />} />
+                      <Route path="dashboard" element={<PMDashboardPage />} />
+                      <Route path="all" element={<PMProjectDirectory />} />
+                      <Route path=":id" element={<PMProjectProfile />} />
+                      <Route path="kanban" element={<PMKanbanPage />} />
+                      <Route path="timeline" element={<PMTimelinePage />} />
+                      <Route path="tasks" element={<PMTasksPage />} />
+                      <Route path="milestones" element={<PMMilestonesPage />} />
+                      <Route path="files" element={<PMFilesPage />} />
+                      <Route path="feedback" element={<PMFeedbackPage />} />
+                      <Route path="time-tracking" element={<PMTimeTrackingPage />} />
+                      <Route path="budget" element={<PMBudgetPage />} />
+                    </Route>
                     <Route path="visitors" element={<AdminVisitorsPage />} />
-                    <Route path="team" element={<AdminTeamPage />} />
+                    <Route path="team" element={<AdminTeamPage />}>
+                      <Route index element={<TeamDashboardPage />} />
+                      <Route path="dashboard" element={<TeamDashboardPage />} />
+                      <Route path="directory" element={<EmployeeDirectoryPage />} />
+                      <Route path="attendance" element={<TeamAttendancePage />} />
+                      <Route path="work-logs" element={<TeamWorkLogsPage />} />
+                      <Route path="performance" element={<TeamPerformancePage />} />
+                      <Route path="leader" element={<TeamLeaderDashboardPage />} />
+                      <Route path="roles" element={<RolesPermissionsPage />} />
+                      <Route path="leaves" element={<LeaveManagementPage />} />
+                      <Route path="payroll" element={<PayrollOverviewPage />} />
+                      <Route path="analytics" element={<TeamAnalyticsPage />} />
+                    </Route>
                     <Route path="activity" element={<AdminActivityTrackerPage />} />
                     <Route path="offers" element={<AdminOffersPage />} />
                     <Route path="database" element={<AdminDatabasePage />} />
+                    <Route path="delete-requests" element={<DeleteRequestsPage />} />
                     <Route path="settings" element={<AdminSettingsPage />} />
+                    <Route path="notifications" element={<AdminNotificationDashboard />} />
+                    <Route path="audit-logs" element={<AdminAuditLogs />} />
+                    <Route path="activity-feed" element={<AdminActivityFeed />} />
                   </Route>
 
                   <Route path="*" element={<NotFound />} />

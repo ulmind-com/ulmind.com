@@ -3,9 +3,9 @@
    Centralised fetch wrapper with JWT auto-attach & 401 handling
    ────────────────────────────────────────────────────────────── */
 
-// Use Vite proxy in development to avoid CORS and network blocking issues on the network
-export const getBaseUrl = () => import.meta.env.DEV ? "/api/v1" : "https://ulmind-backend.onrender.com/api/v1";
-export const getWsBaseUrl = () => import.meta.env.DEV ? `ws://${window.location.host}/ws` : "wss://ulmind-backend.onrender.com/ws";
+// Use production backend by default to avoid local connection refused errors if backend is not running
+export const getBaseUrl = () => import.meta.env.VITE_API_URL || "https://ulmind-backend.onrender.com/api/v1";
+export const getWsBaseUrl = () => import.meta.env.VITE_WS_URL || "wss://ulmind-backend.onrender.com/ws";
 
 const BASE_URL = getBaseUrl();
 
@@ -246,6 +246,112 @@ export const getSessionsAPI = async () => {
 };
 
 // ═══════════════════════════════════════════════════════════════
+//  CRM / CLIENT APIs
+// ═══════════════════════════════════════════════════════════════
+
+export interface Client {
+  _id: string;
+  companyName: string;
+  contactEmail: string;
+  phone?: string;
+  industry?: string;
+  assigned_manager?: string;
+  revenue: number;
+  lifetime_value: number;
+  address?: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  crm_data: {
+    stage: string;
+    tags: string[];
+    notes: {
+      id: string;
+      content: string;
+      author_id: string;
+      created_at: string;
+    }[];
+    contracts: {
+      id: string;
+      title: string;
+      file_url: string;
+      status: string;
+      created_at: string;
+      expires_at: string | null;
+    }[];
+    last_contacted_at: string | null;
+  };
+}
+
+export const getClientsAPI = async (): Promise<Client[]> => {
+  const res = await authFetch("/clients/");
+  if (!res.ok) throw new Error("Failed to fetch clients");
+  return res.json();
+};
+
+export const getCrmDashboardAPI = async (): Promise<any> => {
+  const res = await authFetch("/crm/dashboard");
+  if (!res.ok) throw new Error("Failed to fetch CRM dashboard");
+  return res.json();
+};
+
+export const getCrmActivitiesAPI = async (): Promise<any[]> => {
+  const res = await authFetch("/crm/activities");
+  if (!res.ok) throw new Error("Failed to fetch activities");
+  return res.json();
+};
+
+export const getCrmMeetingsAPI = async (): Promise<any[]> => {
+  const res = await authFetch("/crm/meetings");
+  if (!res.ok) throw new Error("Failed to fetch meetings");
+  return res.json();
+};
+
+export const getCrmContractsAPI = async (): Promise<any[]> => {
+  const res = await authFetch("/crm/contracts");
+  if (!res.ok) throw new Error("Failed to fetch contracts");
+  return res.json();
+};
+
+export const getCrmDocumentsAPI = async (): Promise<any[]> => {
+  const res = await authFetch("/crm/documents");
+  if (!res.ok) throw new Error("Failed to fetch documents");
+  return res.json();
+};
+
+export const getClientAPI = async (id: string): Promise<Client> => {
+  const res = await authFetch(`/clients/${id}`);
+  if (!res.ok) throw new Error("Failed to fetch client");
+  return res.json();
+};
+
+export const createClientAPI = async (payload: { companyName: string; contactEmail: string }): Promise<Client> => {
+  const res = await authFetch("/clients/", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error("Failed to create client");
+  return res.json();
+};
+
+export const updateClientStageAPI = async (id: string, stage: string): Promise<Client> => {
+  const res = await authFetch(`/clients/${id}/stage?stage=${encodeURIComponent(stage)}`, {
+    method: "PUT",
+  });
+  if (!res.ok) throw new Error("Failed to update client stage");
+  return res.json();
+};
+
+export const addClientNoteAPI = async (id: string, content: string, author_id: string): Promise<Client> => {
+  const res = await authFetch(`/clients/${id}/notes`, {
+    method: "POST",
+    body: JSON.stringify({ content, author_id }),
+  });
+  if (!res.ok) throw new Error("Failed to add client note");
+  return res.json();
+};
+
+// ═══════════════════════════════════════════════════════════════
 //  TEAM APIs
 // ═══════════════════════════════════════════════════════════════
 
@@ -435,3 +541,196 @@ export const resetPasswordAPI = async (reset_token: string, new_password: string
   return data as { success: boolean; message: string };
 };
 
+// ═══════════════════════════════════════════════════════════════
+//  PROJECT MANAGEMENT ENTERPRISE API
+// ═══════════════════════════════════════════════════════════════
+
+export const getPmDashboardAPI = async (): Promise<any> => {
+  const res = await authFetch("/pm/dashboard");
+  if (!res.ok) throw new Error("Failed to fetch PM dashboard");
+  return res.json();
+};
+
+export const getPmTasksAPI = async (projectId?: string): Promise<any[]> => {
+  const url = projectId ? `/pm/tasks?project_id=${projectId}` : "/pm/tasks";
+  const res = await authFetch(url);
+  if (!res.ok) throw new Error("Failed to fetch tasks");
+  return res.json();
+};
+
+export const updatePmTaskAPI = async (id: string, data: any): Promise<any> => {
+  const res = await authFetch(`/pm/tasks/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Failed to update task");
+  return res.json();
+};
+
+export const getPmMilestonesAPI = async (projectId?: string): Promise<any[]> => {
+  const url = projectId ? `/pm/milestones?project_id=${projectId}` : "/pm/milestones";
+  const res = await authFetch(url);
+  if (!res.ok) throw new Error("Failed to fetch milestones");
+  return res.json();
+};
+
+export const getPmTimeLogsAPI = async (projectId?: string): Promise<any[]> => {
+  const url = projectId ? `/pm/time-logs?project_id=${projectId}` : "/pm/time-logs";
+  const res = await authFetch(url);
+  if (!res.ok) throw new Error("Failed to fetch time logs");
+  return res.json();
+};
+
+export const getPmFilesAPI = async (projectId?: string): Promise<any[]> => {
+  const url = projectId ? `/pm/files?project_id=${projectId}` : "/pm/files";
+  const res = await authFetch(url);
+  if (!res.ok) throw new Error("Failed to fetch files");
+  return res.json();
+};
+
+export const getPmFeedbackAPI = async (projectId?: string): Promise<any[]> => {
+  const url = projectId ? `/pm/feedback?project_id=${projectId}` : "/pm/feedback";
+  const res = await authFetch(url);
+  if (!res.ok) throw new Error("Failed to fetch feedback");
+  return res.json();
+};
+
+export const getPmExpensesAPI = async (projectId?: string): Promise<any[]> => {
+  const url = projectId ? `/pm/expenses?project_id=${projectId}` : "/pm/expenses";
+  const res = await authFetch(url);
+  if (!res.ok) throw new Error("Failed to fetch expenses");
+  return res.json();
+};
+
+export const getProjectsAPI = async (): Promise<any[]> => {
+  const res = await authFetch("/projects/");
+  if (!res.ok) throw new Error("Failed to fetch projects");
+  return res.json();
+};
+
+export const getProjectAPI = async (id: string): Promise<any> => {
+  const res = await authFetch(`/projects/${id}`);
+  if (!res.ok) throw new Error("Failed to fetch project");
+  return res.json();
+};
+
+// ═══════════════════════════════════════════════════════════════
+//  FINANCE ENTERPRISE API
+// ═══════════════════════════════════════════════════════════════
+
+export const getFinanceDashboardAPI = async (): Promise<any> => {
+  const res = await authFetch("/finance/dashboard");
+  if (!res.ok) throw new Error("Failed to fetch finance dashboard");
+  return res.json();
+};
+
+export const getInvoicesAPI = async (): Promise<any[]> => {
+  const res = await authFetch("/finance/invoices");
+  if (!res.ok) throw new Error("Failed to fetch invoices");
+  return res.json();
+};
+
+export const getPaymentsAPI = async (): Promise<any[]> => {
+  const res = await authFetch("/finance/payments");
+  if (!res.ok) throw new Error("Failed to fetch payments");
+  return res.json();
+};
+
+export const getExpensesAPI = async (): Promise<any[]> => {
+  const res = await authFetch("/finance/expenses");
+  if (!res.ok) throw new Error("Failed to fetch expenses");
+  return res.json();
+};
+
+export const getOutstandingInvoicesAPI = async (): Promise<any[]> => {
+  const res = await authFetch("/finance/outstanding");
+  if (!res.ok) throw new Error("Failed to fetch outstanding invoices");
+  return res.json();
+};
+
+// ═══════════════════════════════════════════════════════════════
+//  TEAM ENTERPRISE API
+// ═══════════════════════════════════════════════════════════════
+
+export const getTeamHRDashboardAPI = async (): Promise<any> => {
+  const res = await authFetch("/team-hr/dashboard");
+  if (!res.ok) throw new Error("Failed to fetch team dashboard");
+  return res.json();
+};
+
+export const getTeamAttendanceAPI = async (employeeId?: string): Promise<any[]> => {
+  const url = employeeId ? `/team-hr/attendance?employee_id=${employeeId}` : "/team-hr/attendance";
+  const res = await authFetch(url);
+  if (!res.ok) throw new Error("Failed to fetch attendance");
+  return res.json();
+};
+
+export const getTeamWorkLogsAPI = async (employeeId?: string): Promise<any[]> => {
+  const url = employeeId ? `/team-hr/work-logs?employee_id=${employeeId}` : "/team-hr/work-logs";
+  const res = await authFetch(url);
+  if (!res.ok) throw new Error("Failed to fetch work logs");
+  return res.json();
+};
+
+export const getTeamPerformanceAPI = async (employeeId?: string): Promise<any[]> => {
+  const url = employeeId ? `/team-hr/performance?employee_id=${employeeId}` : "/team-hr/performance";
+  const res = await authFetch(url);
+  if (!res.ok) throw new Error("Failed to fetch performance");
+  return res.json();
+};
+
+export const getTeamLeavesAPI = async (employeeId?: string): Promise<any[]> => {
+  const url = employeeId ? `/team-hr/leaves?employee_id=${employeeId}` : "/team-hr/leaves";
+  const res = await authFetch(url);
+  if (!res.ok) throw new Error("Failed to fetch leaves");
+  return res.json();
+};
+
+export const getTeamPayrollAPI = async (employeeId?: string): Promise<any[]> => {
+  const url = employeeId ? `/team-hr/payroll?employee_id=${employeeId}` : "/team-hr/payroll";
+  const res = await authFetch(url);
+  if (!res.ok) throw new Error("Failed to fetch payroll");
+  return res.json();
+};
+
+// ═══════════════════════════════════════════════════════════════
+//  DELETE REQUESTS API
+// ═══════════════════════════════════════════════════════════════
+
+export interface DeleteRequest {
+  _id: string;
+  user_id: string;
+  user_name: string;
+  user_email: string;
+  item_type: string;
+  item_description: string;
+  endpoint: string;
+  status: "pending" | "approved" | "rejected";
+  created_at: string;
+}
+
+export const createDeleteRequestAPI = async (payload: { item_type: string; item_description: string; endpoint: string }) => {
+  const res = await authFetch("/delete-requests/", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error("Failed to create delete request");
+  return res.json();
+};
+
+export const getDeleteRequestsAPI = async (status?: string): Promise<{ data: DeleteRequest[], pagination: any }> => {
+  const url = status ? `/delete-requests/?status_filter=${status}` : `/delete-requests/`;
+  const res = await authFetch(url);
+  if (!res.ok) throw new Error("Failed to fetch delete requests");
+  return res.json();
+};
+
+export const updateDeleteRequestStatusAPI = async (id: string, status: "approved" | "rejected") => {
+  const res = await authFetch(`/delete-requests/${id}/status`, {
+    method: "PATCH",
+    body: JSON.stringify({ status }),
+  });
+  if (!res.ok) throw new Error("Failed to update delete request status");
+  return res.json();
+};

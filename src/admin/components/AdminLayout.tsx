@@ -20,21 +20,36 @@ import {
   ChevronRight,
   Database,
   Activity,
+  Briefcase,
+  DollarSign,
+  FolderKanban,
+  Bell,
+  ShieldAlert,
+  Rss
 } from "lucide-react";
+import NotificationCenter from "./NotificationCenter";
 import "../admin.css";
 
 const navItems = [
   { path: "/admin", label: "Dashboard", icon: LayoutDashboard, end: true },
+  { path: "/admin/crm", label: "CRM Pipeline", icon: Briefcase, end: false },
+  { path: "/admin/projects", label: "Projects", icon: FolderKanban, end: false },
+  { path: "/admin/finance", label: "Finance", icon: DollarSign, end: false },
   { path: "/admin/analytics", label: "Analytics", icon: BarChart3, end: false },
   { path: "/admin/visitors", label: "Visitors", icon: Users, end: false },
   { path: "/admin/team", label: "Team", icon: ShieldCheck, end: false },
   { path: "/admin/activity", label: "Activity Tracker", icon: Activity, end: false },
   { path: "/admin/offers", label: "Offers", icon: Tag, end: false },
   { path: "/admin/database", label: "Database", icon: Database, end: false },
+  { path: "/admin/notifications", label: "AI Notifications", icon: Bell, end: false },
+  { path: "/admin/activity-feed", label: "Activity Feed", icon: Rss, end: false },
+  { path: "/admin/audit-logs", label: "Audit Logs", icon: ShieldAlert, end: false },
+  { path: "/admin/delete-requests", label: "Delete Requests", icon: ShieldAlert, end: false },
   { path: "/admin/settings", label: "Settings", icon: Settings, end: false },
 ];
 
 import { AdminActionProvider } from "../context/AdminActionContext";
+import { WebSocketProvider } from "../context/WebSocketContext";
 
 const AdminLayout: React.FC = () => {
   const { user, logout } = useAuth();
@@ -48,6 +63,7 @@ const AdminLayout: React.FC = () => {
 
   return (
     <AdminActionProvider>
+      <WebSocketProvider>
       <div className="admin-root">
         {/* Mobile Overlay */}
         <div
@@ -80,6 +96,7 @@ const AdminLayout: React.FC = () => {
           <nav className="admin-nav">
             {navItems.map((item) => {
               if (item.path === "/admin/activity" && user?.role?.toLowerCase() !== "super_admin") return null;
+              if (item.path === "/admin/delete-requests" && user?.role?.toLowerCase() !== "super_admin") return null;
               return (
                 <NavLink
                   key={item.path}
@@ -226,6 +243,7 @@ const AdminLayout: React.FC = () => {
             </div>
 
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <NotificationCenter />
               <div className="admin-badge admin-badge-success">
                 ● Online
               </div>
@@ -247,6 +265,7 @@ const AdminLayout: React.FC = () => {
           }
         `}</style>
       </div>
+      </WebSocketProvider>
     </AdminActionProvider>
   );
 };
