@@ -4,8 +4,15 @@
    ────────────────────────────────────────────────────────────── */
 
 // Use production backend by default to avoid local connection refused errors if backend is not running
-export const getBaseUrl = () => import.meta.env.VITE_API_URL || "https://ulmind-backend.onrender.com/api/v1";
-export const getWsBaseUrl = () => import.meta.env.VITE_WS_URL || "wss://ulmind-backend.onrender.com/ws";
+export const getBaseUrl = () => {
+  if (import.meta.env.PROD) return "https://ulmind-backend.onrender.com/api/v1";
+  return import.meta.env.VITE_API_URL || "https://ulmind-backend.onrender.com/api/v1";
+};
+
+export const getWsBaseUrl = () => {
+  if (import.meta.env.PROD) return "wss://ulmind-backend.onrender.com/ws";
+  return import.meta.env.VITE_WS_URL || "wss://ulmind-backend.onrender.com/ws";
+};
 
 const BASE_URL = getBaseUrl();
 
