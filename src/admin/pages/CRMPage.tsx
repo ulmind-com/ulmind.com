@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { 
   LayoutDashboard, Users, Kanban, 
   History, Calendar, FileSignature, 
-  Receipt, CreditCard, FolderOpen 
+  Receipt, CreditCard, FolderOpen, Search
 } from "lucide-react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 
@@ -13,6 +13,7 @@ const CRMPage: React.FC = () => {
   const crmNavLinks = [
     { to: "/admin/crm/dashboard", icon: <LayoutDashboard size={16} />, label: "Dashboard" },
     { to: "/admin/crm/clients", icon: <Users size={16} />, label: "Client List" },
+    { to: "/admin/crm/lead-finder", icon: <Search size={16} />, label: "Lead Finder" },
     { to: "/admin/crm/activities", icon: <History size={16} />, label: "Contact History" },
     { to: "/admin/crm/meetings", icon: <Calendar size={16} />, label: "Meeting Notes" },
     { to: "/admin/crm/contracts", icon: <FileSignature size={16} />, label: "Contracts" },

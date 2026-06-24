@@ -73,6 +73,7 @@ const CRMContractsPage = lazy(() => import("./admin/pages/crm/ContractsPage"));
 const DeleteRequestsPage = lazy(() => import("./admin/pages/DeleteRequestsPage"));
 const CRMDocumentsPage = lazy(() => import("./admin/pages/crm/DocumentsPage"));
 const CRMPipelinePage = lazy(() => import("./admin/pages/crm/PipelinePage"));
+const CRMLeadFinderPage = lazy(() => import("./admin/pages/crm/LeadFinderPage"));
 const AdminFinancePage = lazy(() => import("./admin/pages/FinancePage"));
 const AdminProjectPage = lazy(() => import("./admin/pages/ProjectPage"));
 const FinDashboardPage = lazy(() => import("./admin/pages/finance/FinDashboard"));
@@ -560,6 +561,7 @@ const App = () => {
                       <Route path="payments" element={<AdminFinancePage />} />
                       <Route path="documents" element={<CRMDocumentsPage />} />
                       <Route path="pipeline" element={<CRMPipelinePage />} />
+                      <Route path="lead-finder" element={<CRMLeadFinderPage />} />
                       {/* Legacy lead details fallback */}
                       <Route path="lead/:id" element={<CRMClientProfilePage />} />
                     </Route>
