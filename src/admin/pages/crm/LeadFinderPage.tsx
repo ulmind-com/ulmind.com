@@ -20,6 +20,7 @@ const LeadFinderPage: React.FC = () => {
   const [niche, setNiche] = useState("");
   const [location, setLocation] = useState("");
   const [loading, setLoading] = useState(false);
+  const [searched, setSearched] = useState(false);
   const [leads, setLeads] = useState<ScrapedLead[]>([]);
   const [addedLeadNames, setAddedLeadNames] = useState<Set<string>>(new Set());
 
@@ -32,6 +33,7 @@ const LeadFinderPage: React.FC = () => {
 
     setLoading(true);
     setLeads([]);
+    setSearched(false);
     toast.info("Scraping Google Maps listings... This may take up to a minute.");
 
     try {
@@ -45,6 +47,7 @@ const LeadFinderPage: React.FC = () => {
       const data = await res.json();
       if (data.status === "success") {
         setLeads(data.leads || []);
+        setSearched(true);
         toast.success(`Found ${data.count} leads without a website!`);
       } else {
         throw new Error(data.message || "Scraping failed");
@@ -343,6 +346,44 @@ const LeadFinderPage: React.FC = () => {
               </table>
             </div>
           </motion.div>
+        ) : searched ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="admin-glass-panel"
+            style={{
+              padding: "48px 24px",
+              textAlign: "center",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 16
+            }}
+          >
+            <div
+              style={{
+                width: 56,
+                height: 56,
+                borderRadius: "50%",
+                background: "rgba(225,29,72,0.05)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                border: "1px solid rgba(225,29,72,0.1)",
+                color: "#e11d48"
+              }}
+            >
+              <ShieldAlert size={24} />
+            </div>
+            <div>
+              <h4 style={{ fontSize: 16, fontWeight: 700, color: "#fff" }}>No Prospects Found</h4>
+              <p style={{ color: "#64748b", fontSize: 13, marginTop: 4, maxWidth: 400, marginLeft: "auto", marginRight: "auto" }}>
+                All identified businesses for "{niche}" in "{location}" already have websites listed on Google Maps, or no businesses were found. Try another niche or location.
+              </p>
+            </div>
+          </motion.div>
         ) : (
           <motion.div
             initial={{ opacity: 0 }}
@@ -382,6 +423,7 @@ const LeadFinderPage: React.FC = () => {
             </div>
           </motion.div>
         )}
+
       </AnimatePresence>
     </motion.div>
   );
