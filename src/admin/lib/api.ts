@@ -252,6 +252,7 @@ export const getSessionsAPI = async () => {
 export interface Client {
   _id: string;
   companyName: string;
+  contactName?: string;
   contactEmail: string;
   phone?: string;
   industry?: string;
@@ -265,13 +266,13 @@ export interface Client {
   crm_data: {
     stage: string;
     tags: string[];
-    notes: {
+    notes?: {
       id: string;
       content: string;
       author_id: string;
       created_at: string;
     }[];
-    contracts: {
+    contracts?: {
       id: string;
       title: string;
       file_url: string;
@@ -279,7 +280,50 @@ export interface Client {
       created_at: string;
       expires_at: string | null;
     }[];
-    last_contacted_at: string | null;
+    contacts?: {
+      id: string;
+      name: string;
+      email: string;
+      phone?: string;
+      role: string;
+      created_at: string;
+    }[];
+    projects?: {
+      id: string;
+      name: string;
+      status: string;
+      deadline?: string;
+      created_at: string;
+    }[];
+    invoices?: {
+      id: string;
+      invoice_number: string;
+      amount: number;
+      status: string;
+      due_date: string;
+      created_at: string;
+    }[];
+    documents?: {
+      id: string;
+      title: string;
+      file_url: string;
+      created_at: string;
+    }[];
+    meetings?: {
+      id: string;
+      title: string;
+      scheduled_at: string;
+      status: string;
+      notes?: string;
+      created_at: string;
+    }[];
+    activity_logs?: {
+      id: string;
+      action: string;
+      description: string;
+      created_at: string;
+    }[];
+    last_contacted_at?: string | null;
   };
 }
 
@@ -340,6 +384,39 @@ export const updateClientStageAPI = async (id: string, stage: string): Promise<C
   });
   if (!res.ok) throw new Error("Failed to update client stage");
   return res.json();
+};
+
+export const addClientCRMDataAPI = async (id: string, field: string, data: any): Promise<Client> => {
+  const res = await authFetch(`/clients/${id}/crm_data/${field}`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error(`Failed to add ${field}`);
+  return res.json();
+};
+
+export const updateClientCRMDataAPI = async (id: string, field: string, item_id: string, data: any): Promise<Client> => {
+  const res = await authFetch(`/clients/${id}/crm_data/${field}/${item_id}`, {
+    method: "PUT",
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error(`Failed to update ${field}`);
+  return res.json();
+};
+
+export const updateClientStatusAPI = async (id: string, status: string): Promise<Client> => {
+  const res = await authFetch(`/clients/${id}/status?status=${encodeURIComponent(status)}`, {
+    method: "PUT",
+  });
+  if (!res.ok) throw new Error("Failed to update client status");
+  return res.json();
+};
+
+export const deleteClientAPI = async (id: string): Promise<void> => {
+  const res = await authFetch(`/clients/${id}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) throw new Error("Failed to delete client");
 };
 
 export const addClientNoteAPI = async (id: string, content: string, author_id: string): Promise<Client> => {

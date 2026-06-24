@@ -26,7 +26,7 @@ export const AdminActionProvider: React.FC<{ children: ReactNode }> = ({ childre
   const loadLottie = async (type: ActionAnimationType) => {
     if (animDataRef.current[type]) return animDataRef.current[type];
     try {
-      const url = type === 'delete' ? '/Jason/delete.json' : '/Jason/blue_tick.json';
+      const url = type === 'delete' ? '/Jason/Wrong.json' : '/Jason/blue_tick.json';
       const res = await fetch(url);
       const data = await res.json();
       animDataRef.current[type] = data;
@@ -56,7 +56,7 @@ export const AdminActionProvider: React.FC<{ children: ReactNode }> = ({ childre
       {children}
       {showAnimation && (
         <div className="admin-action-overlay admin-animate-fade">
-          <div className="admin-action-lottie-container">
+          <div className={`admin-action-lottie-container ${currentAnimType}`}>
             {activeAnimData ? (
               <Lottie 
                 key={currentAnimType}

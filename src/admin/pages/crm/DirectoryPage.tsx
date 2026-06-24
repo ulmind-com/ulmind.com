@@ -6,8 +6,10 @@ import { useNavigate } from "react-router-dom";
 import { AdminTable, ColumnDef } from "../../components/AdminTable";
 import { DynamicAddModal, ModalField } from "../../components/DynamicAddModal";
 import { toast } from "sonner";
+import { useAdminAction } from "../../context/AdminActionContext";
 
 const DirectoryPage: React.FC = () => {
+  const { triggerActionAnimation } = useAdminAction();
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -82,6 +84,7 @@ const DirectoryPage: React.FC = () => {
       });
       if (!res.ok) throw new Error("Failed to create client");
       toast.success("Client added successfully");
+      triggerActionAnimation('success');
       fetchClients();
     } catch (err: any) {
       throw new Error(err.message);

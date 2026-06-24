@@ -600,9 +600,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .admin-action-lottie-container {
@@ -611,9 +611,41 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle, rgba(239, 68, 68, 0.15) 0%, transparent 70%);
   border-radius: 50%;
-  animation: adminPulseGlow 2s infinite ease-in-out;
+  position: relative;
+}
+
+.admin-action-lottie-container::before {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.1), transparent);
+  animation: adminSpin 4s linear infinite;
+}
+
+@keyframes adminSpin {
+  100% { transform: rotate(360deg); }
+}
+
+.admin-action-lottie-container.success {
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%);
+  animation: adminPulseGlowSuccess 2s infinite ease-in-out;
+}
+
+@keyframes adminPulseGlowSuccess {
+  0%, 100% { box-shadow: 0 0 30px rgba(16, 185, 129, 0.3), inset 0 0 20px rgba(16, 185, 129, 0.1); }
+  50%      { box-shadow: 0 0 60px rgba(16, 185, 129, 0.5), inset 0 0 40px rgba(16, 185, 129, 0.3); }
+}
+
+.admin-action-lottie-container.delete {
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.15) 0%, transparent 70%);
+  animation: adminPulseGlowDelete 2s infinite ease-in-out;
+}
+
+@keyframes adminPulseGlowDelete {
+  0%, 100% { box-shadow: 0 0 30px rgba(239, 68, 68, 0.3), inset 0 0 20px rgba(239, 68, 68, 0.1); }
+  50%      { box-shadow: 0 0 60px rgba(239, 68, 68, 0.5), inset 0 0 40px rgba(239, 68, 68, 0.3); }
 }
 
 .admin-action-lottie {
