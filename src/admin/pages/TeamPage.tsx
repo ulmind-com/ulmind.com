@@ -7,7 +7,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import {
   LayoutDashboard, Users, CalendarCheck, ClipboardList,
-  BarChart2, Crown, Shield, Plane, DollarSign, TrendingUp
+  BarChart2, Crown, Shield, Plane, DollarSign, TrendingUp, Activity
 } from "lucide-react";
 import { NavLink, Outlet } from "react-router-dom";
 
@@ -23,6 +23,7 @@ const TeamLayout: React.FC = () => {
     { to: "/admin/team/leaves", icon: <Plane size={16} />, label: "Leave Management" },
     { to: "/admin/team/payroll", icon: <DollarSign size={16} />, label: "Payroll Overview" },
     { to: "/admin/team/analytics", icon: <TrendingUp size={16} />, label: "Team Analytics" },
+    { to: "/admin/team/manager-tracking", icon: <Activity size={16} />, label: "Manager Tracking" },
   ];
 
   return (

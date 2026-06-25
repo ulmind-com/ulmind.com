@@ -60,6 +60,7 @@ const RolesPermissionsPage = lazy(() => import("./admin/pages/team/RolesPermissi
 const LeaveManagementPage = lazy(() => import("./admin/pages/team/LeaveManagement"));
 const PayrollOverviewPage = lazy(() => import("./admin/pages/team/PayrollOverview"));
 const TeamAnalyticsPage = lazy(() => import("./admin/pages/team/TeamAnalytics"));
+const ManagerTrackingPage = lazy(() => import("./admin/pages/team/ManagerTrackingPage"));
 const AdminActivityTrackerPage = lazy(() => import("./admin/pages/ActivityTrackerPage"));
 const AdminOffersPage = lazy(() => import("./admin/pages/OffersPage"));
 const AdminDatabasePage = lazy(() => import("./admin/pages/DatabasePage"));
@@ -607,6 +608,7 @@ const App = () => {
                       <Route path="leaves" element={<LeaveManagementPage />} />
                       <Route path="payroll" element={<PayrollOverviewPage />} />
                       <Route path="analytics" element={<TeamAnalyticsPage />} />
+                      <Route path="manager-tracking" element={<ManagerTrackingPage />} />
                     </Route>
                     <Route path="activity" element={<AdminActivityTrackerPage />} />
                     <Route path="offers" element={<AdminOffersPage />} />
