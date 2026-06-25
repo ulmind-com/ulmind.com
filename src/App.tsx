@@ -486,8 +486,6 @@ const App = () => {
     };
   }, [trackUser]);
 
-  const isAdminDomain = typeof window !== "undefined" && window.location.hostname.startsWith("admin.");
-
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} storageKey="ulmind-theme">
@@ -503,8 +501,7 @@ const App = () => {
             <RouteTransitionLoader>
               <Suspense fallback={<PageLoader />}>
                 <Routes>
-                  {!isAdminDomain && (
-                    <Route element={<Layout />}>
+                  <Route element={<Layout />}>
                     <Route path="/" element={<Index />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/projects" element={<Projects />} />
@@ -533,12 +530,9 @@ const App = () => {
                     <Route path="/industries/:slug" element={<IndustryDetail />} />
                     <Route path="/verify" element={<CertificateVerification />} />
                   </Route>
-                  )}
 
-                  {/* ─── Admin Panel Routes (completely isolated) ─── */}
-                  {isAdminDomain && (
-                    <>
-                      <Route path="/" element={
+                  {/* ─── Admin Panel Routes ─── */}
+                  <Route path="/admin/login" element={
                     <AuthProvider>
                       <AdminLoginPage />
                     </AuthProvider>
@@ -623,8 +617,6 @@ const App = () => {
                     <Route path="audit-logs" element={<AdminAuditLogs />} />
                     <Route path="activity-feed" element={<AdminActivityFeed />} />
                   </Route>
-                  </>
-                  )}
 
                   <Route path="*" element={<NotFound />} />
                 </Routes>
