@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import {
   LayoutDashboard, FolderOpen, Kanban, Clock,
   ListTodo, Flag, FileText, MessageCircle,
-  Timer, DollarSign
+  Timer, DollarSign, Lock
 } from "lucide-react";
 import { NavLink, Outlet } from "react-router-dom";
 
@@ -19,6 +19,7 @@ const ProjectPage: React.FC = () => {
     { to: "/admin/projects/feedback", icon: <MessageCircle size={16} />, label: "Client Feedback" },
     { to: "/admin/projects/time-tracking", icon: <Timer size={16} />, label: "Time Tracking" },
     { to: "/admin/projects/budget", icon: <DollarSign size={16} />, label: "Budget" },
+    { to: "/admin/projects/environment", icon: <Lock size={16} />, label: "Environment" },
   ];
 
   return (

@@ -21,7 +21,8 @@ export function ChatWidget() {
       .catch(err => console.error("Error loading Lottie", err));
   }, []);
 
-  if (location.pathname.startsWith("/admin")) return null;
+  const isAdminRoute = location.pathname.startsWith("/admin") || (typeof window !== "undefined" && window.location.hostname.startsWith("admin."));
+  if (isAdminRoute) return null;
 
   return (
     <div className={cn("fixed right-4 sm:right-6 z-[10000] flex flex-col items-center transition-all duration-300", isOpen ? "bottom-4 sm:bottom-6" : "bottom-[168px]")}>

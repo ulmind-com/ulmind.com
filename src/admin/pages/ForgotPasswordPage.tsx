@@ -239,7 +239,7 @@ const ForgotPasswordPage: React.FC = () => {
     try {
       await resetPasswordAPI(resetToken, newPassword);
       setPwSuccess(true);
-      setTimeout(() => navigate("/admin/login", { replace: true }), 2500);
+      setTimeout(() => navigate("/", { replace: true }), 2500);
     } catch (err: any) {
       setPwError(err.message || "Password reset failed");
     } finally {
@@ -390,7 +390,7 @@ const ForgotPasswordPage: React.FC = () => {
               </button>
               <button
                 type="button"
-                onClick={() => navigate("/admin/login")}
+                onClick={() => navigate("/")}
                 style={{
                   background: "none", border: "none",
                   color: "#64748b", fontSize: 13,

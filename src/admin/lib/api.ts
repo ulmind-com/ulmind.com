@@ -55,7 +55,7 @@ export const authFetch = async (
   if (res.status === 401) {
     clearToken();
     clearSessionId();
-    window.location.href = "/admin/login";
+    window.location.href = "/";
     throw new Error("Session expired");
   }
 

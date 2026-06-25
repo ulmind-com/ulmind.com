@@ -9,7 +9,7 @@ const CookieConsent: React.FC = () => {
 
   useEffect(() => {
     // Skip cookie prompt in admin panel
-    if (typeof window !== "undefined" && window.location.pathname.startsWith("/admin")) return;
+    if (typeof window !== "undefined" && (window.location.pathname.startsWith("/admin") || window.location.hostname.startsWith("admin."))) return;
 
     // Check if user has already made a decision
     const hasConsented = localStorage.getItem("ulmind_cookie_consent");
