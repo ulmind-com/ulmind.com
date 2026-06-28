@@ -29,6 +29,7 @@ import Lottie from 'lottie-react';
 // Combined Animated component for seamless sliding of videos AND orbiting icons
 const AnimatedHeroVisuals = () => {
   const [index, setIndex] = useState(0);
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
   // Grouped the videos with their specific icons and data for the floating elements
   // Added hero_v4.mp4 with unique icons
@@ -83,6 +84,21 @@ const AnimatedHeroVisuals = () => {
   const Icon2 = CurrentSlide.icon2.icon;
   const Icon3 = CurrentSlide.icon3.icon;
 
+  useEffect(() => {
+    setIsVideoLoaded(false);
+  }, [index]);
+
+  useEffect(() => {
+    // Preload all videos on mount to prevent black circles
+    slides.forEach(slide => {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'video';
+      link.href = slide.src;
+      document.head.appendChild(link);
+    });
+  }, []);
+
   return (
     <div className="absolute inset-0 w-full h-full">
       {/* popLayout ensures they overlap smoothly during the slide */}
@@ -97,17 +113,27 @@ const AnimatedHeroVisuals = () => {
           className="absolute inset-0 w-full h-full"
         >
           {/* The Central Circular Video */}
-          <div className="absolute inset-8 rounded-full z-10 overflow-hidden shadow-2xl transition-all duration-300 group/circle bg-background">
+          <div className="absolute inset-8 rounded-full z-10 overflow-hidden shadow-2xl transition-all duration-300 group/circle bg-background flex items-center justify-center relative">
+            
+            {!isVideoLoaded && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-violet-900/5 backdrop-blur-sm z-20">
+                <div className="w-12 h-12 border-4 border-violet-500/30 border-t-violet-500 rounded-full animate-spin"></div>
+              </div>
+            )}
+
             <video
               src={CurrentSlide.src}
               autoPlay
               muted
               playsInline
+              preload="auto"
+              onCanPlay={() => setIsVideoLoaded(true)}
+              onLoadedData={() => setIsVideoLoaded(true)}
               onEnded={handleVideoEnd} // Triggers next slide ONLY when video finishes
               onContextMenu={(e) => e.preventDefault()} // Prevents right click and save
               controlsList="nodownload" // Removes download option if controls were visible
               disablePictureInPicture // Disables picture in picture mode
-              className="w-full h-full object-cover pointer-events-none select-none" // pointer-events-none prevents dragging
+              className={`w-full h-full object-cover pointer-events-none select-none transition-opacity duration-700 ${isVideoLoaded ? 'opacity-100' : 'opacity-0'}`} 
             />
           </div>
 
