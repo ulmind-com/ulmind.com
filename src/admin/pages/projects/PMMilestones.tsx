@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
-import { getPmMilestonesAPI, authFetch } from "../../lib/api";
+import { getPmMilestonesAPI, getProjectsAPI, authFetch } from "../../lib/api";
 import { Loader2, Plus, Flag } from "lucide-react";
 import { AdminTable, ColumnDef } from "../../components/AdminTable";
 import { DynamicAddModal, ModalField } from "../../components/DynamicAddModal";
@@ -11,9 +11,19 @@ const PMMilestones: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
 
-  useEffect(() => { fetchMilestones(); }, []);
+  const [projects, setProjects] = useState<any[]>([]);
+
+  useEffect(() => { 
+    fetchMilestones();
+    fetchProjects();
+  }, []);
+  
   const fetchMilestones = async () => {
     try { setMilestones(await getPmMilestonesAPI()); } catch (err) { console.error(err); } finally { setLoading(false); }
+  };
+
+  const fetchProjects = async () => {
+    try { setProjects(await getProjectsAPI()); } catch (err) { console.error(err); }
   };
 
   const columns = useMemo<ColumnDef<any>[]>(() => [
@@ -54,8 +64,15 @@ const PMMilestones: React.FC = () => {
       { label: "Delayed", value: "Delayed" }
     ], defaultValue: "Pending" },
     { name: "completion_pct", label: "Progress (%)", type: "number", required: true, defaultValue: 0 },
-    { name: "due_date", label: "Due Date", type: "date", required: true },
-    { name: "project_id", label: "Project ID (Optional)", type: "text" },
+    { 
+      name: "project_id", 
+      label: "Linked Project", 
+      type: "select", 
+      options: [
+        { label: "-- None --", value: "" },
+        ...projects.map(p => ({ label: p.name, value: p._id }))
+      ] 
+    },
   ];
 
   const handleAdd = async (data: any) => {

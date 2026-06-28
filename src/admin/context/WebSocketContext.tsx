@@ -34,8 +34,9 @@ export const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children 
     // Fetch initial notifications
     const fetchNotifications = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/v1/notifications/", {
-          headers: { Authorization: `Bearer ${localStorage.getItem("admin_token")}` }
+        const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1";
+        const res = await fetch(`${apiUrl}/notifications/`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("ulmind_admin_token")}` }
         });
         if (res.ok) {
           const data = await res.json();
@@ -51,7 +52,8 @@ export const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children 
   useEffect(() => {
     if (!user) return;
 
-    const wsUrl = `ws://localhost:5000/ws/notifications/${user.email}`;
+    const wsUrlBase = import.meta.env.VITE_WS_URL || "ws://localhost:5000/ws";
+    const wsUrl = `${wsUrlBase}/notifications/${user.email}`;
     const websocket = new WebSocket(wsUrl);
 
     websocket.onopen = () => {
@@ -93,9 +95,10 @@ export const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children 
   const markAllRead = async () => {
     setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
     try {
-      await fetch("http://localhost:5000/api/v1/notifications/read-all", {
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1";
+      await fetch(`${apiUrl}/notifications/read-all`, {
         method: "PUT",
-        headers: { Authorization: `Bearer ${localStorage.getItem("admin_token")}` }
+        headers: { Authorization: `Bearer ${localStorage.getItem("ulmind_admin_token")}` }
       });
     } catch (err) {
       console.error(err);
@@ -105,9 +108,10 @@ export const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children 
   const markAsRead = async (id: string) => {
     setNotifications(prev => prev.map(n => n._id === id ? { ...n, is_read: true } : n));
     try {
-      await fetch(`http://localhost:5000/api/v1/notifications/${id}/read`, {
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1";
+      await fetch(`${apiUrl}/notifications/${id}/read`, {
         method: "PUT",
-        headers: { Authorization: `Bearer ${localStorage.getItem("admin_token")}` }
+        headers: { Authorization: `Bearer ${localStorage.getItem("ulmind_admin_token")}` }
       });
     } catch (err) {
       console.error(err);

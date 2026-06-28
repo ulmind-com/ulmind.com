@@ -3,10 +3,10 @@
    Centralised fetch wrapper with JWT auto-attach & 401 handling
    ────────────────────────────────────────────────────────────── */
 
-// Use production backend by default to avoid local connection refused errors if backend is not running
+// Use local backend in dev mode if VITE_API_URL is set, otherwise fallback to production
 export const getBaseUrl = () => {
-  if (import.meta.env.PROD) return "https://ulmind-backend.onrender.com/api/v1";
-  return import.meta.env.VITE_API_URL || "https://ulmind-backend.onrender.com/api/v1";
+  if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
+  return "https://ulmind-backend.onrender.com/api/v1";
 };
 
 export const getWsBaseUrl = () => {
@@ -642,6 +642,16 @@ export const getPmTasksAPI = async (projectId?: string): Promise<any[]> => {
   return res.json();
 };
 
+export const createPmTaskAPI = async (data: any): Promise<any> => {
+  const res = await authFetch("/pm/tasks", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Failed to create task");
+  return res.json();
+};
+
 export const updatePmTaskAPI = async (id: string, data: any): Promise<any> => {
   const res = await authFetch(`/pm/tasks/${id}`, {
     method: "PUT",
@@ -649,6 +659,14 @@ export const updatePmTaskAPI = async (id: string, data: any): Promise<any> => {
     body: JSON.stringify(data),
   });
   if (!res.ok) throw new Error("Failed to update task");
+  return res.json();
+};
+
+export const deletePmTaskAPI = async (id: string): Promise<any> => {
+  const res = await authFetch(`/pm/tasks/${id}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) throw new Error("Failed to delete task");
   return res.json();
 };
 
@@ -696,6 +714,121 @@ export const getProjectsAPI = async (): Promise<any[]> => {
 export const getProjectAPI = async (id: string): Promise<any> => {
   const res = await authFetch(`/projects/${id}`);
   if (!res.ok) throw new Error("Failed to fetch project");
+  return res.json();
+};
+
+export const searchProjectsAPI = async (q: string): Promise<any[]> => {
+  const res = await authFetch(`/projects/search?q=${encodeURIComponent(q)}`);
+  if (!res.ok) throw new Error("Failed to search projects");
+  return res.json();
+};
+
+export const getProjectTaskStatsAPI = async (id: string): Promise<any> => {
+  const res = await authFetch(`/projects/${id}/task-stats`);
+  if (!res.ok) throw new Error("Failed to fetch task stats");
+  return res.json();
+};
+
+export const getProjectFinanceAPI = async (id: string): Promise<any> => {
+  const res = await authFetch(`/projects/${id}/finance`);
+  if (!res.ok) throw new Error("Failed to fetch project finance");
+  return res.json();
+};
+
+export const createProjectAPI = async (data: any): Promise<any> => {
+  const res = await authFetch("/projects/", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || "Failed to create project");
+  }
+  return res.json();
+};
+
+export const updateProjectAPI = async (id: string, data: any): Promise<any> => {
+  const res = await authFetch(`/projects/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || "Failed to update project");
+  }
+  return res.json();
+};
+
+// ─── ENTERPRISE TASK APIs ────────────────────────────────────────────────────
+
+export const getTasksAPI = async (projectId?: string): Promise<any[]> => {
+  const url = projectId ? `/tasks/?project_id=${projectId}` : "/tasks/";
+  const res = await authFetch(url);
+  if (!res.ok) throw new Error("Failed to fetch tasks");
+  return res.json();
+};
+
+export const createTaskAPI = async (data: any): Promise<any> => {
+  const res = await authFetch("/tasks/", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || "Failed to create task");
+  }
+  return res.json();
+};
+
+export const updateTaskAPI = async (id: string, data: any): Promise<any> => {
+  const res = await authFetch(`/tasks/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || "Failed to update task");
+  }
+  return res.json();
+};
+
+export const deleteTaskAPI = async (id: string): Promise<void> => {
+  const res = await authFetch(`/tasks/${id}`, { method: "DELETE" });
+  if (!res.ok) throw new Error("Failed to delete task");
+};
+
+export const notifyTaskAssigneeAPI = async (id: string): Promise<any> => {
+  const res = await authFetch(`/tasks/${id}/notify`, { method: "POST" });
+  if (!res.ok) throw new Error("Failed to send notification");
+  return res.json();
+};
+
+export const sendTaskSmsAPI = async (id: string): Promise<any> => {
+  const res = await authFetch(`/pm/tasks/${id}/sms`, { method: "POST" });
+  if (!res.ok) throw new Error("Failed to send SMS");
+  return res.json();
+};
+
+export const searchEmployeesAPI = async (q?: string): Promise<any[]> => {
+  const url = q ? `/tasks/employees/search?q=${encodeURIComponent(q)}` : "/tasks/employees/search";
+  const res = await authFetch(url);
+  if (!res.ok) throw new Error("Failed to search employees");
+  return res.json();
+};
+
+// ─── AUDIT & ACTIVITY FEED APIs ──────────────────────────────────────────────
+
+export const getAuditLogsAPI = async (limit = 100, skip = 0, action?: string): Promise<any[]> => {
+  let url = `/audit/?limit=${limit}&skip=${skip}`;
+  if (action) url += `&action=${encodeURIComponent(action)}`;
+  const res = await authFetch(url);
+  if (!res.ok) throw new Error("Failed to fetch audit logs");
+  return res.json();
+};
+
+export const getActivityFeedAPI = async (limit = 50, skip = 0): Promise<any[]> => {
+  const res = await authFetch(`/audit/activity-feed?limit=${limit}&skip=${skip}`);
+  if (!res.ok) throw new Error("Failed to fetch activity feed");
   return res.json();
 };
 

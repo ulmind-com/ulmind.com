@@ -19,19 +19,27 @@ interface DynamicAddModalProps {
   fields: ModalField[];
   onSubmit: (data: any) => Promise<void>;
   submitText?: string;
+  initialData?: any;
 }
 
 export const DynamicAddModal: React.FC<DynamicAddModalProps> = ({ 
-  isOpen, onClose, title, fields, onSubmit, submitText = "Save Record" 
+  isOpen, onClose, title, fields, onSubmit, submitText = "Save Record", initialData 
 }) => {
   const defaultState = fields.reduce((acc, field) => {
     acc[field.name] = field.defaultValue !== undefined ? field.defaultValue : "";
     return acc;
   }, {} as any);
 
-  const [formData, setFormData] = useState(defaultState);
+  const [formData, setFormData] = useState(initialData || defaultState);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (isOpen) {
+      setFormData(initialData || defaultState);
+      setError(null);
+    }
+  }, [isOpen, initialData]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

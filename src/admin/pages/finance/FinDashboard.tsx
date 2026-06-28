@@ -58,7 +58,7 @@ const FinDashboard: React.FC = () => {
                 <div style={{ flex: 1, height: 8, background: "rgba(255,255,255,0.05)", borderRadius: 4, overflow: "hidden" }}>
                   <div style={{ width: `${stats.total_expenses ? (val / stats.total_expenses) * 100 : 0}%`, height: "100%", background: "#ef4444", borderRadius: 4 }} />
                 </div>
-                <div style={{ width: 80, fontSize: 13, fontWeight: 600, color: "#fff", textAlign: "right" }}>${val.toLocaleString()}</div>
+                <div style={{ width: 80, fontSize: 13, fontWeight: 600, color: "#fff", textAlign: "right" }}>₹{val.toLocaleString()}</div>
               </div>
             ))}
             {(!stats?.expense_breakdown || Object.keys(stats.expense_breakdown).length === 0) && <p style={{ color: "#64748b" }}>No expenses recorded.</p>}
@@ -68,10 +68,10 @@ const FinDashboard: React.FC = () => {
         <div className="admin-glass-panel" style={{ padding: 24 }}>
           <h3 style={{ fontSize: 16, fontWeight: 600, color: "#fff", marginBottom: 16 }}>Financial Summary</h3>
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#94a3b8" }}>Total Invoiced</span><span style={{ color: "#fff", fontWeight: 600 }}>${(stats?.total_invoiced || 0).toLocaleString()}</span></div>
-            <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#94a3b8" }}>Total Collected</span><span style={{ color: "#10b981", fontWeight: 600 }}>${(stats?.total_payments || 0).toLocaleString()}</span></div>
-            <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#94a3b8" }}>Outstanding</span><span style={{ color: "#f59e0b", fontWeight: 600 }}>${(stats?.outstanding || 0).toLocaleString()}</span></div>
-            <div style={{ display: "flex", justifyContent: "space-between", borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: 16 }}><span style={{ color: "#94a3b8" }}>Net Profit</span><span style={{ color: "#38bdf8", fontWeight: 700, fontSize: 18 }}>${(stats?.net_profit || 0).toLocaleString()}</span></div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#94a3b8" }}>Total Invoiced</span><span style={{ color: "#fff", fontWeight: 600 }}>₹{(stats?.total_invoiced || 0).toLocaleString()}</span></div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#94a3b8" }}>Total Collected</span><span style={{ color: "#10b981", fontWeight: 600 }}>₹{(stats?.total_payments || 0).toLocaleString()}</span></div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#94a3b8" }}>Outstanding</span><span style={{ color: "#f59e0b", fontWeight: 600 }}>₹{(stats?.outstanding || 0).toLocaleString()}</span></div>
+            <div style={{ display: "flex", justifyContent: "space-between", borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: 16 }}><span style={{ color: "#94a3b8" }}>Net Profit</span><span style={{ color: "#38bdf8", fontWeight: 700, fontSize: 18 }}>₹{(stats?.net_profit || 0).toLocaleString()}</span></div>
           </div>
         </div>
       </div>

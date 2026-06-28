@@ -28,17 +28,17 @@ const FinProfitLoss: React.FC = () => {
           <div>
             <DollarSign size={24} color="#10b981" style={{ margin: "0 auto 8px" }} />
             <p style={{ color: "#94a3b8", fontSize: 14, marginBottom: 8 }}>Total Revenue</p>
-            <p style={{ fontSize: 32, fontWeight: 700, color: "#10b981" }}>${revenue.toLocaleString()}</p>
+            <p style={{ fontSize: 32, fontWeight: 700, color: "#10b981" }}>₹{revenue.toLocaleString()}</p>
           </div>
           <div>
             <TrendingDown size={24} color="#ef4444" style={{ margin: "0 auto 8px" }} />
             <p style={{ color: "#94a3b8", fontSize: 14, marginBottom: 8 }}>Total Expenses</p>
-            <p style={{ fontSize: 32, fontWeight: 700, color: "#ef4444" }}>${expenses.toLocaleString()}</p>
+            <p style={{ fontSize: 32, fontWeight: 700, color: "#ef4444" }}>₹{expenses.toLocaleString()}</p>
           </div>
           <div>
             <TrendingUp size={24} color="#38bdf8" style={{ margin: "0 auto 8px" }} />
             <p style={{ color: "#94a3b8", fontSize: 14, marginBottom: 8 }}>Net Profit</p>
-            <p style={{ fontSize: 32, fontWeight: 700, color: profit >= 0 ? "#38bdf8" : "#ef4444" }}>${profit.toLocaleString()}</p>
+            <p style={{ fontSize: 32, fontWeight: 700, color: profit >= 0 ? "#38bdf8" : "#ef4444" }}>₹{profit.toLocaleString()}</p>
           </div>
         </div>
       </div>
@@ -49,17 +49,17 @@ const FinProfitLoss: React.FC = () => {
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           <div style={{ display: "flex", justifyContent: "space-between", padding: "12px 16px", background: "rgba(16, 185, 129, 0.08)", borderRadius: 8, borderLeft: "3px solid #10b981" }}>
             <span style={{ color: "#cbd5e1", fontWeight: 500 }}>Revenue (Paid Invoices)</span>
-            <span style={{ color: "#10b981", fontWeight: 700 }}>+ ${revenue.toLocaleString()}</span>
+            <span style={{ color: "#10b981", fontWeight: 700 }}>+ ₹{revenue.toLocaleString()}</span>
           </div>
           {stats?.expense_breakdown && Object.entries(stats.expense_breakdown).map(([cat, val]: any) => (
             <div key={cat} style={{ display: "flex", justifyContent: "space-between", padding: "12px 16px", background: "rgba(239, 68, 68, 0.05)", borderRadius: 8, borderLeft: "3px solid #ef4444" }}>
               <span style={{ color: "#cbd5e1", textTransform: "capitalize" }}>{cat}</span>
-              <span style={{ color: "#ef4444", fontWeight: 600 }}>- ${val.toLocaleString()}</span>
+              <span style={{ color: "#ef4444", fontWeight: 600 }}>- ₹{val.toLocaleString()}</span>
             </div>
           ))}
           <div style={{ display: "flex", justifyContent: "space-between", padding: "16px", background: "rgba(56, 189, 248, 0.1)", borderRadius: 8, borderLeft: "3px solid #38bdf8", marginTop: 8 }}>
             <span style={{ color: "#fff", fontWeight: 700, fontSize: 16 }}>Net Profit</span>
-            <span style={{ color: "#38bdf8", fontWeight: 700, fontSize: 18 }}>${profit.toLocaleString()} ({margin}%)</span>
+            <span style={{ color: "#38bdf8", fontWeight: 700, fontSize: 18 }}>₹{profit.toLocaleString()} ({margin}%)</span>
           </div>
         </div>
       </div>

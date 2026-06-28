@@ -21,11 +21,11 @@ const FinRevenue: React.FC = () => {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 20, marginBottom: 24 }}>
         <div className="admin-glass-panel" style={{ padding: 24 }}>
           <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 8 }}>Total Invoiced</p>
-          <p style={{ fontSize: 28, fontWeight: 700, color: "#fff" }}>${(stats?.total_invoiced || 0).toLocaleString()}</p>
+          <p style={{ fontSize: 28, fontWeight: 700, color: "#fff" }}>₹{(stats?.total_invoiced || 0).toLocaleString()}</p>
         </div>
         <div className="admin-glass-panel" style={{ padding: 24 }}>
           <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 8 }}>Total Collected</p>
-          <p style={{ fontSize: 28, fontWeight: 700, color: "#10b981" }}>${(stats?.total_revenue || 0).toLocaleString()}</p>
+          <p style={{ fontSize: 28, fontWeight: 700, color: "#10b981" }}>₹{(stats?.total_revenue || 0).toLocaleString()}</p>
         </div>
         <div className="admin-glass-panel" style={{ padding: 24 }}>
           <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 8 }}>Collection Rate</p>

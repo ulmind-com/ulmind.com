@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { getPmTasksAPI, updatePmTaskAPI } from "../../lib/api";
+import { getPmTasksAPI, updatePmTaskAPI, createPmTaskAPI, deletePmTaskAPI } from "../../lib/api";
 import { Loader2, Plus, Filter } from "lucide-react";
 import { DndContext, closestCorners, PointerSensor, KeyboardSensor, useSensor, useSensors, DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { TaskModal } from "../../components/TaskModal";
+import { LottieOverlay } from "../../components/LottieOverlay";
+import { toast } from "sonner";
 
 const KANBAN_COLUMNS = ["Backlog", "Pending", "In Progress", "Review", "Testing", "Completed"];
 const PRIORITY_COLORS: any = { Critical: "#ef4444", High: "#f59e0b", Medium: "#38bdf8", Low: "#64748b" };
@@ -14,9 +17,14 @@ const SortableTaskCard = ({ task, onClick }: { task: any; onClick: () => void })
   const style = { transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.5 : 1, cursor: "grab" };
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="kanban-card" onClick={(e) => { e.stopPropagation(); onClick(); }}>
-      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
-        <h4 style={{ fontSize: 14, fontWeight: 600, color: "#fff", margin: 0 }}>{task.title}</h4>
-        <span style={{ width: 8, height: 8, borderRadius: "50%", background: PRIORITY_COLORS[task.priority] || "#64748b", flexShrink: 0, marginTop: 4 }} />
+      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8, alignItems: "flex-start" }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: "#fff", margin: 0, paddingRight: 8 }}>{task.title}</h4>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+          <button onClick={(e) => { e.stopPropagation(); onClick(); }} style={{ background: "transparent", border: "none", color: "#8b949e", cursor: "pointer", padding: 0 }} title="Edit Task">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+          <span style={{ width: 8, height: 8, borderRadius: "50%", background: PRIORITY_COLORS[task.priority] || "#64748b", marginTop: 2 }} />
+        </div>
       </div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 12 }}>
         <span style={{ color: "#94a3b8" }}>{task.estimated_hours ? `${task.estimated_hours}h est.` : ""}</span>
@@ -29,11 +37,44 @@ const SortableTaskCard = ({ task, onClick }: { task: any; onClick: () => void })
 const PMKanban: React.FC = () => {
   const [tasks, setTasks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<any>(null);
+  const [lottieConfig, setLottieConfig] = useState({ isVisible: false, path: "", text: "" });
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }), useSensor(KeyboardSensor));
 
   useEffect(() => { fetchTasks(); }, []);
   const fetchTasks = async () => {
     try { setTasks(await getPmTasksAPI()); } catch (err) { console.error(err); } finally { setLoading(false); }
+  };
+
+  const handleTaskSubmit = async (data: any) => {
+    try {
+      if (selectedTask) {
+        await updatePmTaskAPI(selectedTask._id, data);
+        setLottieConfig({ isVisible: true, path: "/Jason/Success.json", text: "Task Updated" });
+      } else {
+        await createPmTaskAPI(data);
+        setLottieConfig({ isVisible: true, path: "/Jason/Success.json", text: "Task Created" });
+      }
+      setIsModalOpen(false);
+      setSelectedTask(null);
+      fetchTasks();
+    } catch (err: any) {
+      toast.error(err.message || "Operation failed");
+    }
+  };
+
+  const handleDeleteTask = async () => {
+    if (!selectedTask) return;
+    try {
+      await deletePmTaskAPI(selectedTask._id);
+      setLottieConfig({ isVisible: true, path: "/Jason/delete.json", text: "Task Deleted" });
+      setIsModalOpen(false);
+      setSelectedTask(null);
+      fetchTasks();
+    } catch (err: any) {
+      toast.error(err.message || "Failed to delete task");
+    }
   };
 
   const handleDragEnd = async (event: DragEndEvent) => {
@@ -61,7 +102,7 @@ const PMKanban: React.FC = () => {
         <h2 style={{ fontSize: 24, fontWeight: 700, color: "#fff" }}>Kanban Board</h2>
         <div style={{ display: "flex", gap: 12 }}>
           <button className="admin-btn admin-btn-ghost"><Filter size={16} /> Filter</button>
-          <button className="admin-btn admin-btn-primary"><Plus size={16} /> New Task</button>
+          <button className="admin-btn admin-btn-primary" onClick={() => { setSelectedTask(null); setIsModalOpen(true); }}><Plus size={16} /> New Task</button>
         </div>
       </div>
       <DndContext sensors={sensors} collisionDetection={closestCorners} onDragEnd={handleDragEnd}>
@@ -76,7 +117,7 @@ const PMKanban: React.FC = () => {
                 </div>
                 <div id={col} style={{ display: "flex", flexDirection: "column", gap: 10, minHeight: 120 }}>
                   <SortableContext items={colTasks.map(t => t._id)} strategy={verticalListSortingStrategy}>
-                    {colTasks.map(task => <SortableTaskCard key={task._id} task={task} onClick={() => {}} />)}
+                    {colTasks.map(task => <SortableTaskCard key={task._id} task={task} onClick={() => { setSelectedTask(task); setIsModalOpen(true); }} />)}
                   </SortableContext>
                 </div>
               </div>
@@ -84,6 +125,20 @@ const PMKanban: React.FC = () => {
           })}
         </div>
       </DndContext>
+
+      <TaskModal
+        isOpen={isModalOpen}
+        onClose={() => { setIsModalOpen(false); setSelectedTask(null); }}
+        onSubmit={handleTaskSubmit}
+        onDelete={handleDeleteTask}
+        initialData={selectedTask}
+      />
+      <LottieOverlay
+        isVisible={lottieConfig.isVisible}
+        animationPath={lottieConfig.path}
+        text={lottieConfig.text}
+        onComplete={() => setLottieConfig({ ...lottieConfig, isVisible: false })}
+      />
     </motion.div>
   );
 };
