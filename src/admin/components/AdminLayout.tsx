@@ -42,6 +42,7 @@ const navItems = [
   { path: "/admin/offers", label: "Offers", icon: Tag, end: false },
   { path: "/admin/database", label: "Database", icon: Database, end: false },
   { path: "/admin/notifications", label: "AI Notifications", icon: Bell, end: false },
+  { path: "/admin/cron-monitor", label: "CRON Job Monitor", icon: Activity, end: false },
   { path: "/admin/activity-feed", label: "Activity Feed", icon: Rss, end: false },
   { path: "/admin/audit-logs", label: "Audit Logs", icon: ShieldAlert, end: false },
   { path: "/admin/delete-requests", label: "Delete Requests", icon: ShieldAlert, end: false },

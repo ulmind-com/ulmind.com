@@ -951,3 +951,26 @@ export const updateDeleteRequestStatusAPI = async (id: string, status: "approved
   if (!res.ok) throw new Error("Failed to update delete request status");
   return res.json();
 };
+
+export interface Monitor {
+  id: string;
+  friendly_name: string;
+  url: string;
+  type: number;
+  sub_type: string;
+  keyword_type: number;
+  keyword_value: string;
+  status: number; // 0=Paused, 1=Not Checked, 2=Up, 8=Seems Down, 9=Down
+  all_time_uptime_ratio: string;
+  custom_uptime_ratio: string;
+}
+
+export const fetchMonitorsAPI = async (): Promise<Monitor[]> => {
+  const res = await authFetch("/cron-monitor/monitors");
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.detail || "Failed to fetch cron monitors");
+  }
+  const data = await res.json();
+  return data.monitors;
+};
