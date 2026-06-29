@@ -98,6 +98,7 @@ const PMTimeTrackingPage = lazy(() => import("./admin/pages/projects/PMTimeTrack
 const PMBudgetPage = lazy(() => import("./admin/pages/projects/PMBudget"));
 const PMEnvironmentPage = lazy(() => import("./admin/pages/projects/PMEnvironment"));
 const AdminNotificationDashboard = lazy(() => import("./admin/pages/NotificationDashboardPage"));
+const CronMonitorPage = lazy(() => import("./admin/pages/CronMonitorPage"));
 const AdminAuditLogs = lazy(() => import("./admin/pages/AuditLogsPage"));
 const AdminActivityFeed = lazy(() => import("./admin/pages/ActivityFeedPage"));
 import { AuthProvider } from "./admin/context/auth-context";
@@ -616,6 +617,7 @@ const App = () => {
                     <Route path="delete-requests" element={<DeleteRequestsPage />} />
                     <Route path="settings" element={<AdminSettingsPage />} />
                     <Route path="notifications" element={<AdminNotificationDashboard />} />
+                    <Route path="cron-monitor" element={<CronMonitorPage />} />
                     <Route path="audit-logs" element={<AdminAuditLogs />} />
                     <Route path="activity-feed" element={<AdminActivityFeed />} />
                   </Route>
