@@ -6,11 +6,12 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { getProjectsAPI, createProjectAPI, updateProjectAPI, searchEmployeesAPI } from "../../lib/api";
+import { getProjectsAPI, createProjectAPI, updateProjectAPI, deleteProjectAPI, searchEmployeesAPI } from "../../lib/api";
 import {
   Loader2, Plus, Download, Search, Filter, LayoutGrid, List,
   TrendingUp, DollarSign, Clock, CheckCircle2, AlertCircle,
-  ArrowUpRight, ChevronDown, X, Calendar, Users, Briefcase, Tag
+  ArrowUpRight, ChevronDown, X, Calendar, Users, Briefcase, Tag,
+  Pencil, Trash2, AlertTriangle
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -114,12 +115,29 @@ const ProjectDirectory: React.FC = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingProject, setEditingProject] = useState<any>(null);
+  const [deleteTarget, setDeleteTarget] = useState<any>(null);
+  const [deleting, setDeleting] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => { fetchProjects(); }, []);
 
   const fetchProjects = async () => {
     try { setProjects(await getProjectsAPI()); } catch (err) { console.error(err); } finally { setLoading(false); }
+  };
+
+  const handleDeleteProject = async () => {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      await deleteProjectAPI(deleteTarget._id);
+      setProjects(prev => prev.filter(p => p._id !== deleteTarget._id));
+      toast.success(`"${deleteTarget.name}" deleted`);
+      setDeleteTarget(null);
+    } catch (err: any) {
+      toast.error(err.message || "Failed to delete project");
+    } finally {
+      setDeleting(false);
+    }
   };
 
   // ── KPI Stats ────────────────────────────────────────────
@@ -295,8 +313,9 @@ const ProjectDirectory: React.FC = () => {
                     {p.name}
                   </h3>
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <button
+                    title="Edit project"
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
@@ -304,14 +323,31 @@ const ProjectDirectory: React.FC = () => {
                       setShowEditModal(true);
                     }}
                     style={{
-                      padding: "6px 12px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)",
+                      width: 32, height: 32, borderRadius: 9, border: "1px solid rgba(255,255,255,0.1)",
                       background: "rgba(255,255,255,0.03)", color: "#c9d1d9", cursor: "pointer",
-                      fontSize: 12, fontWeight: 600, transition: "all 0.2s", zIndex: 10
+                      display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s", zIndex: 10
                     }}
-                    onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.08)")}
-                    onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.03)")}
+                    onMouseEnter={e => { e.currentTarget.style.background = "rgba(59,130,246,0.15)"; e.currentTarget.style.color = "#3b82f6"; e.currentTarget.style.borderColor = "rgba(59,130,246,0.35)"; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.03)"; e.currentTarget.style.color = "#c9d1d9"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; }}
                   >
-                    Edit
+                    <Pencil size={14} />
+                  </button>
+                  <button
+                    title="Delete project"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setDeleteTarget(p);
+                    }}
+                    style={{
+                      width: 32, height: 32, borderRadius: 9, border: "1px solid rgba(239,68,68,0.18)",
+                      background: "rgba(239,68,68,0.08)", color: "#f87171", cursor: "pointer",
+                      display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s", zIndex: 10
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.background = "rgba(239,68,68,0.2)"; e.currentTarget.style.borderColor = "rgba(239,68,68,0.45)"; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = "rgba(239,68,68,0.08)"; e.currentTarget.style.borderColor = "rgba(239,68,68,0.18)"; }}
+                  >
+                    <Trash2 size={14} />
                   </button>
                   <StatusBadge status={p.status} />
                 </div>
@@ -410,12 +446,26 @@ const ProjectDirectory: React.FC = () => {
                     <td style={{ padding: "14px 16px", minWidth: 140 }}><ProgressBar value={p.progress || 0} /></td>
                     <td style={{ padding: "14px 16px", fontSize: 12, color: "#6e7681" }}>{p.end_date ? new Date(p.end_date).toLocaleDateString("en-IN") : "—"}</td>
                     <td style={{ padding: "14px 16px" }}>
-                      <button
-                        onClick={e => { e.stopPropagation(); setEditingProject(p); setShowEditModal(true); }}
-                        style={{ padding: "6px 14px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)", background: "transparent", color: "#c9d1d9", cursor: "pointer", fontSize: 12, fontWeight: 600 }}
-                      >
-                        Edit
-                      </button>
+                      <div style={{ display: "flex", gap: 8 }}>
+                        <button
+                          title="Edit project"
+                          onClick={e => { e.stopPropagation(); setEditingProject(p); setShowEditModal(true); }}
+                          style={{ width: 30, height: 30, borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)", background: "transparent", color: "#c9d1d9", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s" }}
+                          onMouseEnter={e => { e.currentTarget.style.background = "rgba(59,130,246,0.15)"; e.currentTarget.style.color = "#3b82f6"; }}
+                          onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#c9d1d9"; }}
+                        >
+                          <Pencil size={14} />
+                        </button>
+                        <button
+                          title="Delete project"
+                          onClick={e => { e.stopPropagation(); setDeleteTarget(p); }}
+                          style={{ width: 30, height: 30, borderRadius: 8, border: "1px solid rgba(239,68,68,0.18)", background: "rgba(239,68,68,0.08)", color: "#f87171", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s" }}
+                          onMouseEnter={e => { e.currentTarget.style.background = "rgba(239,68,68,0.2)"; }}
+                          onMouseLeave={e => { e.currentTarget.style.background = "rgba(239,68,68,0.08)"; }}
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
                     </td>
                   </motion.tr>
                 ))}
@@ -434,6 +484,57 @@ const ProjectDirectory: React.FC = () => {
             project={editingProject}
             onSuccess={() => { fetchProjects(); setShowCreateModal(false); setShowEditModal(false); setEditingProject(null); }}
           />
+        )}
+      </AnimatePresence>
+
+      {/* ── Delete Confirmation Modal ─────────────────────────── */}
+      <AnimatePresence>
+        {deleteTarget && (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            onClick={() => !deleting && setDeleteTarget(null)}
+            style={{ position: "fixed", inset: 0, zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)", padding: 20 }}
+          >
+            <motion.div
+              initial={{ scale: 0.92, opacity: 0, y: 12 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.92, opacity: 0, y: 12 }}
+              transition={{ type: "spring", stiffness: 380, damping: 28 }}
+              onClick={e => e.stopPropagation()}
+              style={{
+                width: "100%", maxWidth: 420, background: "linear-gradient(160deg, rgba(20,12,14,0.96), rgba(13,17,23,0.96))",
+                border: "1px solid rgba(239,68,68,0.22)", borderRadius: 22, padding: 32, textAlign: "center",
+                boxShadow: "0 30px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(239,68,68,0.08), inset 0 1px 0 rgba(255,255,255,0.04)",
+                position: "relative", overflow: "hidden",
+              }}
+            >
+              <div style={{ position: "absolute", top: -50, left: "50%", transform: "translateX(-50%)", width: 180, height: 180, borderRadius: "50%", background: "#ef4444", opacity: 0.12, filter: "blur(50px)", pointerEvents: "none" }} />
+              <div style={{ width: 64, height: 64, borderRadius: 18, margin: "0 auto 20px", display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(239,68,68,0.12)", border: "1px solid rgba(239,68,68,0.3)", position: "relative" }}>
+                <AlertTriangle size={28} color="#f87171" />
+              </div>
+              <h3 style={{ fontSize: 20, fontWeight: 800, color: "#f0f6fc", marginBottom: 8, letterSpacing: "-0.01em" }}>Delete this project?</h3>
+              <p style={{ fontSize: 13.5, color: "#9ba3af", lineHeight: 1.6, marginBottom: 4 }}>
+                <strong style={{ color: "#f0f6fc" }}>{deleteTarget.name}</strong>
+                {deleteTarget.project_id ? <span style={{ color: "#6e7681", fontFamily: "monospace" }}> ({deleteTarget.project_id})</span> : null}
+              </p>
+              <p style={{ fontSize: 12.5, color: "#6e7681", lineHeight: 1.6, marginBottom: 28 }}>
+                Eta permanently delete hobe — tasks, files, sob kichu s3 chole jabe. Undo kora jabe na.
+              </p>
+              <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
+                <button
+                  onClick={() => setDeleteTarget(null)} disabled={deleting}
+                  style={{ flex: 1, padding: "12px 20px", borderRadius: 12, border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.03)", color: "#c9d1d9", cursor: deleting ? "not-allowed" : "pointer", fontSize: 14, fontWeight: 600 }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDeleteProject} disabled={deleting}
+                  style={{ flex: 1, padding: "12px 20px", borderRadius: 12, border: "none", background: "linear-gradient(135deg, #ef4444, #b91c1c)", color: "#fff", cursor: deleting ? "not-allowed" : "pointer", fontSize: 14, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, boxShadow: "0 8px 22px rgba(239,68,68,0.35)", opacity: deleting ? 0.75 : 1 }}
+                >
+                  {deleting ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={15} />}
+                  {deleting ? "Deleting..." : "Delete"}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
     </motion.div>

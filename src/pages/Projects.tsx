@@ -1,5 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion";
+import { getPortfolioProjectsAPI } from "@/admin/lib/api";
 import { ExternalLink, Calendar, Users, Globe, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -126,7 +127,7 @@ function ProjectCard({ project, index }: { project: any; index: number }) {
 /* ─────────────────────────────── */
 /*  Main Page                      */
 /* ─────────────────────────────── */
-const ALL_PROJECTS = [
+const DEFAULT_PROJECTS = [
   { id: 1, type: "web", title: "Multi-Level Marketing (MLM) Engine", description: "A scalable MLM platform featuring automated referral tracking, dynamic commission distribution, and a real-time genealogy tree visualizer for distributors.", image: "/mlm_platform.png", technologies: ["MERN Stack", "TypeScript", "Tailwind CSS", "Redux Toolkit", "Node.js"], category: "Business / FinTech", timeline: "7 days", teamSize: "2 developers", demoUrl: "https://www.sarvasolutionvision.com/", githubUrl: "#" },
   { id: 2, type: "web", title: "Restaurant Food Delivery Platform (Serverless)", description: "A serverless progressive web app for food ordering with a modern UI, cart system, and direct WhatsApp integration.", image: "/maa_laxmi.png", technologies: ["React", "TypeScript", "Vercel"], category: "Web Development", timeline: "3 days", teamSize: "3 developers", demoUrl: "https://www.malakshmiranirestaurant.online", githubUrl: "#" },
   { id: 3, type: "web", title: "Hotel & Restaurant Business Website", description: "A fast, mobile-first business website designed to improve online visibility and local engagement.", image: "/Jamai_da_project.png", technologies: ["React", "TypeScript", "Vercel"], category: "Web Development", timeline: "2 days", teamSize: "2 developers", demoUrl: "https://jamaidahotel.online", githubUrl: "#" },
@@ -140,10 +141,34 @@ const ALL_PROJECTS = [
 
 export default function Projects() {
   const [activeFilter, setActiveFilter] = useState<"web" | "app">("web");
+  const [projects, setProjects] = useState<any[]>(DEFAULT_PROJECTS);
 
-  const webCount = ALL_PROJECTS.filter((p) => p.type === "web").length;
-  const appCount = ALL_PROJECTS.filter((p) => p.type === "app").length;
-  const filtered = ALL_PROJECTS.filter((p) => p.type === activeFilter);
+  useEffect(() => {
+    getPortfolioProjectsAPI()
+      .then((data) => {
+        if (data && data.length > 0) {
+          const formatted = data.map((p) => ({
+            id: p._id,
+            type: p.type,
+            title: p.title,
+            description: p.description,
+            image: p.image?.url || "/placeholder-image.jpg",
+            technologies: p.technologies || [],
+            category: p.category,
+            timeline: p.timeline,
+            teamSize: p.teamSize,
+            demoUrl: p.demoUrl || "#",
+            githubUrl: p.githubUrl || "#"
+          }));
+          setProjects(formatted);
+        }
+      })
+      .catch(console.error);
+  }, []);
+
+  const webCount = projects.filter((p) => p.type === "web").length;
+  const appCount = projects.filter((p) => p.type === "app").length;
+  const filtered = projects.filter((p) => p.type === activeFilter);
 
   return (
     <div className="min-h-screen bg-white dark:bg-background relative overflow-hidden font-sans transition-colors duration-300">

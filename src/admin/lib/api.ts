@@ -3,6 +3,8 @@
    Centralised fetch wrapper with JWT auto-attach & 401 handling
    ────────────────────────────────────────────────────────────── */
 
+import { fireActionFx, fxForRequest } from "./actionFx";
+
 // Use local backend in dev mode if VITE_API_URL is set, otherwise fallback to production
 export const getBaseUrl = () => {
   if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
@@ -59,6 +61,12 @@ export const authFetch = async (
     clearSessionId();
     window.location.href = "/";
     throw new Error("Session expired");
+  }
+
+  // Global success FX — play a Lottie overlay on any successful mutation
+  if (res.ok) {
+    const fx = fxForRequest((options.method as string) || "GET", endpoint);
+    if (fx) fireActionFx(fx);
   }
 
   return res;
@@ -761,6 +769,15 @@ export const updateProjectAPI = async (id: string, data: any): Promise<any> => {
   return res.json();
 };
 
+export const deleteProjectAPI = async (id: string): Promise<any> => {
+  const res = await authFetch(`/projects/${id}`, { method: "DELETE" });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || "Failed to delete project");
+  }
+  return res.json();
+};
+
 // ─── ENTERPRISE TASK APIs ────────────────────────────────────────────────────
 
 export const getTasksAPI = async (projectId?: string): Promise<any[]> => {
@@ -975,4 +992,118 @@ export const fetchMonitorsAPI = async (): Promise<Monitor[]> => {
   }
   const data = await res.json();
   return data.monitors;
+};
+
+// ═══════════════════════════════════════════════════════════════
+//  CMS - WEBSITE CONTENT APIs
+// ═══════════════════════════════════════════════════════════════
+
+export interface WebsiteStat {
+  _id: string;
+  value: string;
+  label: string;
+  order: number;
+}
+
+export interface Testimonial {
+  _id: string;
+  name: string;
+  username: string;
+  body: string;
+  rating: number;
+  order: number;
+  img?: { url: string; public_id: string };
+}
+
+export interface PortfolioProject {
+  _id: string;
+  title: string;
+  description: string;
+  type: string;
+  category: string;
+  timeline: string;
+  teamSize: string;
+  demoUrl?: string;
+  githubUrl?: string;
+  languages: string[];
+  technologies: string[];
+  order: number;
+  image?: { url: string; public_id: string };
+}
+
+export const uploadCmsImageAPI = async (file: File): Promise<{ url: string; public_id: string }> => {
+  const formData = new FormData();
+  formData.append("image", file);
+  const res = await authFetch("/website-content/upload-image", {
+    method: "POST",
+    body: formData,
+  });
+  if (!res.ok) throw new Error("Image upload failed");
+  return res.json();
+};
+
+// --- Stats ---
+export const getWebsiteStatsAPI = async (): Promise<WebsiteStat[]> => {
+  const res = await authFetch("/website-content/stats");
+  if (!res.ok) throw new Error("Failed to fetch stats");
+  return res.json();
+};
+export const createWebsiteStatAPI = async (data: Partial<WebsiteStat>) => {
+  const res = await authFetch("/website-content/stats", { method: "POST", body: JSON.stringify(data) });
+  if (!res.ok) throw new Error("Failed to create stat");
+  return res.json();
+};
+export const updateWebsiteStatAPI = async (id: string, data: Partial<WebsiteStat>) => {
+  const res = await authFetch(`/website-content/stats/${id}`, { method: "PUT", body: JSON.stringify(data) });
+  if (!res.ok) throw new Error("Failed to update stat");
+  return res.json();
+};
+export const deleteWebsiteStatAPI = async (id: string) => {
+  const res = await authFetch(`/website-content/stats/${id}`, { method: "DELETE" });
+  if (!res.ok) throw new Error("Failed to delete stat");
+  return res.json();
+};
+
+// --- Testimonials ---
+export const getTestimonialsAPI = async (): Promise<Testimonial[]> => {
+  const res = await authFetch("/website-content/testimonials");
+  if (!res.ok) throw new Error("Failed to fetch testimonials");
+  return res.json();
+};
+export const createTestimonialAPI = async (data: Partial<Testimonial>) => {
+  const res = await authFetch("/website-content/testimonials", { method: "POST", body: JSON.stringify(data) });
+  if (!res.ok) throw new Error("Failed to create testimonial");
+  return res.json();
+};
+export const updateTestimonialAPI = async (id: string, data: Partial<Testimonial>) => {
+  const res = await authFetch(`/website-content/testimonials/${id}`, { method: "PUT", body: JSON.stringify(data) });
+  if (!res.ok) throw new Error("Failed to update testimonial");
+  return res.json();
+};
+export const deleteTestimonialAPI = async (id: string) => {
+  const res = await authFetch(`/website-content/testimonials/${id}`, { method: "DELETE" });
+  if (!res.ok) throw new Error("Failed to delete testimonial");
+  return res.json();
+};
+
+// --- Projects ---
+export const getPortfolioProjectsAPI = async (): Promise<PortfolioProject[]> => {
+  const res = await authFetch("/website-content/projects");
+  if (!res.ok) throw new Error("Failed to fetch portfolio projects");
+  return res.json();
+};
+export const createPortfolioProjectAPI = async (data: Partial<PortfolioProject>) => {
+  const res = await authFetch("/website-content/projects", { method: "POST", body: JSON.stringify(data) });
+  if (!res.ok) throw new Error("Failed to create project");
+  return res.json();
+};
+export const updatePortfolioProjectAPI = async (id: string, data: Partial<PortfolioProject>) => {
+  const res = await authFetch(`/website-content/projects/${id}`, { method: "PUT", body: JSON.stringify(data) });
+  if (!res.ok) throw new Error("Failed to update project");
+  return res.json();
+};
+export const deletePortfolioProjectAPI = async (id: string) => {
+  const res = await authFetch(`/website-content/projects/${id}`, { method: "DELETE" });
+  if (!res.ok) throw new Error("Failed to delete project");
+  return res.json();
 };

@@ -40,6 +40,7 @@ const navItems = [
   { path: "/admin/team", label: "Team", icon: ShieldCheck, end: false },
   { path: "/admin/activity", label: "Activity Tracker", icon: Activity, end: false },
   { path: "/admin/offers", label: "Offers", icon: Tag, end: false },
+  { path: "/admin/website-content", label: "Website Content", icon: LayoutDashboard, end: false },
   { path: "/admin/database", label: "Database", icon: Database, end: false },
   { path: "/admin/notifications", label: "AI Notifications", icon: Bell, end: false },
   { path: "/admin/cron-monitor", label: "CRON Job Monitor", icon: Activity, end: false },

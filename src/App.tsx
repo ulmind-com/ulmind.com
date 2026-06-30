@@ -101,6 +101,7 @@ const AdminNotificationDashboard = lazy(() => import("./admin/pages/Notification
 const CronMonitorPage = lazy(() => import("./admin/pages/CronMonitorPage"));
 const AdminAuditLogs = lazy(() => import("./admin/pages/AuditLogsPage"));
 const AdminActivityFeed = lazy(() => import("./admin/pages/ActivityFeedPage"));
+const CmsLayout = lazy(() => import("./admin/pages/cms/CmsLayout"));
 import { AuthProvider } from "./admin/context/auth-context";
 import AdminLayout from "./admin/components/AdminLayout";
 import ProtectedRoute from "./admin/components/ProtectedRoute";
@@ -620,6 +621,7 @@ const App = () => {
                     <Route path="cron-monitor" element={<CronMonitorPage />} />
                     <Route path="audit-logs" element={<AdminAuditLogs />} />
                     <Route path="activity-feed" element={<AdminActivityFeed />} />
+                    <Route path="website-content" element={<CmsLayout />} />
                   </Route>
 
                   <Route path="*" element={<NotFound />} />
