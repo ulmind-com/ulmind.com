@@ -1,8 +1,10 @@
 import { cn } from "@/lib/utils";
 import { Marquee } from "@/components/magicui/marquee";
 import BlurBlob from "@/components/BlurBlob";
+import { useState, useEffect } from "react";
+import { getTestimonialsAPI } from "@/admin/lib/api";
 
-const reviews = [
+const defaultReviews = [
   {
     name: "Milan Kumar Mondal",
     username: "Owner, Maa Laxmirani Restaurant",
@@ -46,9 +48,6 @@ const reviews = [
     rating: 5,
   },
 ];
-
-const firstRow = reviews.slice(0, reviews.length / 2);
-const secondRow = reviews.slice(reviews.length / 2);
 
 /* ⭐ Star renderer */
 const Stars = ({ rating }) => (
@@ -105,6 +104,28 @@ const ReviewCard = ({ img, name, username, body, rating }) => {
 };
 
 export const TestimonialsSection = () => {
+  const [reviews, setReviews] = useState(defaultReviews);
+
+  useEffect(() => {
+    getTestimonialsAPI()
+      .then((data) => {
+        if (data.length > 0) {
+          const formatted = data.map(r => ({
+            name: r.name,
+            username: r.username,
+            body: r.body,
+            rating: r.rating,
+            img: r.img?.url || "/placeholder-user.jpg"
+          }));
+          setReviews(formatted);
+        }
+      })
+      .catch(console.error);
+  }, []);
+
+  const firstRow = reviews.slice(0, reviews.length / 2);
+  const secondRow = reviews.slice(reviews.length / 2);
+
   return (
     <section className="py-20 relative overflow-hidden max-w-[100vw]">
       <BlurBlob position={{ top: "30%", left: "20%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-pink-300" opacityClass="opacity-20" />

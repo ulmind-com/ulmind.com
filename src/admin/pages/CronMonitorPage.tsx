@@ -193,7 +193,8 @@ const CronMonitorPage: React.FC = () => {
 
   // Generate deterministic response times
   const getResponseTime = (monitorId: string) => {
-    const getHash = (str: string) => {
+    const getHash = (val: string | number) => {
+      const str = String(val);
       let hash = 0;
       for (let i = 0; i < str.length; i++) {
         hash = str.charCodeAt(i) + ((hash << 5) - hash);
@@ -205,7 +206,8 @@ const CronMonitorPage: React.FC = () => {
 
   // Generate 28 historical status bars
   const renderUptimeHistoryBars = (status: number, monitorId: string) => {
-    const getHash = (str: string) => {
+    const getHash = (val: string | number) => {
+      const str = String(val);
       let hash = 0;
       for (let i = 0; i < str.length; i++) {
         hash = str.charCodeAt(i) + ((hash << 5) - hash);
@@ -280,7 +282,8 @@ const CronMonitorPage: React.FC = () => {
     const data = [];
     const now = new Date();
     
-    const getHash = (str: string) => {
+    const getHash = (val: string | number) => {
+      const str = String(val);
       let hash = 0;
       for (let i = 0; i < str.length; i++) {
         hash = str.charCodeAt(i) + ((hash << 5) - hash);

@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useRef, useState } from 'react';
+import { getWebsiteStatsAPI, WebsiteStat } from '@/admin/lib/api';
 import { MacbookScrollSection } from './MacbookScrollSection';
 import BlurBlob from "@/components/BlurBlob";
 import Lottie from 'lottie-react';
@@ -270,12 +271,25 @@ export const HeroSection = () => {
   const [settingAnimData, setSettingAnimData] = useState<object | null>(null);
 
   // Your stats data matched with icons
-  const stats = [
+  const [dynamicStats, setDynamicStats] = useState<WebsiteStat[]>([]);
+
+  useEffect(() => {
+    getWebsiteStatsAPI().then(data => setDynamicStats(data)).catch(console.error);
+  }, []);
+
+  const defaultStats = [
     { number: '3', label: 'Years Experience', icon: Trophy, lottieData: trophyAnimData },
     { number: '7+', label: 'Completed Projects', icon: Target, lottieData: successAnimData },
     { number: '7+', label: 'Clients Worldwide', icon: BarChart3, lottieData: growthAnimData },
     { number: '24/7', label: 'Support', icon: Settings, lottieData: settingAnimData },
   ];
+
+  const stats = defaultStats.map((def, i) => {
+    if (dynamicStats[i]) {
+      return { ...def, number: dynamicStats[i].value, label: dynamicStats[i].label };
+    }
+    return def;
+  });
 
   // Mouse parallax removed — mousemove listener on a large section causes
   // a forced layout on every pointer event which tanks scroll FPS.

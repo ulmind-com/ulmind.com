@@ -7,6 +7,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import BlurBlob from "@/components/BlurBlob";
+import { fetchSiteStats } from "@/lib/siteContent";
 
 const features = [
   {
@@ -26,7 +27,8 @@ const features = [
   }
 ];
 
-const stats = [
+// Shown until live CMS data loads (and as a safe fallback if the API is unreachable)
+const DEFAULT_STATS = [
   { number: "7+", label: "Projects Completed" },
   { number: "7+", label: "Happy Clients" },
   { number: "3+", label: "Years Experience" },
@@ -40,6 +42,7 @@ export const AboutPreviewSection = () => {
   });
 
   const navigate = useNavigate();
+  const [stats, setStats] = useState(DEFAULT_STATS);
   const [arrowAnimData, setArrowAnimData] = useState<object | null>(null);
   const [missionAnimData, setMissionAnimData] = useState<object | null>(null);
   const [peopleAnimData, setPeopleAnimData] = useState<object | null>(null);
@@ -90,6 +93,19 @@ export const AboutPreviewSection = () => {
     fetchLottie('/Jason/Mission.json', setMissionAnimData, true);
     fetchLottie('/Jason/people.json', setPeopleAnimData, true);
     fetchLottie('/Jason/verification.json', setVerificationAnimData, true);
+  }, []);
+
+  // Pull live, admin-managed stats from the CMS — keep defaults if unavailable
+  useEffect(() => {
+    let active = true;
+    fetchSiteStats()
+      .then((data) => {
+        if (active && Array.isArray(data) && data.length > 0) {
+          setStats(data.map((s) => ({ number: s.value, label: s.label })));
+        }
+      })
+      .catch(() => {});
+    return () => { active = false; };
   }, []);
 
   return (

@@ -11,6 +11,8 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useNavigate } from 'react-router-dom';
 import { CTASection } from '@/components/Sections/CTASection';
+import { getWebsiteStatsAPI, WebsiteStat } from '@/admin/lib/api';
+import { useState, useEffect } from 'react';
 
 export default function About() {
   const navigate = useNavigate();
@@ -46,12 +48,11 @@ export default function About() {
     },
   ];
 
-  const stats = [
-    { number: '7+', label: 'Projects Completed' },
-    { number: '7+', label: 'Happy Clients' },
-    { number: '3+', label: 'Years Experience' },
-    { number: '8+', label: 'Team Members' },
-  ];
+  const [stats, setStats] = useState<WebsiteStat[]>([]);
+
+  useEffect(() => {
+    getWebsiteStatsAPI().then(data => setStats(data)).catch(console.error);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -178,7 +179,7 @@ export default function About() {
                 {stats.map((stat, i) => (
                   <div key={i} className="flex flex-col space-y-2 relative group">
                     <span className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-br from-foreground to-foreground/50 group-hover:from-primary group-hover:to-primary/50 transition-all duration-300">
-                      {stat.number}
+                      {stat.value}
                     </span>
                     <span className="text-sm font-semibold text-muted-foreground">
                       {stat.label}
