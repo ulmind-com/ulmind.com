@@ -592,82 +592,147 @@
   font-weight: 500 !important;
 }
 
-/* ─── Action Lottie Overlay ────────────────────────────────── */
+/* ─── Action Lottie Overlay (Premium) ──────────────────────── */
 .admin-action-overlay {
   position: fixed;
   inset: 0;
-  z-index: 9999;
+  z-index: 99999;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background:
+    radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--fx-accent, #f43f5e) 14%, transparent), transparent 55%),
+    rgba(3, 4, 7, 0.55);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
 }
 
-.admin-action-lottie-container {
-  width: 300px;
-  height: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
+/* Glass card */
+.admin-action-card {
   position: relative;
+  width: 320px;
+  padding: 34px 32px 30px;
+  border-radius: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+  background:
+    linear-gradient(160deg, rgba(22, 28, 45, 0.92), rgba(10, 13, 22, 0.94));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 30px 70px -20px rgba(0, 0, 0, 0.75),
+    0 0 60px -10px color-mix(in srgb, var(--fx-accent, #f43f5e) 45%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
-.admin-action-lottie-container::before {
-  content: '';
+/* Gradient border ring (crisp, with a soft glow pulse) */
+.admin-action-ring {
   position: absolute;
-  inset: -20px;
+  inset: 0;
+  border-radius: 28px;
+  padding: 1.5px;
+  background: linear-gradient(
+    140deg,
+    color-mix(in srgb, var(--fx-accent, #f43f5e) 85%, transparent),
+    rgba(255, 255, 255, 0.35) 40%,
+    color-mix(in srgb, var(--fx-accent, #f43f5e) 55%, transparent) 75%,
+    rgba(255, 255, 255, 0.1)
+  );
+  z-index: 4;
+  pointer-events: none;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: adminRingGlow 2s ease-in-out infinite;
+}
+
+@keyframes adminRingGlow {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 1; }
+}
+
+/* Diagonal sheen sweep */
+.admin-action-sheen {
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.14), transparent);
+  transform: skewX(-18deg);
+  animation: adminSheen 2.2s ease-in-out 0.25s;
+  z-index: 3;
+  pointer-events: none;
+}
+
+@keyframes adminSheen {
+  0%   { left: -60%; }
+  60%  { left: 130%; }
+  100% { left: 130%; }
+}
+
+/* Sparkle particles */
+.admin-action-spark {
+  position: absolute;
+  top: 46%;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.1), transparent);
-  animation: adminSpin 4s linear infinite;
+  background: var(--fx-accent, #f43f5e);
+  box-shadow: 0 0 10px var(--fx-accent, #f43f5e);
+  z-index: 2;
+  pointer-events: none;
 }
 
-@keyframes adminSpin {
-  100% { transform: rotate(360deg); }
+/* Halo behind the lottie */
+.admin-action-lottie-halo {
+  position: relative;
+  z-index: 1;
+  width: 148px;
+  height: 148px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--fx-accent, #f43f5e) 22%, transparent) 0%, transparent 68%);
+  animation: adminHaloPulse 2s ease-in-out infinite;
 }
 
-.admin-action-lottie-container.success {
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%);
-  animation: adminPulseGlowSuccess 2s infinite ease-in-out;
-}
-
-@keyframes adminPulseGlowSuccess {
-  0%, 100% { box-shadow: 0 0 30px rgba(16, 185, 129, 0.3), inset 0 0 20px rgba(16, 185, 129, 0.1); }
-  50%      { box-shadow: 0 0 60px rgba(16, 185, 129, 0.5), inset 0 0 40px rgba(16, 185, 129, 0.3); }
-}
-
-/* Save → verification (brand red/rose glow) */
-.admin-action-lottie-container.save {
-  background: radial-gradient(circle, rgba(244, 63, 94, 0.16) 0%, transparent 70%);
-  animation: adminPulseGlowSave 2s infinite ease-in-out;
-}
-
-@keyframes adminPulseGlowSave {
-  0%, 100% { box-shadow: 0 0 30px rgba(244, 63, 94, 0.3), inset 0 0 20px rgba(244, 63, 94, 0.1); }
-  50%      { box-shadow: 0 0 60px rgba(244, 63, 94, 0.55), inset 0 0 40px rgba(244, 63, 94, 0.3); }
-}
-
-/* Edit → success tick (emerald glow) */
-.admin-action-lottie-container.edit {
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%);
-  animation: adminPulseGlowSuccess 2s infinite ease-in-out;
-}
-
-.admin-action-lottie-container.delete {
-  background: radial-gradient(circle, rgba(239, 68, 68, 0.15) 0%, transparent 70%);
-  animation: adminPulseGlowDelete 2s infinite ease-in-out;
-}
-
-@keyframes adminPulseGlowDelete {
-  0%, 100% { box-shadow: 0 0 30px rgba(239, 68, 68, 0.3), inset 0 0 20px rgba(239, 68, 68, 0.1); }
-  50%      { box-shadow: 0 0 60px rgba(239, 68, 68, 0.5), inset 0 0 40px rgba(239, 68, 68, 0.3); }
+@keyframes adminHaloPulse {
+  0%, 100% { box-shadow: 0 0 26px -6px color-mix(in srgb, var(--fx-accent, #f43f5e) 60%, transparent); }
+  50%      { box-shadow: 0 0 52px 2px  color-mix(in srgb, var(--fx-accent, #f43f5e) 75%, transparent); }
 }
 
 .admin-action-lottie {
   width: 100%;
   height: 100%;
+}
+
+.admin-action-title {
+  position: relative;
+  z-index: 1;
+  margin: 14px 0 0;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #fff;
+  background: linear-gradient(90deg, #ffffff, color-mix(in srgb, var(--fx-accent, #f43f5e) 55%, #ffffff));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.admin-action-sub {
+  position: relative;
+  z-index: 1;
+  margin: 6px 0 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--admin-text-muted);
 }
 
 /* ─── Liquid Glass UI Enhancements ─────────────────────────── */
