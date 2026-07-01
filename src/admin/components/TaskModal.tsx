@@ -122,7 +122,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSubmit,
               </div>
 
               <div>
-                <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#94a3b8", marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
+                <label style={{ fontSize: 13, fontWeight: 600, color: "#94a3b8", marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
                   <AlignLeft size={14} /> Description
                 </label>
                 <textarea
@@ -156,7 +156,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSubmit,
                   </select>
                 </div>
                 <div>
-                  <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#94a3b8", marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
+                  <label style={{ fontSize: 13, fontWeight: 600, color: "#94a3b8", marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
                     <AlertCircle size={14} /> Priority
                   </label>
                   <select
@@ -175,7 +175,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSubmit,
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
                 <div>
-                  <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#94a3b8", marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
+                  <label style={{ fontSize: 13, fontWeight: 600, color: "#94a3b8", marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
                     <Calendar size={14} /> Due Date
                   </label>
                   <input
@@ -190,7 +190,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSubmit,
                   />
                 </div>
                 <div>
-                  <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#94a3b8", marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
+                  <label style={{ fontSize: 13, fontWeight: 600, color: "#94a3b8", marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
                     <Clock size={14} /> Est. Hours
                   </label>
                   <input

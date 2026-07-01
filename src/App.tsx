@@ -103,7 +103,15 @@ const CronMonitorPage = lazy(() => import("./admin/pages/CronMonitorPage"));
 const AdminAuditLogs = lazy(() => import("./admin/pages/AuditLogsPage"));
 const AdminActivityFeed = lazy(() => import("./admin/pages/ActivityFeedPage"));
 const CmsLayout = lazy(() => import("./admin/pages/cms/CmsLayout"));
+
+// ─── Hardware Monitoring System ──────────────────────────────
+const HWLoginPage = lazy(() => import("./admin/pages/hardware/HWLoginPage"));
+const HWDashboard = lazy(() => import("./admin/pages/hardware/HWDashboard"));
+const HWAdminDashboard = lazy(() => import("./admin/pages/hardware/HWAdminDashboard"));
+const HWEmployeeManagement = lazy(() => import("./admin/pages/hardware/HWEmployeeManagement"));
+
 import { AuthProvider } from "./admin/context/auth-context";
+import { HWProvider } from "./admin/context/hw-context";
 import AdminLayout from "./admin/components/AdminLayout";
 import ProtectedRoute from "./admin/components/ProtectedRoute";
 
@@ -625,6 +633,36 @@ const App = () => {
                     <Route path="activity-feed" element={<AdminActivityFeed />} />
                     <Route path="website-content" element={<CmsLayout />} />
                   </Route>
+
+                  {/* ─── Hardware Monitoring Routes ─── */}
+                  <Route path="/admin/hw/login" element={
+                    <HWProvider>
+                      <HWLoginPage />
+                    </HWProvider>
+                  } />
+                  <Route path="/admin/hw/dashboard" element={
+                    <HWProvider>
+                      <HWDashboard />
+                    </HWProvider>
+                  } />
+                  <Route path="/admin/hw/admin" element={
+                    <AuthProvider>
+                      <ProtectedRoute>
+                        <HWProvider>
+                          <HWAdminDashboard />
+                        </HWProvider>
+                      </ProtectedRoute>
+                    </AuthProvider>
+                  } />
+                  <Route path="/admin/hw/employees" element={
+                    <AuthProvider>
+                      <ProtectedRoute>
+                        <HWProvider>
+                          <HWEmployeeManagement />
+                        </HWProvider>
+                      </ProtectedRoute>
+                    </AuthProvider>
+                  } />
 
                   <Route path="*" element={<NotFound />} />
                 </Routes>
