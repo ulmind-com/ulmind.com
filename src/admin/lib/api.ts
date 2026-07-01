@@ -3,7 +3,6 @@
    Centralised fetch wrapper with JWT auto-attach & 401 handling
    ────────────────────────────────────────────────────────────── */
 
-import { fireActionFx, fxForRequest } from "./actionFx";
 
 // Use local backend in dev mode if VITE_API_URL is set, otherwise fallback to production
 export const getBaseUrl = () => {
@@ -63,11 +62,9 @@ export const authFetch = async (
     throw new Error("Session expired");
   }
 
-  // Global success FX — play a Lottie overlay on any successful mutation
-  if (res.ok) {
-    const fx = fxForRequest((options.method as string) || "GET", endpoint);
-    if (fx) fireActionFx(fx);
-  }
+  // Global success FX is now handled centrally by the fetch interceptor
+  // installed in AdminActionProvider (see actionFx.installFetchFx), so we
+  // no longer fire it here — that avoids double-firing the overlay.
 
   return res;
 };

@@ -6,7 +6,6 @@ import { DndContext, closestCorners, PointerSensor, KeyboardSensor, useSensor, u
 import { SortableContext, verticalListSortingStrategy, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { TaskModal } from "../../components/TaskModal";
-import { LottieOverlay } from "../../components/LottieOverlay";
 import { toast } from "sonner";
 
 const KANBAN_COLUMNS = ["Backlog", "Pending", "In Progress", "Review", "Testing", "Completed"];
@@ -39,7 +38,6 @@ const PMKanban: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<any>(null);
-  const [lottieConfig, setLottieConfig] = useState({ isVisible: false, path: "", text: "" });
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }), useSensor(KeyboardSensor));
 
   useEffect(() => { fetchTasks(); }, []);
@@ -51,10 +49,8 @@ const PMKanban: React.FC = () => {
     try {
       if (selectedTask) {
         await updatePmTaskAPI(selectedTask._id, data);
-        setLottieConfig({ isVisible: true, path: "/Jason/Success.json", text: "Task Updated" });
       } else {
         await createPmTaskAPI(data);
-        setLottieConfig({ isVisible: true, path: "/Jason/Success.json", text: "Task Created" });
       }
       setIsModalOpen(false);
       setSelectedTask(null);
@@ -68,7 +64,6 @@ const PMKanban: React.FC = () => {
     if (!selectedTask) return;
     try {
       await deletePmTaskAPI(selectedTask._id);
-      setLottieConfig({ isVisible: true, path: "/Jason/delete.json", text: "Task Deleted" });
       setIsModalOpen(false);
       setSelectedTask(null);
       fetchTasks();
@@ -132,12 +127,6 @@ const PMKanban: React.FC = () => {
         onSubmit={handleTaskSubmit}
         onDelete={handleDeleteTask}
         initialData={selectedTask}
-      />
-      <LottieOverlay
-        isVisible={lottieConfig.isVisible}
-        animationPath={lottieConfig.path}
-        text={lottieConfig.text}
-        onComplete={() => setLottieConfig({ ...lottieConfig, isVisible: false })}
       />
     </motion.div>
   );

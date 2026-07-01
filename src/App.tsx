@@ -63,6 +63,7 @@ const TeamAnalyticsPage = lazy(() => import("./admin/pages/team/TeamAnalytics"))
 const ManagerTrackingPage = lazy(() => import("./admin/pages/team/ManagerTrackingPage"));
 const AdminActivityTrackerPage = lazy(() => import("./admin/pages/ActivityTrackerPage"));
 const AdminOffersPage = lazy(() => import("./admin/pages/OffersPage"));
+const AdminMarketingPage = lazy(() => import("./admin/pages/MarketingPage"));
 const AdminDatabasePage = lazy(() => import("./admin/pages/DatabasePage"));
 const AdminCRMPage = lazy(() => import("./admin/pages/CRMPage"));
 const CRMDashboardPage = lazy(() => import("./admin/pages/crm/CRMDashboard"));
@@ -614,6 +615,7 @@ const App = () => {
                     </Route>
                     <Route path="activity" element={<AdminActivityTrackerPage />} />
                     <Route path="offers" element={<AdminOffersPage />} />
+                    <Route path="marketing" element={<AdminMarketingPage />} />
                     <Route path="database" element={<AdminDatabasePage />} />
                     <Route path="delete-requests" element={<DeleteRequestsPage />} />
                     <Route path="settings" element={<AdminSettingsPage />} />
