@@ -27,7 +27,8 @@ import {
   ShieldAlert,
   Rss,
   Megaphone,
-  Monitor
+  Monitor,
+  Camera
 } from "lucide-react";
 import NotificationCenter from "./NotificationCenter";
 import "../admin.css";
@@ -51,6 +52,7 @@ const navItems = [
   { path: "/admin/audit-logs", label: "Audit Logs", icon: ShieldAlert, end: false },
   { path: "/admin/delete-requests", label: "Delete Requests", icon: ShieldAlert, end: false },
   { path: "/admin/hardware/admin", label: "Hardware Monitor", icon: Monitor, end: false },
+  { path: "/admin/hardware", label: "My Tracker", icon: Camera, end: true },
   { path: "/admin/settings", label: "Settings", icon: Settings, end: false },
 ];
 

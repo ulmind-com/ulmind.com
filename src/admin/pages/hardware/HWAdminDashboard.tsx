@@ -262,14 +262,35 @@ const HWAdminDashboard: React.FC = () => {
                     </div>
 
                     {/* Metrics */}
-                    <div style={{ display: "flex", gap: 8, marginBottom: 10, flexWrap: "wrap" }}>
-                      {emp.session_id && (
-                        <MiniStat label="Time" value={formatDuration(emp.session_duration_seconds)} />
-                      )}
-                      {emp.session_id && (
-                        <MiniStat label="Active" value={formatDuration(emp.active_seconds)} />
-                      )}
-                      <MiniStat label="Score" value={`${emp.productivity_score}%`} />
+                    <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 16 }}>
+                      <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                        {emp.session_id && emp.login_time && (
+                          <div style={{
+                            padding: "4px 10px", borderRadius: 8, fontSize: 10,
+                            background: "rgba(59,130,246,0.1)", border: "1px solid rgba(59,130,246,0.2)",
+                            display: "flex", alignItems: "center", gap: 6
+                          }}>
+                            <Clock size={12} color="#3b82f6" />
+                            <span style={{ color: "#60a5fa" }}>In:</span>
+                            <span style={{ color: "#93c5fd", fontWeight: 800 }}>
+                              {new Date(emp.login_time).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                          </div>
+                        )}
+                        {emp.session_id && (
+                          <div style={{
+                            padding: "4px 10px", borderRadius: 8, fontSize: 10,
+                            background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.2)",
+                            display: "flex", alignItems: "center", gap: 6
+                          }}>
+                            <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#10b981", animation: "pulse 2s infinite" }} />
+                            <span style={{ color: "#34d399", fontWeight: 600 }}>Active Track:</span>
+                            <span style={{ color: "#10b981", fontWeight: 800 }}>{formatDuration(emp.active_seconds)} / {formatDuration(emp.session_duration_seconds)}</span>
+                          </div>
+                        )}
+                      </div>
+                      
+                      <ScoreBar label="AI Productivity Score" value={emp.productivity_score} />
                     </div>
 
                     {/* Alert indicators */}
@@ -407,6 +428,29 @@ const HWAdminDashboard: React.FC = () => {
               <p style={{ fontSize: 13, color: "#94a3b8", marginBottom: 20 }}>
                 {selectedEmployee.designation} • {selectedEmployee.employee_id}
               </p>
+
+              {/* LIVE METRICS SUBSECTION */}
+              <div style={{
+                marginBottom: 20, padding: 16, borderRadius: 12,
+                background: "rgba(16,185,129,0.05)", border: "1px solid rgba(16,185,129,0.2)"
+              }}>
+                <h4 style={{ fontSize: 13, fontWeight: 700, color: "#10b981", marginBottom: 12, display: "flex", alignItems: "center", gap: 6 }}>
+                  <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#10b981", animation: "pulse 2s infinite" }} />
+                  Live AI Tracking Monitor
+                </h4>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                  <MiniStat label="Status" value={selectedEmployee.status.toUpperCase()} />
+                  <MiniStat label="Camera" value={selectedEmployee.camera_state.toUpperCase()} />
+                  <MiniStat label="Active AI Track" value={formatDuration(selectedEmployee.active_seconds)} />
+                  <MiniStat label="Live Score" value={`${selectedEmployee.productivity_score}%`} />
+                </div>
+                {selectedEmployee.current_event && (
+                  <div style={{ marginTop: 12, padding: "6px 12px", background: "rgba(0,0,0,0.2)", borderRadius: 6, fontSize: 11 }}>
+                    <span style={{ color: "#94a3b8" }}>Current Activity: </span>
+                    <span style={{ color: "#fff", fontWeight: 600 }}>{selectedEmployee.current_event.replace(/_/g, " ").toUpperCase()}</span>
+                  </div>
+                )}
+              </div>
 
               {dailyReport ? (
                 <>
