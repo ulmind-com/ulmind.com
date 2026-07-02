@@ -218,7 +218,7 @@ const HWDashboard: React.FC = () => {
               <svg width="200" height="200" viewBox="0 0 200 200" style={{ transform: "rotate(-90deg)" }}>
                 <circle cx="100" cy="100" r="90" fill="none" stroke="var(--admin-border)" strokeWidth="6" />
                 <circle cx="100" cy="100" r="90" fill="none" stroke="#3b82f6" strokeWidth="6"
-                  strokeDasharray="565" strokeDashoffset={565 - (565 * (timer.progress / 100))}
+                  strokeDasharray="565" strokeDashoffset={565 - (565 * ((timer.progressPercent || 0) / 100))}
                   strokeLinecap="round" style={{ transition: "stroke-dashoffset 1s linear" }}
                 />
               </svg>
@@ -227,10 +227,10 @@ const HWDashboard: React.FC = () => {
                 alignItems: "center", justifyContent: "center"
               }}>
                 <div style={{ fontSize: 32, fontWeight: 700, color: "var(--admin-text)", fontVariantNumeric: "tabular-nums", letterSpacing: -1 }}>
-                  {timer.elapsedFormatted}
+                  {timer.isDutyCompleted ? "08:00:00" : (timer.formattedTime || "00:00:00")}
                 </div>
-                <div style={{ fontSize: 12, color: "var(--admin-text-muted)", marginTop: 4, textTransform: "uppercase", fontWeight: 600, letterSpacing: 1 }}>
-                  {timer.isLunchBreak ? "Lunch Break" : "Active"}
+                <div style={{ fontSize: 12, color: timer.isDutyCompleted ? "#10b981" : "var(--admin-text-muted)", marginTop: 4, textTransform: "uppercase", fontWeight: 600, letterSpacing: 1 }}>
+                  {timer.isDutyCompleted ? "Today Work Done 🎉" : "Active"}
                 </div>
               </div>
             </div>
@@ -238,11 +238,51 @@ const HWDashboard: React.FC = () => {
             <div style={{ display: "flex", justifyContent: "space-between", width: "100%", marginTop: 32, padding: "0 16px" }}>
               <div style={{ textAlign: "center" }}>
                 <div style={{ fontSize: 11, color: "var(--admin-text-muted)" }}>Remaining</div>
-                <div style={{ fontSize: 14, fontWeight: 600, color: "var(--admin-text)", fontVariantNumeric: "tabular-nums" }}>{timer.remainingFormatted}</div>
+                <div style={{ fontSize: 14, fontWeight: 600, color: "var(--admin-text)", fontVariantNumeric: "tabular-nums" }}>{timer.formattedRemaining || "00:00:00"}</div>
               </div>
               <div style={{ textAlign: "center" }}>
                 <div style={{ fontSize: 11, color: "var(--admin-text-muted)" }}>Progress</div>
-                <div style={{ fontSize: 14, fontWeight: 600, color: "#10b981" }}>{Math.round(timer.progress)}%</div>
+                <div style={{ fontSize: 14, fontWeight: 600, color: "#10b981" }}>{Math.round(timer.progressPercent || 0)}%</div>
+              </div>
+            </div>
+          </div>
+          
+          {/* AI Productivity Card */}
+          <div className="hw-panel" style={{
+            background: "var(--admin-card-bg)", borderRadius: 16, border: "1px solid var(--admin-border)",
+            padding: 32, display: "flex", flexDirection: "column"
+          }}>
+            <h3 style={{ fontSize: 12, fontWeight: 600, color: "var(--admin-text-muted)", letterSpacing: 1, textTransform: "uppercase", margin: "0 0 24px 0", display: "flex", alignItems: "center", gap: 8 }}>
+              <BarChart3 size={16} color="#8b5cf6" /> Live AI Performance
+            </h3>
+            
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <span style={{ color: "var(--admin-text-muted)", fontSize: 13, fontWeight: 600 }}>Face Productivity Score</span>
+                <span style={{ fontSize: 24, fontWeight: 800, color: (employee.avg_productivity_score || 0) >= 80 ? "#10b981" : (employee.avg_productivity_score || 0) >= 50 ? "#f59e0b" : "#ef4444" }}>
+                  {employee.avg_productivity_score || 0}%
+                </span>
+              </div>
+              <div style={{ height: 6, borderRadius: 3, background: "rgba(255,255,255,0.05)", overflow: "hidden" }}>
+                <div style={{
+                  height: "100%", width: `${Math.min(100, employee.avg_productivity_score || 0)}%`,
+                  background: (employee.avg_productivity_score || 0) >= 80 ? "#10b981" : (employee.avg_productivity_score || 0) >= 50 ? "#f59e0b" : "#ef4444",
+                  borderRadius: 3, transition: "width 1s ease"
+                }} />
+              </div>
+              
+              <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+                <div style={{ flex: 1, padding: 12, background: "rgba(255,255,255,0.02)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.04)" }}>
+                  <div style={{ fontSize: 10, color: "var(--admin-text-muted)", marginBottom: 4, textTransform: "uppercase", fontWeight: 700 }}>AI Tracker</div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#10b981", fontSize: 12, fontWeight: 600 }}>
+                    <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#10b981", animation: "pulse 2s infinite" }} />
+                    Active
+                  </div>
+                </div>
+                <div style={{ flex: 1, padding: 12, background: "rgba(255,255,255,0.02)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.04)" }}>
+                   <div style={{ fontSize: 10, color: "var(--admin-text-muted)", marginBottom: 4, textTransform: "uppercase", fontWeight: 700 }}>Current Rank</div>
+                   <div style={{ color: "#f59e0b", fontSize: 13, fontWeight: 700 }}>Top 10%</div>
+                </div>
               </div>
             </div>
           </div>

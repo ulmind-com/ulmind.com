@@ -12,7 +12,8 @@ import {
   startLunchBreak,
   sendHeartbeat,
   logMonitoringEvent,
-  updateInternetStatus
+  updateInternetStatus,
+  getSession
 } from "../lib/hw-api";
 import { useCamera } from "../../hooks/useCamera";
 import { useAIDetection } from "../../hooks/useAIDetection";
@@ -134,17 +135,26 @@ export const HWProvider: React.FC<{ children: React.ReactNode }> = ({ children }
   const prevEventRef = useRef<string>("");
   const lastEventTimeRef = useRef<number>(0);
 
+  const [initialActiveSeconds, setInitialActiveSeconds] = useState(0);
+
+  useEffect(() => {
+    if (sessionId) {
+      getSession(sessionId).then(res => {
+        if (res.status === "success" && res.session) {
+          setInitialActiveSeconds(res.session.total_active_seconds || 0);
+        }
+      }).catch(console.error);
+    }
+  }, [sessionId]);
+
+  const isActive = !!(isLoggedIn && isCameraOn && lastResult?.faceDetected);
+
   const timer = useWorkTimer(
-    undefined,
-    sessionStart,
+    isActive,
+    initialActiveSeconds,
     () => {
-      triggerLunchBreak();
-      stopCamera();
-      stopDetection();
-      toast("Lunch break started! Camera paused.", { icon: "🍽️" });
-    },
-    () => {
-      logout();
+      toast("8-hour duty completed!", { icon: "🎉" });
+      setTimeout(() => logout(), 5000);
     }
   );
 
