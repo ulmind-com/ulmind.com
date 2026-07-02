@@ -128,16 +128,6 @@ const HWAdminDashboard: React.FC = () => {
         marginBottom: 24, flexWrap: "wrap", gap: 12,
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <button
-            onClick={() => navigate("/admin")}
-            style={{
-              background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)",
-              borderRadius: 10, padding: "8px 12px", color: "#94a3b8", cursor: "pointer",
-              display: "flex", alignItems: "center", gap: 4, fontSize: 12,
-            }}
-          >
-            <ArrowLeft size={14} /> Admin
-          </button>
           <div>
             <h1 style={{ fontSize: 22, fontWeight: 800, margin: 0, display: "flex", alignItems: "center", gap: 8 }}>
               <Shield size={22} color="#3b82f6" /> Monitoring Center
@@ -150,7 +140,7 @@ const HWAdminDashboard: React.FC = () => {
 
         <div style={{ display: "flex", gap: 10 }}>
           <button
-            onClick={() => navigate("/admin/hw/employees")}
+            onClick={() => navigate("/admin/hardware/employees")}
             style={{
               padding: "8px 16px", borderRadius: 10,
               background: "rgba(59,130,246,0.1)", border: "1px solid rgba(59,130,246,0.2)",
@@ -207,7 +197,7 @@ const HWAdminDashboard: React.FC = () => {
               <Users size={40} color="#475569" style={{ margin: "0 auto 12px" }} />
               <p style={{ color: "#64748b", fontSize: 14 }}>No employees registered yet.</p>
               <button
-                onClick={() => navigate("/admin/hw/employees")}
+                onClick={() => navigate("/admin/hardware/employees")}
                 style={{
                   marginTop: 12, padding: "8px 20px", borderRadius: 10,
                   background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",

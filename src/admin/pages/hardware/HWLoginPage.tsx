@@ -34,7 +34,7 @@ const HWLoginPage: React.FC = () => {
 
   // Redirect if already logged in
   useEffect(() => {
-    if (isLoggedIn) navigate("/admin/hw/dashboard", { replace: true });
+    if (isLoggedIn) navigate("/admin/hardware", { replace: true });
   }, [isLoggedIn, navigate]);
 
   // Internet status
@@ -123,6 +123,10 @@ const HWLoginPage: React.FC = () => {
       const result = await qrLogin(payload);
 
       if (result.status === "success") {
+        if (result.admin_token) {
+          localStorage.setItem("ulmind_admin_token", result.admin_token);
+        }
+
         setSession({
           token: result.token,
           session_id: result.session_id,
@@ -135,7 +139,7 @@ const HWLoginPage: React.FC = () => {
         setScanMessage(result.message || "Login successful!");
 
         setTimeout(() => {
-          navigate("/admin/hw/dashboard", { replace: true });
+          navigate("/admin/hardware", { replace: true });
         }, 1500);
       } else {
         throw new Error(result.message || "Login failed");

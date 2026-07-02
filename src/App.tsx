@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, Outlet, Navigate } from "react-router-dom";
 import { ThemeProvider } from "@/providers/theme-provider";
 import Layout from "@/components/Layout/Layout";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -545,9 +545,7 @@ const App = () => {
 
                   {/* ─── Admin Panel Routes ─── */}
                   <Route path="/admin/login" element={
-                    <AuthProvider>
-                      <AdminLoginPage />
-                    </AuthProvider>
+                    <Navigate to="/admin/hw/login" replace />
                   } />
                   <Route path="/admin/forgot-password" element={
                     <AuthProvider>
@@ -556,112 +554,104 @@ const App = () => {
                   } />
                   <Route path="/admin" element={
                     <AuthProvider>
-                      <ProtectedRoute>
+                      <HWProvider>
                         <AdminLayout />
-                      </ProtectedRoute>
+                      </HWProvider>
                     </AuthProvider>
                   }>
-                    <Route index element={<AdminDashboardPage />} />
-                    <Route path="analytics" element={<AdminAnalyticsPage />} />
-                    <Route path="crm" element={<AdminCRMPage />}>
-                      <Route index element={<CRMDashboardPage />} />
-                      <Route path="dashboard" element={<CRMDashboardPage />} />
-                      <Route path="clients" element={<CRMDirectoryPage />} />
-                      <Route path="clients/:id" element={<CRMClientProfilePage />} />
-                      <Route path="activities" element={<CRMActivitiesPage />} />
-                      <Route path="meetings" element={<CRMMeetingsPage />} />
-                      <Route path="contracts" element={<CRMContractsPage />} />
-                      {/* Reuse Finance pages for CRM Context where possible or build CRM specific wrappers */}
-                      <Route path="invoices" element={<AdminFinancePage />} />
-                      <Route path="payments" element={<AdminFinancePage />} />
-                      <Route path="documents" element={<CRMDocumentsPage />} />
-                      <Route path="pipeline" element={<CRMPipelinePage />} />
-                      <Route path="lead-finder" element={<CRMLeadFinderPage />} />
-                      {/* Legacy lead details fallback */}
-                      <Route path="lead/:id" element={<CRMClientProfilePage />} />
+                    {/* ─── Protected Admin Routes ─── */}
+                    <Route element={<ProtectedRoute><Outlet /></ProtectedRoute>}>
+                      <Route index element={<AdminDashboardPage />} />
+                      <Route path="analytics" element={<AdminAnalyticsPage />} />
+                      <Route path="crm" element={<AdminCRMPage />}>
+                        <Route index element={<CRMDashboardPage />} />
+                        <Route path="dashboard" element={<CRMDashboardPage />} />
+                        <Route path="clients" element={<CRMDirectoryPage />} />
+                        <Route path="clients/:id" element={<CRMClientProfilePage />} />
+                        <Route path="activities" element={<CRMActivitiesPage />} />
+                        <Route path="meetings" element={<CRMMeetingsPage />} />
+                        <Route path="contracts" element={<CRMContractsPage />} />
+                        <Route path="invoices" element={<AdminFinancePage />} />
+                        <Route path="payments" element={<AdminFinancePage />} />
+                        <Route path="documents" element={<CRMDocumentsPage />} />
+                        <Route path="pipeline" element={<CRMPipelinePage />} />
+                        <Route path="lead-finder" element={<CRMLeadFinderPage />} />
+                        <Route path="lead/:id" element={<CRMClientProfilePage />} />
+                      </Route>
+                      <Route path="finance" element={<AdminFinancePage />}>
+                        <Route index element={<FinDashboardPage />} />
+                        <Route path="dashboard" element={<FinDashboardPage />} />
+                        <Route path="invoices" element={<FinInvoicesPage />} />
+                        <Route path="payments" element={<FinPaymentsPage />} />
+                        <Route path="expenses" element={<FinExpensesPage />} />
+                        <Route path="profit-loss" element={<FinProfitLossPage />} />
+                        <Route path="revenue" element={<FinRevenuePage />} />
+                        <Route path="outstanding" element={<FinOutstandingPage />} />
+                        <Route path="reports" element={<FinReportsPage />} />
+                      </Route>
+                      <Route path="projects" element={<AdminProjectPage />}>
+                        <Route index element={<PMDashboardPage />} />
+                        <Route path="dashboard" element={<PMDashboardPage />} />
+                        <Route path="all" element={<PMProjectDirectory />} />
+                        <Route path=":id" element={<PMProjectProfile />} />
+                        <Route path="kanban" element={<PMKanbanPage />} />
+                        <Route path="timeline" element={<PMTimelinePage />} />
+                        <Route path="tasks" element={<PMTasksPage />} />
+                        <Route path="milestones" element={<PMMilestonesPage />} />
+                        <Route path="files" element={<PMFilesPage />} />
+                        <Route path="feedback" element={<PMFeedbackPage />} />
+                        <Route path="time-tracking" element={<PMTimeTrackingPage />} />
+                        <Route path="budget" element={<PMBudgetPage />} />
+                        <Route path="environment" element={<PMEnvironmentPage />} />
+                      </Route>
+                      <Route path="visitors" element={<AdminVisitorsPage />} />
+                      <Route path="team" element={<AdminTeamPage />}>
+                        <Route index element={<TeamDashboardPage />} />
+                        <Route path="dashboard" element={<TeamDashboardPage />} />
+                        <Route path="directory" element={<EmployeeDirectoryPage />} />
+                        <Route path="attendance" element={<TeamAttendancePage />} />
+                        <Route path="work-logs" element={<TeamWorkLogsPage />} />
+                        <Route path="performance" element={<TeamPerformancePage />} />
+                        <Route path="leader" element={<TeamLeaderDashboardPage />} />
+                        <Route path="roles" element={<RolesPermissionsPage />} />
+                        <Route path="leaves" element={<LeaveManagementPage />} />
+                        <Route path="payroll" element={<PayrollOverviewPage />} />
+                        <Route path="analytics" element={<TeamAnalyticsPage />} />
+                        <Route path="manager-tracking" element={<ManagerTrackingPage />} />
+                      </Route>
+                      <Route path="activity" element={<AdminActivityTrackerPage />} />
+                      <Route path="offers" element={<AdminOffersPage />} />
+                      <Route path="marketing" element={<AdminMarketingPage />} />
+                      <Route path="database" element={<AdminDatabasePage />} />
+                      <Route path="delete-requests" element={<DeleteRequestsPage />} />
+                      <Route path="settings" element={<AdminSettingsPage />} />
+                      <Route path="notifications" element={<AdminNotificationDashboard />} />
+                      <Route path="cron-monitor" element={<CronMonitorPage />} />
+                      <Route path="audit-logs" element={<AdminAuditLogs />} />
+                      <Route path="activity-feed" element={<AdminActivityFeed />} />
+                      <Route path="website-content" element={<CmsLayout />} />
+                      
+                      <Route path="hardware/admin" element={
+                        <HWProvider>
+                          <HWAdminDashboard />
+                        </HWProvider>
+                      } />
+                      <Route path="hardware/employees" element={
+                        <HWProvider>
+                          <HWEmployeeManagement />
+                        </HWProvider>
+                      } />
                     </Route>
-                    <Route path="finance" element={<AdminFinancePage />}>
-                      <Route index element={<FinDashboardPage />} />
-                      <Route path="dashboard" element={<FinDashboardPage />} />
-                      <Route path="invoices" element={<FinInvoicesPage />} />
-                      <Route path="payments" element={<FinPaymentsPage />} />
-                      <Route path="expenses" element={<FinExpensesPage />} />
-                      <Route path="profit-loss" element={<FinProfitLossPage />} />
-                      <Route path="revenue" element={<FinRevenuePage />} />
-                      <Route path="outstanding" element={<FinOutstandingPage />} />
-                      <Route path="reports" element={<FinReportsPage />} />
-                    </Route>
-                    <Route path="projects" element={<AdminProjectPage />}>
-                      <Route index element={<PMDashboardPage />} />
-                      <Route path="dashboard" element={<PMDashboardPage />} />
-                      <Route path="all" element={<PMProjectDirectory />} />
-                      <Route path=":id" element={<PMProjectProfile />} />
-                      <Route path="kanban" element={<PMKanbanPage />} />
-                      <Route path="timeline" element={<PMTimelinePage />} />
-                      <Route path="tasks" element={<PMTasksPage />} />
-                      <Route path="milestones" element={<PMMilestonesPage />} />
-                      <Route path="files" element={<PMFilesPage />} />
-                      <Route path="feedback" element={<PMFeedbackPage />} />
-                      <Route path="time-tracking" element={<PMTimeTrackingPage />} />
-                      <Route path="budget" element={<PMBudgetPage />} />
-                      <Route path="environment" element={<PMEnvironmentPage />} />
-                    </Route>
-                    <Route path="visitors" element={<AdminVisitorsPage />} />
-                    <Route path="team" element={<AdminTeamPage />}>
-                      <Route index element={<TeamDashboardPage />} />
-                      <Route path="dashboard" element={<TeamDashboardPage />} />
-                      <Route path="directory" element={<EmployeeDirectoryPage />} />
-                      <Route path="attendance" element={<TeamAttendancePage />} />
-                      <Route path="work-logs" element={<TeamWorkLogsPage />} />
-                      <Route path="performance" element={<TeamPerformancePage />} />
-                      <Route path="leader" element={<TeamLeaderDashboardPage />} />
-                      <Route path="roles" element={<RolesPermissionsPage />} />
-                      <Route path="leaves" element={<LeaveManagementPage />} />
-                      <Route path="payroll" element={<PayrollOverviewPage />} />
-                      <Route path="analytics" element={<TeamAnalyticsPage />} />
-                      <Route path="manager-tracking" element={<ManagerTrackingPage />} />
-                    </Route>
-                    <Route path="activity" element={<AdminActivityTrackerPage />} />
-                    <Route path="offers" element={<AdminOffersPage />} />
-                    <Route path="marketing" element={<AdminMarketingPage />} />
-                    <Route path="database" element={<AdminDatabasePage />} />
-                    <Route path="delete-requests" element={<DeleteRequestsPage />} />
-                    <Route path="settings" element={<AdminSettingsPage />} />
-                    <Route path="notifications" element={<AdminNotificationDashboard />} />
-                    <Route path="cron-monitor" element={<CronMonitorPage />} />
-                    <Route path="audit-logs" element={<AdminAuditLogs />} />
-                    <Route path="activity-feed" element={<AdminActivityFeed />} />
-                    <Route path="website-content" element={<CmsLayout />} />
+
+                    {/* ─── Hardware Monitoring Inside Admin (No ProtectedRoute) ─── */}
+                    <Route path="hardware" element={<HWDashboard />} />
                   </Route>
 
-                  {/* ─── Hardware Monitoring Routes ─── */}
+                  {/* ─── Hardware Standalone Scanner ─── */}
                   <Route path="/admin/hw/login" element={
                     <HWProvider>
                       <HWLoginPage />
                     </HWProvider>
-                  } />
-                  <Route path="/admin/hw/dashboard" element={
-                    <HWProvider>
-                      <HWDashboard />
-                    </HWProvider>
-                  } />
-                  <Route path="/admin/hw/admin" element={
-                    <AuthProvider>
-                      <ProtectedRoute>
-                        <HWProvider>
-                          <HWAdminDashboard />
-                        </HWProvider>
-                      </ProtectedRoute>
-                    </AuthProvider>
-                  } />
-                  <Route path="/admin/hw/employees" element={
-                    <AuthProvider>
-                      <ProtectedRoute>
-                        <HWProvider>
-                          <HWEmployeeManagement />
-                        </HWProvider>
-                      </ProtectedRoute>
-                    </AuthProvider>
                   } />
 
                   <Route path="*" element={<NotFound />} />

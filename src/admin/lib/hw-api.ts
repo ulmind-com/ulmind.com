@@ -43,7 +43,9 @@ const hwFetch = async (endpoint: string, options: RequestInit = {}): Promise<any
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({ detail: res.statusText }));
-    throw new Error(err.detail || err.message || `HTTP ${res.status}`);
+    const error: any = new Error(err.detail || err.message || `HTTP ${res.status}`);
+    error.status = res.status;
+    throw error;
   }
   return res.json();
 };
@@ -75,18 +77,34 @@ export const deleteEmployee = (id: string) =>
 export const regenerateQR = (id: string) =>
   hwFetch(`/hw/employees/${id}/regenerate-qr`, { method: "POST" });
 
+// Anti-cheat: enroll / remove an employee's reference face (128-d descriptor).
+export const enrollFace = (id: string, faceDescriptor: number[]) =>
+  hwFetch(`/hw/employees/${id}/enroll-face`, {
+    method: "POST",
+    body: JSON.stringify({ face_descriptor: faceDescriptor }),
+  });
+
+export const removeFace = (id: string) =>
+  hwFetch(`/hw/employees/${id}/face`, { method: "DELETE" });
+
 
 // ═══════════════════════════════════════════════════════════════
 //  QR AUTH
 // ═══════════════════════════════════════════════════════════════
 
-export const qrLogin = (qrPayload: string, deviceInfo?: string) =>
+export const qrLogin = (
+  qrPayload: string,
+  deviceInfo?: string,
+  face?: { descriptor?: number[]; livenessPassed?: boolean },
+) =>
   hwFetch("/hw/auth/qr-login", {
     method: "POST",
     body: JSON.stringify({
       qr_payload: qrPayload,
       device_info: deviceInfo || navigator.userAgent,
       user_agent: navigator.userAgent,
+      face_descriptor: face?.descriptor,
+      liveness_passed: face?.livenessPassed ?? false,
     }),
   });
 

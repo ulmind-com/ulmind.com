@@ -26,7 +26,8 @@ import {
   Bell,
   ShieldAlert,
   Rss,
-  Megaphone
+  Megaphone,
+  Monitor
 } from "lucide-react";
 import NotificationCenter from "./NotificationCenter";
 import "../admin.css";
@@ -49,6 +50,7 @@ const navItems = [
   { path: "/admin/activity-feed", label: "Activity Feed", icon: Rss, end: false },
   { path: "/admin/audit-logs", label: "Audit Logs", icon: ShieldAlert, end: false },
   { path: "/admin/delete-requests", label: "Delete Requests", icon: ShieldAlert, end: false },
+  { path: "/admin/hardware/admin", label: "Hardware Monitor", icon: Monitor, end: false },
   { path: "/admin/settings", label: "Settings", icon: Settings, end: false },
 ];
 
@@ -61,9 +63,19 @@ const AdminLayout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleLogout = () => {
+    localStorage.removeItem("ulmind_hw_token");
+    localStorage.removeItem("ulmind_hw_session");
+    localStorage.removeItem("ulmind_hw_employee");
     logout();
     navigate("/");
   };
+
+  // Fallback to HW employee if no admin user is present
+  const hwEmployeeStr = localStorage.getItem("ulmind_hw_employee");
+  const hwEmployee = hwEmployeeStr ? JSON.parse(hwEmployeeStr) : null;
+  
+  const displayName = user?.email?.split("@")[0] || hwEmployee?.name || "Admin";
+  const displayInitial = displayName.charAt(0).toUpperCase();
 
   return (
     <AdminActionProvider>
@@ -161,18 +173,18 @@ const AdminLayout: React.FC = () => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontSize: 13,
-                    fontWeight: 700,
+                    fontSize: 16,
+                    fontWeight: "bold",
                     color: "#fff",
                   }}
                 >
-                  {user?.email?.charAt(0).toUpperCase() || "A"}
+                  {displayInitial}
                 </div>
               )}
-              <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ flex: 1, overflow: "hidden" }}>
                 <div
                   style={{
-                    fontSize: 13,
+                    fontSize: 14,
                     fontWeight: 600,
                     color: "var(--admin-text)",
                     whiteSpace: "nowrap",
@@ -180,16 +192,18 @@ const AdminLayout: React.FC = () => {
                     textOverflow: "ellipsis",
                   }}
                 >
-                  {user?.email || "Admin"}
+                  {displayName}
                 </div>
                 <div
                   style={{
                     fontSize: 11,
                     color: "var(--admin-text-dim)",
-                    textTransform: "capitalize",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
                   }}
                 >
-                  {user?.role || "admin"}
+                  {user ? "Admin" : hwEmployee ? hwEmployee.designation || "Hardware User" : "Admin"}
                 </div>
               </div>
               <button
@@ -242,7 +256,7 @@ const AdminLayout: React.FC = () => {
             <div style={{ fontSize: 14, color: "var(--admin-text-muted)" }}>
               Welcome back,{" "}
               <span style={{ color: "var(--admin-text)", fontWeight: 600 }}>
-                {user?.email?.split("@")[0] || "Admin"}
+                {displayName}
               </span>
             </div>
 
