@@ -151,16 +151,6 @@ const HWEmployeeManagement: React.FC = () => {
         marginBottom: 24, flexWrap: "wrap", gap: 12,
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <button
-            onClick={() => navigate("/admin/hw/admin")}
-            style={{
-              background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)",
-              borderRadius: 10, padding: "8px 12px", color: "#94a3b8", cursor: "pointer",
-              display: "flex", alignItems: "center", gap: 4, fontSize: 12,
-            }}
-          >
-            <ArrowLeft size={14} /> Back
-          </button>
           <div>
             <h1 style={{ fontSize: 22, fontWeight: 800, margin: 0, display: "flex", alignItems: "center", gap: 8 }}>
               <Users size={22} color="#3b82f6" /> Employee Management

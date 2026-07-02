@@ -63,6 +63,7 @@ export function useWorkTimer(
   sessionStartTime?: Date | null,
   onLunchBreak?: () => void,
   onDayEnd?: () => void,
+  testMode = false,
 ): WorkTimerState {
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [morningElapsed, setMorningElapsed] = useState(0);
@@ -74,10 +75,14 @@ export function useWorkTimer(
   const lastTickRef = useRef<number>(Date.now());
   const hasTriggeredLunchRef = useRef(false);
   const hasTriggeredEndRef = useRef(false);
+  const testModeRef = useRef(testMode);
+  testModeRef.current = testMode;
 
   const tick = useCallback(() => {
     const now = Date.now();
-    const segment = getCurrentSegment(config);
+    // Test mode forces an always-running "afternoon" segment so the timer
+    // and camera monitoring can be demoed outside real duty hours.
+    const segment = testModeRef.current ? "afternoon" : getCurrentSegment(config);
     setCurrentSegment(segment);
 
     if (segment === "morning" || segment === "afternoon") {
@@ -156,10 +161,10 @@ export function useWorkTimer(
     };
   }, [tick, sessionStartTime, config]);
 
-  const segment = getCurrentSegment(config);
-  const isLunchBreak = segment === "lunch";
-  const isAfterHours = segment === "off" && new Date().getHours() >= config.afternoonEnd;
-  const isBeforeHours = segment === "off" && new Date().getHours() < config.morningStart;
+  const segment = testMode ? "afternoon" : getCurrentSegment(config);
+  const isLunchBreak = !testMode && segment === "lunch";
+  const isAfterHours = !testMode && segment === "off" && new Date().getHours() >= config.afternoonEnd;
+  const isBeforeHours = !testMode && segment === "off" && new Date().getHours() < config.morningStart;
   const isPaused = isLunchBreak;
 
   // Segment timing
