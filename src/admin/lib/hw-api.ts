@@ -108,10 +108,10 @@ export const qrLogin = (
     }),
   });
 
-export const qrLogout = (sessionId: string) =>
+export const qrLogout = (sessionId: string, dutyCompleted: boolean = false) =>
   hwFetch("/hw/auth/qr-logout", {
     method: "POST",
-    body: JSON.stringify({ session_id: sessionId }),
+    body: JSON.stringify({ session_id: sessionId, duty_completed: dutyCompleted }),
   });
 
 export const startLunchBreak = (sessionId: string) =>

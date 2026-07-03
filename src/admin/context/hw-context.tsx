@@ -17,7 +17,7 @@ import {
 } from "../lib/hw-api";
 import { useCamera } from "../../hooks/useCamera";
 import { useAIDetection } from "../../hooks/useAIDetection";
-import { useWorkTimer } from "../../hooks/useWorkTimer";
+import { useWorkTimer, type PauseReason } from "../../hooks/useWorkTimer";
 import { playAlertBeep } from "../lib/beep";
 import { toast } from "sonner";
 
@@ -39,7 +39,8 @@ interface HWContextType {
   sessionType: string | null;
   schedule: any;
   setSession: (data: any) => void;
-  logout: () => Promise<void>;
+  logout: (dutyCompleted?: boolean) => Promise<void>;
+  isLunchBreak: boolean;
   triggerLunchBreak: () => Promise<void>;
   stream: MediaStream | null;
   isCameraOn: boolean;
@@ -93,10 +94,10 @@ export const HWProvider: React.FC<{ children: React.ReactNode }> = ({ children }
     localStorage.setItem("ulmind_hw_schedule", JSON.stringify(data.session_schedule));
   }, []);
 
-  const logout = useCallback(async () => {
+  const logout = useCallback(async (dutyCompleted: boolean = false) => {
     if (sessionId) {
       try {
-        await qrLogout(sessionId);
+        await qrLogout(sessionId, dutyCompleted);
       } catch (e) {
         console.error("Logout error:", e);
       }
@@ -140,22 +141,62 @@ export const HWProvider: React.FC<{ children: React.ReactNode }> = ({ children }
   useEffect(() => {
     if (sessionId) {
       getSession(sessionId).then(res => {
-        if (res.status === "success" && res.session) {
-          setInitialActiveSeconds(res.session.total_active_seconds || 0);
+        if (res.status === "success") {
+          // Resume from the DAY's cumulative active time so the timer
+          // survives logout/re-login (a fresh session starts at 0, but the
+          // day's total carries over). Falls back to this session's own
+          // total for older backends.
+          const resumeFrom =
+            res.day_active_seconds ??
+            res.session?.total_active_seconds ??
+            0;
+          setInitialActiveSeconds(resumeFrom);
         }
       }).catch(console.error);
     }
   }, [sessionId]);
 
-  const isActive = !!(isLoggedIn && isCameraOn && lastResult?.faceDetected);
+  // Lunch break pauses the clock just like a logout would.
+  const isLunchBreak = sessionType === "lunch";
+
+  // The timer only ticks when the employee is genuinely present & working:
+  //   • logged in and camera on
+  //   • a face is detected
+  //   • NOT sleeping (eyes shut / drowsy)
+  //   • camera not covered
+  //   • not on a lunch break
+  // Anything else pauses the timer automatically (spec requirements 2/3/4/6).
+  const isActive = !!(
+    isLoggedIn &&
+    isCameraOn &&
+    lastResult?.faceDetected &&
+    !lastResult?.sleepingDetected &&
+    !lastResult?.cameraCovered &&
+    !isLunchBreak
+  );
+
+  // Human-readable reason the timer is paused (drives the dashboard UI).
+  const pauseReason: PauseReason = !isLoggedIn
+    ? "offline"
+    : isLunchBreak
+    ? "lunch"
+    : !isCameraOn || lastResult?.cameraCovered
+    ? "camera"
+    : lastResult?.sleepingDetected
+    ? "sleeping"
+    : !lastResult?.faceDetected
+    ? "away"
+    : null;
 
   const timer = useWorkTimer(
     isActive,
     initialActiveSeconds,
     () => {
-      toast("8-hour duty completed!", { icon: "🎉" });
-      setTimeout(() => logout(), 5000);
-    }
+      toast("8-hour duty completed! 🎉", { icon: "🎉" });
+      // Finalize the shift on the backend, then end the session.
+      setTimeout(() => logout(true), 5000);
+    },
+    pauseReason
   );
 
   // Internet monitoring
@@ -181,16 +222,20 @@ export const HWProvider: React.FC<{ children: React.ReactNode }> = ({ children }
     };
   }, [sessionId, employee]);
 
-  // Start camera
+  // Start camera while logged in & working. On lunch break we release the
+  // camera (privacy) and the timer is already paused; it resumes on return.
   useEffect(() => {
-    if (isLoggedIn && !timer.isLunchBreak && !timer.isAfterHours) {
+    if (isLoggedIn && !isLunchBreak && !timer.isDutyCompleted) {
       startCamera();
+    } else {
+      stopCamera();
+      stopDetection();
     }
     return () => {
       stopCamera();
       stopDetection();
     };
-  }, [isLoggedIn, timer.isLunchBreak, timer.isAfterHours]);
+  }, [isLoggedIn, isLunchBreak, timer.isDutyCompleted]);
 
   // Start AI detection
   useEffect(() => {
@@ -262,32 +307,68 @@ export const HWProvider: React.FC<{ children: React.ReactNode }> = ({ children }
     }
   }, [lastResult, sessionId, employee]);
 
-  // Heartbeat
+  // Heartbeat — reports the REAL elapsed seconds since the last beat,
+  // bucketed by the employee's actual state, so the backend accumulates an
+  // accurate picture for the AI productivity score & salary calculation.
+  const stateRef = useRef({ isCameraOn, isLunchBreak, lastResult, prevEvent: prevEventRef.current });
+  useEffect(() => {
+    stateRef.current = { isCameraOn, isLunchBreak, lastResult, prevEvent: prevEventRef.current };
+  }, [isCameraOn, isLunchBreak, lastResult, prevEventRef.current]);
+
+  const lastBeatRef = useRef<number>(Date.now());
   useEffect(() => {
     if (!sessionId || !employee) return;
-    heartbeatRef.current = setInterval(() => {
+    lastBeatRef.current = Date.now();
+
+    const beat = () => {
+      const now = Date.now();
+      const delta = Math.max(0, Math.min(30, (now - lastBeatRef.current) / 1000)); // clamp for tab-throttle
+      lastBeatRef.current = now;
+
+      const { isCameraOn, isLunchBreak, lastResult: r, prevEvent } = stateRef.current;
+      const covered = !!r?.cameraCovered;
+      const faceDetected = !!r?.faceDetected && !covered;
+      const sleeping = faceDetected && !!r?.sleepingDetected;
+      const awakeWorking = faceDetected && !sleeping && !isLunchBreak && isCameraOn;
+
+      // Bucket the elapsed window (only ONE of active / sleeping / absent).
+      const summary: Record<string, any> = {
+        current_event: prevEvent,
+      };
+      if (isLunchBreak) {
+        // On lunch we don't penalise — record nothing but keep the session alive.
+      } else if (!isCameraOn || !faceDetected) {
+        summary.absent_seconds = delta;
+        if (covered) summary.camera_covered_seconds = delta;
+      } else if (sleeping) {
+        // Face is present but the person is asleep → idle + sleeping penalty.
+        summary.face_present_seconds = delta;
+        summary.idle_seconds = delta;
+        summary.sleeping_seconds = delta;
+      } else {
+        // Genuinely active & working.
+        summary.face_present_seconds = delta;
+        summary.active_seconds = delta;
+        if (r?.mobileDetected) summary.mobile_seconds = delta;      // penalty, timer still runs
+        if (r?.lookingAway) summary.looking_away_seconds = delta;   // penalty, timer still runs
+      }
+
       sendHeartbeat({
         session_id: sessionId,
         employee_id: employee.employee_id,
-        camera_state: isCameraOn ? "on" : "off",
-        face_detected: lastResult?.faceDetected ?? false,
-        is_active: lastResult?.faceDetected ?? false,
-        detection_summary: {
-          face_present_seconds: lastResult?.faceDetected ? 10 : 0,
-          active_seconds: lastResult?.faceDetected ? 10 : 0,
-          idle_seconds: !lastResult?.faceDetected ? 10 : 0,
-          absent_seconds: !lastResult?.faceDetected ? 10 : 0,
-          current_event: prevEventRef.current,
-          mobile_detected: lastResult?.mobileDetected ?? false,
-          sleeping_detected: lastResult?.sleepingDetected ?? false,
-        },
+        camera_state: covered ? "covered" : isCameraOn ? "on" : "off",
+        face_detected: faceDetected,
+        is_active: awakeWorking,
+        detection_summary: summary,
       }).catch(() => {});
-    }, 10000);
+    };
+
+    heartbeatRef.current = setInterval(beat, 10000);
 
     return () => {
       if (heartbeatRef.current) clearInterval(heartbeatRef.current);
     };
-  }, [sessionId, employee, isCameraOn, lastResult]);
+  }, [sessionId, employee]);
 
   return (
     <HWContext.Provider value={{
@@ -300,6 +381,7 @@ export const HWProvider: React.FC<{ children: React.ReactNode }> = ({ children }
       schedule,
       setSession,
       logout,
+      isLunchBreak,
       triggerLunchBreak,
       stream,
       isCameraOn,

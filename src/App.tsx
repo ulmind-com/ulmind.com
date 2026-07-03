@@ -500,7 +500,7 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} storageKey="ulmind-theme">
+      <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} storageKey="ulmind-theme">
         <TooltipProvider>
           {/* Removed any extra wrapper completely so layout remains untouched */}
           <Toaster />
