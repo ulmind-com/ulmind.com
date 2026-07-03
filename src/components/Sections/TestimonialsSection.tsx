@@ -65,41 +65,96 @@ const Stars = ({ rating }) => (
   </div>
 );
 
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
 const ReviewCard = ({ img, name, username, body, rating }) => {
+  const maxLength = 100;
+  const isLong = body.length > maxLength;
+  const displayBody = isLong ? body.slice(0, maxLength) + "..." : body;
+
   return (
-    <figure
-      className={cn(
-        "relative w-64 cursor-pointer overflow-hidden rounded-xl border p-4 transition-all duration-300",
-        "border-gray-950/10 bg-gray-950/5 hover:bg-gray-950/10",
-        "dark:border-gray-50/10 dark:bg-gray-50/10 dark:hover:bg-gray-50/15"
-      )}
-    >
-      <div className="flex items-start gap-3">
-        <img
-          className="rounded-full object-cover"
-          width="40"
-          height="40"
-          alt={name}
-          src={img}
-        />
+    <Dialog>
+      <figure
+        className={cn(
+          "relative w-72 h-[200px] cursor-pointer overflow-hidden rounded-xl border p-4 transition-all duration-300 flex flex-col",
+          "border-gray-950/10 bg-gray-950/5 hover:bg-gray-950/10",
+          "dark:border-gray-50/10 dark:bg-gray-50/10 dark:hover:bg-gray-50/15"
+        )}
+      >
+        <div className="flex items-start gap-3">
+          <img
+            className="rounded-full object-cover min-w-[40px]"
+            width="40"
+            height="40"
+            alt={name}
+            src={img || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`}
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
+            }}
+          />
 
-        <div className="flex flex-col">
-          <figcaption className="text-sm font-semibold dark:text-white">
-            {name}
-          </figcaption>
+          <div className="flex flex-col min-w-0">
+            <figcaption className="text-sm font-semibold dark:text-white truncate">
+              {name}
+            </figcaption>
 
-          <p className="text-xs font-medium text-muted-foreground">
-            {username}
-          </p>
+            <p className="text-xs font-medium text-muted-foreground truncate">
+              {username}
+            </p>
 
-          <Stars rating={rating} />
+            <Stars rating={rating} />
+          </div>
         </div>
-      </div>
 
-      <blockquote className="mt-3 text-sm text-muted-foreground leading-relaxed">
-        {body}
-      </blockquote>
-    </figure>
+        <blockquote className="mt-3 text-sm text-muted-foreground leading-relaxed flex-1 overflow-hidden">
+          {displayBody}
+          {isLong && (
+            <DialogTrigger asChild>
+              <span className="text-primary font-medium cursor-pointer ml-1 hover:underline">
+                Read more
+              </span>
+            </DialogTrigger>
+          )}
+        </blockquote>
+      </figure>
+
+      {isLong && (
+        <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto z-[99999]">
+          <DialogHeader>
+            <div className="flex items-start gap-3 mb-2">
+              <img
+                className="rounded-full object-cover"
+                width="40"
+                height="40"
+                alt={name}
+                src={img || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`}
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
+                }}
+              />
+              <div className="flex flex-col text-left">
+                <DialogTitle className="text-lg">{name}</DialogTitle>
+                <p className="text-sm font-medium text-muted-foreground">
+                  {username}
+                </p>
+                <Stars rating={rating} />
+              </div>
+            </div>
+          </DialogHeader>
+          <div className="text-sm text-foreground leading-relaxed">
+            {body}
+          </div>
+        </DialogContent>
+      )}
+    </Dialog>
   );
 };
 

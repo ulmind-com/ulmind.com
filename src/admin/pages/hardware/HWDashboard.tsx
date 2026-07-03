@@ -11,16 +11,33 @@ import {
   Activity, Timer, Coffee, Scan, ChevronRight, BarChart3,
 } from "lucide-react";
 import { useHW } from "../../context/hw-context";
+import { getProductivityScore, getLeaderboard } from "../../lib/hw-api";
 import { playAlertBeep } from "../../lib/beep";
 import "../../admin.css";
 
+// Maps the timer state → a human-facing status chip (label + colour + icon).
+function getWorkStatus(timer: any) {
+  if (timer.isDutyCompleted) return { label: "Shift Complete", color: "#10b981", icon: <CheckCircle size={14} /> };
+  if (timer.isRunning) return { label: "Working", color: "#10b981", icon: <Activity size={14} /> };
+  switch (timer.pauseReason as string | null) {
+    case "sleeping": return { label: "Paused · Sleeping", color: "#8b5cf6", icon: <Moon size={14} /> };
+    case "lunch": return { label: "Lunch Break", color: "#3b82f6", icon: <Coffee size={14} /> };
+    case "camera": return { label: "Paused · Camera Off", color: "#ef4444", icon: <CameraOff size={14} /> };
+    case "offline": return { label: "Offline", color: "#6b7280", icon: <WifiOff size={14} /> };
+    case "away":
+    default: return { label: "Paused · Away", color: "#f59e0b", icon: <AlertTriangle size={14} /> };
+  }
+}
+
 const HWDashboard: React.FC = () => {
-  const { 
-    employee, sessionId, isLoggedIn, sessionType, logout, 
+  const {
+    employee, sessionId, isLoggedIn, sessionType, logout, isLunchBreak,
     stream, isCameraOn, isModelLoaded, isDetecting, lastResult, timer
   } = useHW();
-  
+
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const [liveScore, setLiveScore] = useState<number | null>(null);
+  const [liveRank, setLiveRank] = useState<string | null>(null);
   const localVideoRef = useRef<HTMLVideoElement | null>(null);
 
   // Attach the global stream to the local video element
@@ -30,7 +47,40 @@ const HWDashboard: React.FC = () => {
     }
   }, [stream]);
 
+  // Poll the backend for today's real productivity score + leaderboard rank.
+  useEffect(() => {
+    if (!isLoggedIn || !employee?._id) return;
+    let cancelled = false;
+
+    const refresh = async () => {
+      try {
+        const prod = await getProductivityScore(employee._id);
+        if (!cancelled && prod?.scores) {
+          setLiveScore(Math.round(prod.scores.overall_productivity_score ?? 0));
+        }
+      } catch { /* ignore transient errors */ }
+      try {
+        const lb = await getLeaderboard();
+        if (!cancelled && Array.isArray(lb?.leaderboard) && lb.leaderboard.length) {
+          const total = lb.leaderboard.length;
+          const me = lb.leaderboard.find((e: any) => e.employee_id === employee.employee_id);
+          if (me?.rank) {
+            const pct = Math.max(1, Math.round((me.rank / total) * 100));
+            setLiveRank(me.rank === 1 ? "🏆 #1" : `#${me.rank} · Top ${pct}%`);
+          }
+        }
+      } catch { /* ignore */ }
+    };
+
+    refresh();
+    const id = setInterval(refresh, 30000);
+    return () => { cancelled = true; clearInterval(id); };
+  }, [isLoggedIn, employee?._id, employee?.employee_id]);
+
   if (!isLoggedIn || !employee) return null;
+
+  const workStatus = getWorkStatus(timer);
+  const displayScore = liveScore ?? employee.avg_productivity_score ?? 0;
 
   return (
     <div className="admin-page hw-dashboard-page" style={{ padding: "24px", maxWidth: 1400, margin: "0 auto" }}>
@@ -108,17 +158,18 @@ const HWDashboard: React.FC = () => {
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
               <div style={{
                 flex: 1, padding: "8px 12px", borderRadius: 8,
-                background: "rgba(16, 185, 129, 0.05)", border: "1px solid rgba(16, 185, 129, 0.2)",
-                display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "#10b981"
+                background: `${workStatus.color}0d`, border: `1px solid ${workStatus.color}33`,
+                display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: workStatus.color,
+                transition: "all 0.3s"
               }}>
-                <Activity size={14} /> <span>Status: <strong>Working</strong></span>
+                {workStatus.icon} <span>Status: <strong>{workStatus.label}</strong></span>
               </div>
               <div style={{
                 flex: 1, padding: "8px 12px", borderRadius: 8,
                 background: "rgba(59, 130, 246, 0.05)", border: "1px solid rgba(59, 130, 246, 0.2)",
                 display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "#3b82f6"
               }}>
-                <Clock size={14} /> <span>Segment: <strong>{sessionType === "lunch" ? "Lunch Break" : "Active"}</strong></span>
+                <Clock size={14} /> <span>Segment: <strong>{sessionType === "lunch" ? "Lunch Break" : sessionType === "afternoon" ? "Afternoon" : "Active"}</strong></span>
               </div>
             </div>
           </div>
@@ -217,20 +268,29 @@ const HWDashboard: React.FC = () => {
             <div style={{ position: "relative", width: 200, height: 200 }}>
               <svg width="200" height="200" viewBox="0 0 200 200" style={{ transform: "rotate(-90deg)" }}>
                 <circle cx="100" cy="100" r="90" fill="none" stroke="var(--admin-border)" strokeWidth="6" />
-                <circle cx="100" cy="100" r="90" fill="none" stroke="#3b82f6" strokeWidth="6"
+                <circle cx="100" cy="100" r="90" fill="none" stroke={workStatus.color} strokeWidth="6"
                   strokeDasharray="565" strokeDashoffset={565 - (565 * ((timer.progressPercent || 0) / 100))}
-                  strokeLinecap="round" style={{ transition: "stroke-dashoffset 1s linear" }}
+                  strokeLinecap="round"
+                  style={{
+                    transition: "stroke-dashoffset 1s linear, stroke 0.4s ease",
+                    // Gently pulse the ring while the timer is paused.
+                    animation: timer.isPaused ? "pulse 1.6s ease-in-out infinite" : "none",
+                  }}
                 />
               </svg>
               <div style={{
                 position: "absolute", inset: 0, display: "flex", flexDirection: "column",
                 alignItems: "center", justifyContent: "center"
               }}>
-                <div style={{ fontSize: 32, fontWeight: 700, color: "var(--admin-text)", fontVariantNumeric: "tabular-nums", letterSpacing: -1 }}>
+                <div style={{
+                  fontSize: 32, fontWeight: 700, fontVariantNumeric: "tabular-nums", letterSpacing: -1,
+                  color: timer.isPaused ? "var(--admin-text-muted)" : "var(--admin-text)",
+                  transition: "color 0.3s"
+                }}>
                   {timer.isDutyCompleted ? "08:00:00" : (timer.formattedTime || "00:00:00")}
                 </div>
-                <div style={{ fontSize: 12, color: timer.isDutyCompleted ? "#10b981" : "var(--admin-text-muted)", marginTop: 4, textTransform: "uppercase", fontWeight: 600, letterSpacing: 1 }}>
-                  {timer.isDutyCompleted ? "Today Work Done 🎉" : "Active"}
+                <div style={{ fontSize: 11, color: workStatus.color, marginTop: 6, textTransform: "uppercase", fontWeight: 700, letterSpacing: 1, display: "flex", alignItems: "center", gap: 5 }}>
+                  {timer.isDutyCompleted ? <>Today Work Done 🎉</> : <>{workStatus.icon}{workStatus.label}</>}
                 </div>
               </div>
             </div>
@@ -259,14 +319,14 @@ const HWDashboard: React.FC = () => {
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <span style={{ color: "var(--admin-text-muted)", fontSize: 13, fontWeight: 600 }}>Face Productivity Score</span>
-                <span style={{ fontSize: 24, fontWeight: 800, color: (employee.avg_productivity_score || 0) >= 80 ? "#10b981" : (employee.avg_productivity_score || 0) >= 50 ? "#f59e0b" : "#ef4444" }}>
-                  {employee.avg_productivity_score || 0}%
+                <span style={{ fontSize: 24, fontWeight: 800, color: displayScore >= 80 ? "#10b981" : displayScore >= 50 ? "#f59e0b" : "#ef4444", transition: "color 0.4s" }}>
+                  {displayScore}%
                 </span>
               </div>
               <div style={{ height: 6, borderRadius: 3, background: "rgba(255,255,255,0.05)", overflow: "hidden" }}>
                 <div style={{
-                  height: "100%", width: `${Math.min(100, employee.avg_productivity_score || 0)}%`,
-                  background: (employee.avg_productivity_score || 0) >= 80 ? "#10b981" : (employee.avg_productivity_score || 0) >= 50 ? "#f59e0b" : "#ef4444",
+                  height: "100%", width: `${Math.min(100, displayScore)}%`,
+                  background: displayScore >= 80 ? "#10b981" : displayScore >= 50 ? "#f59e0b" : "#ef4444",
                   borderRadius: 3, transition: "width 1s ease"
                 }} />
               </div>
@@ -274,14 +334,14 @@ const HWDashboard: React.FC = () => {
               <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
                 <div style={{ flex: 1, padding: 12, background: "rgba(255,255,255,0.02)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.04)" }}>
                   <div style={{ fontSize: 10, color: "var(--admin-text-muted)", marginBottom: 4, textTransform: "uppercase", fontWeight: 700 }}>AI Tracker</div>
-                  <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#10b981", fontSize: 12, fontWeight: 600 }}>
-                    <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#10b981", animation: "pulse 2s infinite" }} />
-                    Active
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, color: timer.isRunning ? "#10b981" : "var(--admin-text-muted)", fontSize: 12, fontWeight: 600 }}>
+                    <div style={{ width: 6, height: 6, borderRadius: "50%", background: timer.isRunning ? "#10b981" : "#6b7280", animation: timer.isRunning ? "pulse 2s infinite" : "none" }} />
+                    {timer.isRunning ? "Tracking" : "Paused"}
                   </div>
                 </div>
                 <div style={{ flex: 1, padding: 12, background: "rgba(255,255,255,0.02)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.04)" }}>
                    <div style={{ fontSize: 10, color: "var(--admin-text-muted)", marginBottom: 4, textTransform: "uppercase", fontWeight: 700 }}>Current Rank</div>
-                   <div style={{ color: "#f59e0b", fontSize: 13, fontWeight: 700 }}>Top 10%</div>
+                   <div style={{ color: "#f59e0b", fontSize: 13, fontWeight: 700 }}>{liveRank ?? "—"}</div>
                 </div>
               </div>
             </div>
@@ -322,7 +382,7 @@ const HWDashboard: React.FC = () => {
                   Cancel
                 </button>
                 <button
-                  onClick={logout}
+                  onClick={() => logout(false)}
                   className="admin-btn-primary" style={{ flex: 1, background: "var(--admin-rose)" }}
                 >
                   End Shift
