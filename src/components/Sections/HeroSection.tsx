@@ -1,4 +1,4 @@
-import { motion, useInView, useMotionValue, useSpring, AnimatePresence, useTransform } from 'framer-motion';
+import { motion, useInView, useMotionValue, useSpring, AnimatePresence, useTransform, useReducedMotion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import {
   ArrowRight,
@@ -24,6 +24,7 @@ import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useRef, useState } from 'react';
 import { getWebsiteStatsAPI, WebsiteStat } from '@/admin/lib/api';
 import { MacbookScrollSection } from './MacbookScrollSection';
+import { TechLogoGrid } from './TechLogoGrid';
 import BlurBlob from "@/components/BlurBlob";
 import Lottie from 'lottie-react';
 
@@ -261,6 +262,228 @@ const Counter = ({ value, label, icon: Icon, lottieData }: CounterProps) => {
   );
 };
 
+// Ultra-premium text-selection animation that cycles through rotating words.
+// The cursor selects each word character-by-character like real text selection,
+// keeps the selection with a design-tool selection box (dashed border + corner
+// handles + name tag), then deselects and smoothly transitions to the next word.
+// Creates a continuously looping, premium design-tool-style animation.
+
+const AnimatedDigital = () => {
+  const reduce = useReducedMotion();
+  const [phase, setPhase] = useState<'idle' | 'selecting' | 'selected' | 'deselecting'>('idle');
+  const wordRef = useRef<HTMLSpanElement>(null);
+  const [wordDim, setWordDim] = useState({ w: 0, h: 0 });
+
+  const currentWord = 'Digital';
+
+  useEffect(() => {
+    const measure = () => {
+      const el = wordRef.current;
+      if (el) {
+        setWordDim({ w: el.offsetWidth, h: el.offsetHeight });
+      }
+    };
+    const timer = setTimeout(measure, 100);
+    window.addEventListener('resize', measure);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', measure);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (reduce) return;
+    let timer: ReturnType<typeof setTimeout>;
+
+    switch (phase) {
+      case 'idle':
+        timer = setTimeout(() => setPhase('selecting'), 500);
+        break;
+      case 'selecting':
+        // Duration of animation is 0.8s
+        timer = setTimeout(() => setPhase('selected'), 850);
+        break;
+      case 'selected':
+        timer = setTimeout(() => setPhase('deselecting'), 3000);
+        break;
+      case 'deselecting':
+        timer = setTimeout(() => setPhase('idle'), 400);
+        break;
+    }
+    return () => clearTimeout(timer);
+  }, [phase, reduce]);
+
+  const { w, h } = wordDim;
+  // Compensate for the pt-1 (4px) and pb-3 (12px) on the text span
+  // so the selection box tightly fits the actual visual text.
+  const paddingX = 6;
+  const boxTop = 2; 
+  const boxLeft = -paddingX;
+  const boxW = w + paddingX * 2;
+  const boxH = h > 16 ? h - 10 : h; // Reduce height to match text bounds
+
+  const isFullySelected = phase === 'selected';
+
+  const Corner = ({ className }: { className: string }) => (
+    <span className={`absolute w-2.5 h-2.5 bg-orange-500 ${className}`} />
+  );
+
+  return (
+    <span className="relative inline-block mx-4 my-2 transform -rotate-1">
+      {/* The word */}
+      <span
+        ref={wordRef}
+        className="relative bg-clip-text text-transparent bg-gradient-to-br from-orange-400 via-orange-500 to-red-500 drop-shadow-[0_2px_2px_rgba(0,0,0,0.1)] inline-block pb-3 pt-1 font-bold"
+        style={{ lineHeight: '1.2' }}
+      >
+        {currentWord}
+      </span>
+
+      {/* Dashed marquee box */}
+      {!reduce && (
+        <motion.div
+          className="absolute border-[2.5px] border-dashed border-orange-500 bg-orange-500/10 pointer-events-none z-0"
+          style={{
+            top: boxTop,
+            left: boxLeft,
+          }}
+          initial={{ width: 0, height: 0, opacity: 0 }}
+          animate={{
+            width: phase === 'idle' ? 0 : boxW,
+            height: phase === 'idle' ? 0 : boxH,
+            opacity: phase === 'idle' || phase === 'deselecting' ? 0 : 1,
+          }}
+          transition={{
+            width: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+            height: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+            opacity: { duration: 0.2 },
+          }}
+        >
+          {/* Corner handles */}
+          <div className="absolute inset-0">
+            <Corner className="-top-1.5 -left-1.5" />
+            <Corner className="-top-1.5 -right-1.5" />
+            <Corner className="-bottom-1.5 -left-1.5" />
+            <Corner className="-bottom-1.5 -right-1.5" />
+          </div>
+
+          {/* Red cursor */}
+          <motion.span
+            className="absolute z-10 pointer-events-none"
+            style={{ top: '100%', left: '100%', marginTop: '-2px', marginLeft: '-2px' }}
+            animate={{
+              opacity: phase === 'deselecting' ? 0 : 1,
+              x: phase === 'deselecting' ? 30 : 0,
+              y: phase === 'deselecting' ? 30 : 0,
+            }}
+            transition={{
+              opacity: { duration: 0.2 },
+              x: { duration: 0.3, ease: 'easeOut' },
+              y: { duration: 0.3, ease: 'easeOut' },
+            }}
+          >
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" className="drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]">
+              <path
+                d="M5 3l14 7-6 2.2L10.5 19 5 3z"
+                className="fill-red-500 stroke-black dark:stroke-white"
+                strokeWidth="1.5"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <span
+              className="absolute left-[14px] top-[26px] whitespace-nowrap rounded-[6px] border-[1.5px] border-black dark:border-white bg-red-500 px-3 py-1.5 text-sm font-bold font-sans tracking-normal leading-none text-white shadow-lg"
+            >
+              Mobile
+            </span>
+          </motion.span>
+        </motion.div>
+      )}
+
+      {/* Reduced-motion */}
+      {reduce && (
+        <>
+          <div
+            className="absolute border-[2.5px] border-dashed border-orange-500 bg-orange-500/10 pointer-events-none z-0"
+            style={{
+              top: boxTop,
+              left: boxLeft,
+              width: boxW,
+              height: boxH,
+            }}
+          >
+            <Corner className="-top-1.5 -left-1.5" />
+            <Corner className="-top-1.5 -right-1.5" />
+            <Corner className="-bottom-1.5 -left-1.5" />
+            <Corner className="-bottom-1.5 -right-1.5" />
+            <span className="absolute z-10 pointer-events-none" style={{ top: '100%', left: '100%', marginTop: '-2px', marginLeft: '-2px' }}>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                <path d="M5 3l14 7-6 2.2L10.5 19 5 3z" className="fill-red-500 stroke-black dark:stroke-white" strokeWidth="1.5" strokeLinejoin="round" />
+              </svg>
+              <span className="absolute left-[14px] top-[26px] whitespace-nowrap rounded-[6px] border-[1.5px] border-black dark:border-white bg-red-500 px-3 py-1.5 text-sm font-bold font-sans tracking-normal leading-none text-white shadow-md">
+                Mobile
+              </span>
+            </span>
+          </div>
+        </>
+      )}
+    </span>
+  );
+};
+
+const FloatingCursor = ({
+  color,
+  label,
+  initialPosition,
+  animatePath,
+  delay,
+  duration = 8
+}: {
+  color: 'blue' | 'emerald' | 'violet';
+  label: string;
+  initialPosition: { top: string; left: string };
+  animatePath: { x: number[]; y: number[] };
+  delay: number;
+  duration?: number;
+}) => {
+  const colorStyles = {
+    blue: { fill: 'fill-blue-500', bg: 'bg-blue-500' },
+    emerald: { fill: 'fill-emerald-500', bg: 'bg-emerald-500' },
+    violet: { fill: 'fill-violet-500', bg: 'bg-violet-500' },
+  }[color];
+
+  return (
+    <motion.div
+      className="absolute z-50 pointer-events-none hidden md:block"
+      style={{ top: initialPosition.top, left: initialPosition.left }}
+      animate={{
+        x: animatePath.x,
+        y: animatePath.y,
+      }}
+      transition={{
+        duration: duration,
+        repeat: Infinity,
+        repeatType: "mirror",
+        ease: "easeInOut",
+        delay: delay
+      }}
+    >
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" className="drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]">
+        <path
+          d="M5 3l14 7-6 2.2L10.5 19 5 3z"
+          className={`${colorStyles.fill} stroke-black dark:stroke-white`}
+          strokeWidth="1.5"
+          strokeLinejoin="round"
+        />
+      </svg>
+      <span
+        className={`absolute left-[14px] top-[26px] whitespace-nowrap rounded-[6px] border-[1.5px] border-black dark:border-white ${colorStyles.bg} px-3 py-1.5 text-sm font-bold font-sans tracking-normal leading-none text-white shadow-lg`}
+      >
+        {label}
+      </span>
+    </motion.div>
+  );
+};
+
 export const HeroSection = () => {
   const navigate = useNavigate();
 
@@ -291,10 +514,6 @@ export const HeroSection = () => {
     return def;
   });
 
-  // Mouse parallax removed — mousemove listener on a large section causes
-  // a forced layout on every pointer event which tanks scroll FPS.
-  // Replaced with a static CSS perspective tilt on the ring only.
-
   const [scrollAnimData, setScrollAnimData] = useState<object | null>(null);
   const [arrowAnimData, setArrowAnimData] = useState<object | null>(null);
 
@@ -312,7 +531,6 @@ export const HeroSection = () => {
       })
       .catch(() => {});
 
-    // Fetch and recolor stat-card animations to brand red #f50847
     const fetchAndRecolor = (path: string, setter: React.Dispatch<React.SetStateAction<object | null>>) => {
       fetch(path)
         .then((r) => r.json())
@@ -365,24 +583,40 @@ export const HeroSection = () => {
   return (
     <section
       id="home"
-      // CHANGED: Reduced top padding from pt-32 to pt-20 to pull the section up closer to the navbar
       className="relative min-h-screen pt-2 sm:pt-20 pb-20 overflow-hidden bg-gradient-to-br from-background via-violet-50/50 dark:via-violet-900/10 to-background"
     >
       <BlurBlob position={{ top: "20%", left: "10%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-cyan-300 dark:bg-cyan-600" opacityClass="opacity-40 dark:opacity-20" />
       <BlurBlob position={{ top: "60%", left: "90%" }} size={{ width: "700px", height: "700px" }} colorClass="bg-fuchsia-300 dark:bg-fuchsia-600" opacityClass="opacity-40 dark:opacity-20" />
+
+      <TechLogoGrid />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center mb-24 relative">
+          
+          {/* Floating multiplayer cursors */}
+          <FloatingCursor 
+            color="blue" 
+            label="Cloud" 
+            initialPosition={{ top: '-10%', left: '30%' }}
+            animatePath={{ x: [0, 80, 20, -50, 0], y: [0, 40, 100, 20, 0] }}
+            delay={0}
+            duration={10}
+          />
+          <FloatingCursor 
+            color="emerald" 
+            label="Web" 
+            initialPosition={{ top: '80%', left: '5%' }}
+            animatePath={{ x: [0, 50, 120, 60, 0], y: [0, -30, -100, -20, 0] }}
+            delay={2}
+            duration={8}
+          />
 
-        {/* Main 2-Column Grid */}
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center mb-24">
-
-          {/* Left Column: Text Content */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             className="text-left z-10 mt-2 sm:mt-0 lg:-mt-16"
           >
-            {/* Top Badge */}
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
@@ -395,25 +629,14 @@ export const HeroSection = () => {
               </span>
             </motion.div>
 
-            {/* Headline with 3D Ultra Premium Styling */}
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black mb-6 leading-[1.1] tracking-tight">
               <span className="text-foreground drop-shadow-md">Building Tomorrow's</span>
               <br />
-              <span className="relative inline-block border-[3px] border-dashed border-orange-400/80 px-5 py-2 mx-2 my-3 bg-gradient-to-r from-orange-500/10 to-amber-500/5 shadow-[0_0_20px_rgba(249,115,22,0.15)] rounded-lg transform -rotate-1 hover:rotate-0 transition-transform duration-300">
-                <span className="bg-clip-text text-transparent bg-gradient-to-br from-orange-400 via-orange-500 to-red-500 drop-shadow-[0_2px_2px_rgba(0,0,0,0.1)]">
-                  Digital
-                </span>
-                {/* 3D Glowing Dashed Box Corner Squares */}
-                <span className="absolute -top-1.5 -left-1.5 w-3 h-3 bg-white dark:bg-background border-2 border-orange-500 rounded-sm shadow-[0_0_8px_rgba(249,115,22,0.6)]" />
-                <span className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-white dark:bg-background border-2 border-orange-500 rounded-sm shadow-[0_0_8px_rgba(249,115,22,0.6)]" />
-                <span className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-white dark:bg-background border-2 border-orange-500 rounded-sm shadow-[0_0_8px_rgba(249,115,22,0.6)]" />
-                <span className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-white dark:bg-background border-2 border-orange-500 rounded-sm shadow-[0_0_8px_rgba(249,115,22,0.6)]" />
-              </span>
+              <AnimatedDigital />
               <br />
               <span className="text-foreground drop-shadow-md">Solutions</span>
             </h1>
 
-            {/* Paragraph */}
             <p className="text-lg sm:text-xl text-muted-foreground mb-10 max-w-lg leading-relaxed">
               We transform ideas into powerful digital experiences using cutting-edge
               technology and innovative design principles.
