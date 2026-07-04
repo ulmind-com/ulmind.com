@@ -1,8 +1,45 @@
 import { motion } from "framer-motion";
+import { useTheme } from "next-themes";
+import { useState, useEffect } from "react";
 
 export const CTASection = () => {
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const logoSrc = mounted && resolvedTheme === "dark" ? "/1.png" : "/2.png";
+
   return (
-    <section className="relative overflow-hidden bg-[#ff4d4f] py-28">
+    <section className="relative overflow-hidden bg-[#ff4d4f] pt-44 pb-28">
+      {/* CUTOUT & LOGO */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 z-30 flex justify-center">
+        {/* Center U-shape tongue */}
+        <svg 
+          width="300" 
+          height="100" 
+          viewBox="0 0 300 100" 
+          fill="none" 
+          xmlns="http://www.w3.org/2000/svg" 
+          className="text-background"
+        >
+          <path d="M0,0 H20 C80,0 80,100 150,100 C220,100 220,0 280,0 H300 Z" fill="currentColor" />
+        </svg>
+
+        {/* LOGO IN THE CUTOUT */}
+        <div className="absolute top-[20px] left-1/2 -translate-x-1/2 z-40 flex items-center justify-center">
+          {mounted && (
+            <img 
+              src={logoSrc} 
+              alt="Logo" 
+              className="h-16 w-auto object-contain" 
+            />
+          )}
+        </div>
+      </div>
+
       {/* BACKGROUND DECOR */}
       <div className="absolute inset-0 pointer-events-none z-10">
         {/* dotted grid */}
@@ -13,8 +50,8 @@ export const CTASection = () => {
         </div>
 
         {/* faint shapes */}
-        <div className="absolute top-16 left-24 w-10 h-10 border border-white/20 rotate-45" />
-        <div className="absolute top-20 right-24 w-12 h-12 border border-white/20 rotate-12" />
+        <div className="absolute top-32 left-24 w-10 h-10 border border-white/20 rotate-45" />
+        <div className="absolute top-40 right-24 w-12 h-12 border border-white/20 rotate-12" />
         <div className="absolute bottom-20 right-52 w-8 h-8 border border-white/20 rotate-45" />
       </div>
 
