@@ -3,10 +3,50 @@ import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import Lottie from 'lottie-react';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, Github, ArrowRight } from 'lucide-react';
+import { ExternalLink, Github, ArrowRight, Code } from 'lucide-react';
 import { ShineBorder } from '@/components/ui/shine-border';
+import { SiReact, SiTypescript, SiNodedotjs, SiMongodb, SiTailwindcss, SiRedux, SiVercel, SiExpress, SiJavascript, SiHtml5, SiCss3 } from "react-icons/si";
 
+const TechIcon = ({ tech, className }: { tech: string, className?: string }) => {
+  const t = tech.toLowerCase();
+  if (t.includes("react")) return <SiReact className={className} />;
+  if (t.includes("typescript")) return <SiTypescript className={className} />;
+  if (t.includes("node")) return <SiNodedotjs className={className} />;
+  if (t.includes("mongo")) return <SiMongodb className={className} />;
+  if (t.includes("tailwind")) return <SiTailwindcss className={className} />;
+  if (t.includes("redux")) return <SiRedux className={className} />;
+  if (t.includes("vercel")) return <SiVercel className={className} />;
+  if (t.includes("express")) return <SiExpress className={className} />;
+  if (t.includes("javascript")) return <SiJavascript className={className} />;
+  if (t.includes("html")) return <SiHtml5 className={className} />;
+  if (t.includes("css")) return <SiCss3 className={className} />;
+  return <Code className={className} />;
+};
 const projects = [
+  {
+    title: 'Property King (US Client Project)',
+    description: 'A comprehensive real estate application designed for property management, discovery, and seamless user experiences.',
+    image: '/Project Folder/property_king.png',
+    technologies: ['React', 'Node.js', 'MongoDB'],
+    category: 'Web Application',
+    status: 'Live',
+    links: {
+      demo: '#',
+      github: '#',
+    },
+  },
+  {
+    title: 'GasSync Platform (US Client Project)',
+    description: 'A comprehensive platform designed for seamless synchronization, monitoring, and management of gas-related operations.',
+    image: '/Project Folder/the_gassync.png',
+    technologies: ['React', 'TypeScript', 'Node.js'],
+    category: 'Web Application',
+    status: 'Live',
+    links: {
+      demo: 'https://thegassync.com/',
+      github: '#',
+    },
+  },
   {
     title: 'Covian Project',
     description: 'A modern, scalable web application designed to deliver an exceptional user experience with real-time features and a robust architecture.',
@@ -198,8 +238,9 @@ export const ProjectsSection = () => {
                     {project.technologies.map((tech) => (
                       <span
                         key={tech}
-                        className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-md"
+                        className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-md flex items-center"
                       >
+                        <TechIcon tech={tech} className="w-3 h-3 mr-1 opacity-70" />
                         {tech}
                       </span>
                     ))}

@@ -1,13 +1,29 @@
 import React, { useRef, useState, useEffect } from "react";
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion";
 import { getPortfolioProjectsAPI } from "@/admin/lib/api";
-import { ExternalLink, Calendar, Users, Globe, Smartphone } from "lucide-react";
+import { ExternalLink, Calendar, Users, Globe, Smartphone, Code } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import BlurBlob from "@/components/BlurBlob";
 import { ShineBorder } from "@/components/ui/shine-border";
 import { CTASection } from "@/components/Sections/CTASection";
+import { SiReact, SiTypescript, SiNodedotjs, SiMongodb, SiTailwindcss, SiRedux, SiVercel, SiExpress, SiJavascript, SiHtml5, SiCss3 } from "react-icons/si";
 
+const TechIcon = ({ tech, className }: { tech: string, className?: string }) => {
+  const t = tech.toLowerCase();
+  if (t.includes("react")) return <SiReact className={className} />;
+  if (t.includes("typescript")) return <SiTypescript className={className} />;
+  if (t.includes("node")) return <SiNodedotjs className={className} />;
+  if (t.includes("mongo")) return <SiMongodb className={className} />;
+  if (t.includes("tailwind")) return <SiTailwindcss className={className} />;
+  if (t.includes("redux")) return <SiRedux className={className} />;
+  if (t.includes("vercel")) return <SiVercel className={className} />;
+  if (t.includes("express")) return <SiExpress className={className} />;
+  if (t.includes("javascript")) return <SiJavascript className={className} />;
+  if (t.includes("html")) return <SiHtml5 className={className} />;
+  if (t.includes("css")) return <SiCss3 className={className} />;
+  return <Code className={className} />;
+};
 /* ─────────────────────────────────────────────────── */
 /*  ProjectCard – design completely unchanged          */
 /* ─────────────────────────────────────────────────── */
@@ -91,19 +107,10 @@ function ProjectCard({ project, index }: { project: any; index: number }) {
               <p className="text-zinc-600 dark:text-zinc-400 mb-4 line-clamp-3 text-sm leading-relaxed flex-grow">
                 {project.description}
               </p>
-              <div className="flex gap-4 text-xs text-zinc-500 mb-4 font-mono flex-shrink-0">
-                <div className="flex items-center gap-1">
-                  <Calendar className="w-3.5 h-3.5 text-rose-500 dark:text-red-500" />
-                  {project.timeline}
-                </div>
-                <div className="flex items-center gap-1">
-                  <Users className="w-3.5 h-3.5 text-rose-500 dark:text-red-500" />
-                  {project.teamSize}
-                </div>
-              </div>
               <div className="flex flex-wrap gap-2 mb-6 flex-shrink-0">
                 {project.technologies.map((tech: string) => (
-                  <Badge key={tech} variant="outline" className="text-[10px] border-black/10 dark:border-white/10 text-zinc-600 dark:text-zinc-300 bg-white/50 dark:bg-transparent">
+                  <Badge key={tech} variant="outline" className="text-[10px] border-black/10 dark:border-white/10 text-zinc-600 dark:text-zinc-300 bg-white/50 dark:bg-transparent flex items-center">
+                    <TechIcon tech={tech} className="w-3 h-3 mr-1 opacity-70" />
                     {tech}
                   </Badge>
                 ))}
@@ -128,7 +135,9 @@ function ProjectCard({ project, index }: { project: any; index: number }) {
 /*  Main Page                      */
 /* ─────────────────────────────── */
 const DEFAULT_PROJECTS = [
-  { id: 0, type: "web", title: "Covian Project", description: "A modern, scalable web application designed to deliver an exceptional user experience with real-time features and a robust architecture.", image: "/Project Folder/covian_project.png", technologies: ["React", "Node.js", "MongoDB"], category: "Web Application", timeline: "Ongoing", teamSize: "3 developers", demoUrl: "#", githubUrl: "#" },
+  { id: -2, type: "web", title: "Property King (US Client Project)", description: "A comprehensive real estate application designed for property management, discovery, and seamless user experiences.", image: "/Project Folder/property_king.png", technologies: ["React", "Node.js", "MongoDB"], category: "Web Application", demoUrl: "#", githubUrl: "#" },
+  { id: -1, type: "web", title: "GasSync Platform (US Client)", description: "A comprehensive platform designed for seamless synchronization, monitoring, and management of gas-related operations.", image: "/Project Folder/the_gassync.png", technologies: ["React", "TypeScript", "Node.js"], category: "Web Application", demoUrl: "https://thegassync.com/", githubUrl: "#" },
+  { id: 0, type: "web", title: "Covian Project", description: "A modern, scalable web application designed to deliver an exceptional user experience with real-time features and a robust architecture.", image: "/Project Folder/covian_project.png", technologies: ["React", "Node.js", "MongoDB"], category: "Web Application", demoUrl: "#", githubUrl: "#" },
   { id: 1, type: "web", title: "Multi-Level Marketing (MLM) Engine", description: "A scalable MLM platform featuring automated referral tracking, dynamic commission distribution, and a real-time genealogy tree visualizer for distributors.", image: "/mlm_platform.png", technologies: ["MERN Stack", "TypeScript", "Tailwind CSS", "Redux Toolkit", "Node.js"], category: "Business / FinTech", timeline: "7 days", teamSize: "2 developers", demoUrl: "https://www.sarvasolutionvision.com/", githubUrl: "#" },
   { id: 2, type: "web", title: "Restaurant Food Delivery Platform (Serverless)", description: "A serverless progressive web app for food ordering with a modern UI, cart system, and direct WhatsApp integration.", image: "/maa_laxmi.png", technologies: ["React", "TypeScript", "Vercel"], category: "Web Development", timeline: "3 days", teamSize: "3 developers", demoUrl: "https://food-delivery-frontend-one-smoky.vercel.app/", githubUrl: "#" },
   { id: 3, type: "web", title: "Hotel & Restaurant Business Website", description: "A fast, mobile-first business website designed to improve online visibility and local engagement.", image: "/Jamai_da_project.png", technologies: ["React", "TypeScript", "Vercel"], category: "Web Development", timeline: "2 days", teamSize: "2 developers", demoUrl: "https://jamaidahotel.online", githubUrl: "#" },
@@ -235,7 +244,7 @@ export default function Projects() {
                 backgroundClip: "text",
               }}
             >
-              Projects
+              Work
             </span>
           </motion.h1>
 
