@@ -8,6 +8,18 @@ import { ShineBorder } from '@/components/ui/shine-border';
 
 const projects = [
   {
+    title: 'Covian Project',
+    description: 'A modern, scalable web application designed to deliver an exceptional user experience with real-time features and a robust architecture.',
+    image: '/Project Folder/covian_project.png',
+    technologies: ['React', 'Node.js', 'MongoDB'],
+    category: 'Web Application',
+    status: 'Live',
+    links: {
+      demo: 'https://covian.ulmind.com',
+      github: '#',
+    },
+  },
+  {
     title: 'E-Commerce Platform',
     description: 'A modern, scalable e-commerce solution with real-time inventory, payment processing, and analytics dashboard.',
     image: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=600&h=400&fit=crop',
@@ -113,7 +125,7 @@ export const ProjectsSection = () => {
         };
         setArrowAnimData(stripped);
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   return (
