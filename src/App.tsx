@@ -110,6 +110,7 @@ const HWLoginPage = lazy(() => import("./admin/pages/hardware/HWLoginPage"));
 const HWDashboard = lazy(() => import("./admin/pages/hardware/HWDashboard"));
 const HWAdminDashboard = lazy(() => import("./admin/pages/hardware/HWAdminDashboard"));
 const HWEmployeeManagement = lazy(() => import("./admin/pages/hardware/HWEmployeeManagement"));
+const CinematicLogin = lazy(() => import("./components/Authentication/CinematicLogin/CinematicLogin"));
 
 import { AuthProvider } from "./admin/context/auth-context";
 import { HWProvider } from "./admin/context/hw-context";
@@ -546,7 +547,7 @@ const App = () => {
 
                   {/* ─── Admin Panel Routes ─── */}
                   <Route path="/admin/login" element={
-                    <Navigate to="/admin/hw/login" replace />
+                    <Navigate to="/admin/cinematic-login" replace />
                   } />
                   <Route path="/admin/forgot-password" element={
                     <AuthProvider>
@@ -653,6 +654,13 @@ const App = () => {
                   <Route path="/admin/hw/login" element={
                     <HWProvider>
                       <HWLoginPage />
+                    </HWProvider>
+                  } />
+
+                  {/* ─── Cinematic Smart Office Login ─── */}
+                  <Route path="/admin/cinematic-login" element={
+                    <HWProvider>
+                      <CinematicLogin />
                     </HWProvider>
                   } />
 
