@@ -1104,3 +1104,32 @@ export const deletePortfolioProjectAPI = async (id: string) => {
   if (!res.ok) throw new Error("Failed to delete project");
   return res.json();
 };
+
+export const getInfraAPI = async (search = "", skip = 0, limit = 100) => {
+  const res = await authFetch(`/pm-infra?search=${encodeURIComponent(search)}&skip=${skip}&limit=${limit}`);
+  if (!res.ok) throw new Error("Failed to fetch infrastructure data");
+  return res.json();
+};
+export const createInfraAPI = async (payload: any) => {
+  const res = await authFetch("/pm-infra", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error("Failed to create infrastructure entry");
+  return res.json();
+};
+export const updateInfraAPI = async (id: string, payload: any) => {
+  const res = await authFetch(`/pm-infra/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error("Failed to update infrastructure entry");
+  return res.json();
+};
+export const deleteInfraAPI = async (id: string) => {
+  const res = await authFetch(`/pm-infra/${id}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) throw new Error("Failed to delete infrastructure entry");
+  return res.json();
+};

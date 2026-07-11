@@ -97,6 +97,7 @@ const PMFilesPage = lazy(() => import("./admin/pages/projects/PMFiles"));
 const PMFeedbackPage = lazy(() => import("./admin/pages/projects/PMFeedback"));
 const PMTimeTrackingPage = lazy(() => import("./admin/pages/projects/PMTimeTracking"));
 const PMBudgetPage = lazy(() => import("./admin/pages/projects/PMBudget"));
+const PMInfrastructurePage = lazy(() => import("./admin/pages/projects/PMInfrastructure"));
 const PMEnvironmentPage = lazy(() => import("./admin/pages/projects/PMEnvironment"));
 const AdminNotificationDashboard = lazy(() => import("./admin/pages/NotificationDashboardPage"));
 const CronMonitorPage = lazy(() => import("./admin/pages/CronMonitorPage"));
@@ -602,6 +603,7 @@ const App = () => {
                         <Route path="feedback" element={<PMFeedbackPage />} />
                         <Route path="time-tracking" element={<PMTimeTrackingPage />} />
                         <Route path="budget" element={<PMBudgetPage />} />
+                        <Route path="infrastructure" element={<PMInfrastructurePage />} />
                         <Route path="environment" element={<PMEnvironmentPage />} />
                       </Route>
                       <Route path="visitors" element={<AdminVisitorsPage />} />
