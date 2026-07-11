@@ -134,10 +134,10 @@ const InfraCard = ({ item, onEdit, onDelete }: { item: any, onEdit: (i: any) => 
                     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                         {[
                             { icon: <Mail size={14}/>, label: "Account Email", value: item.email_used, color: "#f59e0b" },
-                            { icon: <Globe size={14}/>, label: "Frontend", value: item.frontend_url, color: "#06b6d4", link: true },
-                            { icon: <Server size={14}/>, label: "Backend", value: item.backend_url, color: "#8b5cf6", link: true },
-                            { icon: <Database size={14}/>, label: "Database", value: item.database_url, color: "#10b981", link: true },
-                            { icon: <Globe size={14}/>, label: "Server Location", value: item.server_location, color: "#ec4899" },
+                            { icon: <Globe size={14}/>, label: "Frontend", value: item.frontend_url, email: item.frontend_email, color: "#06b6d4", link: true },
+                            { icon: <Server size={14}/>, label: "Backend", value: item.backend_url, email: item.backend_email, color: "#8b5cf6", link: true },
+                            { icon: <Database size={14}/>, label: "Database", value: item.database_url, email: item.database_email, color: "#10b981", link: true },
+                            { icon: <Globe size={14}/>, label: "Server Location", value: item.server_location, email: item.server_email, color: "#ec4899" },
                         ].map((detail, idx) => (
                             detail.value ? (
                                 <div key={idx} style={{
@@ -156,6 +156,11 @@ const InfraCard = ({ item, onEdit, onDelete }: { item: any, onEdit: (i: any) => 
                                             </a>
                                         ) : (
                                             <span style={{ fontSize: 13, color: "#e2e8f0", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", display: "block", width: "100%" }}>{detail.value}</span>
+                                        )}
+                                        {detail.email && (
+                                            <span style={{ fontSize: 11, color: "#94a3b8", display: "flex", alignItems: "center", gap: 6, marginTop: 4, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                                                <Mail size={10} /> {detail.email}
+                                            </span>
                                         )}
                                     </div>
                                 </div>
@@ -255,7 +260,11 @@ export default function PMInfrastructure() {
   
   // Forms
   const [formData, setFormData] = useState({
-      project_name: "", email_used: "", frontend_url: "", backend_url: "", database_url: "", server_location: ""
+      project_name: "", email_used: "", 
+      frontend_url: "", frontend_email: "",
+      backend_url: "", backend_email: "",
+      database_url: "", database_email: "",
+      server_location: "", server_email: ""
   });
 
   // Animations
@@ -279,7 +288,13 @@ export default function PMInfrastructure() {
   }, [search]);
 
   const openAdd = () => {
-      setFormData({ project_name: "", email_used: "", frontend_url: "", backend_url: "", database_url: "", server_location: "" });
+      setFormData({ 
+          project_name: "", email_used: "", 
+          frontend_url: "", frontend_email: "",
+          backend_url: "", backend_email: "",
+          database_url: "", database_email: "",
+          server_location: "", server_email: "" 
+      });
       setModalMode("add");
   };
 
@@ -288,9 +303,13 @@ export default function PMInfrastructure() {
           project_name: item.project_name || "",
           email_used: item.email_used || "",
           frontend_url: item.frontend_url || "",
+          frontend_email: item.frontend_email || "",
           backend_url: item.backend_url || "",
+          backend_email: item.backend_email || "",
           database_url: item.database_url || "",
-          server_location: item.server_location || ""
+          database_email: item.database_email || "",
+          server_location: item.server_location || "",
+          server_email: item.server_email || ""
       });
       setEditItem(item);
       setModalMode("edit");
@@ -396,7 +415,8 @@ export default function PMInfrastructure() {
               onClick={(e) => e.stopPropagation()}
               style={{
                 background: "#0f172a", border: "1px solid rgba(255,255,255,0.1)",
-                borderRadius: 20, width: 500, maxWidth: "90%", padding: 24,
+                borderRadius: 20, width: 550, maxWidth: "90%", padding: 24,
+                maxHeight: "90vh", overflowY: "auto",
                 boxShadow: "0 20px 40px rgba(0,0,0,0.5)"
               }}
             >
@@ -405,50 +425,43 @@ export default function PMInfrastructure() {
               </h3>
               
               <form onSubmit={handleSave} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-                <ModernInput 
-                    label="PROJECT NAME" 
-                    required 
-                    value={formData.project_name} 
-                    onChange={(e: any) => setFormData({...formData, project_name: e.target.value})} 
-                    placeholder="e.g. ULMIND Backend"
-                />
-                <ModernInput 
-                    label="ACCOUNT EMAIL" 
-                    required 
-                    type="email"
-                    value={formData.email_used} 
-                    onChange={(e: any) => setFormData({...formData, email_used: e.target.value})} 
-                    placeholder="e.g. admin@ulmind.com"
-                />
-                
-                <div style={{ display: "flex", gap: 20 }}>
-                    <ModernInput 
-                        label="FRONTEND URL" 
-                        value={formData.frontend_url} 
-                        onChange={(e: any) => setFormData({...formData, frontend_url: e.target.value})} 
-                        placeholder="https://ulmind.com"
-                    />
-                    <ModernInput 
-                        label="BACKEND URL" 
-                        value={formData.backend_url} 
-                        onChange={(e: any) => setFormData({...formData, backend_url: e.target.value})} 
-                        placeholder="https://api.ulmind.com"
-                    />
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                    <ModernInput label="PROJECT NAME" required value={formData.project_name} onChange={(e: any) => setFormData({...formData, project_name: e.target.value})} placeholder="e.g. ULMIND Backend" />
+                    <ModernInput label="ACCOUNT EMAIL" type="email" value={formData.email_used} onChange={(e: any) => setFormData({...formData, email_used: e.target.value})} placeholder="e.g. admin@ulmind.com" />
                 </div>
                 
-                <div style={{ display: "flex", gap: 20 }}>
-                    <ModernInput 
-                        label="DATABASE URL" 
-                        value={formData.database_url} 
-                        onChange={(e: any) => setFormData({...formData, database_url: e.target.value})} 
-                        placeholder="mongodb+srv://..."
-                    />
-                    <ModernInput 
-                        label="SERVER LOCATION" 
-                        value={formData.server_location} 
-                        onChange={(e: any) => setFormData({...formData, server_location: e.target.value})} 
-                        placeholder="e.g. AWS us-east-1"
-                    />
+                <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                    <div style={{ padding: "16px", background: "rgba(255,255,255,0.02)", borderRadius: 12, border: "1px solid rgba(255,255,255,0.05)" }}>
+                        <h4 style={{ color: "#06b6d4", fontSize: 13, margin: "0 0 12px 0", textTransform: "uppercase", letterSpacing: 0.5 }}>Frontend Details</h4>
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                            <ModernInput label="URL" value={formData.frontend_url} onChange={(e: any) => setFormData({...formData, frontend_url: e.target.value})} placeholder="https://..." />
+                            <ModernInput label="Email" value={formData.frontend_email} onChange={(e: any) => setFormData({...formData, frontend_email: e.target.value})} placeholder="frontend@..." />
+                        </div>
+                    </div>
+                    
+                    <div style={{ padding: "16px", background: "rgba(255,255,255,0.02)", borderRadius: 12, border: "1px solid rgba(255,255,255,0.05)" }}>
+                        <h4 style={{ color: "#8b5cf6", fontSize: 13, margin: "0 0 12px 0", textTransform: "uppercase", letterSpacing: 0.5 }}>Backend Details</h4>
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                            <ModernInput label="URL" value={formData.backend_url} onChange={(e: any) => setFormData({...formData, backend_url: e.target.value})} placeholder="https://api..." />
+                            <ModernInput label="Email" value={formData.backend_email} onChange={(e: any) => setFormData({...formData, backend_email: e.target.value})} placeholder="backend@..." />
+                        </div>
+                    </div>
+
+                    <div style={{ padding: "16px", background: "rgba(255,255,255,0.02)", borderRadius: 12, border: "1px solid rgba(255,255,255,0.05)" }}>
+                        <h4 style={{ color: "#10b981", fontSize: 13, margin: "0 0 12px 0", textTransform: "uppercase", letterSpacing: 0.5 }}>Database Details</h4>
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                            <ModernInput label="URL" value={formData.database_url} onChange={(e: any) => setFormData({...formData, database_url: e.target.value})} placeholder="mongodb+srv://..." />
+                            <ModernInput label="Email" value={formData.database_email} onChange={(e: any) => setFormData({...formData, database_email: e.target.value})} placeholder="dbadmin@..." />
+                        </div>
+                    </div>
+
+                    <div style={{ padding: "16px", background: "rgba(255,255,255,0.02)", borderRadius: 12, border: "1px solid rgba(255,255,255,0.05)" }}>
+                        <h4 style={{ color: "#ec4899", fontSize: 13, margin: "0 0 12px 0", textTransform: "uppercase", letterSpacing: 0.5 }}>Server Details</h4>
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                            <ModernInput label="Location" value={formData.server_location} onChange={(e: any) => setFormData({...formData, server_location: e.target.value})} placeholder="AWS, Render, etc." />
+                            <ModernInput label="Email" value={formData.server_email} onChange={(e: any) => setFormData({...formData, server_email: e.target.value})} placeholder="serveradmin@..." />
+                        </div>
+                    </div>
                 </div>
 
                 <div style={{ display: "flex", justifyContent: "flex-end", gap: 12, marginTop: 16, paddingTop: 20, borderTop: "1px solid rgba(255,255,255,0.06)" }}>
