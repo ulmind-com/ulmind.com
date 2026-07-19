@@ -458,6 +458,23 @@ const WhatsAppFloat: React.FC = () => {
 };
 
 /* ===========================
+   Admin Subdomain Redirect
+   Detects admin.ulmind.com and redirects to admin panel
+=========================== */
+const AdminSubdomainRedirect = () => {
+  const location = useLocation();
+  const isAdminSubdomain = window.location.hostname === "admin.ulmind.com";
+
+  useEffect(() => {
+    if (isAdminSubdomain && !location.pathname.startsWith("/admin")) {
+      window.location.replace("/admin/cinematic-login");
+    }
+  }, [isAdminSubdomain, location.pathname]);
+
+  return null;
+};
+
+/* ===========================
    App
 =========================== */
 const queryClient = new QueryClient();
@@ -510,6 +527,7 @@ const App = () => {
 
           <BrowserRouter>
             <ScrollToTop />
+            <AdminSubdomainRedirect />
             <FaviconTransition />
             <PageviewTracker />
             <RouteTransitionLoader>
