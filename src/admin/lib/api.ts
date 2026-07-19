@@ -8,11 +8,11 @@
 export const getBaseUrl = () => {
   if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
   if (import.meta.env.DEV) return "/api/v1";
-  return "https://ulmind-backend.onrender.com/api/v1";
+  return "https://ulmind-backend-5ww9.onrender.com/api/v1";
 };
 
 export const getWsBaseUrl = () => {
-  if (import.meta.env.PROD) return "wss://ulmind-backend.onrender.com/ws";
+  if (import.meta.env.PROD) return "wss://ulmind-backend-5ww9.onrender.com/ws";
   return import.meta.env.VITE_WS_URL || "ws://localhost:8000/ws";
 };
 
