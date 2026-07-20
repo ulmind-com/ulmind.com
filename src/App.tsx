@@ -459,17 +459,41 @@ const WhatsAppFloat: React.FC = () => {
 
 /* ===========================
    Admin Subdomain Redirect
-   Detects admin.ulmind.com and redirects to admin panel
+   Detects admin.ulmind.com and ensures only admin routes are accessible.
+   - Root (/) → redirects to /admin/cinematic-login
+   - Any non-admin path → redirects to /admin/cinematic-login
+   - Admin paths → pass through normally
 =========================== */
 const AdminSubdomainRedirect = () => {
   const location = useLocation();
-  const isAdminSubdomain = window.location.hostname === "admin.ulmind.com";
+  const isAdminSubdomain =
+    typeof window !== "undefined" &&
+    (window.location.hostname === "admin.ulmind.com" ||
+     window.location.hostname.startsWith("admin."));
 
   useEffect(() => {
     if (isAdminSubdomain && !location.pathname.startsWith("/admin")) {
       window.location.replace("/admin/cinematic-login");
     }
   }, [isAdminSubdomain, location.pathname]);
+
+  // On admin subdomain, block rendering of non-admin routes entirely
+  // (the useEffect redirect handles navigation, this prevents flash of wrong content)
+  if (isAdminSubdomain && !location.pathname.startsWith("/admin")) {
+    return (
+      <div style={{
+        position: "fixed", inset: 0, zIndex: 99999,
+        display: "flex", alignItems: "center", justifyContent: "center",
+        background: "#000",
+      }}>
+        <video
+          src="/ulmind_loader.mp4"
+          autoPlay muted playsInline loop
+          style={{ width: "min(340px, 80vw)", height: "auto", objectFit: "contain", borderRadius: "16px" }}
+        />
+      </div>
+    );
+  }
 
   return null;
 };
