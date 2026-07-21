@@ -353,29 +353,53 @@ export const getCrmDashboardAPI = async (): Promise<any> => {
   return res.json();
 };
 
-export const getCrmActivitiesAPI = async (): Promise<any[]> => {
-  const res = await authFetch("/crm/activities");
-  if (!res.ok) throw new Error("Failed to fetch activities");
+/** The four CRM record types, each backed by its own collection. */
+export type CrmResource = "activities" | "meetings" | "contracts" | "documents";
+
+/** Optionally scoped to one client — used by the client profile tabs. */
+const crmQuery = (clientId?: string) =>
+  clientId ? `?client_id=${encodeURIComponent(clientId)}` : "";
+
+export const getCrmRecordsAPI = async (resource: CrmResource, clientId?: string): Promise<any[]> => {
+  const res = await authFetch(`/crm/${resource}${crmQuery(clientId)}`);
+  if (!res.ok) throw new Error(`Failed to fetch ${resource}`);
   return res.json();
 };
 
-export const getCrmMeetingsAPI = async (): Promise<any[]> => {
-  const res = await authFetch("/crm/meetings");
-  if (!res.ok) throw new Error("Failed to fetch meetings");
+export const createCrmRecordAPI = async (resource: CrmResource, data: any): Promise<any> => {
+  const res = await authFetch(`/crm/${resource}`, { method: "POST", body: JSON.stringify(data) });
+  if (!res.ok) throw new Error(await readError(res, `Failed to create ${resource}`));
   return res.json();
 };
 
-export const getCrmContractsAPI = async (): Promise<any[]> => {
-  const res = await authFetch("/crm/contracts");
-  if (!res.ok) throw new Error("Failed to fetch contracts");
+export const updateCrmRecordAPI = async (resource: CrmResource, id: string, data: any): Promise<any> => {
+  const res = await authFetch(`/crm/${resource}/${id}`, { method: "PUT", body: JSON.stringify(data) });
+  if (!res.ok) throw new Error(await readError(res, `Failed to update ${resource}`));
   return res.json();
 };
 
-export const getCrmDocumentsAPI = async (): Promise<any[]> => {
-  const res = await authFetch("/crm/documents");
-  if (!res.ok) throw new Error("Failed to fetch documents");
-  return res.json();
+export const deleteCrmRecordAPI = async (resource: CrmResource, id: string): Promise<void> => {
+  const res = await authFetch(`/crm/${resource}/${id}`, { method: "DELETE" });
+  if (!res.ok) throw new Error(await readError(res, `Failed to delete ${resource}`));
 };
+
+/** FastAPI returns {detail: "..."} on failure; surface it instead of a generic message. */
+const readError = async (res: Response, fallback: string): Promise<string> => {
+  try {
+    const body = await res.json();
+    if (typeof body?.detail === "string") return body.detail;
+    if (Array.isArray(body?.detail)) return body.detail.map((d: any) => d.msg).join(", ");
+  } catch { /* non-JSON body */ }
+  return fallback;
+};
+
+export const getCrmActivitiesAPI = (clientId?: string) => getCrmRecordsAPI("activities", clientId);
+export const getCrmMeetingsAPI = (clientId?: string) => getCrmRecordsAPI("meetings", clientId);
+export const getCrmContractsAPI = (clientId?: string) => getCrmRecordsAPI("contracts", clientId);
+export const getCrmDocumentsAPI = (clientId?: string) => getCrmRecordsAPI("documents", clientId);
+
+/* Invoices/payments live in the Finance section of this file — see
+   getInvoicesAPI / getPaymentsAPI below, which take an optional clientId. */
 
 export const getClientAPI = async (id: string): Promise<Client> => {
   const res = await authFetch(`/clients/${id}`);
@@ -406,6 +430,20 @@ export const addClientCRMDataAPI = async (id: string, field: string, data: any):
     body: JSON.stringify(data),
   });
   if (!res.ok) throw new Error(`Failed to add ${field}`);
+  return res.json();
+};
+
+/** Edit a client's core details. Only the keys sent are written server-side,
+ *  so crm_data (notes, contracts, …) is never disturbed by an edit. */
+export const updateClientAPI = async (id: string, data: Partial<Client>): Promise<Client> => {
+  const res = await authFetch(`/clients/${id}`, { method: "PUT", body: JSON.stringify(data) });
+  if (!res.ok) throw new Error(await readError(res, "Failed to update client"));
+  return res.json();
+};
+
+export const deleteClientCRMDataAPI = async (id: string, field: string, item_id: string): Promise<Client> => {
+  const res = await authFetch(`/clients/${id}/crm_data/${field}/${item_id}`, { method: "DELETE" });
+  if (!res.ok) throw new Error(await readError(res, `Failed to delete ${field}`));
   return res.json();
 };
 
@@ -858,14 +896,15 @@ export const getFinanceDashboardAPI = async (): Promise<any> => {
   return res.json();
 };
 
-export const getInvoicesAPI = async (): Promise<any[]> => {
-  const res = await authFetch("/finance/invoices");
+/** clientId narrows the list to one client — used by the CRM views. */
+export const getInvoicesAPI = async (clientId?: string): Promise<any[]> => {
+  const res = await authFetch(`/finance/invoices${crmQuery(clientId)}`);
   if (!res.ok) throw new Error("Failed to fetch invoices");
   return res.json();
 };
 
-export const getPaymentsAPI = async (): Promise<any[]> => {
-  const res = await authFetch("/finance/payments");
+export const getPaymentsAPI = async (clientId?: string): Promise<any[]> => {
+  const res = await authFetch(`/finance/payments${crmQuery(clientId)}`);
   if (!res.ok) throw new Error("Failed to fetch payments");
   return res.json();
 };

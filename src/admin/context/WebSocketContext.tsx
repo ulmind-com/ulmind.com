@@ -1,8 +1,9 @@
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback, useRef, ReactNode } from 'react';
 import { useAuth } from './auth-context';
+import { authFetch, getWsBaseUrl } from '../lib/api';
 import { toast } from 'sonner';
 
-interface Notification {
+export interface Notification {
   _id: string;
   type: string;
   title: string;
@@ -13,14 +14,23 @@ interface Notification {
   is_read: boolean;
   link?: string;
   created_at: string;
+  read_at?: string | null;
+  ai_generated?: boolean;
+  actor?: string | null;
 }
 
 interface WebSocketContextType {
   notifications: Notification[];
   setNotifications: React.Dispatch<React.SetStateAction<Notification[]>>;
   unreadCount: number;
-  markAllRead: () => void;
-  markAsRead: (id: string) => void;
+  loading: boolean;
+  connected: boolean;
+  refresh: () => Promise<void>;
+  markAllRead: () => Promise<void>;
+  markAsRead: (id: string) => Promise<void>;
+  markAsUnread: (id: string) => Promise<void>;
+  removeNotification: (id: string) => Promise<void>;
+  clearRead: () => Promise<void>;
 }
 
 const WebSocketContext = createContext<WebSocketContextType | undefined>(undefined);
@@ -28,98 +38,144 @@ const WebSocketContext = createContext<WebSocketContextType | undefined>(undefin
 export const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { user } = useAuth();
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [ws, setWs] = useState<WebSocket | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [connected, setConnected] = useState(false);
+  const socketRef = useRef<WebSocket | null>(null);
+  const reconnectRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const attemptsRef = useRef(0);
+
+  const refresh = useCallback(async () => {
+    try {
+      // authFetch resolves the base URL the same way as the rest of the admin
+      // panel. The old code hardcoded a localhost:5000 fallback, so in local
+      // development notifications silently never loaded.
+      const res = await authFetch('/notifications/');
+      if (res.ok) setNotifications(await res.json());
+    } catch (err) {
+      console.error('Failed to fetch notifications:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    // Fetch initial notifications
-    const fetchNotifications = async () => {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1";
-        const res = await fetch(`${apiUrl}/notifications/`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem("ulmind_admin_token")}` }
-        });
-        if (res.ok) {
-          const data = await res.json();
-          setNotifications(data);
-        }
-      } catch (err) {
-        console.error("Failed to fetch notifications:", err);
-      }
-    };
-    if (user) fetchNotifications();
-  }, [user]);
+    if (user) refresh();
+    else { setNotifications([]); setLoading(false); }
+  }, [user, refresh]);
 
+  // ── WebSocket with backoff reconnect ────────────────────────
   useEffect(() => {
     if (!user) return;
+    let disposed = false;
 
-    const wsUrlBase = import.meta.env.VITE_WS_URL || "ws://localhost:5000/ws";
-    const wsUrl = `${wsUrlBase}/notifications/${user.email}`;
-    const websocket = new WebSocket(wsUrl);
+    const connect = () => {
+      if (disposed) return;
+      const ws = new WebSocket(`${getWsBaseUrl()}/notifications/${user.email}`);
+      socketRef.current = ws;
 
-    websocket.onopen = () => {
-      console.log('Connected to Notification WebSocket');
-    };
+      ws.onopen = () => {
+        attemptsRef.current = 0;
+        setConnected(true);
+      };
 
-    websocket.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        if (data.type === 'NEW_NOTIFICATION') {
+      ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          if (data.type !== 'NEW_NOTIFICATION') return;
           const notif = data.notification as Notification;
-          setNotifications(prev => [notif, ...prev]);
-          
-          // Toast for High/Critical
-          if (notif.priority === 'Critical' || notif.priority === 'High') {
-             toast.error(notif.title, { description: notif.message, duration: 5000 });
-          } else {
-             toast.info(notif.title, { description: notif.message });
+          // Guard against a duplicate arriving alongside a refresh.
+          setNotifications((prev) =>
+            prev.some((n) => n._id === notif._id) ? prev : [notif, ...prev]
+          );
+          if (notif.priority === 'Critical') {
+            toast.error(notif.title, { description: notif.message, duration: 6000 });
+          } else if (notif.priority === 'High') {
+            toast.warning(notif.title, { description: notif.message, duration: 5000 });
           }
+          // Medium/Low arrive silently — the bell badge is enough.
+        } catch (err) {
+          console.error('Error parsing websocket message', err);
         }
-      } catch (err) {
-        console.error("Error parsing websocket message", err);
-      }
+      };
+
+      ws.onclose = () => {
+        setConnected(false);
+        if (disposed) return;
+        // Back off so a downed backend doesn't spin a reconnect loop.
+        const delay = Math.min(30000, 1000 * 2 ** attemptsRef.current);
+        attemptsRef.current += 1;
+        reconnectRef.current = setTimeout(connect, delay);
+      };
+
+      ws.onerror = () => ws.close();
     };
 
-    websocket.onclose = () => {
-      console.log('Disconnected from Notification WebSocket');
-    };
-
-    setWs(websocket);
+    connect();
 
     return () => {
-      websocket.close();
+      disposed = true;
+      if (reconnectRef.current) clearTimeout(reconnectRef.current);
+      socketRef.current?.close();
+      socketRef.current = null;
     };
   }, [user]);
 
-  const unreadCount = notifications.filter(n => !n.is_read).length;
+  const unreadCount = notifications.filter((n) => !n.is_read).length;
 
-  const markAllRead = async () => {
-    setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
+  /** Apply an optimistic change, then roll it back if the server rejects it —
+   *  the previous version left the UI showing a success that never happened. */
+  const optimistic = useCallback(async (
+    apply: (prev: Notification[]) => Notification[],
+    request: () => Promise<Response | void>,
+    errorMessage: string,
+  ) => {
+    let snapshot: Notification[] = [];
+    setNotifications((prev) => { snapshot = prev; return apply(prev); });
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1";
-      await fetch(`${apiUrl}/notifications/read-all`, {
-        method: "PUT",
-        headers: { Authorization: `Bearer ${localStorage.getItem("ulmind_admin_token")}` }
-      });
+      const res = await request();
+      if (res && !res.ok) throw new Error(`${res.status}`);
     } catch (err) {
-      console.error(err);
+      console.error(errorMessage, err);
+      setNotifications(snapshot);
+      toast.error(errorMessage);
     }
-  };
+  }, []);
 
-  const markAsRead = async (id: string) => {
-    setNotifications(prev => prev.map(n => n._id === id ? { ...n, is_read: true } : n));
-    try {
-      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1";
-      await fetch(`${apiUrl}/notifications/${id}/read`, {
-        method: "PUT",
-        headers: { Authorization: `Bearer ${localStorage.getItem("ulmind_admin_token")}` }
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  const markAllRead = useCallback(() => optimistic(
+    (prev) => prev.map((n) => ({ ...n, is_read: true })),
+    () => authFetch('/notifications/read-all', { method: 'PUT' }),
+    'Could not mark all as read',
+  ), [optimistic]);
+
+  const markAsRead = useCallback((id: string) => optimistic(
+    (prev) => prev.map((n) => (n._id === id ? { ...n, is_read: true } : n)),
+    () => authFetch(`/notifications/${id}/read`, { method: 'PUT' }),
+    'Could not mark as read',
+  ), [optimistic]);
+
+  const markAsUnread = useCallback((id: string) => optimistic(
+    (prev) => prev.map((n) => (n._id === id ? { ...n, is_read: false } : n)),
+    () => authFetch(`/notifications/${id}/unread`, { method: 'PUT' }),
+    'Could not mark as unread',
+  ), [optimistic]);
+
+  const removeNotification = useCallback((id: string) => optimistic(
+    (prev) => prev.filter((n) => n._id !== id),
+    () => authFetch(`/notifications/${id}`, { method: 'DELETE' }),
+    'Could not delete notification',
+  ), [optimistic]);
+
+  const clearRead = useCallback(() => optimistic(
+    (prev) => prev.filter((n) => !n.is_read),
+    () => authFetch('/notifications/clear-read', { method: 'DELETE' }),
+    'Could not clear read notifications',
+  ), [optimistic]);
 
   return (
-    <WebSocketContext.Provider value={{ notifications, setNotifications, unreadCount, markAllRead, markAsRead }}>
+    <WebSocketContext.Provider value={{
+      notifications, setNotifications, unreadCount, loading, connected,
+      refresh, markAllRead, markAsRead, markAsUnread, removeNotification, clearRead,
+    }}>
       {children}
     </WebSocketContext.Provider>
   );

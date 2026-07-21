@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect } from "react";
 import {
-  ShieldCheck, Plus, X, Loader2, Edit2, Trash2, Mail, User, Shield, KeyRound, Briefcase
+  ShieldCheck, Plus, X, Loader2, Edit2, Trash2, Mail, User, Shield, KeyRound, Briefcase, Lock
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -24,7 +24,12 @@ type PanelMode = "add" | "edit" | null;
 const EmployeeDirectory: React.FC = () => {
   const { user: currentUser } = useAuth();
   const { triggerActionAnimation } = useAdminAction();
-  
+
+  // Only super admins may grant or change access roles. Everything else on
+  // this page stays available to every admin. The server enforces the same
+  // rule — this just keeps the UI honest about what will be accepted.
+  const canManageRoles = currentUser?.role?.toLowerCase() === "super_admin";
+
   const [team, setTeam] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -77,9 +82,18 @@ const EmployeeDirectory: React.FC = () => {
     setFormLoading(true); setFormError("");
     try {
       if (panelMode === "add") {
-        await createTeamMemberAPI({ full_name: fullName, email, role, initial_password: initialPassword, position });
+        // A non-super-admin cannot pick a role, so new members default to editor.
+        await createTeamMemberAPI({
+          full_name: fullName, email, position, initial_password: initialPassword,
+          role: canManageRoles ? role : "editor",
+        });
       } else if (panelMode === "edit" && selectedMember) {
-        await updateTeamMemberAPI(selectedMember._id, { full_name: fullName, email, role, status, position });
+        // Omit `role` entirely unless the current user is allowed to set it —
+        // sending the unchanged value would still be a role field on the wire.
+        await updateTeamMemberAPI(selectedMember._id, {
+          full_name: fullName, email, status, position,
+          ...(canManageRoles ? { role } : {}),
+        });
       }
       await fetchTeam();
       closePanel();
@@ -237,6 +251,22 @@ const EmployeeDirectory: React.FC = () => {
                       <input type="text" className="admin-input" placeholder="e.g. Content Writer" value={position} onChange={e => setPosition(e.target.value)} style={{ paddingLeft: 42, background: "rgba(0,0,0,0.2)", border: "1px solid rgba(255,255,255,0.1)" }} />
                     </div>
                   </div>
+                  {!canManageRoles ? (
+                    /* Read-only for non-super-admins: they can still edit every
+                       other field, they just cannot change access level. */
+                    <div>
+                      <label style={{ fontSize: 12, fontWeight: 600, color: "#94a3b8", display: "block", marginBottom: 8, textTransform: "uppercase" }}>Access Role</label>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 14px", borderRadius: 12, background: "rgba(0,0,0,0.2)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                        <Lock size={14} color="#64748b" />
+                        <span style={{ fontSize: 14, fontWeight: 600, color: "#e2e8f0", textTransform: "uppercase", letterSpacing: "0.04em" }}>
+                          {panelMode === "edit" ? (selectedMember?.role || "editor").replace("_", " ") : "Editor"}
+                        </span>
+                      </div>
+                      <p style={{ fontSize: 11, color: "#64748b", marginTop: 6 }}>
+                        Only a super admin can change access roles.
+                      </p>
+                    </div>
+                  ) : (
                   <div>
                     <label style={{ fontSize: 12, fontWeight: 600, color: "#94a3b8", display: "block", marginBottom: 8, textTransform: "uppercase" }}>Access Role</label>
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
@@ -254,6 +284,7 @@ const EmployeeDirectory: React.FC = () => {
                       </button>
                     </div>
                   </div>
+                  )}
                   {panelMode === "add" && (
                     <div>
                       <label style={{ fontSize: 12, fontWeight: 600, color: "#94a3b8", display: "block", marginBottom: 8, textTransform: "uppercase" }}>Temporary Password *</label>
