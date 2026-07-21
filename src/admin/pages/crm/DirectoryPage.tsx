@@ -57,7 +57,7 @@ const DirectoryPage: React.FC = () => {
       key: "actions",
       header: "Actions",
       render: (client) => (
-        <button 
+        <button
           onClick={() => navigate(`/admin/crm/clients/${client._id}`)}
           style={{ background: "rgba(56, 189, 248, 0.1)", border: "1px solid rgba(56, 189, 248, 0.2)", color: "#38bdf8", cursor: "pointer", fontWeight: 600, fontSize: 12, padding: "6px 12px", borderRadius: 6 }}
         >
@@ -67,6 +67,9 @@ const DirectoryPage: React.FC = () => {
     }
   ], [navigate]);
 
+  // The stage a new client starts at, so it lands on the pipeline board.
+  const stageOptions = ["Lead", "Qualified", "Prospect", "Proposal Sent", "Negotiation", "Won", "Active Client", "Closed Lost"];
+
   const clientFields: ModalField[] = [
     { name: "companyName", label: "Company Name", type: "text", required: true },
     { name: "contactName", label: "Contact Name", type: "text", required: true },
@@ -74,21 +77,22 @@ const DirectoryPage: React.FC = () => {
     { name: "phone", label: "Phone Number", type: "text" },
     { name: "industry", label: "Industry", type: "text" },
     { name: "revenue", label: "Estimated Revenue (₹)", type: "number", defaultValue: 0 },
+    {
+      name: "stage", label: "Pipeline Stage", type: "select", required: true, defaultValue: "Lead",
+      options: stageOptions.map((s) => ({ label: s, value: s })),
+    },
   ];
 
   const handleAddClient = async (data: any) => {
-    try {
-      const res = await authFetch("/clients/", {
-        method: "POST",
-        body: JSON.stringify({ ...data, status: "Active" })
-      });
-      if (!res.ok) throw new Error("Failed to create client");
-      toast.success("Client added successfully");
-      triggerActionAnimation('success');
-      fetchClients();
-    } catch (err: any) {
-      throw new Error(err.message);
-    }
+    const { stage, ...clientData } = data;
+    const res = await authFetch("/clients/", {
+      method: "POST",
+      // Seed crm_data so the client shows up on the pipeline board immediately.
+      body: JSON.stringify({ ...clientData, status: "Active", crm_data: { stage: stage || "Lead", tags: [] } })
+    });
+    if (!res.ok) throw new Error("Failed to create client");
+    toast.success("Client added successfully");
+    fetchClients();
   };
 
   const handleExportCSV = () => {
