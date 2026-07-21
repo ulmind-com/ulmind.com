@@ -29,8 +29,12 @@ export const fireActionFx = (type: ActionFxType) => {
   handler?.(type);
 };
 
-/** Endpoints that should NOT pop the overlay (auth, uploads, telemetry, chat). */
-const EXCLUDE = ["/auth", "/login", "/logout", "/refresh", "/otp", "/forgot", "/reset", "/upload", "/track", "/page-analytics", "/visitors", "/heartbeat", "/presence", "/chat", "/stream"];
+/** Endpoints that should NOT pop the overlay (auth, uploads, telemetry, chat).
+ *  "/hw/monitor" covers ALL hardware-monitoring writes — detection events,
+ *  heartbeats, camera/internet status. These fire automatically every few
+ *  seconds from the camera loop, so they must autosave silently instead of
+ *  flashing the "Saved Successfully" overlay each time. */
+const EXCLUDE = ["/auth", "/login", "/logout", "/refresh", "/otp", "/forgot", "/reset", "/upload", "/track", "/page-analytics", "/visitors", "/hw/monitor", "/heartbeat", "/presence", "/chat", "/stream"];
 
 /** Map an HTTP method to an FX type, or null if it shouldn't fire. */
 export const fxForRequest = (method: string, endpoint: string): ActionFxType | null => {
