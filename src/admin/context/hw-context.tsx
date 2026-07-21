@@ -276,6 +276,10 @@ export const HWProvider: React.FC<{ children: React.ReactNode }> = ({ children }
       lastEventTimeRef.current = now;
 
       if (eventType !== "active_working") {
+        // Silent autosave — the event is recorded in the background. No toast
+        // is shown here: detection issues (no face, low light, covered camera)
+        // repeat constantly and the popups were disruptive. The dashboard
+        // badges + status chip already reflect the live state visually.
         logMonitoringEvent({
           session_id: sessionId,
           employee_id: employee.employee_id,
@@ -288,21 +292,8 @@ export const HWProvider: React.FC<{ children: React.ReactNode }> = ({ children }
           },
         }).catch(() => {});
 
-        if (severity !== "info") {
-          const alertMessages: Record<string, string> = {
-            camera_covered: "⚠️ Camera is covered!",
-            camera_frozen: "⚠️ Camera appears frozen",
-            face_absent: "👤 Face not detected",
-            looking_away: "👁 Looking away from screen",
-            camera_low_light: "🔆 Low light detected",
-          };
-          if (severity === "critical") {
-            toast.error(alertMessages[eventType] || eventType);
-            playAlertBeep();
-          } else {
-            toast.warning(alertMessages[eventType] || eventType);
-          }
-        }
+        // Critical states still beep once (audio only, no popup).
+        if (severity === "critical") playAlertBeep();
       }
     }
   }, [lastResult, sessionId, employee]);
