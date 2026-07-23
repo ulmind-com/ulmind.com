@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Server, Globe, Database, Mail, Search, Plus, 
-  Trash2, Pencil, ExternalLink, ShieldAlert
+  Server, Globe, Database, Mail, Search, Plus,
+  Trash2, Pencil, ExternalLink, ShieldAlert, Layers
 } from "lucide-react";
 import { toast } from "sonner";
 import Lottie from "lottie-react";
@@ -166,6 +166,39 @@ const InfraCard = ({ item, onEdit, onDelete }: { item: any, onEdit: (i: any) => 
                                 </div>
                             ) : null
                         ))}
+                        {(item.custom_sections || []).map((sec: any) => (
+                            <div key={sec.id} style={{
+                                display: "flex", alignItems: "center", gap: 12,
+                                padding: "8px 12px", background: "rgba(255,255,255,0.03)",
+                                borderRadius: 8, border: "1px solid rgba(255,255,255,0.05)",
+                                width: "100%", overflow: "hidden"
+                            }}>
+                                <div style={{ color: "#eab308", display: "flex", flexShrink: 0 }}><Layers size={14} /></div>
+                                <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0, overflow: "hidden" }}>
+                                    <span style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: 0.5, color: "#64748b", fontWeight: 600 }}>{sec.label}</span>
+                                    {sec.url ? (
+                                        sec.url.startsWith("http") ? (
+                                            <a href={sec.url} target="_blank" rel="noreferrer" style={{ fontSize: 13, color: "#e2e8f0", textDecoration: "none", display: "flex", alignItems: "center", gap: 6, minWidth: 0, width: "100%" }}>
+                                                <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1, display: "block" }}>{sec.url}</span>
+                                                <ExternalLink size={10} style={{ flexShrink: 0 }} />
+                                            </a>
+                                        ) : (
+                                            <span style={{ fontSize: 13, color: "#e2e8f0", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", display: "block", width: "100%" }}>{sec.url}</span>
+                                        )
+                                    ) : null}
+                                    {sec.email && (
+                                        <span style={{ fontSize: 11, color: "#94a3b8", display: "flex", alignItems: "center", gap: 6, marginTop: 4, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                                            <Mail size={10} /> {sec.email}
+                                        </span>
+                                    )}
+                                    {sec.notes && (
+                                        <span style={{ fontSize: 11, color: "#64748b", marginTop: 4, whiteSpace: "pre-wrap" }}>
+                                            {sec.notes}
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
                     </div>
 
                     <div style={{ flex: 1 }} />
@@ -260,11 +293,12 @@ export default function PMInfrastructure() {
   
   // Forms
   const [formData, setFormData] = useState({
-      project_name: "", email_used: "", 
+      project_name: "", email_used: "",
       frontend_url: "", frontend_email: "",
       backend_url: "", backend_email: "",
       database_url: "", database_email: "",
-      server_location: "", server_email: ""
+      server_location: "", server_email: "",
+      custom_sections: [] as { id?: string; label: string; url: string; email: string; notes: string }[]
   });
 
   // Animations
@@ -288,12 +322,13 @@ export default function PMInfrastructure() {
   }, [search]);
 
   const openAdd = () => {
-      setFormData({ 
-          project_name: "", email_used: "", 
+      setFormData({
+          project_name: "", email_used: "",
           frontend_url: "", frontend_email: "",
           backend_url: "", backend_email: "",
           database_url: "", database_email: "",
-          server_location: "", server_email: "" 
+          server_location: "", server_email: "",
+          custom_sections: []
       });
       setModalMode("add");
   };
@@ -309,21 +344,51 @@ export default function PMInfrastructure() {
           database_url: item.database_url || "",
           database_email: item.database_email || "",
           server_location: item.server_location || "",
-          server_email: item.server_email || ""
+          server_email: item.server_email || "",
+          custom_sections: (item.custom_sections || []).map((sec: any) => ({
+              id: sec.id, label: sec.label || "", url: sec.url || "", email: sec.email || "", notes: sec.notes || ""
+          }))
       });
       setEditItem(item);
       setModalMode("edit");
   };
 
+  const addCustomSection = () => {
+      setFormData(prev => ({
+          ...prev,
+          custom_sections: [...prev.custom_sections, { label: "", url: "", email: "", notes: "" }]
+      }));
+  };
+
+  const updateCustomSection = (index: number, field: "label" | "url" | "email" | "notes", value: string) => {
+      setFormData(prev => ({
+          ...prev,
+          custom_sections: prev.custom_sections.map((sec, i) => i === index ? { ...sec, [field]: value } : sec)
+      }));
+  };
+
+  const removeCustomSection = (index: number) => {
+      setFormData(prev => ({
+          ...prev,
+          custom_sections: prev.custom_sections.filter((_, i) => i !== index)
+      }));
+  };
+
   const handleSave = async (e: React.FormEvent) => {
       e.preventDefault();
       try {
+          const payload = {
+              ...formData,
+              custom_sections: formData.custom_sections
+                  .filter(sec => sec.label.trim())
+                  .map(sec => ({ ...sec, label: sec.label.trim() }))
+          };
           if (modalMode === "add") {
-              await createInfraAPI(formData);
+              await createInfraAPI(payload);
               setShowSuccessAnim(true);
               toast.success("Infrastructure saved");
           } else if (modalMode === "edit" && editItem) {
-              await updateInfraAPI(editItem._id || editItem.id, formData);
+              await updateInfraAPI(editItem._id || editItem.id, payload);
               setShowSuccessAnim(true);
               toast.success("Infrastructure updated");
           }
@@ -460,6 +525,69 @@ export default function PMInfrastructure() {
                         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
                             <ModernInput label="Location" value={formData.server_location} onChange={(e: any) => setFormData({...formData, server_location: e.target.value})} placeholder="AWS, Render, etc." />
                             <ModernInput label="Email" value={formData.server_email} onChange={(e: any) => setFormData({...formData, server_email: e.target.value})} placeholder="serveradmin@..." />
+                        </div>
+                    </div>
+
+                    <div style={{ padding: "16px", background: "rgba(255,255,255,0.02)", borderRadius: 12, border: "1px solid rgba(255,255,255,0.05)" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: formData.custom_sections.length ? 12 : 0 }}>
+                            <h4 style={{ color: "#eab308", fontSize: 13, margin: 0, textTransform: "uppercase", letterSpacing: 0.5 }}>Custom Sections</h4>
+                            <button
+                                type="button"
+                                onClick={addCustomSection}
+                                style={{
+                                    display: "flex", alignItems: "center", gap: 6,
+                                    padding: "6px 12px", borderRadius: 8, border: "1px solid rgba(234,179,8,0.3)",
+                                    background: "rgba(234,179,8,0.1)", color: "#eab308", fontSize: 12, fontWeight: 600, cursor: "pointer"
+                                }}
+                            >
+                                <Plus size={13} /> Add Section
+                            </button>
+                        </div>
+                        <p style={{ margin: formData.custom_sections.length ? "0 0 12px" : 0, color: "#64748b", fontSize: 12 }}>
+                            Add any extra service this project uses — Cloudinary, AWS, Twilio, etc. — and which account/email it's saved under.
+                        </p>
+
+                        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                            {formData.custom_sections.map((sec, idx) => (
+                                <div key={idx} style={{
+                                    position: "relative", padding: "14px", borderRadius: 10,
+                                    background: "rgba(0,0,0,0.25)", border: "1px solid rgba(255,255,255,0.06)",
+                                    display: "flex", flexDirection: "column", gap: 12
+                                }}>
+                                    <button
+                                        type="button"
+                                        onClick={() => removeCustomSection(idx)}
+                                        style={{
+                                            position: "absolute", top: 10, right: 10, width: 26, height: 26, borderRadius: 7,
+                                            background: "rgba(239,68,68,0.1)", border: "none", color: "#ef4444",
+                                            display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer"
+                                        }}
+                                    >
+                                        <Trash2 size={13} />
+                                    </button>
+                                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, paddingRight: 32 }}>
+                                        <ModernInput label="Service / Section Name" required value={sec.label} onChange={(e: any) => updateCustomSection(idx, "label", e.target.value)} placeholder="e.g. Cloudinary, AWS S3" />
+                                        <ModernInput label="Email" value={sec.email} onChange={(e: any) => updateCustomSection(idx, "email", e.target.value)} placeholder="account@..." />
+                                    </div>
+                                    <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 16 }}>
+                                        <ModernInput label="URL / Console Link (optional)" value={sec.url} onChange={(e: any) => updateCustomSection(idx, "url", e.target.value)} placeholder="https://..." />
+                                    </div>
+                                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                                        <label style={{ color: "#94a3b8", fontSize: 12, fontWeight: 600, letterSpacing: 0.5 }}>Notes (optional)</label>
+                                        <textarea
+                                            value={sec.notes}
+                                            onChange={(e) => updateCustomSection(idx, "notes", e.target.value)}
+                                            placeholder="Any extra detail worth remembering..."
+                                            rows={2}
+                                            style={{
+                                                width: "100%", padding: "10px 12px", borderRadius: 10,
+                                                background: "rgba(15, 23, 42, 0.6)", border: "1px solid rgba(255,255,255,0.08)",
+                                                color: "#f8fafc", fontSize: 13, outline: "none", resize: "vertical", fontFamily: "inherit"
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
