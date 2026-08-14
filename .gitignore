@@ -26,3 +26,7 @@ venv_pill/
 venv_rembg/
 venv/
 public/venv_rembg/
+
+# Env backups
+*.env.local.bak
+.env.local.bak
