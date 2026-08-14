@@ -70,6 +70,7 @@ const OffersPage: React.FC = () => {
   const [isActive, setIsActive] = useState(true);
   const [color1, setColor1] = useState("");
   const [color2, setColor2] = useState("");
+  const [color3, setColor3] = useState("");
   const [textColor, setTextColor] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -97,7 +98,7 @@ const OffersPage: React.FC = () => {
     setPanelMode("add");
     setSelectedOffer(null);
     setTitle(""); setDescription(""); setStartTime(""); setEndTime("");
-    setIsActive(true); setColor1(""); setColor2(""); setTextColor(""); 
+    setIsActive(true); setColor1(""); setColor2(""); setColor3(""); setTextColor(""); 
     setImageFile(null); setImagePreview(null); setFormError("");
   };
 
@@ -111,6 +112,7 @@ const OffersPage: React.FC = () => {
     setIsActive(offer.is_active);
     setColor1(offer.color1 || "");
     setColor2(offer.color2 || "");
+    setColor3(offer.color3 || "");
     setTextColor(offer.text_color || "");
     setImageFile(null);
     setImagePreview(offer.image?.url || null);
@@ -142,6 +144,7 @@ const OffersPage: React.FC = () => {
         fd.append("is_active", String(isActive));
         if (color1) fd.append("color1", color1);
         if (color2) fd.append("color2", color2);
+        if (color3) fd.append("color3", color3);
         if (textColor) fd.append("text_color", textColor);
         if (imageFile) fd.append("image", imageFile);
         await createOfferAPI(fd);
@@ -154,6 +157,7 @@ const OffersPage: React.FC = () => {
           is_active: isActive,
           color1: color1 || null,
           color2: color2 || null,
+          color3: color3 || null,
           text_color: textColor || null,
         });
         // If image changed, upload separately
@@ -469,19 +473,26 @@ const OffersPage: React.FC = () => {
                   <h4 style={{ fontSize: 14, fontWeight: 600, color: "var(--admin-text)", marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
                     <Tag size={16} /> Premium Styling
                   </h4>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16, marginBottom: 16 }}>
                     <div>
-                      <label style={{ fontSize: 11, fontWeight: 600, color: "#94a3b8", display: "block", marginBottom: 6, textTransform: "uppercase" }}>Gradient Color 1 (Left)</label>
+                      <label style={{ fontSize: 11, fontWeight: 600, color: "#94a3b8", display: "block", marginBottom: 6, textTransform: "uppercase" }}>Color 1 (Left)</label>
                       <div style={{ display: "flex", gap: 8 }}>
-                        <input type="color" value={color1 || "#7c3aed"} onChange={e => setColor1(e.target.value)} style={{ width: 44, height: 44, padding: 2, background: "rgba(255,255,255,0.05)", border: "1px solid var(--admin-border)", borderRadius: 12, cursor: "pointer" }} />
-                        <input type="text" className="admin-input" placeholder="#7c3aed" value={color1} onChange={e => setColor1(e.target.value)} style={{ flex: 1, fontFamily: "monospace" }} />
+                        <input type="color" value={color1 || "#FF9933"} onChange={e => setColor1(e.target.value)} style={{ width: 44, height: 44, padding: 2, background: "rgba(255,255,255,0.05)", border: "1px solid var(--admin-border)", borderRadius: 12, cursor: "pointer" }} />
+                        <input type="text" className="admin-input" placeholder="#FF9933" value={color1} onChange={e => setColor1(e.target.value)} style={{ flex: 1, fontFamily: "monospace" }} />
                       </div>
                     </div>
                     <div>
-                      <label style={{ fontSize: 11, fontWeight: 600, color: "#94a3b8", display: "block", marginBottom: 6, textTransform: "uppercase" }}>Gradient Color 2 (Right)</label>
+                      <label style={{ fontSize: 11, fontWeight: 600, color: "#94a3b8", display: "block", marginBottom: 6, textTransform: "uppercase" }}>Color 2 (Middle)</label>
                       <div style={{ display: "flex", gap: 8 }}>
-                        <input type="color" value={color2 || "#f59e0b"} onChange={e => setColor2(e.target.value)} style={{ width: 44, height: 44, padding: 2, background: "rgba(255,255,255,0.05)", border: "1px solid var(--admin-border)", borderRadius: 12, cursor: "pointer" }} />
-                        <input type="text" className="admin-input" placeholder="#f59e0b" value={color2} onChange={e => setColor2(e.target.value)} style={{ flex: 1, fontFamily: "monospace" }} />
+                        <input type="color" value={color2 || "#ffffff"} onChange={e => setColor2(e.target.value)} style={{ width: 44, height: 44, padding: 2, background: "rgba(255,255,255,0.05)", border: "1px solid var(--admin-border)", borderRadius: 12, cursor: "pointer" }} />
+                        <input type="text" className="admin-input" placeholder="#ffffff" value={color2} onChange={e => setColor2(e.target.value)} style={{ flex: 1, fontFamily: "monospace" }} />
+                      </div>
+                    </div>
+                    <div>
+                      <label style={{ fontSize: 11, fontWeight: 600, color: "#94a3b8", display: "block", marginBottom: 6, textTransform: "uppercase" }}>Color 3 (Right)</label>
+                      <div style={{ display: "flex", gap: 8 }}>
+                        <input type="color" value={color3 || "#138808"} onChange={e => setColor3(e.target.value)} style={{ width: 44, height: 44, padding: 2, background: "rgba(255,255,255,0.05)", border: "1px solid var(--admin-border)", borderRadius: 12, cursor: "pointer" }} />
+                        <input type="text" className="admin-input" placeholder="#138808" value={color3} onChange={e => setColor3(e.target.value)} style={{ flex: 1, fontFamily: "monospace" }} />
                       </div>
                     </div>
                   </div>

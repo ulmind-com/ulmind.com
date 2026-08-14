@@ -49,11 +49,13 @@ export const OfferStrip: React.FC = () => {
 
   const offer = bannerOffers[0]; // Show one at a time
 
-  const bgStyle = offer.color1 && offer.color2
-    ? `linear-gradient(135deg, ${offer.color1} 0%, ${offer.color2} 100%)`
-    : offer.color1 
-      ? offer.color1
-      : `linear-gradient(135deg, #7c3aed 0%, #e11d48 50%, #f59e0b 100%)`;
+  const bgStyle = offer.color1 && offer.color2 && offer.color3
+    ? `linear-gradient(135deg, ${offer.color1} 0%, ${offer.color2} 50%, ${offer.color3} 100%)`
+    : offer.color1 && offer.color2
+      ? `linear-gradient(135deg, ${offer.color1} 0%, ${offer.color2} 100%)`
+      : offer.color1 
+        ? offer.color1
+        : `linear-gradient(135deg, #7c3aed 0%, #e11d48 50%, #f59e0b 100%)`;
 
   const textColor = offer.text_color || "#ffffff";
 
