@@ -7,6 +7,7 @@
 import React, { useState, useEffect } from "react";
 import { X, Tag } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
+import { getBaseUrl } from "@/admin/lib/api";
 
 interface OfferData {
   _id: string;
@@ -18,7 +19,7 @@ interface OfferData {
   image: { url: string; public_id: string } | null;
 }
 
-const API_URL = "https://ulmind-backend.onrender.com/api/v1/offers/active";
+const API_URL = `${getBaseUrl()}/offers/active`;
 
 /** Compact strip that hangs below the navbar (rendered INSIDE the nav container) */
 export const OfferStrip: React.FC = () => {
