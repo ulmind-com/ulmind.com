@@ -1,15 +1,17 @@
 import React, { useState } from "react";
-import { Layers, Star, Briefcase, Globe } from "lucide-react";
+import { Layers, Star, Briefcase, Globe, Flag } from "lucide-react";
 import StatsManager from "./StatsManager";
 import ReviewsManager from "./ReviewsManager";
 import ProjectsManager from "./ProjectsManager";
+import FestiveBannerManager from "./FestiveBannerManager";
 
-type TabKey = "stats" | "reviews" | "projects";
+type TabKey = "stats" | "reviews" | "projects" | "festive";
 
 const TABS: { key: TabKey; label: string; desc: string; icon: React.ElementType; accent: string; glow: string }[] = [
   { key: "stats", label: "Company Stats", desc: "Counters & milestones", icon: Layers, accent: "#0ea5e9", glow: "rgba(14,165,233,0.35)" },
   { key: "reviews", label: "Client Reviews", desc: "Testimonials & ratings", icon: Star, accent: "#f43f5e", glow: "rgba(244,63,94,0.35)" },
   { key: "projects", label: "Portfolio Projects", desc: "Showcase work", icon: Briefcase, accent: "#10b981", glow: "rgba(16,185,129,0.3)" },
+  { key: "festive", label: "Festive Banner", desc: "Celebration decorations", icon: Flag, accent: "#FF9933", glow: "rgba(255,153,51,0.35)" },
 ];
 
 const CmsLayout: React.FC = () => {
@@ -93,6 +95,7 @@ const CmsLayout: React.FC = () => {
         {activeTab === "stats" && <StatsManager />}
         {activeTab === "reviews" && <ReviewsManager />}
         {activeTab === "projects" && <ProjectsManager />}
+        {activeTab === "festive" && <FestiveBannerManager />}
       </div>
 
       <style>{`

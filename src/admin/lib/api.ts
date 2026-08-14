@@ -1084,6 +1084,31 @@ export const getWebsiteStatsAPI = async (): Promise<WebsiteStat[]> => {
   if (!res.ok) throw new Error("Failed to fetch stats");
   return res.json();
 };
+// --- Festive Banner (singleton hero decoration config) ---
+export interface FestiveBanner {
+  enabled: boolean;
+  text: string;
+  color1: string;
+  color2: string;
+  intensity: number;
+  showChakra: boolean;
+  startAt: string | null;
+  endAt: string | null;
+  active: boolean; // server-computed: enabled AND within [startAt, endAt]
+}
+
+export const getFestiveBannerAPI = async (): Promise<FestiveBanner> => {
+  const res = await authFetch("/website-content/festive-banner");
+  if (!res.ok) throw new Error("Failed to fetch festive banner");
+  return res.json();
+};
+
+export const updateFestiveBannerAPI = async (data: Partial<FestiveBanner>): Promise<FestiveBanner> => {
+  const res = await authFetch("/website-content/festive-banner", { method: "PUT", body: JSON.stringify(data) });
+  if (!res.ok) throw new Error("Failed to update festive banner");
+  return res.json();
+};
+
 export const createWebsiteStatAPI = async (data: Partial<WebsiteStat>) => {
   const res = await authFetch("/website-content/stats", { method: "POST", body: JSON.stringify(data) });
   if (!res.ok) throw new Error("Failed to create stat");

@@ -22,11 +22,12 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useRef, useState } from 'react';
-import { getWebsiteStatsAPI, WebsiteStat } from '@/admin/lib/api';
+import { getWebsiteStatsAPI, WebsiteStat, getFestiveBannerAPI, FestiveBanner } from '@/admin/lib/api';
 import { MacbookScrollSection } from './MacbookScrollSection';
 import { TechLogoGrid } from './TechLogoGrid';
 import BlurBlob from "@/components/BlurBlob";
 import Lottie from 'lottie-react';
+import { FestiveBadge, FestiveHeroOverlay, type FestiveDisplay } from './FestiveHero';
 
 // Combined Animated component for seamless sliding of videos AND orbiting icons
 const AnimatedHeroVisuals = () => {
@@ -487,6 +488,25 @@ const FloatingCursor = ({
 export const HeroSection = () => {
   const navigate = useNavigate();
 
+  // Festive banner config from the admin panel API
+  const [festiveDisplay, setFestiveDisplay] = useState<FestiveDisplay | null>(null);
+
+  useEffect(() => {
+    getFestiveBannerAPI()
+      .then((cfg: FestiveBanner) => {
+        if (cfg.active) {
+          setFestiveDisplay({
+            text: cfg.text,
+            color1: cfg.color1,
+            color2: cfg.color2,
+            intensity: cfg.intensity,
+            showChakra: cfg.showChakra,
+          });
+        }
+      })
+      .catch(() => { /* silently ignore — no festive banner */ });
+  }, []);
+
   // Lottie animation states for stat cards
   const [trophyAnimData, setTrophyAnimData] = useState<object | null>(null);
   const [successAnimData, setSuccessAnimData] = useState<object | null>(null);
@@ -588,6 +608,8 @@ export const HeroSection = () => {
       <BlurBlob position={{ top: "20%", left: "10%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-cyan-300 dark:bg-cyan-600" opacityClass="opacity-40 dark:opacity-20" />
       <BlurBlob position={{ top: "60%", left: "90%" }} size={{ width: "700px", height: "700px" }} colorClass="bg-fuchsia-300 dark:bg-fuchsia-600" opacityClass="opacity-40 dark:opacity-20" />
 
+      {festiveDisplay && <FestiveHeroOverlay display={festiveDisplay} />}
+
       <TechLogoGrid />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -617,17 +639,21 @@ export const HeroSection = () => {
             transition={{ duration: 0.8 }}
             className="text-left z-10 mt-2 sm:mt-0 lg:-mt-16"
           >
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-violet-100 dark:bg-violet-900/30 border border-violet-200 dark:border-violet-800 rounded-full mb-8"
-            >
-              <Sparkles className="w-4 h-4 text-violet-600 dark:text-violet-400" />
-              <span className="text-sm font-semibold text-violet-700 dark:text-violet-300">
-                Welcome to the Future of Development
-              </span>
-            </motion.div>
+            {festiveDisplay ? (
+              <FestiveBadge display={festiveDisplay} />
+            ) : (
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-violet-100 dark:bg-violet-900/30 border border-violet-200 dark:border-violet-800 rounded-full mb-8"
+              >
+                <Sparkles className="w-4 h-4 text-violet-600 dark:text-violet-400" />
+                <span className="text-sm font-semibold text-violet-700 dark:text-violet-300">
+                  Welcome to the Future of Development
+                </span>
+              </motion.div>
+            )}
 
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black mb-6 leading-[1.1] tracking-tight">
               <span className="text-foreground drop-shadow-md">Building Tomorrow's</span>
