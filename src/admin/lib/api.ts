@@ -545,6 +545,9 @@ export interface Offer {
   start_time: string | null;
   end_time: string | null;
   is_active: boolean;
+  color1?: string | null;
+  color2?: string | null;
+  text_color?: string | null;
   image: { url: string; public_id: string } | null;
   createdAt: string;
   updatedAt: string;

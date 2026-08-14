@@ -49,6 +49,14 @@ export const OfferStrip: React.FC = () => {
 
   const offer = bannerOffers[0]; // Show one at a time
 
+  const bgStyle = offer.color1 && offer.color2
+    ? `linear-gradient(135deg, ${offer.color1} 0%, ${offer.color2} 100%)`
+    : offer.color1 
+      ? offer.color1
+      : `linear-gradient(135deg, #7c3aed 0%, #e11d48 50%, #f59e0b 100%)`;
+
+  const textColor = offer.text_color || "#ffffff";
+
   return (
     <AnimatePresence>
       <motion.div
@@ -58,16 +66,17 @@ export const OfferStrip: React.FC = () => {
         exit={{ opacity: 0, y: -5 }}
         transition={{ duration: 0.3 }}
         className="offer-strip-container"
+        style={{ background: bgStyle }}
       >
         <div className="offer-strip-shimmer" />
 
         <div className="offer-strip-content">
-          <Tag size={13} color="#fff" style={{ flexShrink: 0 }} />
-          <span className="offer-strip-title">
+          <Tag size={13} color={textColor} style={{ flexShrink: 0 }} />
+          <span className="offer-strip-title" style={{ color: textColor }}>
             {offer.title}
           </span>
           {offer.description && (
-            <span className="offer-strip-desc">
+            <span className="offer-strip-desc" style={{ color: textColor }}>
               {offer.description}
             </span>
           )}
@@ -77,13 +86,13 @@ export const OfferStrip: React.FC = () => {
           onClick={() => dismiss(offer._id)}
           className="offer-strip-close"
           aria-label="Dismiss"
+          style={{ color: textColor }}
         >
           <X size={12} />
         </button>
 
         <style>{`
           .offer-strip-container {
-            background: linear-gradient(135deg, #7c3aed 0%, #e11d48 50%, #f59e0b 100%);
             padding: 8px 40px 8px 12px;
             display: flex;
             align-items: center;
@@ -109,14 +118,13 @@ export const OfferStrip: React.FC = () => {
             text-align: center;
           }
           .offer-strip-title {
-            color: #fff;
             font-weight: 700;
             font-size: 12px;
           }
           .offer-strip-desc {
-            color: rgba(255,255,255,0.85);
             font-size: 11px;
             font-weight: 400;
+            opacity: 0.9;
           }
           .offer-strip-close {
             position: absolute;

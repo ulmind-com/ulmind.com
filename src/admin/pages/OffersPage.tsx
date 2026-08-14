@@ -68,6 +68,9 @@ const OffersPage: React.FC = () => {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [isActive, setIsActive] = useState(true);
+  const [color1, setColor1] = useState("");
+  const [color2, setColor2] = useState("");
+  const [textColor, setTextColor] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
@@ -94,7 +97,8 @@ const OffersPage: React.FC = () => {
     setPanelMode("add");
     setSelectedOffer(null);
     setTitle(""); setDescription(""); setStartTime(""); setEndTime("");
-    setIsActive(true); setImageFile(null); setImagePreview(null); setFormError("");
+    setIsActive(true); setColor1(""); setColor2(""); setTextColor(""); 
+    setImageFile(null); setImagePreview(null); setFormError("");
   };
 
   const openEditPanel = (offer: Offer) => {
@@ -105,6 +109,9 @@ const OffersPage: React.FC = () => {
     setStartTime(toLocalDatetimeValue(offer.start_time));
     setEndTime(toLocalDatetimeValue(offer.end_time));
     setIsActive(offer.is_active);
+    setColor1(offer.color1 || "");
+    setColor2(offer.color2 || "");
+    setTextColor(offer.text_color || "");
     setImageFile(null);
     setImagePreview(offer.image?.url || null);
     setFormError("");
@@ -133,6 +140,9 @@ const OffersPage: React.FC = () => {
         if (startTime) fd.append("start_time", new Date(startTime).toISOString());
         if (endTime) fd.append("end_time", new Date(endTime).toISOString());
         fd.append("is_active", String(isActive));
+        if (color1) fd.append("color1", color1);
+        if (color2) fd.append("color2", color2);
+        if (textColor) fd.append("text_color", textColor);
         if (imageFile) fd.append("image", imageFile);
         await createOfferAPI(fd);
       } else if (panelMode === "edit" && selectedOffer) {
@@ -142,6 +152,9 @@ const OffersPage: React.FC = () => {
           start_time: startTime ? new Date(startTime).toISOString() : null,
           end_time: endTime ? new Date(endTime).toISOString() : null,
           is_active: isActive,
+          color1: color1 || null,
+          color2: color2 || null,
+          text_color: textColor || null,
         });
         // If image changed, upload separately
         if (imageFile) {
@@ -447,6 +460,41 @@ const OffersPage: React.FC = () => {
                       </div>
                     </div>
                   </button>
+                </div>
+
+                <hr style={{ border: 0, borderTop: "1px solid rgba(255,255,255,0.05)", margin: "4px 0" }} />
+
+                {/* Styling */}
+                <div>
+                  <h4 style={{ fontSize: 14, fontWeight: 600, color: "var(--admin-text)", marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
+                    <Tag size={16} /> Premium Styling
+                  </h4>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
+                    <div>
+                      <label style={{ fontSize: 11, fontWeight: 600, color: "#94a3b8", display: "block", marginBottom: 6, textTransform: "uppercase" }}>Gradient Color 1 (Left)</label>
+                      <div style={{ display: "flex", gap: 8 }}>
+                        <input type="color" value={color1 || "#7c3aed"} onChange={e => setColor1(e.target.value)} style={{ width: 44, height: 44, padding: 2, background: "rgba(255,255,255,0.05)", border: "1px solid var(--admin-border)", borderRadius: 12, cursor: "pointer" }} />
+                        <input type="text" className="admin-input" placeholder="#7c3aed" value={color1} onChange={e => setColor1(e.target.value)} style={{ flex: 1, fontFamily: "monospace" }} />
+                      </div>
+                    </div>
+                    <div>
+                      <label style={{ fontSize: 11, fontWeight: 600, color: "#94a3b8", display: "block", marginBottom: 6, textTransform: "uppercase" }}>Gradient Color 2 (Right)</label>
+                      <div style={{ display: "flex", gap: 8 }}>
+                        <input type="color" value={color2 || "#f59e0b"} onChange={e => setColor2(e.target.value)} style={{ width: 44, height: 44, padding: 2, background: "rgba(255,255,255,0.05)", border: "1px solid var(--admin-border)", borderRadius: 12, cursor: "pointer" }} />
+                        <input type="text" className="admin-input" placeholder="#f59e0b" value={color2} onChange={e => setColor2(e.target.value)} style={{ flex: 1, fontFamily: "monospace" }} />
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <label style={{ fontSize: 11, fontWeight: 600, color: "#94a3b8", display: "block", marginBottom: 6, textTransform: "uppercase" }}>Text Color</label>
+                    <div style={{ display: "flex", gap: 8 }}>
+                      <input type="color" value={textColor || "#ffffff"} onChange={e => setTextColor(e.target.value)} style={{ width: 44, height: 44, padding: 2, background: "rgba(255,255,255,0.05)", border: "1px solid var(--admin-border)", borderRadius: 12, cursor: "pointer" }} />
+                      <input type="text" className="admin-input" placeholder="#ffffff" value={textColor} onChange={e => setTextColor(e.target.value)} style={{ flex: 1, fontFamily: "monospace" }} />
+                    </div>
+                    <p style={{ fontSize: 11, color: "var(--admin-text-muted)", marginTop: 8 }}>
+                      Leave empty to use the default vibrant theme. You can create the Indian tricolor by picking Saffron (#FF9933) and Green (#138808).
+                    </p>
+                  </div>
                 </div>
 
                 <hr style={{ border: 0, borderTop: "1px solid rgba(255,255,255,0.05)", margin: "4px 0" }} />
