@@ -108,6 +108,17 @@ export const qrLogin = (
     }),
   });
 
+export const manualHWLogin = (email: string, password: string) =>
+  hwFetch("/hw/auth/manual-login", {
+    method: "POST",
+    body: JSON.stringify({
+      email,
+      password,
+      device_info: navigator.userAgent,
+      user_agent: navigator.userAgent,
+    }),
+  });
+
 export const qrLogout = (sessionId: string, dutyCompleted: boolean = false) =>
   hwFetch("/hw/auth/qr-logout", {
     method: "POST",
