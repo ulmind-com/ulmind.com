@@ -62,19 +62,7 @@ export default function Team() {
         twitter: "https://x.com/SmrSmt147270",
       },
     },
-    {
-      name: "Tirtha Ghosh",
-      role: "Co-Founder & CTO",
-      techRole: "Full Stack Developer",
-      image: "/TirthaGhosh.jpg",
-      bio: "Full Stack Developer building end-to-end web applications.",
-      skills: ["MERN", "NodeJS", "Express", "React"],
-      social: {
-        linkedin: "https://www.linkedin.com/in/tirtha-ghosh-098a072ba/",
-        github: "https://github.com/tirthaGhosh91213",
-        twitter: "https://tirtha-portfolio-pink.vercel.app/",
-      },
-    },
+
     {
       name: "Sagnik Mondal",
       role: "Co-Founder & COO",
@@ -137,7 +125,7 @@ export default function Team() {
       .finally(() => setApiLoading(false));
   }, []);
 
-  // Fuzzy name match: compares last name exactly + first name loosely (handles Tirtha/Thirtha)
+  // Fuzzy name match: compares last name exactly + first name loosely (handles spelling variants)
   const fuzzyNameMatch = (staticName: string, dynamicName: string | null): boolean => {
     if (!dynamicName) return false;
     const sParts = staticName.toLowerCase().trim().split(/\s+/);
@@ -146,7 +134,7 @@ export default function Team() {
     const sLast = sParts[sParts.length - 1];
     const dLast = dParts[dParts.length - 1];
     if (sLast !== dLast) return false;
-    // First name: check if one starts with the other (handles Tirtha vs Thirtha)
+    // First name: check if one starts with the other (handles spelling variants)
     const sFirst = sParts[0];
     const dFirst = dParts[0];
     return sFirst === dFirst || sFirst.startsWith(dFirst) || dFirst.startsWith(sFirst);
