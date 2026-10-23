@@ -97,7 +97,7 @@ export default function Loader() {
           <rect x="14" y="14" width={W - 28} height={H - 28} fill="none" stroke="#B8B19B" strokeWidth="2" strokeDasharray="7 6" opacity=".55" />
           <rect data-edge x="14" y="14" width={W - 28} height={H - 28} fill="none" stroke="#0E0F11" strokeWidth="2.4" strokeDasharray="0 1000" pathLength="1000" />
           <g clipPath="url(#kl-wc)">
-            <text x={W / 2} y="86" textAnchor="middle" className="kl-word">KERBCODE</text>
+            <text x={W / 2} y="86" textAnchor="middle" className="kl-word">ULMIND</text>
             <text x={W / 2} y="116" textAnchor="middle" className="kl-sub">STUDIO · DROP 07 · 100% COTTON</text>
           </g>
           <line x1="28" y1="140" x2="28" y2="140" data-thread stroke="#EC6A2C" strokeWidth="2" strokeDasharray="5 4" />

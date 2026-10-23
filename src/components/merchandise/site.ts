@@ -1,6 +1,6 @@
 export const meta = {
-  name: "Kerbcode Studio",
-  title: "Kerbcode Studio — Drop 07 | ULMIND Merchandise",
+  name: "ULMIND Studio",
+  title: "ULMIND Studio — Drop 07 | Merchandise",
   description: "Exclusive streetwear drop: heavyweight hoodies, shells and basics.",
 };
 

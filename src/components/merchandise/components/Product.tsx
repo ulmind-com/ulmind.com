@@ -85,13 +85,13 @@ export default function Product() {
     setAdded(true);
     setTimeout(() => setAdded(false), 2200);
     const bag = document.querySelector<HTMLElement>("[data-bag]");
-    if (isStatic() || !bag || !btn.current) { window.dispatchEvent(new Event("kerb:bag")); return; }
+    if (isStatic() || !bag || !btn.current) { window.dispatchEvent(new Event("ulmind:bag")); return; }
     const a = btn.current.getBoundingClientRect(), b = bag.getBoundingClientRect();
     const tok = document.createElement("div");
     tok.className = "k-token";
     Object.assign(tok.style, { left: a.left + a.width / 2 - 14 + "px", top: a.top + a.height / 2 - 14 + "px" });
     document.body.appendChild(tok);
-    gsap.timeline({ onComplete: () => { tok.remove(); window.dispatchEvent(new Event("kerb:bag")); } })
+    gsap.timeline({ onComplete: () => { tok.remove(); window.dispatchEvent(new Event("ulmind:bag")); } })
       .to(tok, { y: -60, scale: 1.25, duration: 0.3, ease: "power2.out" })
       .to(tok, { x: b.left + b.width / 2 - 14 - (a.left + a.width / 2 - 14), y: b.top + b.height / 2 - 14 - (a.top + a.height / 2 - 14), scale: 0.5, duration: 0.8, ease: "power3.in" });
   };
