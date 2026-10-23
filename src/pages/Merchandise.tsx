@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useTheme } from "next-themes";
 import { useLenis } from "@studio-freight/react-lenis";
 import { ScrollTrigger } from "@/components/merchandise/lib/gsap";
-import Loader from "@/components/merchandise/components/Loader";
 import Nav from "@/components/merchandise/components/Nav";
 import Hero from "@/components/merchandise/components/Hero";
 import Lineup from "@/components/merchandise/components/Lineup";
@@ -42,7 +41,6 @@ export default function Merchandise() {
   return (
     <>
       <Animations />
-      <Loader />
       <Nav />
       <main className="k-main">
         <Hero />

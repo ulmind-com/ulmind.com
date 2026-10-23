@@ -1,10 +1,13 @@
-let lifted = false;
+let lifted = true;
 export const kerb = {
   get lifted() { return lifted; },
   lift() { lifted = true; if (typeof window !== "undefined") window.dispatchEvent(new Event("kerb:lift")); },
 };
 export function onKerbLift(fn: () => void) {
-  if (lifted) { fn(); return () => {}; }
+  if (lifted) {
+    const timer = setTimeout(fn, 20);
+    return () => clearTimeout(timer);
+  }
   const h = () => fn();
   if (typeof window !== "undefined") {
     window.addEventListener("kerb:lift", h, { once: true });

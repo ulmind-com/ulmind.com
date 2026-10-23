@@ -2,7 +2,7 @@ type Listener = (progress: number, done: boolean) => void;
 
 const tasks = new Map<string, number>(); // id -> progress 0..1
 const listeners = new Set<Listener>();
-let finished = false;
+let finished = true;
 
 function emit() {
   const values = [...tasks.values()];
@@ -40,8 +40,8 @@ export const loading = {
 /** Run a callback once the loader is gone (immediately if it already is). */
 export function onSiteReady(fn: () => void) {
   if (finished) {
-    fn();
-    return () => {};
+    const timer = setTimeout(fn, 20);
+    return () => clearTimeout(timer);
   }
   const handler = () => fn();
   if (typeof window !== "undefined") {
