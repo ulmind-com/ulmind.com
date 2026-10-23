@@ -92,15 +92,18 @@ const AnimatedHeroVisuals = () => {
   }, [index]);
 
   useEffect(() => {
-    // Preload all videos on mount to prevent black circles
-    slides.forEach(slide => {
+    // Progressively preload only the upcoming video to save bandwidth while keeping transitions seamless
+    const nextIndex = (index + 1) % slides.length;
+    const nextSrc = slides[nextIndex].src;
+    const selector = `link[rel="preload"][href="${nextSrc}"]`;
+    if (!document.querySelector(selector)) {
       const link = document.createElement('link');
       link.rel = 'preload';
       link.as = 'video';
-      link.href = slide.src;
+      link.href = nextSrc;
       document.head.appendChild(link);
-    });
-  }, []);
+    }
+  }, [index, slides]);
 
   return (
     <div className="absolute inset-0 w-full h-full">
