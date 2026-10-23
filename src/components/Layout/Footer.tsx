@@ -6,6 +6,7 @@ import {
   MapPin,
   Instagram,
   Facebook,
+  ShieldCheck,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 // Link ta ekhane import kora holo
@@ -176,27 +177,36 @@ export const Footer = () => {
               </div>
             </div>
 
-            {/* MSME Registered Badge */}
-            <div className="pt-3">
-              <div className="inline-flex items-center gap-3 px-3.5 py-2 rounded-xl bg-zinc-900/[0.03] dark:bg-white/[0.05] border border-zinc-900/10 dark:border-white/10 backdrop-blur-sm transition-all hover:border-zinc-900/20 dark:hover:border-white/20 shadow-sm">
+            {/* Certifications & Registrations */}
+            <div className="pt-3 flex items-center gap-3.5 flex-wrap">
+              {/* MSME Logo */}
+              <div className="shrink-0 flex items-center">
                 <img
                   src="/MSME%20Black%20Mode.png"
-                  alt="MSME Registered Enterprise"
-                  className="h-11 w-auto object-contain dark:hidden"
+                  alt="MSME Registered"
+                  className="h-14 w-auto object-contain dark:hidden"
                 />
                 <img
                   src="/MSME%20White%20Mode.png"
-                  alt="MSME Registered Enterprise"
-                  className="h-11 w-auto object-contain hidden dark:block"
+                  alt="MSME Registered"
+                  className="h-14 w-auto object-contain hidden dark:block"
                 />
-                <div className="flex flex-col leading-tight">
-                  <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                    Govt. of India
-                  </span>
-                  <span className="text-xs font-bold text-zinc-900 dark:text-white mt-0.5">
-                    MSME Registered
-                  </span>
+              </div>
+
+              {/* Registered Partnership Firm Badge */}
+              <div className="flex flex-col items-center text-center py-2 px-3 rounded-xl bg-black/[0.03] dark:bg-white/[0.04] border border-black/10 dark:border-white/10 backdrop-blur-sm transition-all hover:border-black/20 dark:hover:border-white/20 shadow-xs">
+                <div className="flex items-center justify-center mb-0.5">
+                  <ShieldCheck className="w-5 h-5 text-emerald-500 fill-emerald-500/15" />
                 </div>
+                <span className="text-[10px] font-extrabold uppercase tracking-tight text-zinc-900 dark:text-white leading-tight">
+                  REGISTERED PARTNERSHIP FIRM
+                </span>
+                <span className="text-[8.5px] font-medium text-zinc-600 dark:text-zinc-400 mt-0.5 leading-tight">
+                  Official Registration • West Bengal, India
+                </span>
+                <span className="mt-1 px-2.5 py-0.5 rounded-full text-[8px] font-bold tracking-wider uppercase bg-black/10 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 border border-black/10 dark:border-zinc-700/80">
+                  ULMIND
+                </span>
               </div>
             </div>
           </div>
@@ -337,7 +347,7 @@ export const Footer = () => {
       <div className="relative z-10 bg-black/5 dark:bg-white/5 border-t border-black/10 dark:border-white/10 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground">
-            © {currentYear} ULMiND. All rights reserved.
+            Copyright © {currentYear} ULMIND. All Rights Reserved. MSME Reg.
           </p>
 
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
