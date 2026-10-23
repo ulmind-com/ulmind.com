@@ -10,7 +10,6 @@ import { usePinProgress, isStatic, tick, watchVisible, lenisVelocity } from "../
 function HeroFilm() {
   const cv = useRef<HTMLCanvasElement>(null);
   const [failed, setFailed] = useState(false);
-  const [hasDrawn, setHasDrawn] = useState(false);
   const flip = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -39,7 +38,6 @@ function HeroFilm() {
           g.clearRect(0, 0, c.width, c.height);
           g.drawImage(im, 0, 0, c.width, c.height);
           last = i;
-          setHasDrawn(true);
         }
       };
 
@@ -88,39 +86,7 @@ function HeroFilm() {
       </div></div>
     );
 
-  return (
-    <div style={{ position: "relative", width: "100%", height: "100%" }}>
-      {!hasDrawn && (
-        <img
-          src={IMG("hoodie-front")}
-          alt="Drop 07 hoodie"
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "contain",
-            pointerEvents: "none",
-          }}
-        />
-      )}
-      <canvas
-        ref={cv}
-        width={FILM.w}
-        height={FILM.h}
-        className="hf-canvas"
-        style={{
-          position: "relative",
-          width: "100%",
-          height: "100%",
-          display: "block",
-          opacity: hasDrawn ? 1 : 0,
-          transition: "opacity 0.25s ease",
-        }}
-        aria-label="Drop 07 hoodie turning"
-      />
-    </div>
-  );
+  return <canvas ref={cv} width={FILM.w} height={FILM.h} className="hf-canvas" aria-label="Drop 07 hoodie turning" />;
 }
 
 export default function Hero() {
