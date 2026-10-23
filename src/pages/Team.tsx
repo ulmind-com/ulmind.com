@@ -87,42 +87,45 @@ export default function Team() {
         github: "https://github.com/Swastika-Roy",
         twitter: "#"
       }
-    },
-    {
-      name: "Roni Routh",
-      role: "Software Development Engineer",
-      techRole: "Machine Learning Engineer",
-      image: "/ronirouth.jpg",
-      bio: "Passionate Python Developer specializing in Machine Learning and Data Analysis. Skilled in C++, Python, and key ML libraries like NumPy, Pandas, Scikit-learn, and FastAPI, focusing on building intelligent, data-driven applications with clean, efficient code.",
-      skills: [
-        "C++",
-        "Python",
-        "NumPy",
-        "Pandas",
-        "Matplotlib & Seaborn",
-        "Scikit-learn",
-        "FastApi",
-        "SQL"
-      ],
-      social: {
-        linkedin: "https://www.linkedin.com/in/roni-routh-a15227302/"
-      }
     }
   ];
 
   const [dynamicTeam, setDynamicTeam] = React.useState<any[]>([]);
   const [apiLoading, setApiLoading] = React.useState(true);
 
+  // Blacklist any ex-members to guarantee they never appear, even if returned by dynamic API
+  const isExcludedMember = (name: string | null | undefined): boolean => {
+    if (!name) return false;
+    const lower = name.toLowerCase();
+    return lower.includes("roni") || lower.includes("routh") || lower.includes("tirtha") || lower.includes("ghosh");
+  };
+
   React.useEffect(() => {
-    fetch("https://ulmind-backend.onrender.com/api/v1/team/public")
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data)) {
-          setDynamicTeam(data);
+    const urls = [
+      "https://ulmind-backend-5ww9.onrender.com/api/v1/team/public",
+      "https://ulmind-backend.onrender.com/api/v1/team/public"
+    ];
+
+    const fetchTeam = async () => {
+      for (const url of urls) {
+        try {
+          const res = await fetch(url);
+          if (res.ok) {
+            const data = await res.json();
+            if (Array.isArray(data)) {
+              setDynamicTeam(data.filter((m: any) => !isExcludedMember(m?.full_name)));
+              setApiLoading(false);
+              return;
+            }
+          }
+        } catch {
+          // try next url
         }
-      })
-      .catch(console.error)
-      .finally(() => setApiLoading(false));
+      }
+      setApiLoading(false);
+    };
+
+    fetchTeam();
   }, []);
 
   // Fuzzy name match: compares last name exactly + first name loosely (handles spelling variants)
@@ -141,32 +144,34 @@ export default function Team() {
   };
 
   const teamToRender = apiLoading 
-    ? staticTeam 
+    ? staticTeam.filter(s => !isExcludedMember(s.name))
     : (() => {
-        if (dynamicTeam.length === 0) return staticTeam;
+        if (dynamicTeam.length === 0) return staticTeam.filter(s => !isExcludedMember(s.name));
 
         const matchedStaticNames = new Set<string>();
 
-        const merged = dynamicTeam.map(dMember => {
-          const sMember = staticTeam.find(s => fuzzyNameMatch(s.name, dMember.full_name));
-          if (sMember) matchedStaticNames.add(sMember.name);
+        const merged = dynamicTeam
+          .filter(dMember => !isExcludedMember(dMember.full_name))
+          .map(dMember => {
+            const sMember = staticTeam.find(s => fuzzyNameMatch(s.name, dMember.full_name));
+            if (sMember) matchedStaticNames.add(sMember.name);
 
-          return {
-            name: dMember.full_name || sMember?.name || "Unknown",
-            role: dMember.position || sMember?.role || "Team Member", 
-            techRole: sMember?.techRole || "", 
-            image: dMember.profile_photo?.url || sMember?.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(dMember.full_name || "M")}&background=7c3aed&color=fff`,
-            bio: sMember?.bio || "",
-            social: {
-              linkedin: dMember.linkedin_url || sMember?.social?.linkedin || null,
-              github: dMember.github_url || sMember?.social?.github || null,
-              twitter: dMember.x_url || sMember?.social?.twitter || null,
-            }
-          };
-        });
+            return {
+              name: dMember.full_name || sMember?.name || "Unknown",
+              role: dMember.position || sMember?.role || "Team Member", 
+              techRole: sMember?.techRole || "", 
+              image: dMember.profile_photo?.url || sMember?.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(dMember.full_name || "M")}&background=7c3aed&color=fff`,
+              bio: sMember?.bio || "",
+              social: {
+                linkedin: dMember.linkedin_url || sMember?.social?.linkedin || null,
+                github: dMember.github_url || sMember?.social?.github || null,
+                twitter: dMember.x_url || sMember?.social?.twitter || null,
+              }
+            };
+          });
 
         // Append static-only members who were NOT matched to any backend member
-        const unmatchedStatic = staticTeam.filter(s => !matchedStaticNames.has(s.name));
+        const unmatchedStatic = staticTeam.filter(s => !matchedStaticNames.has(s.name) && !isExcludedMember(s.name));
         return [...merged, ...unmatchedStatic];
       })();
 

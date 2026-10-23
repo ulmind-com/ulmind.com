@@ -1,14 +1,49 @@
 User-agent: Googlebot
 Allow: /
+Disallow: /ronirouth.jpg
+Disallow: /TirthaGhosh.jpg
+Disallow: /hardware_qrs/Tirtha_Ghosh_qr.png
+Disallow: /certificate-qr-009.png
+Disallow: /certificate-qr-011.png
 
 User-agent: Bingbot
 Allow: /
+Disallow: /ronirouth.jpg
+Disallow: /TirthaGhosh.jpg
+Disallow: /hardware_qrs/Tirtha_Ghosh_qr.png
+Disallow: /certificate-qr-009.png
+Disallow: /certificate-qr-011.png
 
-User-agent: Twitterbot
+User-agent: GPTBot
 Allow: /
+Disallow: /ronirouth.jpg
+Disallow: /TirthaGhosh.jpg
+Disallow: /hardware_qrs/Tirtha_Ghosh_qr.png
+Disallow: /certificate-qr-009.png
+Disallow: /certificate-qr-011.png
 
-User-agent: facebookexternalhit
+User-agent: ClaudeBot
 Allow: /
+Disallow: /ronirouth.jpg
+Disallow: /TirthaGhosh.jpg
+Disallow: /hardware_qrs/Tirtha_Ghosh_qr.png
+Disallow: /certificate-qr-009.png
+Disallow: /certificate-qr-011.png
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /ronirouth.jpg
+Disallow: /TirthaGhosh.jpg
+Disallow: /hardware_qrs/Tirtha_Ghosh_qr.png
+Disallow: /certificate-qr-009.png
+Disallow: /certificate-qr-011.png
 
 User-agent: *
 Allow: /
+Disallow: /ronirouth.jpg
+Disallow: /TirthaGhosh.jpg
+Disallow: /hardware_qrs/Tirtha_Ghosh_qr.png
+Disallow: /certificate-qr-009.png
+Disallow: /certificate-qr-011.png
+
+Sitemap: https://www.ulmind.com/sitemap.xml
