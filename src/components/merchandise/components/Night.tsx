@@ -102,7 +102,7 @@ export default function Night() {
           ))}
         </div>
         <div ref={finale} className="nt-finale">
-          <div ref={hood} className="nt-hood"><Cut n="hoodie-front" alt="Drop 07 hoodie lifting off a kerb" /></div>
+          <div ref={hood} className="nt-hood"><Cut n="hoodie-front" alt="Drop 07 hoodie lifting off a plinth" /></div>
           <img className="nt-plinth" src={PLINTH} alt="" aria-hidden />
         </div>
       </div>

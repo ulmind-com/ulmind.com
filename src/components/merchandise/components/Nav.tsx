@@ -30,8 +30,8 @@ export default function Nav() {
       setBag((b) => b + 1);
       if (bagEl.current && !isStatic()) gsap.fromTo(bagEl.current, { scale: 1.6 }, { scale: 1, duration: 0.6, ease: "elastic.out(1,0.5)" });
     };
-    window.addEventListener("kerb:bag", onBag);
-    return () => { cancelAnimationFrame(raf); window.removeEventListener("kerb:bag", onBag); };
+    window.addEventListener("ulmind:bag", onBag);
+    return () => { cancelAnimationFrame(raf); window.removeEventListener("ulmind:bag", onBag); };
   }, []);
 
   useEffect(() => {
@@ -55,7 +55,7 @@ export default function Nav() {
 
   return (
     <nav ref={root} className={`k-nav ${tone === "white" ? "is-white" : ""} ${open ? "is-open" : ""}`} aria-label="Merchandise Sub-Navigation">
-      <a href="#hero" className="k-logo" onClick={(e) => go(e, "#hero")}><b>KERBCODE</b><i>STUDIO</i></a>
+      <a href="#hero" className="k-logo" onClick={(e) => go(e, "#hero")}><b>ULMIND</b><i>STUDIO</i></a>
       <div className="k-tab" onMouseEnter={() => setOpen(true)} onMouseLeave={() => { setOpen(false); setHl((h) => ({ ...h, on: false })); }}>
         <Magnetic strength={0.2}>
           <button type="button" className="k-tab-btn" aria-expanded={open} onClick={() => setOpen((o) => !o)} onFocus={() => setOpen(true)}>

@@ -1,4 +1,4 @@
-// All text + data for Kerbcode Studio (fictional, concept website). Prices are SAMPLE prices.
+// All text + data for ULMIND Studio. Prices are SAMPLE prices.
 export const IMG = (n: string) => `/images/kerbcode/${n}${n === "fabric-macro" ? "" : "-cut"}.webp`;
 export const PLINTH = "/images/kerbcode/kerb-plinth.png";
 
@@ -13,7 +13,7 @@ export const NAV = [
 
 export const PIECES = [
   { id: "hoodie", name: "Drop 07 Hoodie", word: "HOODIE", price: 4990, front: "hoodie-front", back: "hoodie-back", note: "480 GSM brushed fleece. Boxy, dropped shoulder." },
-  { id: "puffer", name: "Kerb Puffer", word: "PUFFER", price: 8990, front: "puffer-front", back: "puffer-back", note: "Matte shell, wide baffles, high collar." },
+  { id: "puffer", name: "Ulmind Puffer", word: "PUFFER", price: 8990, front: "puffer-front", back: "puffer-back", note: "Matte shell, wide baffles, high collar." },
   { id: "tee", name: "Heavy Tee", word: "TEE", price: 1990, front: "tee-front", back: "tee-back", note: "260 GSM cotton. Thick rib neck." },
   { id: "cargo", name: "Wide Cargo", word: "CARGO", price: 4490, front: "cargo-front", back: "cargo-back", note: "Cotton twill, deep thigh pockets." },
   { id: "cap", name: "Six-Panel Cap", word: "CAP", price: 1290, front: "cap-front", back: null, note: "Washed twill. One size, curved brim." },
@@ -32,7 +32,7 @@ export const SIZES = ["S", "M", "L", "XL"] as const;
 
 export const NIGHT_SLOTS = [
   { name: "Drop 07 Hoodie", front: "hoodie-front", back: "hoodie-back", flat: "#141516" },
-  { name: "Kerb Puffer", front: "puffer-front", back: "puffer-back", flat: "#1a1b1d" },
+  { name: "Ulmind Puffer", front: "puffer-front", back: "puffer-back", flat: "#1a1b1d" },
   { name: "Heavy Tee", front: "tee-front", back: "tee-back", flat: "#15171a" },
   { name: "Wide Cargo", front: "cargo-front", back: "cargo-back", flat: "#3A3C40" },
   { name: "Six-Panel Cap", front: "cap-front", back: null, flat: "#B81F25" },
@@ -42,7 +42,7 @@ export const NIGHT_SLOTS = [
 
 export const SHOP = [
   { name: "Drop 07 Hoodie", sub: "Ink", price: 4990, front: "hoodie-front", back: "hoodie-back" },
-  { name: "Kerb Puffer", sub: "Ink", price: 8990, front: "puffer-front", back: "puffer-back" },
+  { name: "Ulmind Puffer", sub: "Ink", price: 8990, front: "puffer-front", back: "puffer-back" },
   { name: "Heavy Tee", sub: "Ink", price: 1990, front: "tee-front", back: "tee-back" },
   { name: "Wide Cargo", sub: "Charcoal", price: 4490, front: "cargo-front", back: "cargo-back" },
   { name: "Drop 07 Hoodie", sub: "Ember", price: 4990, front: "hoodie-ember", back: null },
@@ -52,7 +52,7 @@ export const SHOP = [
 ] as const;
 
 export const ALSO = [
-  { name: "Kerb Puffer", price: 8990, img: "puffer-front", stars: 5, back: "puffer-back" },
+  { name: "Ulmind Puffer", price: 8990, img: "puffer-front", stars: 5, back: "puffer-back" },
   { name: "Heavy Tee", price: 1990, img: "tee-front", stars: 4, back: "tee-back" },
   { name: "Wide Cargo", price: 4490, img: "cargo-front", stars: 5, back: "cargo-back" },
   { name: "Six-Panel Cap", price: 1290, img: "cap-front", stars: 4, back: null },
@@ -68,8 +68,8 @@ export const LOOKS = [
     ],
   },
   {
-    name: "Kerb walk", pieces: [
-      { id: "puffer", name: "Kerb Puffer", price: 8990, img: "puffer-front", look: "-190,-60,5" },
+    name: "Ulmind walk", pieces: [
+      { id: "puffer", name: "Ulmind Puffer", price: 8990, img: "puffer-front", look: "-190,-60,5" },
       { id: "tee", name: "Heavy Tee", price: 1990, img: "tee-front", look: "20,40,-4" },
       { id: "socks", name: "Rib Socks", price: 690, img: "socks-front", look: "230,-70,-8" },
     ],
@@ -87,7 +87,7 @@ export const PAST = [
   { drop: "Drop 06", name: "Slate Puffer", img: "puffer-front", price: 8490 },
   { drop: "Drop 05", name: "Ember Hoodie", img: "hoodie-ember", price: 4790 },
   { drop: "Drop 05", name: "Chalk Tee", img: "tee-chalk", price: 1890 },
-  { drop: "Drop 04", name: "Kerb Cargo", img: "cargo-front", price: 4290 },
+  { drop: "Drop 04", name: "Ulmind Cargo", img: "cargo-front", price: 4290 },
   { drop: "Drop 04", name: "Teal Hoodie", img: "hoodie-teal", price: 4790 },
   { drop: "Drop 03", name: "Red Cap", img: "cap-front", price: 1190 },
   { drop: "Drop 03", name: "Navy Hoodie", img: "hoodie-navy", price: 4690 },

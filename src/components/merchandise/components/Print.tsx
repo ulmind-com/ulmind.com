@@ -76,13 +76,13 @@ export default function Print() {
           <div className="pr-garment">
             <img src={IMG("hoodie-back")} alt="Back of the black hoodie on a screen-printing table" />
             <div className="pr-chest" style={{ left: `${CHEST.x * 100}%`, top: `${CHEST.y * 100}%`, width: `${CHEST.w * 100}%`, height: `${CHEST.h * 100}%` }}>
-              <svg ref={svg} viewBox={`0 0 ${VB.w} ${VB.h}`} aria-label="Printed graphic: KERB 07">
+              <svg ref={svg} viewBox={`0 0 ${VB.w} ${VB.h}`} aria-label="Printed graphic: ULMIND 07">
                 <defs>
                   {[0, 1, 2, 3].map((i) => <clipPath key={i} id={`kp-clip${i}`}><rect x="0" y="0" width="0" height={VB.h} /></clipPath>)}
                 </defs>
-                <g clipPath="url(#kp-clip0)"><text x="22" y="118" className="pr-t1">KERB</text></g>
+                <g clipPath="url(#kp-clip0)"><text x="22" y="118" className="pr-t1">ULMIND</text></g>
                 <g clipPath="url(#kp-clip1)"><path d="M336 78 V42 A20 20 0 0 1 376 42 V78 Z" fill="#EC6A2C" /><circle cx="364" cy="168" r="12" fill="#EC6A2C" /></g>
-                <g clipPath="url(#kp-clip2)"><text x="200" y="176" textAnchor="middle" className="pr-t2">CODE · 07</text></g>
+                <g clipPath="url(#kp-clip2)"><text x="200" y="176" textAnchor="middle" className="pr-t2">STUDIO · 07</text></g>
                 <g clipPath="url(#kp-clip3)"><path d="M24 196H376" stroke="#F6F6F4" strokeWidth="2" strokeDasharray="6 6" /><text x="200" y="216" textAnchor="middle" className="pr-t3">STUDIO · STREET · DROP 07</text></g>
               </svg>
               <div ref={blade} className="pr-blade" aria-hidden><i /></div>

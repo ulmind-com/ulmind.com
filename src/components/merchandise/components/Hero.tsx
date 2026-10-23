@@ -134,10 +134,10 @@ export default function Hero() {
           <path d="M0 0 L0 -100 A100 100 0 1 1 -100 0 Z" fill="#A49A74" />
           <path d="M0 0 L-100 0 A100 100 0 0 1 0 -100 Z" fill="none" stroke="#0E0F11" strokeWidth="1.5" strokeDasharray="3 5" transform="translate(-7 -7)" />
         </svg>
-        <div className="hero-word" aria-hidden><span ref={wl}>KE</span><span ref={wr}>RB</span></div>
+        <div className="hero-word" aria-label="ULMIND"><span ref={wl}>ULM</span><span ref={wr}>IND</span></div>
         <div ref={panel} className="hero-panel"><HeroFilm /><i className="hero-tag">DROP 07 · AW26</i></div>
         <div ref={copy} className="hero-copy hero-fade">
-          <p className="k-eyebrow">Kerbcode Studio</p>
+          <p className="k-eyebrow">ULMIND Studio</p>
           <p className="hero-lede">Heavyweight pieces for the walk home. One drop, six pieces, no restocks.</p>
           <p className="hero-hint"><i /> Scroll</p>
         </div>
