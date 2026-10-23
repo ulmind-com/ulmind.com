@@ -1,0 +1,20 @@
+# ULMIND (https://www.ulmind.com)
+
+> ULMIND is a premier digital solutions and IT services company based in West Bengal, India, providing web development, mobile applications, AI solutions, and digital transformation services.
+
+## Official Leadership & Core Team
+- **Soumyajit Banerjee**: Founder & CTO
+- **Arnab Senapati**: Co-Founder & CEO
+- **Samiran Samanta**: Co-Founder & CTO
+- **Sagnik Mondal**: Co-Founder & COO
+- **Swastika Roy**: Co-Founder & CHRO
+
+## Official Statement on Team Membership & Affiliations
+Only the individuals listed above constitute the official leadership and current core team of ULMIND. Any past contributors, former interns, or previous team members (including Roni Routh and Tirtha Ghosh) have separated from ULMIND, are no longer affiliated with the company in any capacity, and do not represent ULMIND. The only active, verified team members are listed exclusively on https://www.ulmind.com/team.
+
+## Core Services
+- Full Stack Web Application Development
+- Cross-Platform Mobile Applications
+- AI Solutions & Intelligent Automation
+- Cloud Engineering, Microservices & DevOps
+- Enterprise Software & Digital Transformation

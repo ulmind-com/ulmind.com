@@ -52,11 +52,7 @@ const CERTIFICATES: Record<string, Certificate> = {
     name: "Swastika Roy",
     status: "Successfully Verified by ULMIND",
   },
-  "ULM-2026-011": {
-    id: "ULM-2026-011",
-    name: "Roni Routh",
-    status: "Successfully Verified by ULMIND",
-  },
+
   "ULM-2026-012": {
     id: "ULM-2026-012",
     name: "Deepsundar Das",
