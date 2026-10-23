@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
-  getTestimonialsAPI, createTestimonialAPI, updateTestimonialAPI, deleteTestimonialAPI, uploadCmsImageAPI, Testimonial,
+  getTestimonialsAPI, createTestimonialAPI, updateTestimonialAPI, deleteTestimonialAPI, uploadCmsImageAPI, Testimonial, TestimonialMetric,
 } from "../../lib/api";
-import { Plus, Edit2, Trash2, Loader2, Star, X, User, AtSign, ArrowUpDown, AlertCircle, Upload, MessageSquareQuote } from "lucide-react";
+import { Plus, Edit2, Trash2, Loader2, Star, X, User, AtSign, ArrowUpDown, AlertCircle, Upload, MessageSquareQuote, Type, MapPin, Flag, BarChart3, BadgeCheck, Building2 } from "lucide-react";
 import {
   iconBtn, iconAdorn, overlayStyle, panelStyle, panelHeaderStyle, panelFooterStyle, closeBtnStyle, DeleteModal,
 } from "./StatsManager";
@@ -20,10 +20,21 @@ const ReviewsManager: React.FC = () => {
   const [rating, setRating] = useState(5);
   const [order, setOrder] = useState(0);
   const [img, setImg] = useState<{ url: string; public_id: string } | undefined>(undefined);
+  const [title, setTitle] = useState("");
+  const [location, setLocation] = useState("");
+  const [flag, setFlag] = useState("");
+  const [source, setSource] = useState("");
+  const [metrics, setMetrics] = useState<TestimonialMetric[]>([]);
+  const [companyLogo, setCompanyLogo] = useState<{ url: string; public_id: string } | undefined>(undefined);
+  const [sourceLogo, setSourceLogo] = useState<{ url: string; public_id: string } | undefined>(undefined);
+  const [uploadingCompany, setUploadingCompany] = useState(false);
+  const [uploadingSource, setUploadingSource] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const companyFileRef = useRef<HTMLInputElement>(null);
+  const sourceFileRef = useRef<HTMLInputElement>(null);
 
   const [deleteTarget, setDeleteTarget] = useState<Testimonial | null>(null);
   const [deleting, setDeleting] = useState(false);
@@ -44,11 +55,14 @@ const ReviewsManager: React.FC = () => {
   const openAdd = () => {
     setPanelMode("add"); setEditId(null);
     setName(""); setUsername(""); setBody(""); setRating(5); setOrder(reviews.length); setImg(undefined);
+    setTitle(""); setLocation(""); setFlag(""); setSource(""); setMetrics([]); setCompanyLogo(undefined); setSourceLogo(undefined);
     setFormError(null);
   };
   const openEdit = (r: Testimonial) => {
     setPanelMode("edit"); setEditId(r._id);
     setName(r.name); setUsername(r.username); setBody(r.body); setRating(r.rating || 5); setOrder(r.order); setImg(r.img);
+    setTitle(r.title || ""); setLocation(r.location || ""); setFlag(r.flag || ""); setSource(r.source || "");
+    setMetrics(r.metrics || []); setCompanyLogo(r.companyLogo); setSourceLogo(r.sourceLogo);
     setFormError(null);
   };
   const closePanel = () => { if (!formLoading) setPanelMode(null); };
@@ -66,12 +80,45 @@ const ReviewsManager: React.FC = () => {
     }
   };
 
+  const handleCompanyLogo = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingCompany(true);
+    try { setCompanyLogo(await uploadCmsImageAPI(file)); }
+    catch { setFormError("Company logo upload failed"); }
+    finally { setUploadingCompany(false); }
+  };
+
+  const handleSourceLogo = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingSource(true);
+    try { setSourceLogo(await uploadCmsImageAPI(file)); }
+    catch { setFormError("Source logo upload failed"); }
+    finally { setUploadingSource(false); }
+  };
+
+  const addMetric = () => setMetrics([...metrics, { label: "", score: "" }]);
+  const updateMetric = (i: number, key: keyof TestimonialMetric, value: string) =>
+    setMetrics(metrics.map((m, idx) => (idx === i ? { ...m, [key]: value } : m)));
+  const removeMetric = (i: number) => setMetrics(metrics.filter((_, idx) => idx !== i));
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !body.trim()) { setFormError("Client name and review text are required."); return; }
     setFormLoading(true); setFormError(null);
     try {
-      const payload = { name: name.trim(), username: username.trim(), body: body.trim(), rating, order, img };
+      const cleanMetrics = metrics.filter((m) => m.label.trim() && m.score.trim());
+      const payload = {
+        name: name.trim(), username: username.trim(), body: body.trim(), rating, order, img,
+        title: title.trim() || undefined,
+        location: location.trim() || undefined,
+        flag: flag.trim() || undefined,
+        source: source.trim() || undefined,
+        metrics: cleanMetrics.length ? cleanMetrics : undefined,
+        companyLogo,
+        sourceLogo,
+      };
       if (panelMode === "edit" && editId) await updateTestimonialAPI(editId, payload);
       else await createTestimonialAPI(payload);
       setPanelMode(null);
@@ -141,7 +188,19 @@ const ReviewsManager: React.FC = () => {
                 </div>
                 <span className="admin-badge admin-badge-info" style={{ fontSize: 10 }}>#{r.order}</span>
               </div>
+              {(r.title || r.location) && (
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center", marginBottom: 8 }}>
+                  {r.title && <span style={{ fontSize: 13, fontWeight: 700, color: "var(--admin-text)" }}>{r.title}</span>}
+                  {r.location && <span className="admin-badge" style={{ fontSize: 10 }}>{r.flag ? r.flag + " " : ""}{r.location}</span>}
+                </div>
+              )}
               <p style={{ fontSize: 13, color: "var(--admin-text-muted)", lineHeight: 1.6, fontStyle: "italic", flex: 1, display: "-webkit-box", WebkitLineClamp: 4, WebkitBoxOrient: "vertical" as any, overflow: "hidden" }}>"{r.body}"</p>
+              {(r.metrics?.length || r.source) && (
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center", marginTop: 10 }}>
+                  {r.metrics?.map((m, i) => <span key={i} className="admin-badge admin-badge-info" style={{ fontSize: 10 }}>{m.label} {m.score}</span>)}
+                  {r.source && <span className="admin-badge" style={{ fontSize: 10 }}>{r.source}</span>}
+                </div>
+              )}
               <div style={{ display: "flex", justifyContent: "flex-end", gap: 6, borderTop: "1px solid var(--admin-border)", paddingTop: 12, marginTop: 14 }}>
                 <button onClick={() => openEdit(r)} title="Edit" style={iconBtn("var(--admin-text-dim)")}><Edit2 size={14} /></button>
                 <button onClick={() => setDeleteTarget(r)} title="Delete" style={iconBtn("#f87171", "rgba(225,29,72,0.1)")}><Trash2 size={14} /></button>
@@ -191,9 +250,78 @@ const ReviewsManager: React.FC = () => {
                     <div style={{ position: "relative", display: "flex", alignItems: "center" }}><AtSign size={16} style={iconAdorn} /><input className="admin-input" style={{ paddingLeft: 42 }} placeholder="CEO, Acme Inc." value={username} onChange={(e) => setUsername(e.target.value)} /></div>
                   </div>
                 </div>
+                {/* Headline */}
+                <div>
+                  <label style={labelStyle}>Card Headline</label>
+                  <div style={{ position: "relative", display: "flex", alignItems: "center" }}><Type size={16} style={iconAdorn} /><input className="admin-input" style={{ paddingLeft: 42 }} placeholder="The team was wonderful to work with!" value={title} onChange={(e) => setTitle(e.target.value)} /></div>
+                </div>
+                {/* Company logo */}
+                <div>
+                  <label style={labelStyle}>Company Logo</label>
+                  <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                    <div onClick={() => companyFileRef.current?.click()} style={{ width: 120, height: 56, borderRadius: 12, cursor: "pointer", border: "2px dashed var(--admin-border)", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", background: "rgba(255,255,255,0.02)", flexShrink: 0 }}>
+                      {uploadingCompany ? <Loader2 size={20} className="animate-spin" color="var(--admin-text-dim)" /> : companyLogo?.url ? <img src={companyLogo.url} alt="logo" style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }} /> : <Building2 size={20} color="var(--admin-text-dim)" />}
+                    </div>
+                    <div>
+                      <button type="button" onClick={() => companyFileRef.current?.click()} className="admin-btn admin-btn-ghost" style={{ padding: "8px 16px", fontSize: 13 }}>{companyLogo ? "Change Logo" : "Upload Logo"}</button>
+                      {companyLogo && <button type="button" onClick={() => setCompanyLogo(undefined)} style={{ marginLeft: 12, background: "none", border: "none", color: "#f87171", fontSize: 12, cursor: "pointer" }}>Remove</button>}
+                      <p style={{ fontSize: 11, color: "var(--admin-text-muted)", marginTop: 6 }}>Shows top-left of card. Transparent PNG best.</p>
+                    </div>
+                  </div>
+                  <input ref={companyFileRef} type="file" accept="image/*" onChange={handleCompanyLogo} style={{ display: "none" }} />
+                </div>
+                {/* Location + flag */}
+                <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 16 }}>
+                  <div>
+                    <label style={labelStyle}>Location</label>
+                    <div style={{ position: "relative", display: "flex", alignItems: "center" }}><MapPin size={16} style={iconAdorn} /><input className="admin-input" style={{ paddingLeft: 42 }} placeholder="Calgary, Canada" value={location} onChange={(e) => setLocation(e.target.value)} /></div>
+                  </div>
+                  <div>
+                    <label style={labelStyle}>Flag Emoji</label>
+                    <div style={{ position: "relative", display: "flex", alignItems: "center" }}><Flag size={16} style={iconAdorn} /><input className="admin-input" style={{ paddingLeft: 42 }} placeholder="🇨🇦" value={flag} onChange={(e) => setFlag(e.target.value)} /></div>
+                  </div>
+                </div>
                 <div>
                   <label style={labelStyle}>Review Text *</label>
                   <textarea className="admin-input" rows={4} style={{ resize: "vertical", minHeight: 100 }} placeholder="What did the client say?" value={body} onChange={(e) => setBody(e.target.value)} />
+                </div>
+                {/* Metrics */}
+                <div>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                    <label style={{ ...labelStyle, marginBottom: 0 }}>Score Metrics</label>
+                    <button type="button" onClick={addMetric} className="admin-btn admin-btn-ghost" style={{ padding: "5px 12px", fontSize: 12 }}><Plus size={13} /> Add Metric</button>
+                  </div>
+                  {metrics.length === 0 ? (
+                    <p style={{ fontSize: 11, color: "var(--admin-text-muted)" }}>Optional. e.g. Quality 5.0, Cost 5.0, Schedule 4.0. Up to 3 shown on card.</p>
+                  ) : (
+                    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                      {metrics.map((m, i) => (
+                        <div key={i} style={{ display: "grid", gridTemplateColumns: "2fr 1fr auto", gap: 10, alignItems: "center" }}>
+                          <div style={{ position: "relative", display: "flex", alignItems: "center" }}><BarChart3 size={15} style={iconAdorn} /><input className="admin-input" style={{ paddingLeft: 40 }} placeholder="Quality" value={m.label} onChange={(e) => updateMetric(i, "label", e.target.value)} /></div>
+                          <input className="admin-input" placeholder="5.0" value={m.score} onChange={(e) => updateMetric(i, "score", e.target.value)} />
+                          <button type="button" onClick={() => removeMetric(i)} style={iconBtn("#f87171", "rgba(225,29,72,0.1)")}><Trash2 size={14} /></button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                {/* Source */}
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, alignItems: "flex-start" }}>
+                  <div>
+                    <label style={labelStyle}>Review Source</label>
+                    <div style={{ position: "relative", display: "flex", alignItems: "center" }}><BadgeCheck size={16} style={iconAdorn} /><input className="admin-input" style={{ paddingLeft: 42 }} placeholder="Google / Clutch / Trustpilot" value={source} onChange={(e) => setSource(e.target.value)} /></div>
+                    <p style={{ fontSize: 11, color: "var(--admin-text-muted)", marginTop: 6 }}>Known names render brand logos automatically.</p>
+                  </div>
+                  <div>
+                    <label style={labelStyle}>Source Logo (override)</label>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <div onClick={() => sourceFileRef.current?.click()} style={{ width: 72, height: 44, borderRadius: 10, cursor: "pointer", border: "2px dashed var(--admin-border)", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", background: "rgba(255,255,255,0.02)", flexShrink: 0 }}>
+                        {uploadingSource ? <Loader2 size={18} className="animate-spin" color="var(--admin-text-dim)" /> : sourceLogo?.url ? <img src={sourceLogo.url} alt="src" style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }} /> : <Upload size={16} color="var(--admin-text-dim)" />}
+                      </div>
+                      {sourceLogo && <button type="button" onClick={() => setSourceLogo(undefined)} style={{ background: "none", border: "none", color: "#f87171", fontSize: 12, cursor: "pointer" }}>Remove</button>}
+                    </div>
+                    <input ref={sourceFileRef} type="file" accept="image/*" onChange={handleSourceLogo} style={{ display: "none" }} />
+                  </div>
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, alignItems: "flex-end" }}>
                   <div>
@@ -215,7 +343,7 @@ const ReviewsManager: React.FC = () => {
             </div>
             <div style={panelFooterStyle}>
               <button type="button" onClick={closePanel} className="admin-btn admin-btn-ghost" disabled={formLoading}>Cancel</button>
-              <button type="submit" form="review-form" className="admin-btn admin-btn-primary" disabled={formLoading || uploading} style={{ padding: "10px 24px" }}>
+              <button type="submit" form="review-form" className="admin-btn admin-btn-primary" disabled={formLoading || uploading || uploadingCompany || uploadingSource} style={{ padding: "10px 24px" }}>
                 {formLoading ? <Loader2 size={16} className="animate-spin" /> : panelMode === "add" ? "Add Review" : "Save Changes"}
               </button>
             </div>

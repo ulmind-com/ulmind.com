@@ -1045,6 +1045,11 @@ export interface WebsiteStat {
   order: number;
 }
 
+export interface TestimonialMetric {
+  label: string;
+  score: string;
+}
+
 export interface Testimonial {
   _id: string;
   name: string;
@@ -1052,7 +1057,14 @@ export interface Testimonial {
   body: string;
   rating: number;
   order: number;
+  title?: string;
+  location?: string;
+  flag?: string;
+  metrics?: TestimonialMetric[];
+  source?: string;
   img?: { url: string; public_id: string };
+  companyLogo?: { url: string; public_id: string };
+  sourceLogo?: { url: string; public_id: string };
 }
 
 export interface PortfolioProject {
