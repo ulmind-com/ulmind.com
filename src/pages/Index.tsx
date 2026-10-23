@@ -12,6 +12,7 @@ import { NewsletterSection } from "@/components/Sections/NewsletterSection";
 import PartnershipSection from "@/components/Sections/PartnershipSection";
 import BrandIntroSection from "@/components/Sections/BrandIntroSection";
 import TurnpikeAnalystSection from "@/components/Sections/TurnpikeAnalystSection";
+import NewmericCompassSection from "@/components/Sections/NewmericCompassSection";
 
 const GlobeSection = lazy(() =>
   import("@/components/Sections/GlobeSection").then((m) => ({ default: m.GlobeSection }))
@@ -34,25 +35,37 @@ const Index = () => {
 
   const section1Opacity = useTransform(
     smoothProgress,
-    [0, 0.33],
+    [0, 0.25],
     [1, 0]
   );
 
   const section1Scale = useTransform(
     smoothProgress,
-    [0, 0.33],
+    [0, 0.25],
+    [1, 0.9]
+  );
+
+  const newmericOpacity = useTransform(
+    smoothProgress,
+    [0.25, 0.5],
+    [1, 0]
+  );
+
+  const newmericScale = useTransform(
+    smoothProgress,
+    [0.25, 0.5],
     [1, 0.9]
   );
 
   const section2Opacity = useTransform(
     smoothProgress,
-    [0.33, 0.66],
+    [0.5, 0.75],
     [1, 0]
   );
 
   const section2Scale = useTransform(
     smoothProgress,
-    [0.33, 0.66],
+    [0.5, 0.75],
     [1, 0.9]
   );
 
@@ -67,13 +80,21 @@ const Index = () => {
         <AboutPreviewSection />
 
         {/* --- STACKING ZONE START --- */}
-        <div ref={containerRef} className="relative h-[300vh]">
+        <div ref={containerRef} className="relative h-[400vh]">
 
           {/* Partnership Card */}
           <div className="sticky top-0 h-screen w-full flex items-center justify-center">
             <PartnershipSection
               opacity={section1Opacity}
               scale={section1Scale}
+            />
+          </div>
+
+          {/* Newmeric Compass Card */}
+          <div className="sticky top-0 h-screen w-full flex items-center justify-center">
+            <NewmericCompassSection
+              opacity={newmericOpacity}
+              scale={newmericScale}
             />
           </div>
 
