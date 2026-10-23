@@ -119,19 +119,81 @@ import { HWProvider } from "./admin/context/hw-context";
 import AdminLayout from "./admin/components/AdminLayout";
 import ProtectedRoute from "./admin/components/ProtectedRoute";
 
-// Ultra-fast, lightweight Suspense loader
-const PageLoader = () => (
-  <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-background/60 backdrop-blur-[2px] pointer-events-none transition-opacity duration-150">
-    <div className="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-violet-600 via-pink-500 to-blue-500 animate-pulse z-[10000]" />
-    <div className="flex flex-col items-center gap-3">
-      <div className="w-9 h-9 border-2 border-violet-500/20 border-t-violet-600 rounded-full animate-spin" />
-    </div>
+// Premium brand video loader
+const VideoLoader = () => (
+  <div style={{
+    position: "fixed",
+    inset: 0,
+    zIndex: 99999,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    background: "#000",
+    animation: "loaderFadeIn 0.2s ease forwards",
+  }}>
+    <video
+      src="/ulmind_loader.mp4"
+      autoPlay
+      muted
+      playsInline
+      loop
+      style={{
+        width: "min(340px, 80vw)",
+        height: "auto",
+        objectFit: "contain",
+        borderRadius: "16px",
+      }}
+    />
+    <style>{`
+      @keyframes loaderFadeIn {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+      }
+      @keyframes loaderFadeOut {
+        from { opacity: 1; }
+        to   { opacity: 0; }
+      }
+    `}</style>
   </div>
 );
 
-// Route-change wrapper — instant navigation with zero artificial delay
+// Suspense fallback (first-load)
+const PageLoader = () => <VideoLoader />;
+
+// Route-change transition loader — useLayoutEffect fires BEFORE paint (no flash)
 const RouteTransitionLoader: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return <>{children}</>;
+  const location = useLocation();
+  // Show loader on initial mount (refresh) for 2s
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const prevPath = React.useRef(location.pathname);
+
+  // Initial load — show video loader once on mount
+  useEffect(() => {
+    const timer = setTimeout(() => setInitialLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Route change
+  React.useLayoutEffect(() => {
+    if (location.pathname !== prevPath.current) {
+      prevPath.current = location.pathname;
+      setLoading(true);
+      const timer = setTimeout(() => setLoading(false), 1200);
+      return () => clearTimeout(timer);
+    }
+  }, [location.pathname]);
+
+  const isLoading = initialLoading || loading;
+
+  return (
+    <>
+      {isLoading && <VideoLoader />}
+      <div style={{ visibility: isLoading ? "hidden" : "visible" }}>
+        {children}
+      </div>
+    </>
+  );
 };
 
 // ─── Pageview Tracker (invisible — just fires the hook) ───
@@ -423,15 +485,13 @@ const AdminSubdomainRedirect = () => {
       <div style={{
         position: "fixed", inset: 0, zIndex: 99999,
         display: "flex", alignItems: "center", justifyContent: "center",
-        background: "#0b0f19",
+        background: "#000",
       }}>
-        <div style={{
-          width: 36, height: 36,
-          borderRadius: "50%",
-          border: "3px solid rgba(255,255,255,0.15)",
-          borderTopColor: "#7c3aed",
-          animation: "spin 0.8s linear infinite"
-        }} />
+        <video
+          src="/ulmind_loader.mp4"
+          autoPlay muted playsInline loop
+          style={{ width: "min(340px, 80vw)", height: "auto", objectFit: "contain", borderRadius: "16px" }}
+        />
       </div>
     );
   }

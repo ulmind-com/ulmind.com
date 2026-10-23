@@ -105,7 +105,7 @@ html.is-static .kl, html.is-static .seam { display: none; }
 .dark .hero-disc path[fill="#A49A74"] { fill: #26241D; }
 .dark .hero-disc path[stroke="#0E0F11"] { stroke: rgba(255,255,255,0.4); }
 .hero-panel { position: absolute; left: 50%; top: 80px; width: 560px; height: 748px; margin-left: -280px; z-index: 3; background: transparent; will-change: transform; }
-.hf-canvas { width: 100%; height: 100%; display: block; -webkit-mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent), linear-gradient(180deg, transparent, #000 10%, #000 90%, transparent); -webkit-mask-composite: source-in; mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent), linear-gradient(180deg, transparent, #000 10%, #000 90%, transparent); mask-composite: intersect; }
+.hf-canvas { width: 100%; height: 100%; display: block; mask-image: radial-gradient(ellipse 90% 90% at 50% 50%, #000 70%, transparent 100%); -webkit-mask-image: radial-gradient(ellipse 90% 90% at 50% 50%, #000 70%, transparent 100%); }
 .hero-tag { position: absolute; left: 16px; bottom: 14px; font-style: normal; font-size: 12px; letter-spacing: .18em; font-weight: 700; color: #4b5058; }
 .dark .hero-tag { color: #94A3B8; }
 .hf-flip { width: 100%; height: 100%; perspective: 1200px; display: grid; place-items: center; }
