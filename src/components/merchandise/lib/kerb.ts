@@ -28,20 +28,40 @@ export function loadFilm(onProgress?: (p: number) => void, only1 = false): Promi
   const run = new Promise<boolean>((resolve) => {
     let done = 0;
     const first = new Image();
-    first.onerror = () => { film.ok = false; onProgress?.(1); resolve(false); };
+    first.onerror = () => {
+      film.ok = false;
+      onProgress?.(1);
+      resolve(false);
+    };
     first.onload = () => {
-      film.ok = true; film.frames[0] = first; done = 1; onProgress?.(done / count);
-      if (count === 1) return resolve(true);
+      film.ok = true;
+      film.frames[0] = first;
+      done = 1;
+      onProgress?.(done / count);
+      // Immediately resolve true so the Hero canvas displays frame 0 without waiting for 192 images!
+      resolve(true);
+
+      if (count === 1) return;
+
       const order: number[] = [];
       for (let i = 8; i < FILM.n; i += 8) order.push(i);
       for (let i = 1; i < FILM.n; i++) if (i % 8) order.push(i);
       let busy = 0, k = 0;
       const pump = () => {
         while (busy < 8 && k < order.length) {
-          const idx = order[k++]; busy++;
+          const idx = order[k++];
+          busy++;
           const im = new Image();
-          const fin = () => { busy--; done++; film.frames[idx] = im; onProgress?.(done / count); if (done >= count) resolve(true); else pump(); };
-          im.onload = fin; im.onerror = fin; im.src = filmUrl(idx);
+          const fin = () => {
+            busy--;
+            done++;
+            film.frames[idx] = im;
+            onProgress?.(done / count);
+            pump();
+          };
+          im.onload = fin;
+          im.onerror = fin;
+          im.src = filmUrl(idx);
         }
       };
       pump();

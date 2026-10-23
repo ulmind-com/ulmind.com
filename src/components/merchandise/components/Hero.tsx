@@ -10,28 +10,46 @@ import { usePinProgress, isStatic, tick, watchVisible, lenisVelocity } from "../
 function HeroFilm() {
   const cv = useRef<HTMLCanvasElement>(null);
   const [failed, setFailed] = useState(false);
+  const [hasDrawn, setHasDrawn] = useState(false);
   const flip = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     let off = () => {};
     let alive = true;
     const film = getFilm();
     const start = () => {
       if (!alive) return;
-      const c = cv.current!;
-      const g = c.getContext("2d")!;
+      const c = cv.current;
+      if (!c) return;
+      const g = c.getContext("2d");
+      if (!g) return;
+
       let last = -1, vis = true, phase = 0, extra = 0, lastY = window.scrollY;
       const offV = watchVisible(c, (v) => (vis = v));
       const N = FILM.n, cycle = 2 * (N - 1);
       const draw = (i: number) => {
         let im = film.frames[i];
-        if (!im) { for (let d = 1; d < 12 && !im; d++) im = film.frames[i - d] || film.frames[i + d]; }
-        if (im) { g.drawImage(im, 0, 0, c.width, c.height); last = i; }
+        if (!im) {
+          for (let d = 1; d < 16 && !im; d++) {
+            im = film.frames[i - d] || film.frames[i + d];
+          }
+        }
+        if (!im && film.frames[0]) im = film.frames[0];
+        if (im) {
+          g.clearRect(0, 0, c.width, c.height);
+          g.drawImage(im, 0, 0, c.width, c.height);
+          last = i;
+          setHasDrawn(true);
+        }
       };
+
       draw(0);
       if (isStatic()) return;
+
       const offT = tick((dt) => {
         if (!vis) return;
-        const y = window.scrollY, dy = y - lastY; lastY = y;
+        const y = window.scrollY, dy = y - lastY;
+        lastY = y;
         extra += dy * 0.06 + lenisVelocity() * 0.004;
         phase += dt * FILM.fps * 0.75;
         const u = (((phase + extra) % cycle) + cycle) % cycle;
@@ -40,16 +58,28 @@ function HeroFilm() {
       });
       off = () => { offT(); offV(); };
     };
-    if (isStatic()) loadFilm(undefined, true).then((ok) => (ok ? start() : setFailed(true)));
-    else loadFilm().then((ok) => (ok ? start() : setFailed(true)));
+
+    if (isStatic()) {
+      loadFilm(undefined, true)
+        .then((ok) => (ok ? start() : setFailed(true)))
+        .catch(() => setFailed(true));
+    } else {
+      loadFilm()
+        .then((ok) => (ok ? start() : setFailed(true)))
+        .catch(() => setFailed(true));
+    }
+
     return () => { alive = false; off(); };
   }, []);
+
   // fallback: 3D flip with tilt, continuous
   useEffect(() => {
     if (!failed || isStatic()) return;
-    const el = flip.current!;
+    const el = flip.current;
+    if (!el) return;
     return tick((_, t) => { el.style.transform = `rotateY(${(t * 22) % 360}deg) rotateX(${Math.sin(t) * 3}deg)`; });
   }, [failed]);
+
   if (failed)
     return (
       <div className="hf-flip"><div ref={flip} className="hf-flip-in">
@@ -57,7 +87,40 @@ function HeroFilm() {
         <img className="back" src={IMG("hoodie-back")} alt="Drop 07 hoodie, back" />
       </div></div>
     );
-  return <canvas ref={cv} width={FILM.w} height={FILM.h} className="hf-canvas" aria-label="Drop 07 hoodie turning" />;
+
+  return (
+    <div style={{ position: "relative", width: "100%", height: "100%" }}>
+      {!hasDrawn && (
+        <img
+          src={IMG("hoodie-front")}
+          alt="Drop 07 hoodie"
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
+            pointerEvents: "none",
+          }}
+        />
+      )}
+      <canvas
+        ref={cv}
+        width={FILM.w}
+        height={FILM.h}
+        className="hf-canvas"
+        style={{
+          position: "relative",
+          width: "100%",
+          height: "100%",
+          display: "block",
+          opacity: hasDrawn ? 1 : 0,
+          transition: "opacity 0.25s ease",
+        }}
+        aria-label="Drop 07 hoodie turning"
+      />
+    </div>
+  );
 }
 
 export default function Hero() {
