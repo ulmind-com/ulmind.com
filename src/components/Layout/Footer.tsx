@@ -175,6 +175,30 @@ export const Footer = () => {
                 </a>
               </div>
             </div>
+
+            {/* MSME Registered Badge */}
+            <div className="pt-3">
+              <div className="inline-flex items-center gap-3 px-3.5 py-2 rounded-xl bg-zinc-900/[0.03] dark:bg-white/[0.05] border border-zinc-900/10 dark:border-white/10 backdrop-blur-sm transition-all hover:border-zinc-900/20 dark:hover:border-white/20 shadow-sm">
+                <img
+                  src="/MSME%20Black%20Mode.png"
+                  alt="MSME Registered Enterprise"
+                  className="h-11 w-auto object-contain dark:hidden"
+                />
+                <img
+                  src="/MSME%20White%20Mode.png"
+                  alt="MSME Registered Enterprise"
+                  className="h-11 w-auto object-contain hidden dark:block"
+                />
+                <div className="flex flex-col leading-tight">
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                    Govt. of India
+                  </span>
+                  <span className="text-xs font-bold text-zinc-900 dark:text-white mt-0.5">
+                    MSME Registered
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Quick Links */}
