@@ -3,13 +3,6 @@ import { Marquee } from "@/components/magicui/marquee";
 import BlurBlob from "@/components/BlurBlob";
 import { useState, useEffect } from "react";
 import { getTestimonialsAPI } from "@/admin/lib/api";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 
 interface Metric {
   label: string;
@@ -170,13 +163,9 @@ const ReviewCard = ({
   source,
   sourceLogo,
 }: Review) => {
-  const maxLength = 200;
-  const isLong = body.length > maxLength;
-  const displayBody = isLong ? body.slice(0, maxLength) + "..." : body;
   const avatar = img || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
 
   return (
-    <Dialog>
       <figure className="relative flex w-[88vw] max-w-[460px] shrink-0 flex-col rounded-2xl border border-gray-200 bg-white p-7 shadow-sm transition-all duration-300 hover:shadow-lg sm:w-[420px] md:w-[460px] dark:border-white/10 dark:bg-neutral-900">
         {/* Top: company logo + location */}
         <div className="flex min-h-[32px] items-center justify-between gap-3">
@@ -198,14 +187,9 @@ const ReviewCard = ({
         {/* Headline */}
         {title && <h3 className="mb-3 text-lg font-bold leading-snug text-gray-900 dark:text-white">{title}</h3>}
 
-        {/* Quote */}
-        <blockquote className="flex-1 text-[15px] leading-relaxed text-gray-600 dark:text-gray-300">
-          "{displayBody}"
-          {isLong && (
-            <DialogTrigger asChild>
-              <span className="ml-1 cursor-pointer font-semibold text-primary hover:underline">Read more</span>
-            </DialogTrigger>
-          )}
+        {/* Quote — full text, fixed-height scroll area */}
+        <blockquote className="review-scroll h-[168px] overflow-y-auto pr-3 text-[15px] leading-relaxed text-gray-600 dark:text-gray-300">
+          "{body}"
         </blockquote>
 
         {/* Rating + metrics */}
@@ -249,34 +233,6 @@ const ReviewCard = ({
           </div>
         </div>
       </figure>
-
-      {isLong && (
-        <DialogContent className="z-[99999] max-h-[80vh] max-w-md overflow-y-auto">
-          <DialogHeader>
-            <div className="mb-2 flex items-start gap-3">
-              <img
-                className="h-10 w-10 rounded-full object-cover"
-                alt={name}
-                src={avatar}
-                onError={(e) => {
-                  e.currentTarget.onerror = null;
-                  e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
-                }}
-              />
-              <div className="flex flex-col text-left">
-                <DialogTitle className="text-lg">{name}</DialogTitle>
-                <p className="text-sm font-medium text-muted-foreground">{username}</p>
-                <div className="mt-1">
-                  <Stars rating={rating} />
-                </div>
-              </div>
-            </div>
-          </DialogHeader>
-          {title && <h4 className="mb-2 text-base font-bold text-foreground">{title}</h4>}
-          <div className="text-sm leading-relaxed text-foreground">{body}</div>
-        </DialogContent>
-      )}
-    </Dialog>
   );
 };
 

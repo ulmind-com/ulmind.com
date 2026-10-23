@@ -495,3 +495,24 @@
   animation: float-y 7s ease-in-out infinite;
   will-change: transform;
 }
+/* Testimonial card inner scroll area (fortmindz-style thin scrollbar) */
+.review-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+.review-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.review-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+.review-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.dark .review-scroll {
+  scrollbar-color: #52525b transparent;
+}
+.dark .review-scroll::-webkit-scrollbar-thumb {
+  background: #52525b;
+}
