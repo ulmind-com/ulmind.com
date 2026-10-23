@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, lazy, Suspense } from "react";
 import { useScroll, useTransform, useSpring } from "framer-motion";
 
 import { HeroSection } from "@/components/Sections/HeroSection";
@@ -12,7 +12,10 @@ import { NewsletterSection } from "@/components/Sections/NewsletterSection";
 import PartnershipSection from "@/components/Sections/PartnershipSection";
 import BrandIntroSection from "@/components/Sections/BrandIntroSection";
 import TurnpikeAnalystSection from "@/components/Sections/TurnpikeAnalystSection";
-import { GlobeSection } from "@/components/Sections/GlobeSection";
+
+const GlobeSection = lazy(() =>
+  import("@/components/Sections/GlobeSection").then((m) => ({ default: m.GlobeSection }))
+);
 
 const Index = () => {
   /* ===== STACK SCROLL SETUP ===== */
@@ -92,7 +95,9 @@ const Index = () => {
 
         <TestimonialsSection />
         <NewsletterSection />
-        <GlobeSection />
+        <Suspense fallback={<div className="h-[550px] md:h-[500px]" />}>
+          <GlobeSection />
+        </Suspense>
         <CTASection />
       </main>
     </div>

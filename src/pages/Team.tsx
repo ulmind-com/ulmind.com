@@ -106,26 +106,37 @@ export default function Team() {
       "https://ulmind-backend.onrender.com/api/v1/team/public"
     ];
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3500);
+
     const fetchTeam = async () => {
-      for (const url of urls) {
-        try {
-          const res = await fetch(url);
-          if (res.ok) {
-            const data = await res.json();
-            if (Array.isArray(data)) {
-              setDynamicTeam(data.filter((m: any) => !isExcludedMember(m?.full_name)));
-              setApiLoading(false);
-              return;
-            }
-          }
-        } catch {
-          // try next url
-        }
+      try {
+        const fetchPromises = urls.map(url =>
+          fetch(url, { signal: controller.signal })
+            .then(res => {
+              if (res.ok) return res.json();
+              throw new Error("Failed");
+            })
+            .then(data => {
+              if (Array.isArray(data)) return data;
+              throw new Error("Not array");
+            })
+        );
+        const data = await Promise.any(fetchPromises);
+        setDynamicTeam(data.filter((m: any) => !isExcludedMember(m?.full_name)));
+      } catch {
+        // Falls back instantly to staticTeam
+      } finally {
+        clearTimeout(timeoutId);
+        setApiLoading(false);
       }
-      setApiLoading(false);
     };
 
     fetchTeam();
+    return () => {
+      controller.abort();
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   // Fuzzy name match: compares last name exactly + first name loosely (handles spelling variants)
