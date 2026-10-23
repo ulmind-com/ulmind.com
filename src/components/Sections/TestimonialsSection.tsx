@@ -177,7 +177,7 @@ const ReviewCard = ({
 
   return (
     <Dialog>
-      <figure className="relative flex w-[340px] shrink-0 flex-col rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-lg md:w-[400px] dark:border-white/10 dark:bg-neutral-900">
+      <figure className="relative flex w-[88vw] max-w-[460px] shrink-0 flex-col rounded-2xl border border-gray-200 bg-white p-7 shadow-sm transition-all duration-300 hover:shadow-lg sm:w-[420px] md:w-[460px] dark:border-white/10 dark:bg-neutral-900">
         {/* Top: company logo + location */}
         <div className="flex min-h-[32px] items-center justify-between gap-3">
           {companyLogo ? (
@@ -307,10 +307,6 @@ export const TestimonialsSection = () => {
       .catch(console.error);
   }, []);
 
-  const mid = Math.ceil(reviews.length / 2);
-  const firstRow = reviews.slice(0, mid);
-  const secondRow = reviews.slice(mid);
-
   return (
     <section className="relative max-w-[100vw] overflow-hidden py-20">
       <BlurBlob position={{ top: "30%", left: "20%" }} size={{ width: "600px", height: "600px" }} colorClass="bg-pink-300" opacityClass="opacity-20" />
@@ -326,22 +322,13 @@ export const TestimonialsSection = () => {
         </div>
       </div>
 
-      <div className="relative z-10 flex w-full flex-col items-center justify-center gap-8 overflow-hidden">
-        {/* Top Row → Left to Right */}
-        <Marquee pauseOnHover className="[--duration:40s] [--gap:1.5rem]">
-          {firstRow.map((review, i) => (
+      <div className="relative z-10 flex w-full flex-col items-center justify-center overflow-hidden">
+        {/* Single row → scrolls right to left automatically */}
+        <Marquee pauseOnHover className="[--duration:55s] [--gap:2rem]">
+          {reviews.map((review, i) => (
             <ReviewCard key={i} {...review} />
           ))}
         </Marquee>
-
-        {/* Bottom Row → Right to Left */}
-        {secondRow.length > 0 && (
-          <Marquee reverse pauseOnHover className="[--duration:40s] [--gap:1.5rem]">
-            {secondRow.map((review, i) => (
-              <ReviewCard key={i} {...review} />
-            ))}
-          </Marquee>
-        )}
       </div>
     </section>
   );
