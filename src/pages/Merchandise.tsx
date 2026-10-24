@@ -3,6 +3,7 @@ import { useTheme } from "next-themes";
 import { useLenis } from "@studio-freight/react-lenis";
 import { ScrollTrigger } from "@/components/merchandise/lib/gsap";
 import Nav from "@/components/merchandise/components/Nav";
+import CinematicHero from "@/components/merchandise/components/CinematicHero";
 import Hero from "@/components/merchandise/components/Hero";
 import Lineup from "@/components/merchandise/components/Lineup";
 import Clock from "@/components/merchandise/components/Clock";
@@ -43,6 +44,7 @@ export default function Merchandise() {
       <Animations />
       <Nav />
       <main className="k-main">
+        <CinematicHero />
         <Hero />
         <Seam kind="diag" from={C.khaki} />
         <Lineup />
