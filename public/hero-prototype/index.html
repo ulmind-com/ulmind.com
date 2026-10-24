@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LTX — The world model</title>
+<meta name="description" content="LTX builds open world models that give you full control, from production-grade video to systems that understand and operate in the physical world.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══ TOKENS ═══ */
+:root {
+  --retake-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --retake-slow-ease: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* ═══ RESET ═══ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  font-family: 'Manrope', system-ui, sans-serif;
+  color: #fff;
+  background: #000;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+::selection { background: rgba(255,255,255,0.2); }
+:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+button { font-family: 'Manrope', system-ui, sans-serif; }
+a { color: inherit; text-decoration: none; }
+
+/* ═══ STAGE ═══ */
+.stage {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background: #000;
+}
+
+/* ═══ MEDIA ═══ */
+.media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+.media.media-visible { visibility: visible; }
+
+/* ═══ HERO COPY ═══ */
+.hero {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+.title {
+  position: absolute;
+  top: 35.9%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(901px, calc(100vw - 48px));
+  font-size: clamp(62px, 6.8vw, 100px);
+  font-weight: 500;
+  line-height: 0.8;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+  text-shadow: 0 2px 12px rgb(0 0 0 / 0.14);
+  text-align: center;
+}
+.title span {
+  display: inline-block;
+  transition: opacity 900ms var(--retake-ease),
+              filter 900ms var(--retake-ease),
+              transform 900ms var(--retake-ease);
+}
+.title span:nth-child(1) { transition-delay: 0ms; }
+.title span:nth-child(2) { transition-delay: 90ms; }
+.title span:nth-child(3) { transition-delay: 180ms; }
+
+.stage.title-hidden .title span {
+  opacity: 0;
+  filter: blur(12px);
+  transform: translateY(-10px);
+}
+
+.subtitle {
+  position: absolute;
+  top: calc(46.78% + 94px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(734px, calc(100vw - 48px));
+  font-size: clamp(14px, 1.25vw, 18px);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+  text-shadow: 0 1px 8px rgb(0 0 0 / 0.16);
+  text-align: center;
+}
+
+/* ═══ CONTROLLER ═══ */
+.controller {
+  position: absolute;
+  top: 46.78%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(880px, calc(100vw - 48px));
+  height: 72px;
+  z-index: 20;
+}
+
+/* ═══ GLASS SHARED ═══ */
+.glass {
+  position: absolute;
+  border-radius: 999px;
+}
+.glass::before,
+.glass::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+/* broad soft highlight */
+.glass::before {
+  background:
+    radial-gradient(120% 150% at var(--glass-x, 24%) var(--glass-y, 8%),
+                    rgb(255 255 255 / 0.25), rgb(255 255 255 / 0) 53%),
+    linear-gradient(115deg, rgb(255 255 255 / 0.10), rgb(255 255 255 / 0) 42%);
+}
+/* masked perimeter */
+.glass::after {
+  padding: 1px;
+  background: conic-gradient(from 225deg, #7fe3ff, rgb(255 255 255 / 0.35), #ffffff,
+                             #ffd7e6, rgb(255 255 255 / 0.35), #7fe3ff);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+}
+
+/* ═══ TRACK ═══ */
+.track {
+  top: 4px;
+  left: 0;
+  width: 100%;
+  height: 64px;
+  background: rgb(24 55 82 / 0.31);
+  border: 1px solid rgb(255 255 255 / 0.2);
+  -webkit-backdrop-filter: blur(9px) saturate(126%) contrast(108%) brightness(103%);
+          backdrop-filter: blur(9px) saturate(126%) contrast(108%) brightness(103%);
+  box-shadow:
+    0 14px 38px rgb(4 24 43 / 0.16),
+    0 2px 7px rgb(4 24 43 / 0.1),
+    inset 1px 1px 0 rgb(255 255 255 / 0.48),
+    inset -1px -1px 0 rgb(21 49 73 / 0.14),
+    inset 0 0 0 0.5px rgb(255 255 255 / 0.16);
+  transition: left 980ms var(--retake-slow-ease),
+              width 980ms var(--retake-slow-ease);
+}
+.track::after { opacity: 0.27; }
+
+.track.track-fade {
+  opacity: 0;
+  transition: left 980ms var(--retake-slow-ease),
+              width 980ms var(--retake-slow-ease),
+              opacity 400ms linear 650ms;
+}
+
+.controller.collapsed .track {
+  left: calc(50% - 96px);
+  width: 192px;
+}
+.controller.expanding .track {
+  left: 0;
+  width: 100%;
+  opacity: 1;
+  transition: left 980ms var(--retake-slow-ease),
+              width 980ms var(--retake-slow-ease),
+              opacity 300ms linear;
+}
+
+/* ═══ CAPSULE ═══ */
+.capsule {
+  height: 72px;
+  top: -1px;
+  left: var(--cap-left, -5px);
+  width: var(--cap-width, calc(20% + 5px));
+  background: rgb(246 251 255 / 0.24);
+  border: 1px solid rgb(255 255 255 / 0.28);
+  -webkit-backdrop-filter: blur(13px) saturate(128%) contrast(107%) brightness(105%);
+          backdrop-filter: blur(13px) saturate(128%) contrast(107%) brightness(105%);
+  box-shadow:
+    0 11px 28px rgb(4 24 43 / 0.17),
+    0 2px 6px rgb(4 24 43 / 0.1),
+    inset 1px 1px 0 rgb(255 255 255 / 0.62),
+    inset -1px -1px 0 rgb(20 49 73 / 0.18),
+    inset 0 0 12px rgb(255 255 255 / 0.055);
+  transition: left 620ms var(--retake-ease),
+              width 620ms var(--retake-ease),
+              background 620ms var(--retake-ease);
+}
+.capsule::after { opacity: 0.30; }
+
+.controller.collapsed .capsule {
+  left: calc(50% - 100px);
+  width: 200px;
+  background: rgb(246 251 255 / 0.14);
+  transition: left 980ms var(--retake-slow-ease),
+              width 980ms var(--retake-slow-ease),
+              background 980ms var(--retake-slow-ease);
+}
+.controller.expanding .capsule {
+  transition: left 980ms var(--retake-slow-ease),
+              width 980ms var(--retake-slow-ease),
+              background 620ms var(--retake-ease);
+}
+
+/* ═══ CELLS ═══ */
+.cells {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: center;
+}
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 0 14px;
+  font-size: 23px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+  color: #fff;
+  transition: opacity 420ms var(--retake-ease),
+              filter 420ms var(--retake-ease),
+              transform 980ms var(--retake-slow-ease);
+}
+.cell-btn {
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: 'Manrope', system-ui, sans-serif;
+}
+.cell-btn:disabled {
+  cursor: default;
+}
+.cell-btn.is-loading {
+  opacity: 0.35;
+}
+.label-cell {
+  transition: opacity 300ms var(--retake-ease);
+}
+.label-dimmed {
+  opacity: 0.5;
+}
+
+/* Cell hidden during collapse */
+.cell-hidden {
+  opacity: 0;
+  filter: blur(10px);
+  transform: scale(0.94);
+  pointer-events: none;
+}
+/* Active cell travelling to capsule center */
+.cell-active {
+  transition: transform 980ms var(--retake-slow-ease),
+              opacity 420ms var(--retake-ease),
+              filter 420ms var(--retake-ease);
+  z-index: 2;
+}
+/* Reset reveal */
+@keyframes resetReveal {
+  0% { opacity: 0; filter: blur(10px); }
+  100% { opacity: 1; filter: blur(0); }
+}
+.cell-reset {
+  animation: resetReveal 520ms var(--retake-ease) forwards;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+/* Cell restore during expand */
+.cell-restoring {
+  opacity: 1;
+  filter: blur(0);
+  transform: none;
+  transition: opacity 760ms var(--retake-ease) 60ms,
+              filter 760ms var(--retake-ease) 60ms,
+              transform 760ms var(--retake-ease) 60ms;
+}
+
+/* ═══ HEADER ═══ */
+header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  padding: calc(58px + env(safe-area-inset-top, 0px)) 40px 40px;
+  z-index: 30;
+  text-shadow: 0 1px 6px rgb(0 0 0 / 0.18);
+  pointer-events: none;
+}
+header > * { pointer-events: auto; }
+
+.logo-link {
+  display: flex;
+  align-items: center;
+}
+.logo-link svg {
+  height: 24px;
+  width: auto;
+  display: block;
+}
+.meta {
+  display: flex;
+  align-items: center;
+  margin-left: clamp(48px, 5vw, 70px);
+  gap: clamp(28px, 3vw, 44px);
+  font-size: 18px;
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+}
+.try-now {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 152px;
+  height: 38px;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 0.75);
+  background: transparent;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  transition: color 300ms, background 300ms, border-color 300ms;
+}
+.try-now:hover,
+.try-now:focus-visible {
+  background: #fff;
+  color: #0b1a26;
+  border-color: #fff;
+}
+
+/* ═══ STATUS / NOTICE ═══ */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+.notice {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 40;
+  padding: 10px 22px;
+  border-radius: 12px;
+  background: rgb(220 40 40 / 0.85);
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 300ms;
+  pointer-events: none;
+}
+.notice.notice-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.notice button {
+  margin-left: 12px;
+  padding: 4px 14px;
+  border: 1px solid rgba(255,255,255,0.5);
+  border-radius: 6px;
+  background: transparent;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Manrope', system-ui, sans-serif;
+}
+.notice button:hover { background: rgba(255,255,255,0.15); }
+
+/* ═══ RESPONSIVE 900px ═══ */
+@media (max-width: 900px) {
+  header {
+    padding: calc(24px + env(safe-area-inset-top, 0px)) 24px 24px;
+  }
+  .meta {
+    font-size: 14px;
+    gap: 22px;
+    margin-left: 34px;
+  }
+  .try-now {
+    width: 116px;
+    height: 36px;
+    font-size: 14px;
+  }
+  .cell { font-size: clamp(17px, 2.5vw, 24px); }
+}
+
+/* ═══ RESPONSIVE 700px ═══ */
+@media (max-width: 700px) {
+  header {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+  .logo-link svg { height: 21px; }
+  .meta { font-size: 12px; }
+  .meta-smarter { display: none; }
+  .try-now {
+    width: 92px;
+    height: 34px;
+    font-size: 13px;
+    position: relative;
+  }
+  .try-now::after {
+    content: '';
+    position: absolute;
+    inset: -6px -10px;
+  }
+
+  .title {
+    top: 34%;
+    width: calc(100vw - 40px);
+    font-size: clamp(48px, 14vw, 64px);
+    line-height: 0.88;
+    white-space: normal;
+  }
+  .subtitle {
+    top: 77%;
+    width: calc(100vw - 44px);
+    font-size: 14px;
+  }
+
+  .controller {
+    top: 53%;
+    width: calc(100vw - 40px);
+    height: 156px;
+  }
+  .track {
+    top: 0;
+    height: 156px;
+    border-radius: 28px;
+  }
+  .cells {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 48px 54px 54px;
+  }
+  .label-cell {
+    grid-column: 1 / -1;
+  }
+  .cell { font-size: 17px; justify-content: center; }
+
+  /* Dividers */
+  .cells .cell-btn {
+    border-radius: 0;
+    position: relative;
+  }
+  .cells .cell-btn::before {
+    content: '';
+    position: absolute;
+    background: rgb(255 255 255 / 0.12);
+  }
+  /* top border on row 2 & 3 cells */
+  .cells .cell-btn:nth-child(2)::before,
+  .cells .cell-btn:nth-child(3)::before {
+    top: 0; left: 10%; right: 10%; height: 1px;
+  }
+  .cells .cell-btn:nth-child(4)::before,
+  .cells .cell-btn:nth-child(5)::before {
+    top: 0; left: 10%; right: 10%; height: 1px;
+  }
+  /* vertical divider between columns */
+  .cells .cell-btn:nth-child(2)::after,
+  .cells .cell-btn:nth-child(4)::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 15%; bottom: 15%; width: 1px;
+    background: rgb(255 255 255 / 0.12);
+  }
+
+  /* Disable sliding capsule on mobile */
+  .capsule {
+    opacity: 0;
+    pointer-events: none;
+  }
+  /* But show capsule in collapsed/selected state */
+  .controller.collapsed .capsule,
+  .controller.selected .capsule {
+    opacity: 1;
+    pointer-events: auto;
+    left: 50%;
+    top: 4vh;
+    top: 4dvh;
+    transform: translate(-50%, -50%);
+    width: 196px;
+    height: 64px;
+    border-radius: 999px;
+    background: rgb(246 251 255 / 0.18);
+  }
+
+  .cell-btn:active { background: rgb(255 255 255 / 0.08); }
+  .cell-btn:focus-visible { outline-offset: -3px; }
+}
+
+/* ═══ SHORT PHONES 700×700 ═══ */
+@media (max-width: 700px) and (max-height: 700px) {
+  .controller { top: 50%; }
+  .subtitle {
+    top: calc(50% + 168px);
+    width: calc(100vw - 32px);
+    font-size: 13px;
+  }
+}
+
+/* ═══ SHORT LANDSCAPE ═══ */
+@media (max-height: 520px) and (orientation: landscape) {
+  .title {
+    top: 20%;
+    font-size: clamp(34px, 8vh, 56px);
+  }
+  .controller { top: 50%; }
+  .subtitle {
+    top: auto;
+    bottom: 8px;
+    font-size: 13px;
+  }
+}
+
+/* ═══ VERY SHORT LANDSCAPE + NARROW ═══ */
+@media (max-width: 700px) and (max-height: 520px) and (orientation: landscape) {
+  .title {
+    top: 12%;
+    font-size: clamp(28px, 7vh, 44px);
+  }
+  .controller {
+    top: 46%;
+    height: 118px;
+  }
+  .track { height: 118px; }
+  .cells {
+    grid-template-rows: 36px 41px 41px;
+  }
+  .cell { font-size: 15px; }
+  .subtitle {
+    bottom: 6px;
+    font-size: 12px;
+  }
+}
+
+/* ═══ REDUCED MOTION ═══ */
+@media (prefers-reduced-motion: reduce) {
+  .capsule,
+  .track,
+  .cell,
+  .title span,
+  .try-now {
+    transition-duration: 1ms !important;
+    transition-delay: 0s !important;
+  }
+  .cell-reset { animation-duration: 1ms !important; }
+  .stage.title-hidden .title span { filter: none; }
+  .cell-hidden { filter: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="stage" id="stage">
+
+  <!-- ═══ 8 VIDEO LAYERS ═══ -->
+  <video class="media" id="v1f" src="https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/designs/video-1.mp4" muted playsinline preload="auto" aria-hidden="true"></video>
+  <video class="media" id="v1r" src="https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/designs/video-1-reverse.mp4" muted playsinline preload="auto" aria-hidden="true"></video>
+  <video class="media" id="v2f" src="https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/designs/video-2.mp4" muted playsinline preload="auto" aria-hidden="true"></video>
+  <video class="media" id="v2r" src="https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/designs/video-2-reverse.mp4" muted playsinline preload="auto" aria-hidden="true"></video>
+  <video class="media" id="v3f" src="https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/designs/video-3.mp4" muted playsinline preload="auto" aria-hidden="true"></video>
+  <video class="media" id="v3r" src="https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/designs/video-3-reverse.mp4" muted playsinline preload="auto" aria-hidden="true"></video>
+  <video class="media" id="v4f" src="https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/designs/video-4.mp4" muted playsinline preload="auto" aria-hidden="true"></video>
+  <video class="media" id="v4r" src="https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/designs/video-4-reverse.mp4" muted playsinline preload="auto" aria-hidden="true"></video>
+
+  <!-- ═══ HERO COPY ═══ -->
+  <div class="hero">
+    <h1 class="title"><span>The</span> <span>world</span> <span>model</span></h1>
+    <p class="subtitle">LTX builds open world models that give you full control, from production-grade video to systems that understand and operate in the physical world.</p>
+  </div>
+
+  <!-- ═══ CONTROLLER ═══ -->
+  <div class="controller" id="controller" role="group" aria-label="Scene state controller">
+    <div class="track glass" id="track"></div>
+    <div class="capsule glass" id="capsule"></div>
+    <div class="cells" id="cells">
+      <div class="cell label-cell" id="labelCell">Select state →</div>
+      <button class="cell cell-btn is-loading" id="btn-scene" data-branch="scene" data-index="1" disabled>Scene</button>
+      <button class="cell cell-btn is-loading" id="btn-light" data-branch="light" data-index="2" disabled>Lighting</button>
+      <button class="cell cell-btn is-loading" id="btn-colorway" data-branch="colorway" data-index="3" disabled>Clothing</button>
+      <button class="cell cell-btn is-loading" id="btn-fullLook" data-branch="fullLook" data-index="4" disabled>Cast</button>
+    </div>
+  </div>
+
+  <!-- ═══ HEADER ═══ -->
+  <header>
+    <a aria-label="LTX home" class="logo-link" href="#">
+      <svg viewBox="0 0 75 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M0 1.5h4.8v25.7h14.4V32H0V1.5z" fill="#fff"/>
+        <path d="M22.4 1.5H47v4.8H37.5V32h-4.8V6.3H22.4V1.5z" fill="#fff"/>
+        <path d="M50.2 1.5h5.9l6.4 12.9L69 1.5h5.9L66.2 16 75 32h-5.9l-6.6-13L55.9 32H50l8.8-16L50.2 1.5z" fill="#fff"/>
+      </svg>
+    </a>
+    <div class="meta">
+      <span>LTX-2.5 is here</span>
+      <span class="meta-smarter">Smarter. Faster</span>
+    </div>
+    <a class="try-now" href="https://app.ltx.io/" target="_blank" rel="noopener noreferrer">Try now</a>
+  </header>
+
+  <!-- ═══ A11Y STATUS ═══ -->
+  <div class="sr-only" role="status" aria-live="polite" id="liveRegion"></div>
+
+  <!-- ═══ ERROR NOTICE ═══ -->
+  <div class="notice" id="notice" role="alert">
+    <span id="noticeText"></span>
+    <button id="noticeRetry" type="button">Retry</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ═══ CONSTANTS ═══ */
+  var BASE = 'https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/designs/';
+
+  var BRANCHES = {
+    scene:    { fwd: 'v2f', rev: 'v2r', label: 'Scene',    idx: 1 },
+    light:    { fwd: 'v3f', rev: 'v3r', label: 'Lighting', idx: 2 },
+    colorway: { fwd: 'v1f', rev: 'v1r', label: 'Clothing', idx: 3 },
+    fullLook: { fwd: 'v4f', rev: 'v4r', label: 'Cast',     idx: 4 }
+  };
+
+  var CAP_POS = [
+    { left: '-5px',  width: 'calc(20% + 5px)' },
+    { left: '20%',   width: '20%' },
+    { left: '40%',   width: '20%' },
+    { left: '60%',   width: '20%' },
+    { left: '80%',   width: 'calc(20% + 5px)' }
+  ];
+
+  var HOLD_DEFAULT = 0.08;
+  var HOLD_SCENE_REV = 0.18;
+  var FIRST_FRAME_TIMEOUT = 12000;
+
+  /* ═══ ELEMENTS ═══ */
+  var stage      = document.getElementById('stage');
+  var controller = document.getElementById('controller');
+  var capsule    = document.getElementById('capsule');
+  var track      = document.getElementById('track');
+  var labelCell  = document.getElementById('labelCell');
+  var liveRegion = document.getElementById('liveRegion');
+  var notice     = document.getElementById('notice');
+  var noticeText = document.getElementById('noticeText');
+  var noticeRetry= document.getElementById('noticeRetry');
+
+  var videos = {};
+  var btns = {};
+  var btnArr = [];
+  var allBtnEls = [];
+
+  Object.keys(BRANCHES).forEach(function (key) {
+    var b = BRANCHES[key];
+    videos[b.fwd] = document.getElementById(b.fwd);
+    videos[b.rev] = document.getElementById(b.rev);
+    btns[key] = document.getElementById('btn-' + key);
+    btnArr.push(btns[key]);
+    allBtnEls.push(btns[key]);
+  });
+
+  var baseVideo = videos['v1f']; // video-1.mp4 at frame 0
+
+  /* ═══ STATE ═══ */
+  var state = {
+    scene: 'base',
+    playback: 'loading',
+    locked: false,
+    token: 0,
+    activeBranch: null,
+    visibleVideo: null,
+    focusedBtnKey: null
+  };
+
+  /* ═══ READINESS ═══ */
+  var readiness = {};
+  Object.keys(BRANCHES).forEach(function (key) {
+    readiness[key] = { fwd: false, rev: false };
+  });
+
+  function checkReady(videoId) {
+    var el = videos[videoId] || document.getElementById(videoId);
+    return el && el.readyState >= 2;
+  }
+
+  function markReady(videoId) {
+    Object.keys(BRANCHES).forEach(function (key) {
+      var b = BRANCHES[key];
+      if (b.fwd === videoId) readiness[key].fwd = true;
+      if (b.rev === videoId) readiness[key].rev = true;
+      if (readiness[key].fwd && readiness[key].rev && state.scene === 'base' && !state.locked) {
+        btns[key].disabled = false;
+        btns[key].classList.remove('is-loading');
+        btns[key].removeAttribute('aria-hidden');
+        btns[key].removeAttribute('tabindex');
+      }
+    });
+  }
+
+  function trackVideoReadiness() {
+    var allIds = [];
+    Object.keys(BRANCHES).forEach(function (key) {
+      allIds.push(BRANCHES[key].fwd);
+      allIds.push(BRANCHES[key].rev);
+    });
+
+    allIds.forEach(function (id) {
+      var el = videos[id] || document.getElementById(id);
+      if (!el) return;
+      if (el.readyState >= 2) {
+        markReady(id);
+      }
+      el.addEventListener('loadeddata', function () { markReady(id); });
+      el.addEventListener('canplay', function () { markReady(id); });
+    });
+  }
+
+  /* ═══ ANNOUNCE ═══ */
+  function announce(msg) {
+    liveRegion.textContent = '';
+    setTimeout(function () { liveRegion.textContent = msg; }, 60);
+  }
+
+  /* ═══ SHOW / HIDE NOTICE ═══ */
+  function showNotice(msg) {
+    noticeText.textContent = msg;
+    notice.classList.add('notice-visible');
+  }
+  function hideNotice() {
+    notice.classList.remove('notice-visible');
+  }
+
+  /* ═══ VIDEO VISIBILITY ═══ */
+  function showVideo(el) {
+    if (state.visibleVideo && state.visibleVideo !== el) {
+      state.visibleVideo.classList.remove('media-visible');
+    }
+    el.classList.add('media-visible');
+    state.visibleVideo = el;
+  }
+
+  /* ═══ CAPSULE POSITION ═══ */
+  function setCapsulePos(idx) {
+    controller.style.setProperty('--cap-left', CAP_POS[idx].left);
+    controller.style.setProperty('--cap-width', CAP_POS[idx].width);
+  }
+
+  /* ═══ CONTROLLER HOVER ═══ */
+  var hoverIdx = -1;
+  var kbFocusIdx = -1;
+  var isMobile = window.matchMedia('(max-width:700px)').matches;
+
+  window.matchMedia('(max-width:700px)').addEventListener('change', function (e) {
+    isMobile = e.matches;
+  });
+
+  function updateCapsuleFromHover() {
+    if (state.scene !== 'base' || state.locked || isMobile) return;
+    if (kbFocusIdx > 0) {
+      setCapsulePos(kbFocusIdx);
+      labelCell.classList.add('label-dimmed');
+    } else if (hoverIdx > 0) {
+      setCapsulePos(hoverIdx);
+      labelCell.classList.add('label-dimmed');
+    } else {
+      setCapsulePos(0);
+      labelCell.classList.remove('label-dimmed');
+    }
+  }
+
+  btnArr.forEach(function (btn) {
+    var idx = parseInt(btn.getAttribute('data-index'), 10);
+
+    btn.addEventListener('pointerenter', function () {
+      hoverIdx = idx;
+      updateCapsuleFromHover();
+    });
+    btn.addEventListener('focus', function () {
+      kbFocusIdx = idx;
+      updateCapsuleFromHover();
+    });
+    btn.addEventListener('blur', function () {
+      if (kbFocusIdx === idx) kbFocusIdx = -1;
+      updateCapsuleFromHover();
+    });
+  });
+
+  controller.addEventListener('pointerleave', function () {
+    hoverIdx = -1;
+    updateCapsuleFromHover();
+  });
+
+  /* glass highlight tracking */
+  controller.addEventListener('pointermove', function (e) {
+    var rect = controller.getBoundingClientRect();
+    var x = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
+    var y = ((e.clientY - rect.top) / rect.height * 100).toFixed(1);
+    controller.style.setProperty('--glass-x', x + '%');
+    controller.style.setProperty('--glass-y', y + '%');
+  });
+
+  /* ═══ TITLE SHOW / HIDE ═══ */
+  function hideTitle() {
+    stage.classList.add('title-hidden');
+  }
+  function showTitle() {
+    stage.classList.remove('title-hidden');
+  }
+
+  /* ═══ HOLD TIME ═══ */
+  function getHoldTime(vid, branch, dir) {
+    var dur = vid.duration;
+    if (branch === 'scene' && dir === 'reverse') return dur - HOLD_SCENE_REV;
+    return dur - HOLD_DEFAULT;
+  }
+
+  /* ═══ FIRST FRAME DETECTION ═══ */
+  var hasRVFC = 'requestVideoFrameCallback' in HTMLVideoElement.prototype;
+
+  function waitFirstFrame(vid, token) {
+    return new Promise(function (resolve, reject) {
+      var done = false;
+      var elapsed = 0;
+      var paused = false;
+      var timer = null;
+      var cbId = null;
+      var rafId = null;
+
+      function cleanup() {
+        done = true;
+        if (timer) clearTimeout(timer);
+        if (cbId && vid.cancelVideoFrameCallback) vid.cancelVideoFrameCallback(cbId);
+        if (rafId) cancelAnimationFrame(rafId);
+        document.removeEventListener('visibilitychange', onVis);
+      }
+
+      function fail(reason) {
+        if (done) return;
+        cleanup();
+        reject(reason || 'timeout');
+      }
+
+      function succeed() {
+        if (done) return;
+        cleanup();
+        resolve();
+      }
+
+      function onVis() {
+        if (document.hidden) {
+          paused = true;
+          try { vid.pause(); } catch (e) {}
+        } else {
+          paused = false;
+          vid.currentTime = 0;
+          try { vid.play(); } catch (e) {}
+        }
+      }
+      document.addEventListener('visibilitychange', onVis);
+
+      function startTimeout() {
+        timer = setTimeout(function () {
+          if (paused) {
+            startTimeout();
+            return;
+          }
+          fail('timeout');
+        }, FIRST_FRAME_TIMEOUT);
+      }
+      startTimeout();
+
+      if (hasRVFC) {
+        function rvfcCheck(now, meta) {
+          if (done) return;
+          if (state.token !== token) { fail('stale'); return; }
+          if (meta.mediaTime <= 0.5 && vid.readyState >= 2) {
+            succeed();
+          } else {
+            cbId = vid.requestVideoFrameCallback(rvfcCheck);
+          }
+        }
+        cbId = vid.requestVideoFrameCallback(rvfcCheck);
+      } else {
+        /* fallback: readyState + playing + double-rAF */
+        function check() {
+          if (done) return;
+          if (state.token !== token) { fail('stale'); return; }
+          if (vid.readyState >= 2 && !vid.paused) {
+            rafId = requestAnimationFrame(function () {
+              rafId = requestAnimationFrame(function () {
+                if (!done) succeed();
+              });
+            });
+          } else {
+            rafId = requestAnimationFrame(check);
+          }
+        }
+        vid.addEventListener('playing', function onPlaying() {
+          vid.removeEventListener('playing', onPlaying);
+          rafId = requestAnimationFrame(check);
+        }, { once: true });
+        /* also start polling in case `playing` already fired */
+        rafId = requestAnimationFrame(check);
+      }
+    });
+  }
+
+  /* ═══ MONITOR TERMINAL FRAME ═══ */
+  function monitorHold(vid, holdTime, token) {
+    return new Promise(function (resolve) {
+      var done = false;
+
+      function cleanup() { done = true; }
+
+      function endHandler() {
+        if (done || state.token !== token) return;
+        cleanup();
+        try { vid.pause(); } catch (e) {}
+        resolve();
+      }
+      vid.addEventListener('ended', endHandler, { once: true });
+
+      function tick() {
+        if (done || state.token !== token) return;
+        if (vid.currentTime >= holdTime) {
+          vid.removeEventListener('ended', endHandler);
+          cleanup();
+          try { vid.pause(); } catch (e) {}
+          resolve();
+          return;
+        }
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+
+  /* ═══ COLLAPSE CONTROLLER ═══ */
+  function collapseController(branchKey) {
+    var branch = BRANCHES[branchKey];
+    var btn = btns[branchKey];
+    var hadFocus = document.activeElement === btn;
+
+    /* Disable all buttons synchronously */
+    allBtnEls.forEach(function (b) {
+      b.disabled = true;
+      b.setAttribute('aria-hidden', 'true');
+      b.setAttribute('tabindex', '-1');
+    });
+
+    /* Calculate travel distance for the active label */
+    var ctrlRect = controller.getBoundingClientRect();
+    var btnRect = btn.getBoundingClientRect();
+    var capsuleCenterX = ctrlRect.left + ctrlRect.width / 2;
+    var capsuleCenterY = ctrlRect.top + ctrlRect.height / 2;
+    var dx = capsuleCenterX - (btnRect.left + btnRect.width / 2);
+    var dy = capsuleCenterY - (btnRect.top + btnRect.height / 2);
+
+    /* Hide other cells */
+    labelCell.classList.add('cell-hidden');
+    allBtnEls.forEach(function (b) {
+      if (b !== btn) b.classList.add('cell-hidden');
+    });
+
+    /* Move active label to capsule center */
+    btn.classList.add('cell-active');
+    btn.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
+
+    /* Apply collapse + track fade in same recalc */
+    controller.classList.add('collapsed');
+    track.classList.add('track-fade');
+
+    return { hadFocus: hadFocus, btn: btn, branch: branch };
+  }
+
+  /* ═══ SET SELECTED STATE ═══ */
+  function setSelectedState(branchKey, ctx) {
+    var btn = ctx.btn;
+    state.scene = branchKey;
+    state.playback = 'ready';
+
+    /* Change label to Reset */
+    btn.textContent = 'Reset';
+    btn.classList.remove('cell-active');
+    btn.classList.add('cell-reset');
+    btn.style.transform = '';
+    btn.disabled = false;
+    btn.removeAttribute('aria-hidden');
+    btn.setAttribute('tabindex', '0');
+    btn.setAttribute('data-role', 'reset');
+
+    controller.classList.add('selected');
+
+    if (ctx.hadFocus) {
+      btn.focus({ preventScroll: true });
+    }
+
+    announce(BRANCHES[branchKey].label + ' selected. Press Reset to return.');
+  }
+
+  /* ═══ EXPAND CONTROLLER ═══ */
+  function expandController(branchKey) {
+    var branch = BRANCHES[branchKey];
+    var btn = btns[branchKey];
+    var hadFocus = document.activeElement === btn;
+
+    /* Disable reset immediately */
+    btn.disabled = true;
+    btn.setAttribute('aria-hidden', 'true');
+    btn.setAttribute('tabindex', '-1');
+
+    /* Restore original label */
+    btn.textContent = branch.label;
+    btn.classList.remove('cell-reset');
+    btn.removeAttribute('data-role');
+
+    /* Expand */
+    controller.classList.remove('collapsed', 'selected');
+    controller.classList.add('expanding');
+    track.classList.remove('track-fade');
+    track.classList.add('expanding');
+
+    /* Restore labels with stagger */
+    labelCell.classList.remove('cell-hidden');
+    labelCell.classList.add('cell-restoring');
+
+    allBtnEls.forEach(function (b) {
+      b.classList.remove('cell-hidden');
+      b.classList.add('cell-restoring');
+    });
+    btn.classList.remove('cell-active');
+    btn.style.transform = '';
+
+    setCapsulePos(0);
+    labelCell.classList.remove('label-dimmed');
+
+    return { hadFocus: hadFocus, btn: btn };
+  }
+
+  /* ═══ FINALIZE BASE ═══ */
+  function finalizeBase(ctx) {
+    controller.classList.remove('expanding');
+    track.classList.remove('expanding');
+
+    labelCell.classList.remove('cell-restoring');
+    allBtnEls.forEach(function (b) {
+      b.classList.remove('cell-restoring', 'cell-hidden', 'cell-active');
+      b.style.transform = '';
+    });
+
+    state.scene = 'base';
+    state.playback = 'ready';
+    state.locked = false;
+    state.activeBranch = null;
+
+    /* Re-enable ready buttons */
+    Object.keys(BRANCHES).forEach(function (key) {
+      if (readiness[key].fwd && readiness[key].rev) {
+        btns[key].disabled = false;
+        btns[key].removeAttribute('aria-hidden');
+        btns[key].removeAttribute('tabindex');
+      }
+    });
+
+    showTitle();
+
+    if (ctx && ctx.hadFocus) {
+      var target = ctx.btn;
+      if (!target.disabled) {
+        target.focus({ preventScroll: true });
+      }
+    }
+
+    announce('Returned to base scene.');
+    hoverIdx = -1;
+    kbFocusIdx = -1;
+    updateCapsuleFromHover();
+  }
+
+  /* ═══ PLAY FORWARD TRANSITION ═══ */
+  function playForward(branchKey) {
+    if (state.locked || state.scene !== 'base') return;
+
+    /* SYNCHRONOUS LOCK */
+    state.locked = true;
+    state.token++;
+    var token = state.token;
+    state.playback = 'starting';
+    state.activeBranch = branchKey;
+
+    hideNotice();
+    announce('Loading ' + BRANCHES[branchKey].label + ' transition…');
+
+    var branch = BRANCHES[branchKey];
+    var vid = videos[branch.fwd];
+    var ctx = collapseController(branchKey);
+
+    /* Title hide at ~12% of forward progress */
+    var titleDelay = Math.min((vid.duration || 2.08) * 0.12, 0.9) * 1000;
+    var titleTimer = setTimeout(function () {
+      if (state.token === token) hideTitle();
+    }, titleDelay);
+
+    /* Rewind */
+    vid.currentTime = 0;
+
+    function onSeeked() {
+      if (state.token !== token) return;
+
+      var playPromise = vid.play();
+      /* Guard: older browsers return undefined from play() */
+      if (!playPromise || typeof playPromise.then !== 'function') {
+        playPromise = Promise.resolve();
+      }
+      var framePromise = waitFirstFrame(vid, token);
+
+      Promise.all([playPromise, framePromise]).then(function () {
+        if (state.token !== token) return;
+
+        /* Reveal atomically */
+        showVideo(vid);
+        state.playback = 'playing';
+
+        var holdTime = getHoldTime(vid, branchKey, 'forward');
+        return monitorHold(vid, holdTime, token);
+      }).then(function () {
+        if (state.token !== token) return;
+
+        /* SELECTED */
+        state.locked = false;
+        setSelectedState(branchKey, ctx);
+      }).catch(function (err) {
+        if (state.token !== token) return;
+        clearTimeout(titleTimer);
+        handleError(branchKey, 'forward', err, ctx);
+      });
+    }
+
+    /* Wait for seek to 0 */
+    if (vid.currentTime < 0.001 && vid.readyState >= 2) {
+      onSeeked();
+    } else {
+      vid.addEventListener('seeked', function handler() {
+        vid.removeEventListener('seeked', handler);
+        onSeeked();
+      });
+      vid.currentTime = 0;
+    }
+  }
+
+  /* ═══ PLAY REVERSE TRANSITION ═══ */
+  function playReverse(branchKey) {
+    if (state.locked || state.scene !== branchKey) return;
+
+    /* SYNCHRONOUS LOCK */
+    state.locked = true;
+    state.token++;
+    var token = state.token;
+    state.playback = 'starting';
+
+    hideNotice();
+    announce('Returning to base scene…');
+
+    var branch = BRANCHES[branchKey];
+    var vid = videos[branch.rev];
+    var ctx = expandController(branchKey);
+
+    /* Rewind reverse clip */
+    vid.currentTime = 0;
+
+    function onSeeked() {
+      if (state.token !== token) return;
+
+      var playPromise = vid.play();
+      if (!playPromise || typeof playPromise.then !== 'function') {
+        playPromise = Promise.resolve();
+      }
+      var framePromise = waitFirstFrame(vid, token);
+
+      Promise.all([playPromise, framePromise]).then(function () {
+        if (state.token !== token) return;
+
+        showVideo(vid);
+        state.playback = 'playing';
+
+        var holdTime = getHoldTime(vid, branchKey, 'reverse');
+        return monitorHold(vid, holdTime, token);
+      }).then(function () {
+        if (state.token !== token) return;
+
+        /* COMMIT BASE */
+        /* Show base video (video-1 at frame 0) */
+        baseVideo.currentTime = 0;
+        showVideo(baseVideo);
+
+        finalizeBase(ctx);
+      }).catch(function (err) {
+        if (state.token !== token) return;
+        handleError(branchKey, 'reverse', err, ctx);
+      });
+    }
+
+    if (vid.currentTime < 0.001 && vid.readyState >= 2) {
+      onSeeked();
+    } else {
+      vid.addEventListener('seeked', function handler() {
+        vid.removeEventListener('seeked', handler);
+        onSeeked();
+      });
+      vid.currentTime = 0;
+    }
+  }
+
+  /* ═══ ERROR HANDLING ═══ */
+  var lastErrorBranch = null;
+  var lastErrorDir = null;
+
+  function handleError(branchKey, dir, err, ctx) {
+    console.error('Transition error:', branchKey, dir, err);
+    state.playback = 'error';
+    state.locked = false;
+    lastErrorBranch = branchKey;
+    lastErrorDir = dir;
+
+    announce('Transition failed. Press Retry to try again.');
+    showNotice('Transition failed');
+
+    /* Restore controller to safe state */
+    if (dir === 'forward') {
+      /* Undo collapse */
+      controller.classList.remove('collapsed', 'selected');
+      track.classList.remove('track-fade');
+      labelCell.classList.remove('cell-hidden');
+      allBtnEls.forEach(function (b) {
+        b.classList.remove('cell-hidden', 'cell-active');
+        b.style.transform = '';
+      });
+      showTitle();
+
+      state.scene = 'base';
+      Object.keys(BRANCHES).forEach(function (key) {
+        if (readiness[key].fwd && readiness[key].rev) {
+          btns[key].disabled = false;
+          btns[key].removeAttribute('aria-hidden');
+          btns[key].removeAttribute('tabindex');
+        }
+      });
+      setCapsulePos(0);
+    } else {
+      /* dir === 'reverse' — collapse back to selected state */
+      controller.classList.remove('expanding');
+      track.classList.remove('expanding');
+      controller.classList.add('collapsed', 'selected');
+      track.classList.add('track-fade');
+
+      var btn = btns[branchKey];
+      btn.textContent = 'Reset';
+      btn.classList.add('cell-reset');
+      btn.disabled = false;
+      btn.removeAttribute('aria-hidden');
+      btn.setAttribute('tabindex', '0');
+      btn.setAttribute('data-role', 'reset');
+
+      allBtnEls.forEach(function (b) {
+        if (b !== btn) {
+          b.classList.add('cell-hidden');
+          b.disabled = true;
+          b.setAttribute('aria-hidden', 'true');
+          b.setAttribute('tabindex', '-1');
+        }
+      });
+      labelCell.classList.add('cell-hidden');
+      state.scene = branchKey;
+    }
+  }
+
+  noticeRetry.addEventListener('click', function () {
+    hideNotice();
+    if (lastErrorDir === 'forward') {
+      playForward(lastErrorBranch);
+    } else if (lastErrorDir === 'reverse') {
+      playReverse(lastErrorBranch);
+    }
+  });
+
+  /* ═══ BUTTON CLICK HANDLER ═══ */
+  function handleBtnClick(e) {
+    var btn = e.currentTarget;
+    var branchKey = btn.getAttribute('data-branch');
+
+    if (btn.getAttribute('data-role') === 'reset') {
+      playReverse(branchKey);
+    } else {
+      playForward(branchKey);
+    }
+  }
+
+  allBtnEls.forEach(function (btn) {
+    btn.addEventListener('click', handleBtnClick);
+  });
+
+  /* ═══ INIT: PARK BASE VIDEO ═══ */
+  function initBase() {
+    baseVideo.currentTime = 0;
+    var shown = false;
+
+    function tryShow() {
+      if (shown) return;
+      if (baseVideo.readyState >= 2) {
+        shown = true;
+        showVideo(baseVideo);
+        state.playback = 'ready';
+        announce('Scene ready. Use the controller to change states.');
+        trackVideoReadiness();
+      }
+    }
+
+    tryShow();
+    if (!shown) {
+      baseVideo.addEventListener('loadeddata', tryShow);
+      baseVideo.addEventListener('canplay', tryShow);
+      /* Poll fallback for cached media that may not re-fire events */
+      var pollId = setInterval(function () {
+        tryShow();
+        if (shown) clearInterval(pollId);
+      }, 250);
+    }
+  }
+
+  /* ═══ KEYBOARD ═══ */
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && state.scene !== 'base' && !state.locked) {
+      var resetBtn = btns[state.scene];
+      if (resetBtn && resetBtn.getAttribute('data-role') === 'reset') {
+        resetBtn.click();
+      }
+    }
+  });
+
+  /* ═══ BOOT ═══ */
+  setCapsulePos(0);
+  initBase();
+
+})();
+</script>
+</body>
+</html>
