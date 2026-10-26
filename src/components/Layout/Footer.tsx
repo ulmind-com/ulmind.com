@@ -86,6 +86,7 @@ export const Footer = () => {
     { name: "Team", href: "/team" },
     { name: "Methodology", href: "/methodology" },
     { name: "Projects", href: "/projects" },
+    { name: "Blogs & Insights", href: "/blogs" },
     { name: "Career", href: "/career" },
     { name: "Contact", href: "/contact" },
   ];

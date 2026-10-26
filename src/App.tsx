@@ -41,6 +41,8 @@ const TechnologyDetail = lazy(() => import("./pages/technologies/TechnologyDetai
 const IndustriesPage = lazy(() => import("./pages/Industries"));
 const IndustryDetail = lazy(() => import("./pages/industries/IndustryDetail"));
 const CertificateVerification = lazy(() => import("./pages/CertificateVerification"));
+const BlogsPage = lazy(() => import("./pages/Blogs"));
+const BlogDetailPage = lazy(() => import("./pages/BlogDetail"));
 
 // ─── Admin Panel (isolated route tree) ───────────────────────
 const AdminLoginPage = lazy(() => import("./admin/pages/LoginPage"));
@@ -586,6 +588,10 @@ const App = () => {
                     <Route path="/industries" element={<IndustriesPage />} />
                     <Route path="/industries/:slug" element={<IndustryDetail />} />
                     <Route path="/verify" element={<CertificateVerification />} />
+                    <Route path="/blogs" element={<BlogsPage />} />
+                    <Route path="/blog" element={<BlogsPage />} />
+                    <Route path="/blogs/:slug" element={<BlogDetailPage />} />
+                    <Route path="/blog/:slug" element={<BlogDetailPage />} />
                   </Route>
 
                   {/* ─── Admin Panel Routes ─── */}

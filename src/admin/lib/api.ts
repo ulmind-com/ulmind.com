@@ -1083,6 +1083,28 @@ export interface PortfolioProject {
   image?: { url: string; public_id: string };
 }
 
+export interface BlogPost {
+  _id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  category: string;
+  service?: string;
+  tags: string[];
+  author: string;
+  authorRole?: string;
+  authorAvatar?: string;
+  readTime: string;
+  published: boolean;
+  featured: boolean;
+  order: number;
+  views: number;
+  coverImage?: { url: string; public_id: string };
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export const uploadCmsImageAPI = async (file: File): Promise<{ url: string; public_id: string }> => {
   const formData = new FormData();
   formData.append("image", file);
@@ -1182,6 +1204,66 @@ export const updatePortfolioProjectAPI = async (id: string, data: Partial<Portfo
 export const deletePortfolioProjectAPI = async (id: string) => {
   const res = await authFetch(`/website-content/projects/${id}`, { method: "DELETE" });
   if (!res.ok) throw new Error("Failed to delete project");
+  return res.json();
+};
+
+// --- Blogs ---
+export const getBlogsAPI = async (params?: {
+  category?: string;
+  service?: string;
+  tag?: string;
+  search?: string;
+  limit?: number;
+  skip?: number;
+}): Promise<BlogPost[]> => {
+  const query = new URLSearchParams();
+  if (params?.category) query.append("category", params.category);
+  if (params?.service) query.append("service", params.service);
+  if (params?.tag) query.append("tag", params.tag);
+  if (params?.search) query.append("search", params.search);
+  if (params?.limit) query.append("limit", params.limit.toString());
+  if (params?.skip) query.append("skip", params.skip.toString());
+  const qs = query.toString();
+  const res = await authFetch(`/website-content/blogs${qs ? `?${qs}` : ""}`);
+  if (!res.ok) throw new Error("Failed to fetch blogs");
+  return res.json();
+};
+
+export const getAdminBlogsAPI = async (): Promise<BlogPost[]> => {
+  const res = await authFetch("/website-content/blogs/admin/all");
+  if (!res.ok) throw new Error("Failed to fetch admin blogs");
+  return res.json();
+};
+
+export const getBlogBySlugAPI = async (slugOrId: string): Promise<BlogPost> => {
+  const res = await authFetch(`/website-content/blogs/${slugOrId}`);
+  if (!res.ok) throw new Error("Failed to fetch blog post");
+  return res.json();
+};
+
+export const createBlogAPI = async (data: Partial<BlogPost>): Promise<BlogPost> => {
+  const res = await authFetch("/website-content/blogs", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Failed to create blog post");
+  return res.json();
+};
+
+export const updateBlogAPI = async (id: string, data: Partial<BlogPost>): Promise<BlogPost> => {
+  const res = await authFetch(`/website-content/blogs/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Failed to update blog post");
+  return res.json();
+};
+
+export const deleteBlogAPI = async (id: string): Promise<{ status: string }> => {
+  const res = await authFetch(`/website-content/blogs/${id}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) throw new Error("Failed to delete blog post");
   return res.json();
 };
 

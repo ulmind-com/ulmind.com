@@ -30,6 +30,7 @@ const navItems = [
   { name: "Team",        href: "/team" },
   { name: "Methodology", href: "/methodology" },
   { name: "Projects",    href: "/projects" },
+  { name: "Blogs",       href: "/blogs" },
   { name: "Merchandise", href: "/merchandise" },
   { name: "Career",      href: "/career" },
   { name: "Contact",     href: "/contact" },
