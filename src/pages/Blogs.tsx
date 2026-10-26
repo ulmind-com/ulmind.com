@@ -25,6 +25,7 @@ import {
   Layers,
   Palette,
   RotateCcw,
+  Rss,
 } from "lucide-react";
 import { getBlogsAPI, BlogPost } from "@/admin/lib/api";
 import { FALLBACK_BLOGS } from "@/data/blogData";
@@ -175,7 +176,7 @@ export const Blogs: React.FC = () => {
   return (
     <div className="min-h-screen bg-background text-foreground pt-20 sm:pt-24 pb-20 transition-colors duration-300">
       {/* ── Breadcrumb & Top Bar ── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-2 sm:mb-3">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-2 sm:mb-3 flex items-center justify-between">
         <nav className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
           <Link
             to="/"
@@ -186,6 +187,17 @@ export const Blogs: React.FC = () => {
           <ChevronRight size={13} className="opacity-50" />
           <span className="text-foreground font-semibold">Blogs</span>
         </nav>
+
+        <a
+          href="/rss.xml"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Subscribe to RSS Feed"
+          className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 hover:border-amber-500/40 transition-all"
+        >
+          <Rss size={12} className="text-amber-500" />
+          <span>RSS Feed</span>
+        </a>
       </div>
 
       {/* ── Hero Section ── */}

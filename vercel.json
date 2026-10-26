@@ -1,5 +1,36 @@
 {
+  "headers": [
+    {
+      "source": "/(rss\\.xml|blogs/rss\\.xml|feed|feed\\.xml)",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/rss+xml; charset=utf-8"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=1800, s-maxage=1800"
+        }
+      ]
+    }
+  ],
   "rewrites": [
+    {
+      "source": "/rss.xml",
+      "destination": "https://ulmind-backend-5ww9.onrender.com/api/v1/website-content/blogs/rss.xml"
+    },
+    {
+      "source": "/blogs/rss.xml",
+      "destination": "https://ulmind-backend-5ww9.onrender.com/api/v1/website-content/blogs/rss.xml"
+    },
+    {
+      "source": "/feed",
+      "destination": "https://ulmind-backend-5ww9.onrender.com/api/v1/website-content/blogs/rss.xml"
+    },
+    {
+      "source": "/feed.xml",
+      "destination": "https://ulmind-backend-5ww9.onrender.com/api/v1/website-content/blogs/rss.xml"
+    },
     {
       "source": "/(.*)",
       "destination": "/index.html"
